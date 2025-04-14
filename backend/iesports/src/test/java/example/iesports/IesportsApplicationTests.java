@@ -1,0 +1,13 @@
+package example.iesports;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class IesportsApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
