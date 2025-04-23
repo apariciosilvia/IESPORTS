@@ -267,6 +267,7 @@ function handleRegister() {
   --border-color: #ccc;
   --box-shadow: none;
 }
+
 .custom-input:hover,
 .custom-input:focus,
 .custom-input.ion-touched.ion-valid{
