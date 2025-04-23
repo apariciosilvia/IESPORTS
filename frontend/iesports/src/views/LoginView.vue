@@ -231,7 +231,7 @@ function handleRegister() {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: white;
+  background: rgba(255, 255, 255, 0.788);
   padding: 2.5rem;
   border-radius: 16px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
@@ -263,7 +263,7 @@ function handleRegister() {
   
   font-size: 1.5rem;
   --border-radius: 8px;
-  --background: #fff;
+  --background: #ffffff10;
   --border-color: #ccc;
   --box-shadow: none;
 }
