@@ -4,6 +4,8 @@ import App from './App.vue'
 import { IonicVue } from '@ionic/vue'
 import { IonApp } from '@ionic/vue'
 
+import Particles from "@tsparticles/vue3";
+import { loadSlim } from "@tsparticles/slim"; 
 
 import { createPinia } from 'pinia'
 import router from './router.ts'
@@ -23,8 +25,12 @@ import '@ionic/vue/css/display.css'
 
 const app = createApp(App)
 app.component('ion-app', IonApp)
-
-
+app.use(Particles, {
+  init: async engine => {
+    // await loadFull(engine); // you can load the full tsParticles library from "tsparticles" if you need it
+    await loadSlim(engine); // or you can load the slim version from "@tsparticles/slim" if don't need Shapes or Animations
+  },
+});
 app.use(IonicVue)
 app.use(createPinia())
 app.use(router)

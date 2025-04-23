@@ -1,6 +1,95 @@
 <template>
  <ion-page>
   <ion-content>
+    <!-- <div id="vanta-login" class="vanta-bg"></div> -->
+    <vue-particles
+            id="tsparticles"
+            @particles-loaded="particlesLoaded"
+            :options="{
+                    background: {
+                        color: {
+                            value: '#76d6ac'
+                        }
+                    },
+                    fpsLimit: 120,
+                    interactivity: {
+                        events: {
+                            onClick: {
+                                enable: true,
+                                mode: 'push'
+                            },
+                            onHover: {
+                                enable: true,
+                                mode: 'repulse'
+                            },
+                        },
+                        modes: {
+                            bubble: {
+                                distance: 400,
+                                duration: 2,
+                                opacity: 0.8,
+                                size: 40
+                            },
+                            push: {
+                                quantity: 4
+                            },
+                            repulse: {
+                                distance: 200,
+                                duration: 0.4
+                            }
+                        }
+                    },
+                    particles: {
+                        color: {
+                            value: '#ffffff'
+                        },
+                        links: {
+                            color: '#ffffff',
+                            distance: 150,
+                            enable: true,
+                            opacity: 0.8,
+                            width: 6
+                        },
+                        move: {
+                            direction: 'none',
+                            enable: true,
+                            outModes: 'bounce',
+                            random: false,
+                            speed: 6,
+                            straight: false
+                        },
+                        number: {
+                            density: {
+                                enable: true,
+                            },
+                            value: 80
+                        },
+                        opacity: {
+                            value: 0.5
+                        },
+                        shape: {
+                          type: 'image',
+                          image: [
+                              {
+                                  src: '/racket.png',
+                                  width: 32,
+                                  height: 32
+                              },
+                              {
+                                  src: '/ball.png',
+                                  width: 32,
+                                  height: 32
+                              },
+                              
+                          ]
+                      },
+                        size: {
+                            value: { min: 1, max: 5 }
+                        }
+                    },
+                    detectRetina: true
+                }"
+        />
     <div class="card-container" :class="{ 'show-back': showRegister }">
       <div class="card-inner">
         <!-- Login -->
@@ -48,10 +137,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue'
-import SportsParticles from '../components/SportsParticles.vue';
 
+const particlesLoaded = async (container: any) => {
+    console.log("Particles container loaded", container);
+};
 
 const showRegister = ref(false)
 
@@ -72,6 +163,17 @@ function handleRegister() {
 </script>
 
 <style scoped>
+
+.vanta-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .card-container {
   width: 100vw;
   max-width: 600px;
@@ -80,7 +182,8 @@ function handleRegister() {
   perspective: 1000px;
   margin: auto;
   margin-top: 10%;
-  
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 480px) {
@@ -89,10 +192,12 @@ function handleRegister() {
     max-width: 360px;
     aspect-ratio: 10 / 13;
     margin-top: 25%;
+    
   }
 
   .card-face {
     padding: 1.5rem;
+    
   }
 
   .card-face h2 {
@@ -167,7 +272,7 @@ function handleRegister() {
 .custom-input.ion-touched.ion-valid{
   --background:  #42b9831f;
   --border-color: #cccccc38;
-  --box-shadow: 0 0 0 6px #42b983;
+  --box-shadow: 0 0 0 6px #42b9838e;
 }
 
 
