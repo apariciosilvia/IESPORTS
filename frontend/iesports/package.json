@@ -13,6 +13,7 @@
     "@ionic/vue-router": "^8.5.5",
     "@tsparticles/engine": "^3.8.1",
     "@tsparticles/vue3": "^3.0.1",
+    "axios": "^1.9.0",
     "pinia": "^3.0.2",
     "three": "^0.176.0",
     "tsparticles": "^3.8.1",
