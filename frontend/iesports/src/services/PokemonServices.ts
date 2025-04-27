@@ -18,6 +18,9 @@ function getPokemons(offset = 0, limit = 20) {
 
 export { getPokemons };
 
+//CAMBIO SILVIA
+
+
 // import axios from 'axios';
 
 // function getPokemons() {
