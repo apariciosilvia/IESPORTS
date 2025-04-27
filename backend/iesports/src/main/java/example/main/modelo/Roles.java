@@ -7,27 +7,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table (name = "curso")
-public class Curso {
+@Table(name = "roles")
+public class Roles {
 
 	@Id
-	@GeneratedValue (strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	
 	private String nombre;
-	private int year;
+	private int activo;
 	
-	//TODO PREGUNTAR A SILVIA POR QUÉ AÑO
-	//private int year;
-	
-	
-	public Curso() {
-		this.id = 0;
-		this.nombre = null;
-	}
-	
-	public Curso(int id, String nombre){
+	public Roles(int id, String nombre, int activo) {
+		super();
 		this.id = id;
 		this.nombre = nombre;
+		this.activo = activo;
+	}
+	
+	public Roles() {
+		super();
+		this.id = 0;
+		this.nombre = null;
+		this.activo = 0;
 	}
 
 	public int getId() {
@@ -45,12 +46,19 @@ public class Curso {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	
-	public int getYear() {
-		return year;
+
+	public int getActivo() {
+		return activo;
 	}
 
-	public void setYear(int year) {
-		this.year = year;
+	public void setActivo(int activo) {
+		this.activo = activo;
 	}
+	
+	
+	
+	
+	
+	
+	
 }
