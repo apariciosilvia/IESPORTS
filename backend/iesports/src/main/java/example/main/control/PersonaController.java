@@ -15,7 +15,7 @@ import example.main.modelo.Persona;
 @RequestMapping("/persona")
 public class PersonaController {
 	
-	//cambio sebas
+	//cambio sebas 3
 	@Autowired
 	private PersonaService pr;
 	
