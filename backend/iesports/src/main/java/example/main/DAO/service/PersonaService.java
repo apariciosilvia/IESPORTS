@@ -12,7 +12,7 @@ import example.main.modelo.Persona;
 public class PersonaService {
 
 	@Autowired
-	PersonaRepository pr;
+	private PersonaRepository pr;
 	
 	public ArrayList<Persona> getPersonas(){
 		return (ArrayList<Persona>) pr.findAll();
