@@ -3,16 +3,9 @@
   
     <ion-content fullscreen  @ionScroll="handleScroll" :scroll-events="true">
  <!-- Portada grande -->
-      <div class="portada">
-        <h1>Bienvenido a mi página</h1>
-      </div>
-
+ <CarouselPortada />
       <!-- Navbar que aparece al hacer scroll -->
-      <div :class="['navbar', { 'navbar-visible': showNavbar }]">
-        <IonToolbar>
-          <IonTitle>Mi Navegación</IonTitle>
-        </IonToolbar>
-      </div>
+      <BarraNavegacion />
      
       <br><br> <br><br><br>
       <ion-button expand="block" @click="goToLogin">
@@ -196,11 +189,15 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { IonButton, IonContent, IonHeader, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonToolbar, IonTitle } from '@ionic/vue';
+import { IonButton, IonContent, IonHeader, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle } from '@ionic/vue';
 import { getPersonas } from '../services/PersonaServices';
 import { onMounted, ref, type Ref } from 'vue';
 
 // import PersonaCard from '../components/PersonaCard.vue';
+import CarouselPortada from '../components/CarouselPortada.vue';
+import BarraNavegacion from '../components/BarraNavegacion.vue';
+
+
 
 const personas:Ref<any[]> = ref([]);
 
@@ -290,15 +287,8 @@ const handleScroll = (event: CustomEvent) => {
 </script>
 
 <style scoped>
-.portada {
-  height: 100vh;
-  background: url('C:\Users\apari\Documents\GitHub\IESPORTS\frontend\iesports\src\assets\img\1.jpg') center/cover no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: rgb(0, 0, 0);
-  font-size: 2rem;
-}
+
+
 
 .navbar {
   position: fixed;
