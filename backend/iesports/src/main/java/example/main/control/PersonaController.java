@@ -15,10 +15,11 @@ import example.main.modelo.Persona;
 @RequestMapping("/persona")
 public class PersonaController {
 	
-	//cambio sebas 5
 	@Autowired
 	private PersonaService pr;
 	
+	
+	/*Método que devuelve todos los datos de la BBDD*/
 	@GetMapping("/todos")
 	public ArrayList<Persona> getAllPersonas(){
 		return pr.getPersonas();
@@ -26,20 +27,18 @@ public class PersonaController {
 	
 	
 	@GetMapping("/selectPersona")
-	public Persona getPersona(@RequestParam (name = "nombre") String nombre, @RequestParam (name = "password") String password) {
+	public Persona getPersona(@RequestParam (name = "email") String email, @RequestParam (name = "password") String password) {
 		
 		ArrayList<Persona> personas = pr.getPersonas();
 		Persona persona = null;
 		
-		
 		for (Persona currentPersona : personas)
 		{
-			if(currentPersona.getNombre().compareTo(nombre) == 0 && currentPersona.getPassword().compareTo(password) == 0)
+			if(currentPersona.getEmail().compareTo(email) == 0 && currentPersona.getPassword().compareTo(password) == 0)
 			{
 				persona = currentPersona;
 			}
 		}
-		
 		return persona;
 	}
 	

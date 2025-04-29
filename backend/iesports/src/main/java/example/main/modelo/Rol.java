@@ -8,23 +8,23 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "roles")
-public class Roles {
+public class Rol {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	private String nombre;
 	private int activo;
 	
-	public Roles(int id, String nombre, int activo) {
+	public Rol(int id, String nombre, int activo) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.activo = activo;
 	}
 	
-	public Roles() {
+	public Rol() {
 		super();
 		this.id = 0;
 		this.nombre = null;
