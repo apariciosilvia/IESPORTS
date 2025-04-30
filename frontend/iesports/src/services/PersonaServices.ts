@@ -35,7 +35,7 @@ function getPersonas() {
          resolve(response.data);
        })
        .catch(error => {
-        console.error('Error en la petición:', error); // 🔥 Mostrar error en consola
+        console.error('Error en la petición:', error);
         reject(error);
        });
    });
