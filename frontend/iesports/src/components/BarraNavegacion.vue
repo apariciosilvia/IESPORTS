@@ -23,6 +23,10 @@ const showNavbar = ref(false);
 
 const router = useRouter();
 
+function goToLogin() {
+  router.push('/login')
+}
+
 const handleScroll = (event: CustomEvent) => {
   const scrollElement = (event.target as any).getScrollElement 
     ? event.target 
@@ -54,9 +58,7 @@ onUnmounted(() => {
 
 
 
-function goToLogin() {
-  router.push('/login')
-}
+
 </script>
 
 <style scoped>
@@ -77,7 +79,7 @@ function goToLogin() {
 }
 
 .nav-links a:hover {
-  color: #ffd700; /* Amarillo dorado al pasar el ratón */
+  color: #ffd700;
 }
 
 .navbar {
@@ -87,7 +89,7 @@ function goToLogin() {
   transform: translateY(-100%);
   transition: transform 0.3s ease;
   z-index: 999;
-  background-color: rgb(0, 0, 0); /* Fondo oscuro semitransparente */
+  background-color: rgb(0, 0, 0);
 }
 
 .navbar-visible {
@@ -95,9 +97,9 @@ function goToLogin() {
 }
 
 .custom-toolbar {
-  --background: #0a2540; /* Color de fondo negro */
-  --color: white; /* Color de texto */
-  --min-height: 60px; /* Opcional: altura del toolbar */
+  --background: #0a2540; 
+  --color: white; 
+  --min-height: 60px; 
 }
 
 </style>

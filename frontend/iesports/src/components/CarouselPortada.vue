@@ -1,5 +1,7 @@
 <template>
-  <!-- Texto superior -->
+  <div class="login-icon">
+    <span  class="material-symbols-outlined" style="font-size: 54px;" @click="goToLogin">account_circle</span>  
+  </div>
   <div class="intro-text">
     <h1>BIENVENIDO A IESPORTS</h1>
     <p>Desliza hacia abajo para ver más</p>
@@ -27,6 +29,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+
+
+const router = useRouter();
+
+function goToLogin() {
+  router.push('/login')
+}
 
 const slides = [
   { img: new URL('../assets/img/1.jpg', import.meta.url).href, title: 'Partidos' },
@@ -35,6 +45,7 @@ const slides = [
 ];
 
 const currentSlide = ref(0);
+
 let intervalId: any = null;
 
 const nextSlide = () => {
@@ -48,7 +59,7 @@ const prevSlide = () => {
 onMounted(() => {
   intervalId = setInterval(() => {
     nextSlide();
-  }, 4000); // cada 4 segundos
+  }, 4000); 
 });
 
 onBeforeUnmount(() => {
@@ -123,6 +134,15 @@ onBeforeUnmount(() => {
 .intro-text p {
   font-size: 1.2rem;
   margin-bottom: 1rem;
+}
+
+.login-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 30;
+  color: white;
+  cursor: pointer;
 }
 
 
