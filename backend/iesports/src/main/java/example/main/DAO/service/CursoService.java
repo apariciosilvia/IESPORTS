@@ -12,7 +12,7 @@ import example.main.modelo.Curso;
 public class CursoService {
 
 	@Autowired
-	CursoRepository cr;
+	private CursoRepository cr;
 	
 	
 	//Método que se encarga de recoger todos los cursos posibles
