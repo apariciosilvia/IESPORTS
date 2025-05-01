@@ -2,9 +2,7 @@
   <ion-page>
   
     <ion-content fullscreen  @ionScroll="handleScroll" :scroll-events="true">
- <!-- Portada grande -->
- <CarouselPortada />
-      <!-- Navbar que aparece al hacer scroll -->
+      <CarouselPortada />
       <BarraNavegacion />
      
       <br><br> <br><br><br>

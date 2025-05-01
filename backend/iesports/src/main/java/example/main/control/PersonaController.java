@@ -26,7 +26,7 @@ public class PersonaController {
 	}
 	
 	
-	@GetMapping("/selectPersona")
+	@GetMapping("/login")
 	public Persona getPersona(@RequestParam (name = "email") String email, @RequestParam (name = "password") String password) {
 		
 		ArrayList<Persona> personas = pr.getPersonas();
@@ -39,8 +39,8 @@ public class PersonaController {
 				persona = currentPersona;
 			}
 		}
+
 		return persona;
 	}
-	
 	
 }

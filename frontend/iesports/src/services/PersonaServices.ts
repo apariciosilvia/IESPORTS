@@ -18,9 +18,6 @@
 
 // export { getPokemons };
 
-//CAMBIO SILVIA
-
-
 import axios from 'axios';
 
 function getPersonas() {
@@ -39,6 +36,22 @@ function getPersonas() {
         reject(error);
        });
    });
-}
+};
 
-export { getPersonas };
+function login(email: string, password: string) {
+
+  return new Promise((resolve, reject) => {
+
+    const url = `${import.meta.env.VITE_URL_API}/persona/login?email=${email}&password=${password}`;
+
+    axios.get(url)
+      .then(response => {
+        resolve(response.data); 
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+export { getPersonas, login };

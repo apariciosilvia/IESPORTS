@@ -137,8 +137,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue'
+import { ref } from 'vue';
+import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
+import { login } from '../services/PersonaServices';
+import router from '../router';
 
 const particlesLoaded = async (container: any) => {
     console.log("Particles container loaded", container);
@@ -149,9 +151,26 @@ const showRegister = ref(false)
 const loginData = ref({ email: '', password: '' })
 const registerData = ref({ name: '', email: '', password: '', confirmPassword: '' })
 
-function handleLogin() {
-  alert(`Login:\nEmail: ${loginData.value.email}\nPassword: ${loginData.value.password}`)
+async function handleLogin() {
+  try {
+    const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim())
+    console.log('Login exitoso:', response)
+
+    if (response && response.email) {
+      // Guardar al usuario en localStorage
+      localStorage.setItem('usuario', JSON.stringify(response))
+
+      alert('Inicio de sesión exitoso')
+      router.push('/');
+    } else {
+      alert('Credenciales incorrectas')
+    }
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error)
+    alert('Error al iniciar sesión. Verifica tus credenciales.')
+  }
 }
+
 
 function handleRegister() {
   if (registerData.value.password !== registerData.value.confirmPassword) {

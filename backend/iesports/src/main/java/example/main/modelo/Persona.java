@@ -15,7 +15,6 @@ public class Persona {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	
 //	private int curso_id;
 	
 	@ManyToOne
@@ -30,10 +29,7 @@ public class Persona {
 	private String password;
 	private int activo;
 	
-	
-	
 	public Persona(int id, Curso curso_id, String nombre, String email, String password, int activo, Rol rol_id) {
-		super();
 		this.id = id;
 		this.curso_id = curso_id;
 		this.nombre = nombre;
@@ -42,14 +38,10 @@ public class Persona {
 		this.activo = activo;
 		this.rol_id = rol_id;
 	}
-	
-	
 
 	public Persona() {
 		super();
 	}
-
-
 
 	public int getId() {
 		return id;
@@ -106,5 +98,4 @@ public class Persona {
 	public void setRol_id(Rol rol_id) {
 		this.rol_id = rol_id;
 	}
-	
 }
