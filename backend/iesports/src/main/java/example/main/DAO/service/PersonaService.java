@@ -17,6 +17,12 @@ public class PersonaService {
 	public ArrayList<Persona> getPersonas(){
 		return (ArrayList<Persona>) pr.findAll();
 	}
+
+	public void addUser(String nombre, String email, String password1, int curso_id) {
+		Persona persona = new Persona(nombre, email, password1, curso_id);
+	    pr.save(persona);
+		
+	}
 	
 	
 }

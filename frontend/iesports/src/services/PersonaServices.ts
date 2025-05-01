@@ -44,7 +44,7 @@ function login(email: string, password: string) {
 
     const url = `${import.meta.env.VITE_URL_API}/persona/login?email=${email}&password=${password}`;
 
-    axios.get(url)
+    axios.post(url)
       .then(response => {
         resolve(response.data); 
       })
