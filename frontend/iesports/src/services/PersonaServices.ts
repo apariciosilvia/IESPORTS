@@ -24,7 +24,7 @@ function getPersonas() {
 
   return new Promise<any[]>((resolve, reject) => {
 
-    const url = `${import.meta.env.VITE_URL_API}/persona/todos`;
+    const url = `${import.meta.env.VITE_URL_API}/person/getPersons`;
 
      axios.get(url)
        .then(response => {
@@ -42,7 +42,7 @@ function login(email: string, password: string) {
 
   return new Promise((resolve, reject) => {
 
-    const url = `${import.meta.env.VITE_URL_API}/persona/login?email=${email}&password=${password}`;
+    const url = `${import.meta.env.VITE_URL_API}/person/login?email=${email}&password=${password}`;
 
     axios.post(url)
       .then(response => {
@@ -54,4 +54,21 @@ function login(email: string, password: string) {
   });
 };
 
-export { getPersonas, login };
+function getCourses() {
+
+  return new Promise((resolve, reject) => {
+
+    const url = `${import.meta.env.VITE_URL_API}/course/getCourses`;
+
+    axios.get(url)
+      .then(response => {
+        resolve(response.data); 
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+
+export { getPersonas, login, getCourses};

@@ -74,7 +74,6 @@ onMounted(async () => {
     personas.value = response;
   }).catch(() => {
     alert('ERROR OBTENIENDO PERSONAS');
-  
   });
 });
 

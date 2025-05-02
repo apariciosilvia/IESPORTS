@@ -105,7 +105,7 @@
           </form>
           <div class="login-links">
             <a href="#">¿Olvidaste tu contraseña?</a>
-            <a href="#" @click.prevent="showRegister = true">
+            <a href="#"  @click.prevent="showRegister = true; handleGetCourses()">
               ¿No tienes cuenta? Regístrate aquí
             </a>
           </div>
@@ -119,6 +119,15 @@
             <ion-input v-model="registerData.email" type="email" placeholder="Correo electrónico" required class="custom-input" fill="outline" />
             <ion-input v-model="registerData.password" type="password" placeholder="Contraseña" required class="custom-input" fill="outline" />
             <ion-input v-model="registerData.confirmPassword" type="password" placeholder="Confirmar contraseña" required class="custom-input" fill="outline" />
+            <ion-list>
+              <ion-item>
+                <ion-select v-model="selectedCourse" aria-label="Courses" interface="popover" placeholder="Selecciona un curso">
+                  <ion-select-option v-for="course in courses" :key="course.id" :value="course.id">
+                    {{ course.nombre }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
             <ion-button type="submit" expand="block" class="custom-button">
               <ion-icon name="person-add-outline"></ion-icon>
               Registrarse
@@ -137,9 +146,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
-import { login } from '../services/PersonaServices';
+import { getCourses, login } from '../services/PersonaServices';
 import router from '../router';
 
 const particlesLoaded = async (container: any) => {
@@ -179,6 +188,22 @@ function handleRegister() {
   }
   alert(`Registro:\nNombre: ${registerData.value.name}`)
 }
+
+const courses:Ref<any[]> = ref([]);
+const selectedCourse = ref('');
+
+async function handleGetCourses() {
+  try {
+    const response = await getCourses() as any[]; 
+    courses.value = response;
+    console.log(courses.value);
+  } catch (error){
+    console.error('ERROR OBTENIENDO CURSOS: ', error)
+
+    alert('ERROR OBTENIENDO CURSOS');
+  }
+}
+
 </script>
 
 <style scoped>
