@@ -105,7 +105,7 @@
           </form>
           <div class="login-links">
             <a href="#">¿Olvidaste tu contraseña?</a>
-            <a href="#" @click.prevent="showRegister = true">
+            <a href="#"  @click.prevent="showRegister = true; handleGetCourses()">
               ¿No tienes cuenta? Regístrate aquí
             </a>
           </div>
@@ -119,6 +119,15 @@
             <ion-input v-model="registerData.email" type="email" placeholder="Correo electrónico" required class="custom-input" fill="outline" />
             <ion-input v-model="registerData.password" type="password" placeholder="Contraseña" required class="custom-input" fill="outline" />
             <ion-input v-model="registerData.confirmPassword" type="password" placeholder="Confirmar contraseña" required class="custom-input" fill="outline" />
+            <ion-list>
+              <ion-item>
+                <ion-select v-model="selectedCourse" aria-label="Courses" interface="popover" placeholder="Selecciona un curso">
+                  <ion-select-option v-for="course in courses" :key="course.id" :value="course.id">
+                    {{ course.nombre }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
             <ion-button type="submit" expand="block" class="custom-button">
               <ion-icon name="person-add-outline"></ion-icon>
               Registrarse
@@ -137,8 +146,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue'
+import { ref, type Ref } from 'vue';
+import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
+import { getCourses, login } from '../services/PersonaServices';
+import router from '../router';
 
 const particlesLoaded = async (container: any) => {
     console.log("Particles container loaded", container);
@@ -149,9 +160,26 @@ const showRegister = ref(false)
 const loginData = ref({ email: '', password: '' })
 const registerData = ref({ name: '', email: '', password: '', confirmPassword: '' })
 
-function handleLogin() {
-  alert(`Login:\nEmail: ${loginData.value.email}\nPassword: ${loginData.value.password}`)
+async function handleLogin() {
+  try {
+    const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim())
+    console.log('Login exitoso:', response)
+
+    if (response && response.email) {
+      // Guardar al usuario en localStorage
+      localStorage.setItem('usuario', JSON.stringify(response))
+
+      alert('Inicio de sesión exitoso')
+      router.push('/');
+    } else {
+      alert('Credenciales incorrectas')
+    }
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error)
+    alert('Error al iniciar sesión. Verifica tus credenciales.')
+  }
 }
+
 
 function handleRegister() {
   if (registerData.value.password !== registerData.value.confirmPassword) {
@@ -160,6 +188,22 @@ function handleRegister() {
   }
   alert(`Registro:\nNombre: ${registerData.value.name}`)
 }
+
+const courses:Ref<any[]> = ref([]);
+const selectedCourse = ref('');
+
+async function handleGetCourses() {
+  try {
+    const response = await getCourses() as any[]; 
+    courses.value = response;
+    console.log(courses.value);
+  } catch (error){
+    console.error('ERROR OBTENIENDO CURSOS: ', error)
+
+    alert('ERROR OBTENIENDO CURSOS');
+  }
+}
+
 </script>
 
 <style scoped>

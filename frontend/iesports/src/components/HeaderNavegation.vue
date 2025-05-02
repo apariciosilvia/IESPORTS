@@ -44,16 +44,16 @@ function goToLogin() {
 }
 
 ion-button {
-  --color: inherit; /* Hereda el color del texto predeterminado */
-  --background: none; /* Quitar fondo */
-  --box-shadow: none; /* Sin sombra */
-  --padding-start: 0; /* Sin padding horizontal */
-  --padding-end: 0; /* Sin padding horizontal */
-  background: none; /* Sin fondo */
-  border: none; /* Sin borde */
-  color: inherit; /* Hereda el color del texto predeterminado */
-  font-weight: bolder; /* Sin negrita */
-  text-transform: none; /* Sin transformación de texto */
+  --color: inherit; 
+  --background: none;
+  --box-shadow: none; 
+  --padding-start: 0; 
+  --padding-end: 0; 
+  background: none; 
+  border: none; 
+  color: inherit; 
+  font-weight: bolder; 
+  text-transform: none; 
   font-size: 1.2rem;
 }
 </style>
