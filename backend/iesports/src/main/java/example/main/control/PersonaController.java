@@ -26,11 +26,6 @@ public class PersonaController {
 	}
 	
 	
-	
-	/*Método que mediante la URL nos devuelve una respuesta. Para ello tenemos que pasarle
-	 * el EMAIL y el PASSWORD
-	 * EJ:	http://localhost:8080/persona/selectPersona?email=test@gmail.com&password=1234
-	 * */
 	@GetMapping("/selectPersona")
 	public Persona getPersona(@RequestParam (name = "email") String email, @RequestParam (name = "password") String password) {
 		
