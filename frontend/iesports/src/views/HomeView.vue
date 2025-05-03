@@ -2,15 +2,15 @@
   <ion-page>
   
     <ion-content fullscreen  @ionScroll="handleScroll" :scroll-events="true">
- <!-- Portada grande -->
- <CarouselPortada />
-      <!-- Navbar que aparece al hacer scroll -->
+      <CarouselPortada />
       <BarraNavegacion />
      
       <br><br> <br><br><br>
       <ion-button expand="block" @click="goToLogin">
         Ir a Login
       </ion-button>
+      <GalleryComponent/>
+      
       <ion-grid>
         <ion-row>
 
@@ -30,143 +30,6 @@
               </ion-card-content>
             </ion-card>
           </ion-col>
-          <!-- <ion-col
-            v-for="persona in personas"
-            :key="persona.name"
-            size="6" size-md="3"
-          > -->
-            <!-- <PokemonCard
-              :name="pokemon.name"
-              :id="extractId(pokemon.url)"
-              :image="getImageUrl(pokemon.url)"
-            /> -->
-          <!-- </ion-col> -->
-        </ion-row>
-      </ion-grid>
-      <ion-grid>
-        <ion-row>
-
-          <ion-col
-            v-for="persona in personas"
-            :key="persona.id"
-            size="6" size-md="3"
-          >
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ persona.nombre }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <p>Email: {{ persona.email }}</p>
-                <p>Activo: {{ persona.activo ? 'Sí' : 'No' }}</p>
-                <p>Rol ID: {{ persona.rol_id }}</p>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-          <!-- <ion-col
-            v-for="persona in personas"
-            :key="persona.name"
-            size="6" size-md="3"
-          > -->
-            <!-- <PokemonCard
-              :name="pokemon.name"
-              :id="extractId(pokemon.url)"
-              :image="getImageUrl(pokemon.url)"
-            /> -->
-          <!-- </ion-col> -->
-        </ion-row>
-      </ion-grid><ion-grid>
-        <ion-row>
-
-          <ion-col
-            v-for="persona in personas"
-            :key="persona.id"
-            size="6" size-md="3"
-          >
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ persona.nombre }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <p>Email: {{ persona.email }}</p>
-                <p>Activo: {{ persona.activo ? 'Sí' : 'No' }}</p>
-                <p>Rol ID: {{ persona.rol_id }}</p>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-          <!-- <ion-col
-            v-for="persona in personas"
-            :key="persona.name"
-            size="6" size-md="3"
-          > -->
-            <!-- <PokemonCard
-              :name="pokemon.name"
-              :id="extractId(pokemon.url)"
-              :image="getImageUrl(pokemon.url)"
-            /> -->
-          <!-- </ion-col> -->
-        </ion-row>
-      </ion-grid><ion-grid>
-        <ion-row>
-
-          <ion-col
-            v-for="persona in personas"
-            :key="persona.id"
-            size="6" size-md="3"
-          >
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ persona.nombre }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <p>Email: {{ persona.email }}</p>
-                <p>Activo: {{ persona.activo ? 'Sí' : 'No' }}</p>
-                <p>Rol ID: {{ persona.rol_id }}</p>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-          <!-- <ion-col
-            v-for="persona in personas"
-            :key="persona.name"
-            size="6" size-md="3"
-          > -->
-            <!-- <PokemonCard
-              :name="pokemon.name"
-              :id="extractId(pokemon.url)"
-              :image="getImageUrl(pokemon.url)"
-            /> -->
-          <!-- </ion-col> -->
-        </ion-row>
-      </ion-grid>
-      <ion-grid>
-        <ion-row>
-
-          <ion-col
-            v-for="persona in personas"
-            :key="persona.id"
-            size="6" size-md="3"
-          >
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ persona.nombre }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <p>Email: {{ persona.email }}</p>
-                <p>Activo: {{ persona.activo ? 'Sí' : 'No' }}</p>
-                <p>Rol ID: {{ persona.rol_id }}</p>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-          <!-- <ion-col
-            v-for="persona in personas"
-            :key="persona.name"
-            size="6" size-md="3"
-          > -->
-            <!-- <PokemonCard
-              :name="pokemon.name"
-              :id="extractId(pokemon.url)"
-              :image="getImageUrl(pokemon.url)"
-            /> -->
-          <!-- </ion-col> -->
         </ion-row>
       </ion-grid>
       <!-- <ion-infinite-scroll
@@ -196,32 +59,25 @@ import { onMounted, ref, type Ref } from 'vue';
 // import PersonaCard from '../components/PersonaCard.vue';
 import CarouselPortada from '../components/CarouselPortada.vue';
 import BarraNavegacion from '../components/BarraNavegacion.vue';
-
-
+import GalleryComponent from '../components/GalleryComponent.vue';
 
 const personas:Ref<any[]> = ref([]);
 
 const router = useRouter();
 
-
 function goToLogin() {
   router.push('/login')
 }
-
-
-
 
 onMounted(async () => {
   await getPersonas().then((response:any[]) => {
     personas.value = response;
   }).catch(() => {
     alert('ERROR OBTENIENDO PERSONAS');
-  
   });
 });
 
 const showNavbar = ref(false);
-
 
 const handleScroll = (event: CustomEvent) => {
   const scrollElement = (event.target as any).getScrollElement 
@@ -239,10 +95,12 @@ const handleScroll = (event: CustomEvent) => {
       showNavbar.value = scrollTop > 900;
     } else if (windowWidth >= 1024) { 
       // Portátil
-      showNavbar.value = scrollTop > 700;
-    } else if (windowWidth >= 768) { // Tablet
+      showNavbar.value = scrollTop > 690;
+    } else if (windowWidth >= 768) { 
+      // Tablet
       showNavbar.value = scrollTop > 1000;
-    } else { // Móvil
+    } else { 
+      // Móvil
       showNavbar.value = scrollTop > 600;
     }
   });
@@ -287,9 +145,6 @@ const handleScroll = (event: CustomEvent) => {
 </script>
 
 <style scoped>
-
-
-
 .navbar {
   position: fixed;
   top: 0;
