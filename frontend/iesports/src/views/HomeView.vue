@@ -2,22 +2,20 @@
   <ion-page>
   
     <ion-content fullscreen  @ionScroll="handleScroll" :scroll-events="true">
-      <CarouselPortada />
-      <BarraNavegacion />
-     
-      <br><br> <br><br><br>
+      <HeroCarousel />
+      <Navbar/>
+
       <ion-button expand="block" @click="goToLogin">
         Ir a Login
       </ion-button>
-      <GalleryComponent/>
+      <Gallery/>
       
       <ion-grid>
         <ion-row>
-
           <ion-col
-            v-for="persona in personas"
-            :key="persona.id"
-            size="6" size-md="3"
+          v-for="persona in personas"
+          :key="persona.id"
+          size="6" size-md="3"
           >
             <ion-card>
               <ion-card-header>
@@ -32,34 +30,21 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <!-- <ion-infinite-scroll
-        @ionInfinite="loadMore"
-        threshold="100px"
-        ref="infiniteScrollRef"
-      > -->
-        <!-- <ion-infinite-scroll-content
-          loading-spinner="dots"
-          loading-text="Cargando más..."
-        />
-      </ion-infinite-scroll> -->
     </ion-content>
-    <ion-header>
-      <HeaderNavegation />
-    </ion-header>
-
+  
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { IonButton, IonContent, IonHeader, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle } from '@ionic/vue';
-import { getPersonas } from '../services/PersonaServices';
+import { IonButton, IonContent, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle } from '@ionic/vue';
+import { getPersonas } from '@/services/personServices';
 import { onMounted, ref, type Ref } from 'vue';
 
 // import PersonaCard from '../components/PersonaCard.vue';
-import CarouselPortada from '../components/CarouselPortada.vue';
-import BarraNavegacion from '../components/BarraNavegacion.vue';
-import GalleryComponent from '../components/GalleryComponent.vue';
+import HeroCarousel from '@/components/ui/HeroCarousel.vue';
+import Navbar from '@/components/layout/Navbar.vue';
+import Gallery from '@/components/ui/Gallery.vue';
 
 const personas:Ref<any[]> = ref([]);
 

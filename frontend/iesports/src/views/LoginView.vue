@@ -155,7 +155,7 @@
  <script setup lang="ts">
  import { ref, type Ref } from 'vue';
  import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
- import { getCourses, login } from '../services/PersonaServices';
+ import { getCourses, login } from '../services/personServices';
  import router from '../router';
  
  const particlesLoaded = async (container: any) => {
