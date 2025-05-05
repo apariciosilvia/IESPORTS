@@ -135,8 +135,6 @@
     {{ course.nombre }}
   </ion-select-option>
 </ion-select>
-
-
             <ion-button type="submit" expand="block" class="custom-button">
               <ion-icon name="person-add-outline"></ion-icon>
               Registrarse
