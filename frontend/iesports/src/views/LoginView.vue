@@ -152,7 +152,6 @@
   </ion-page>
 </template>
 
-
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
