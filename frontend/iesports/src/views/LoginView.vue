@@ -119,24 +119,15 @@
             <ion-input v-model="registerData.email" type="email" placeholder="Correo electrónico" required class="custom-input" fill="outline" />
             <ion-input v-model="registerData.password" type="password" placeholder="Contraseña" required class="custom-input" fill="outline" />
             <ion-input v-model="registerData.confirmPassword" type="password" placeholder="Confirmar contraseña" required class="custom-input" fill="outline" />
-            <ion-select
-  class="custom-select"
-  v-model="selectedCourse"
-  aria-label="Courses"
-  interface="popover"
-  placeholder="Selecciona un curso"
-  :interfaceOptions="{ cssClass: 'wide-popover' }"
->
-  <ion-select-option
-    v-for="course in courses"
-    :key="course.id"
-    :value="course.id"
-  >
-    {{ course.nombre }}
-  </ion-select-option>
-</ion-select>
-
-
+            <ion-list>
+              <ion-item>
+                <ion-select v-model="selectedCourse" aria-label="Courses" interface="popover" placeholder="Selecciona un curso">
+                  <ion-select-option v-for="course in courses" :key="course.id" :value="course.id">
+                    {{ course.nombre }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
             <ion-button type="submit" expand="block" class="custom-button">
               <ion-icon name="person-add-outline"></ion-icon>
               Registrarse
@@ -329,33 +320,6 @@ async function handleGetCourses() {
   --box-shadow: 0 0 0 6px #42b9838e;
 }
 
-.custom-select {
-  width: 100%;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-
-  /* Igual que custom-input */
-  --border-radius: 8px;
-  --background: #ffffff10;
-  --border-color: #ccc;
-  --box-shadow: none;
-
-  --padding-start: 10px;
-  --padding-end: 10px;
-  --min-height: 48px;
-
-  color: #000; /* texto negro como los inputs */
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-}
-
-.custom-select:hover,
-.custom-select:focus,
-.custom-select.ion-touched.ion-valid {
-  --background: #42b9831f;
-  --border-color: #cccccc38;
-  --box-shadow: 0 0 0 6px #42b9838e;
-}
 
 .custom-button {
   width: 100%;
@@ -394,14 +358,5 @@ async function handleGetCourses() {
 
 .login-links a:hover {
   text-decoration: underline;
-}
-</style>
-
-
-<style>
-/*Hacer mas grande el popover*/
-ion-popover.wide-popover::part(content) {
-  width: 450px !important;
-  max-width: 90vw;
 }
 </style>
