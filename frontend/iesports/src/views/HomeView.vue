@@ -1,148 +1,81 @@
 <template>
   <ion-page>
-  
-    <ion-content fullscreen  @ionScroll="handleScroll" :scroll-events="true">
-      <HeroCarousel />
-      <Navbar/>
+    <!-- Contenido principal de la página -->
+    <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
 
-      <ion-button expand="block" @click="goToLogin">
+      <!-- Carrusel principal (portada visual) -->
+      <HeroCarousel />
+
+      <!-- Navbar solo visible cuando se hace scroll suficiente -->
+      <Navbar :class="['navbar', { 'navbar-visible': showNavbar }]" />
+
+
+      <!-- Botón para ir a la pantalla de login -->
+      <!-- <ion-button expand="block" @click="goToLogin">
         Ir a Login
-      </ion-button>
-      <Gallery/>
+      </ion-button> -->
       
-      <ion-grid>
-        <ion-row>
-          <ion-col
-          v-for="persona in personas"
-          :key="persona.id"
-          size="6" size-md="3"
-          >
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ persona.nombre }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <p>Email: {{ persona.email }}</p>
-                <p>Activo: {{ persona.activo ? 'Sí' : 'No' }}</p>
-                <p>Rol ID: {{ persona.rol_id }}</p>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <!-- Galería de imágenes u otro contenido visual -->
+      <Gallery />
+
+      <!-- Lista de personas obtenidas desde la API -->
+      <PersonList :personas="personas" />
+
     </ion-content>
-  
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { IonButton, IonContent, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle } from '@ionic/vue';
-import { getPersonas } from '@/services/personServices';
-import { onMounted, ref, type Ref } from 'vue';
+/* Importa el router para poder navegar */
+// import { useRouter } from 'vue-router'
 
-// import PersonaCard from '../components/PersonaCard.vue';
+/* Importa componentes de Ionic usados en la vista */
+import {
+  IonContent,
+  IonPage,
+} from '@ionic/vue'
+
+/* Importa componentes visuales personalizados */
 import HeroCarousel from '@/components/ui/HeroCarousel.vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import Gallery from '@/components/ui/Gallery.vue';
+import PersonList from '@/components/ui/PersonList.vue';
 
-const personas:Ref<any[]> = ref([]);
+/* Importa lógica separada (composables) */
+import { usePersonList } from '@/composables/usePersonList'         // carga personas desde API
+import { useNavbarScroll } from '@/composables/useNavbarScroll'     // gestiona scroll dinámico
 
-const router = useRouter();
+/* Inicializa router para redirigir */
+// const router = useRouter()
 
-function goToLogin() {
-  router.push('/login')
-}
+/* Obtiene datos y funciones desde composables */
+const { personas } = usePersonList()
+const { showNavbar, handleScroll } = useNavbarScroll()
 
-onMounted(async () => {
-  await getPersonas().then((response:any[]) => {
-    personas.value = response;
-  }).catch(() => {
-    alert('ERROR OBTENIENDO PERSONAS');
-  });
-});
-
-const showNavbar = ref(false);
-
-const handleScroll = (event: CustomEvent) => {
-  const scrollElement = (event.target as any).getScrollElement 
-    ? event.target 
-    : (event.target as any).scrollElement;
-
-  scrollElement.getScrollElement().then((scrollEl: HTMLElement) => {
-    const scrollTop = scrollEl.scrollTop;
-
-    // Detectamos el tamaño de la pantalla
-    const windowWidth = window.innerWidth;
-
-    if (windowWidth >= 1440) { 
-      // Ordenador grande
-      showNavbar.value = scrollTop > 900;
-    } else if (windowWidth >= 1024) { 
-      // Portátil
-      showNavbar.value = scrollTop > 690;
-    } else if (windowWidth >= 768) { 
-      // Tablet
-      showNavbar.value = scrollTop > 1000;
-    } else { 
-      // Móvil
-      showNavbar.value = scrollTop > 600;
-    }
-  });
-};
-
-
-
-// function extractId(url: string): number {
-//   const partsURL = url.split('/');
-//   return parseInt(partsURL[partsURL.length - 2]);
+/* Redirige al login al hacer clic */
+// function goToLogin() {
+//   router.push('/login')
 // }
-
-// function getImageUrl(url: string): string {
-//   const id = extractId(url);
-//   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-// }
-
-
-// let offset = ref(0);
-// const limit = 20;
-
-// onMounted(async () => {
-//   await cargarPokemons();
-// });
-
-// async function cargarPokemons() {
-//   try {
-//     const response = await getPokemons(offset.value, limit);
-//     pokemons.value.push(...response);
-//   } catch {
-//     alert('ERROR OBTENIENDO POKEMONS');
-//   }
-// }
-
-// async function loadMore(event: CustomEvent) {
-//   offset.value += limit;
-//   await cargarPokemons();
-//   (event.target as HTMLIonInfiniteScrollElement).complete();
-// }
-
-
 </script>
-
 <style scoped>
+/* Clase para mostrar/ocultar navbar con animación */
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
   transform: translateY(-100%);
-  transition: transform 0.3s ease;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   z-index: 999;
 }
 
 .navbar-visible {
   transform: translateY(0);
+  opacity: 1;
 }
 
+
+/* Clase extra para posibles contenidos */
 .contenido {
   padding: 20px;
 }
