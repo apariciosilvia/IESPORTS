@@ -12,11 +12,12 @@
 </template>
 <script setup lang="ts"> 
 import { useRouter } from 'vue-router';
+import { IonButton, IonToolbar } from '@ionic/vue';
 
 const router = useRouter();
 
 function goToLogin() {
-  router.push('/login')
+  router.push('/login');
 }
 </script>
 

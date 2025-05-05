@@ -43,16 +43,13 @@
         />
       </ion-infinite-scroll> -->
     </ion-content>
-    <ion-header>
-      <HeaderNavegation />
-    </ion-header>
 
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { IonButton, IonContent, IonHeader, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle } from '@ionic/vue';
+import { IonButton, IonContent, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle } from '@ionic/vue';
 import { getPersonas } from '../services/PersonaServices';
 import { onMounted, ref, type Ref } from 'vue';
 
@@ -60,6 +57,7 @@ import { onMounted, ref, type Ref } from 'vue';
 import CarouselPortada from '../components/CarouselPortada.vue';
 import BarraNavegacion from '../components/BarraNavegacion.vue';
 import GalleryComponent from '../components/GalleryComponent.vue';
+
 
 const personas:Ref<any[]> = ref([]);
 
