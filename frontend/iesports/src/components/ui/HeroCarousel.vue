@@ -39,9 +39,9 @@ function goToLogin() {
 }
 
 const slides = [
-  { img: new URL('../assets/img/1.jpg', import.meta.url).href, title: 'Partidos' },
-  { img: new URL('../assets/img/2.jpg', import.meta.url).href, title: 'Noticias' },
-  { img: new URL('../assets/img/3.jpg', import.meta.url).href, title: 'Deportes' }
+  { img: new URL('@/assets/img/1.jpg', import.meta.url).href, title: 'Partidos' },
+  { img: new URL('@/assets/img/2.jpg', import.meta.url).href, title: 'Noticias' },
+  { img: new URL('@/assets/img/3.jpg', import.meta.url).href, title: 'Deportes' }
 ];
 
 const currentSlide = ref(0);

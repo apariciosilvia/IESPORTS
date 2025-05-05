@@ -68,18 +68,18 @@ function toggleZoom() {
 
 const rows = [
   [
-    { src: new URL('../assets/img/1.jpg', import.meta.url).href, alt: 'Foto torneo 1' },
-    { src: new URL('../assets/img/2.jpg', import.meta.url).href, alt: 'Foto torneo 2' },
-    { src: new URL('../assets/img/3.jpg', import.meta.url).href, alt: 'Foto torneo 3' }
+    { src: new URL('@/assets/img/1.jpg', import.meta.url).href, alt: 'Foto torneo 1' },
+    { src: new URL('@/assets/img/2.jpg', import.meta.url).href, alt: 'Foto torneo 2' },
+    { src: new URL('@/assets/img/3.jpg', import.meta.url).href, alt: 'Foto torneo 3' }
   ],
   [
-    { src: new URL('../assets/img/2.jpg', import.meta.url).href, alt: 'Instalaciones' },
-    { src: new URL('../assets/img/2.jpg', import.meta.url).href, alt: 'Entrega de premios' }
+    { src: new URL('@/assets/img/2.jpg', import.meta.url).href, alt: 'Instalaciones' },
+    { src: new URL('@/assets/img/2.jpg', import.meta.url).href, alt: 'Entrega de premios' }
   ],
   [
-    { src: new URL('../assets/img/1.jpg', import.meta.url).href, alt: 'Celebración 1' },
-    { src: new URL('../assets/img/2.jpg', import.meta.url).href, alt: 'Celebración 2' },
-    { src: new URL('../assets/img/3.jpg', import.meta.url).href, alt: 'Celebración 3' }
+    { src: new URL('@/assets/img/1.jpg', import.meta.url).href, alt: 'Celebración 1' },
+    { src: new URL('@/assets/img/2.jpg', import.meta.url).href, alt: 'Celebración 2' },
+    { src: new URL('@/assets/img/3.jpg', import.meta.url).href, alt: 'Celebración 3' }
   ]
 ];
 </script>
