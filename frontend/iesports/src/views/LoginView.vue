@@ -120,21 +120,21 @@
              <ion-input v-model="registerData.password" type="password" placeholder="Contraseña" required class="custom-input" fill="outline" />
              <ion-input v-model="registerData.confirmPassword" type="password" placeholder="Confirmar contraseña" required class="custom-input" fill="outline" />
              <ion-select
-   class="custom-select"
-   v-model="selectedCourse"
-   aria-label="Courses"
-   interface="popover"
-   placeholder="Selecciona un curso"
-   :interfaceOptions="{ cssClass: 'wide-popover' }"
- >
-   <ion-select-option
-     v-for="course in courses"
-     :key="course.id"
-     :value="course.id"
-   >
-     {{ course.nombre }}
-   </ion-select-option>
- </ion-select>
+                class="custom-select"
+                v-model="selectedCourse"
+                aria-label="Courses"
+                interface="popover"
+                placeholder="Selecciona un curso"
+                :interfaceOptions="{ cssClass: 'wide-popover' }"
+              >
+                <ion-select-option
+                  v-for="course in courses"
+                  :key="course.id"
+                  :value="course.id"
+                >
+                  {{ course.nombre }}
+                </ion-select-option>
+              </ion-select>
              <ion-button type="submit" expand="block" class="custom-button">
                <ion-icon name="person-add-outline"></ion-icon>
                Registrarse
@@ -154,7 +154,7 @@
  
  <script setup lang="ts">
  import { ref, type Ref } from 'vue';
- import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
+ import { IonInput, IonButton, IonIcon, IonContent, IonPage, IonSelect, IonSelectOption } from '@ionic/vue';
  import { getCourses, login } from '../services/PersonaServices';
  import router from '../router';
  
