@@ -46,13 +46,9 @@ public class PersonServiceImpl implements IPersonService {
 //		return pr.findAll();
 //	}
 
-//	public void addUser(int id, Course course_id, String name, String email, String password, int activo) {
-//		/*Rol default_alumno = new Rol();
-//		default_alumno.setId(4);
-//		Persona persona = new Persona( 0, curso_id, nombre, email, password, 1, );
-//	    pr.save(persona);*/
-//		
-//	}
+	public void addPerson(String name, String email, String password, int course_id) {
+		pr.insertUser(name, email, password, course_id);
+	}
 	
 	
 }
