@@ -155,7 +155,8 @@
  <script setup lang="ts">
  import { ref, type Ref } from 'vue';
  import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
- import { getCourses, login } from '@/services/personServices';
+ import { login, register } from '@/services/personServices';
+ import { getCourses } from "@/services/courseService";
  import router from '@/router';
  
  const particlesLoaded = async (container: any) => {
@@ -188,13 +189,37 @@
  }
  
  
- function handleRegister() {
-   if (registerData.value.password !== registerData.value.confirmPassword) {
-     alert('Las contraseñas no coinciden')
-     return
-   }
-   alert(`Registro:\nNombre: ${registerData.value.name}`)
- }
+ async function handleRegister() {
+  if (registerData.value.password !== registerData.value.confirmPassword) {
+    alert('Las contraseñas no coinciden');
+    return;
+  }
+
+  if (!selectedCourse.value) {
+    alert('Por favor selecciona un curso');
+    return;
+  }
+
+  try {
+    const response = await register(
+      registerData.value.name.trim(),
+      registerData.value.email.trim(),
+      registerData.value.password.trim(),
+      registerData.value.confirmPassword.trim(),
+      Number(selectedCourse.value)
+    );
+
+    if (response) {
+      localStorage.setItem('usuario', JSON.stringify(response));
+      alert('Registro exitoso. Has iniciado sesión automáticamente.');
+      router.push('/');
+    }
+  } catch (error) {
+    console.error('Error en el registro:', error);
+    alert('Error en el registro. Revisa los datos e inténtalo de nuevo.');
+  }
+}
+
  
  const courses:Ref<any[]> = ref([]);
  const selectedCourse = ref('');
