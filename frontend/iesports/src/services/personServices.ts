@@ -1,23 +1,3 @@
-// import axios from 'axios';
-
-// function getPokemons(offset = 0, limit = 20) {
-
-//   return new Promise<any[]>((resolve, reject) => {
-
-//     const url = `${import.meta.env.VITE_URL_API}/pokemon?offset=${offset}&limit=${limit}`;
-
-//      axios.get(url)
-//        .then(response => {
-//          resolve(response.data.results);
-//        })
-//        .catch(error => {
-//          reject(error);
-//        });
-//    });
-// }
-
-// export { getPokemons };
-
 import axios from 'axios';
 
 function getPersonas() {
@@ -54,21 +34,45 @@ function login(email: string, password: string) {
   });
 };
 
-function getCourses() {
-
+function register(name: string, email: string, password: string, password2: string, cursoId: number) {
   return new Promise((resolve, reject) => {
+    const url = `${import.meta.env.VITE_URL_API}/person/registro`;
 
-    const url = `${import.meta.env.VITE_URL_API}/course/getCourses`;
+    const params = new URLSearchParams();
+    params.append("name", name);
+    params.append("email", email);
+    params.append("password", password);
+    params.append("password1", password2);
+    params.append("curso", cursoId.toString());
 
-    axios.get(url)
-      .then(response => {
-        resolve(response.data); 
-      })
-      .catch(error => {
-        reject(error);
-      });
+    axios.post(url, params)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error));
   });
-};
+}
 
 
-export { getPersonas, login, getCourses};
+export { getPersonas, login, register};
+
+
+
+
+// import axios from 'axios';
+
+// function getPokemons(offset = 0, limit = 20) {
+
+//   return new Promise<any[]>((resolve, reject) => {
+
+//     const url = `${import.meta.env.VITE_URL_API}/pokemon?offset=${offset}&limit=${limit}`;
+
+//      axios.get(url)
+//        .then(response => {
+//          resolve(response.data.results);
+//        })
+//        .catch(error => {
+//          reject(error);
+//        });
+//    });
+// }
+
+// export { getPokemons };

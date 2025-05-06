@@ -1,9 +1,21 @@
 <template>
-  <!-- Icono para ir al login -->
-  <div class="login-icon">
-    <span class="material-symbols-outlined" style="font-size: 54px;" @click="goToLogin">
+  <!-- Icono para login o menú -->
+  <div class="login-icon" ref="iconRef">
+    <span class="material-symbols-outlined" style="font-size: 54px;" @click="toggleMenu">
       account_circle
     </span>
+    <b>{{ nombre }}</b>
+
+    <!-- Menú desplegable solo si está logado -->
+    <div v-if="usuarioLogado && menuVisible" class="user-menu" ref="menuRef">
+      <ul>
+        <li @click="goTo('/perfil')">Perfil</li>
+        <li @click="goTo('/notas')">Calificaciones</li>
+        <li @click="goTo('/mensajes')">Mensajes</li>
+        <li @click="goTo('/preferencias')">Preferencias</li>
+        <li @click="logout">Cerrar sesión</li>
+      </ul>
+    </div>
   </div>
 
   <!-- Texto central de bienvenida -->
@@ -28,43 +40,83 @@
   </div>
 </template>
 
-
-
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// Función de navegación al login
-function goToLogin() {
-  router.push('/login')
-}
+const nombre = ref('')
+const usuarioLogado = ref(false)
+const menuVisible = ref(false)
+const iconRef = ref<HTMLElement | null>(null)
+const menuRef = ref<HTMLElement | null>(null)
 
-// Datos de los slides
+defineProps<{ nombre: string }>()
+
+// Lógica carrusel
 const slides = [
   { img: new URL('@/assets/img/1.jpg', import.meta.url).href, title: 'Partidos' },
   { img: new URL('@/assets/img/2.jpg', import.meta.url).href, title: 'Noticias' },
   { img: new URL('@/assets/img/3.jpg', import.meta.url).href, title: 'Deportes' }
 ]
+const currentSlide = ref(0)
+let intervalId: any = null
 
-const currentSlide = ref(0) // Slide activo
-let intervalId: any = null   // ID del setInterval
-
-// Inicia el carrusel automático al montar el componente
 onMounted(() => {
   intervalId = setInterval(() => {
     currentSlide.value = (currentSlide.value + 1) % slides.length
   }, 4000)
+
+  const storedUser = localStorage.getItem('usuario')
+  if (storedUser) {
+    usuarioLogado.value = true
+    nombre.value = JSON.parse(storedUser).name
+  }
+
+  document.addEventListener('click', handleOutsideClick)
 })
 
-// Limpia el intervalo al salir del componente
 onBeforeUnmount(() => {
   clearInterval(intervalId)
+  document.removeEventListener('click', handleOutsideClick)
 })
 
+// Abrir/cerrar menú
+function toggleMenu() {
+  if (usuarioLogado.value) {
+    menuVisible.value = !menuVisible.value
+  } else {
+    router.push('/login')
+  }
+}
 
+function goTo(ruta: string) {
+  menuVisible.value = false
+  router.push(ruta)
+}
+
+function logout() {
+  localStorage.removeItem('usuario')
+  usuarioLogado.value = false
+  nombre.value = ''
+  menuVisible.value = false
+  router.push('/')
+}
+
+// Cerrar menú si haces clic fuera
+function handleOutsideClick(event: MouseEvent) {
+  if (
+    menuVisible.value &&
+    menuRef.value &&
+    !menuRef.value.contains(event.target as Node) &&
+    !iconRef.value?.contains(event.target as Node)
+  ) {
+    menuVisible.value = false
+  }
+}
 </script>
+
 
 <style scoped>
 /* Contenedor principal del carrusel, ocupa toda la pantalla */
@@ -122,6 +174,38 @@ onBeforeUnmount(() => {
   z-index: 30;
   color: white;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.user-menu {
+  position: absolute;
+  top: 70px;
+  right: 0;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  padding: 10px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  width: 180px;
+}
+
+.user-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.user-menu li {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.user-menu li:hover {
+  background: #f2f2f2;
 }
 
 </style>

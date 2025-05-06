@@ -4,7 +4,7 @@
     <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
 
       <!-- Carrusel principal (portada visual) -->
-      <HeroCarousel />
+      <HeroCarousel :nombre="nombre" />
 
       <!-- Navbar solo visible cuando se hace scroll suficiente -->
       <Navbar :class="['navbar', { 'navbar-visible': showNavbar }]" />
@@ -44,6 +44,18 @@ import PersonList from '@/components/ui/PersonList.vue';
 /* Importa lógica separada (composables) */
 import { usePersonList } from '@/composables/usePersonList'         // carga personas desde API
 import { useNavbarScroll } from '@/composables/useNavbarScroll'     // gestiona scroll dinámico
+
+import { onMounted, ref } from 'vue';
+
+const nombre = ref('');
+
+onMounted(() => {
+  const usuarioGuardado = localStorage.getItem('usuario');
+  if (usuarioGuardado) {
+    const usuario = JSON.parse(usuarioGuardado);
+    nombre.value = usuario.name || 'Usuario';
+  }
+});
 
 /* Inicializa router para redirigir */
 // const router = useRouter()
