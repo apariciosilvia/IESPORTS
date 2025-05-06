@@ -154,10 +154,11 @@
  
  <script setup lang="ts">
  import { ref, type Ref } from 'vue';
- import { IonInput, IonButton, IonIcon, IonContent, IonPage } from '@ionic/vue';
+ import { IonInput, IonButton, IonIcon, IonContent, IonPage, IonSelect, IonSelectOption } from '@ionic/vue';
  import { login, register } from '@/services/personServices';
  import { getCourses } from "@/services/courseService";
  import router from '@/router';
+ 
  
  const particlesLoaded = async (container: any) => {
      console.log("Particles container loaded", container);
@@ -189,7 +190,7 @@
  }
  
  
- async function handleRegister() {
+async function handleRegister() {
   if (registerData.value.password !== registerData.value.confirmPassword) {
     alert('Las contraseñas no coinciden');
     return;
@@ -205,7 +206,6 @@
       registerData.value.name.trim(),
       registerData.value.email.trim(),
       registerData.value.password.trim(),
-      registerData.value.confirmPassword.trim(),
       Number(selectedCourse.value)
     );
 
@@ -219,6 +219,8 @@
     alert('Error en el registro. Revisa los datos e inténtalo de nuevo.');
   }
 }
+
+
 
  
  const courses:Ref<any[]> = ref([]);
