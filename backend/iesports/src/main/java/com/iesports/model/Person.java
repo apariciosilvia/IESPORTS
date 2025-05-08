@@ -1,5 +1,6 @@
 package com.iesports.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,6 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "persons")
@@ -24,8 +28,16 @@ public class Person {
 	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	private Role role;
 
+	@NotBlank(message = "El nombre es obligatorio")
 	private String name;
+	
+	@Email(message = "El email no es válido")
+	@NotBlank(message = "El email es obligatorio")
+	@Column(name = "email", unique = true)
 	private String email;
+	
+	@NotBlank(message = "La contraseña es obligatoria")
+	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
 	private String password;
 	private int active;
 
