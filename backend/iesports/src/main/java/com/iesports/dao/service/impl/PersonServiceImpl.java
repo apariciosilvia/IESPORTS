@@ -20,11 +20,9 @@ public class PersonServiceImpl implements IPersonService {
 		return pr.findAll();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Person getPersonById(Long idPerson) {
-//		pr.findById(idPerson).orElse(null); REVISAR
-		return pr.getById(idPerson);
+		return pr.findById(idPerson).orElse(null);
 	}
 
 	@Override
@@ -40,6 +38,22 @@ public class PersonServiceImpl implements IPersonService {
 	@Override
 	public void deletePerson(Person person) {
 		pr.delete(person);
+	}
+	
+	// CUSTOM QUERYS
+
+	@Override
+	public boolean emailExists(String email) {
+		
+//		boolean emailExist = true;
+//		int coincidencesEmail = pr.emailExists(email);
+//		
+//		if (coincidencesEmail != 0) {
+//			// No existe
+//			emailExist = false;
+//		}
+		
+		return pr.emailExists(email) != 0;
 	}
 	
 //	public List<Person> getPersons(){
