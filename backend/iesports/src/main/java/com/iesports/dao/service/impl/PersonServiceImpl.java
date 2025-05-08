@@ -60,9 +60,9 @@ public class PersonServiceImpl implements IPersonService {
 //		return pr.findAll();
 //	}
 
-	public void addPerson(String name, String email, String password, int course_id) {
-		pr.insertUser(name, email, password, course_id);
-	}
+//	public void addPerson(String name, String email, String password, int course_id) {
+//		pr.insertUser(name, email, password, course_id);
+//	}
 	
 	
 }

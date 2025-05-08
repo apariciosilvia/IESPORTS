@@ -47,8 +47,7 @@ public class PersonController {
 		Person person = null;
 
 		for (Person currentPerson : persons) {
-			if (currentPerson.getEmail().compareTo(email) == 0
-					&& currentPerson.getPassword().compareTo(password) == 0) {
+			if (currentPerson.getEmail().compareTo(email) == 0 && currentPerson.getPassword().compareTo(password) == 0) {
 				person = currentPerson;
 			}
 		}
@@ -95,8 +94,7 @@ public class PersonController {
 
 		if (ps.emailExists(person.getEmail())) {
 			System.err.println("El email " + person.getEmail() + " ya existe");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(Map.of("error", "El email " + person.getEmail() + " ya existe"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El email " + person.getEmail() + " ya existe"));
 		}
 
 		// Creamos la persona por defecto con rol de Alumno
