@@ -36,22 +36,35 @@ function login(email: string, password: string) {
 
 // src/services/personServices.ts
 
-function register(name: string, email: string, password: string, cursoId: number) {
-  const url = `${import.meta.env.VITE_URL_API}/person/registro`;
+// function register(name: string, email: string, password: string, cursoId: number) {
+//   const url = `${import.meta.env.VITE_URL_API}/person/registro`;
 
-  const params = new URLSearchParams();
-  params.append('name', name);
-  params.append('email', email);
-  params.append('password', password);
-  params.append('password1', password);       // ambos iguales
-  params.append('curso', cursoId.toString());
+//   const params = new URLSearchParams();
+//   params.append('name', name);
+//   params.append('email', email);
+//   params.append('password', password);
+//   params.append('password1', password);       
+//   params.append('curso', cursoId.toString());
 
-  return axios.post(url, params, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+//   return axios.post(url, params, {
+//     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+//   });
+// }
+
+function register(name: string, email: string, password1: string, password2: string, courseId: number) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/register`;
+
+  // 1. Creamos el objeto person
+  const person = { name, email, password1, password2, courseId };
+  console.log('Objeto person:', person);
+  
+  // 3. Llamamos al endpoint Spring Boot
+  return axios.post(url, person, {
+    // 2. Configuramos encabezados para JSON
+    headers: { 'Content-Type': 'application/json' }
   });
 }
-
-
 
 export { getPersonas, login, register};
 

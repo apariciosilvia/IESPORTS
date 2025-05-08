@@ -1,5 +1,6 @@
 package com.iesports.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,18 +61,23 @@ public class PersonController {
 	// OPCION 1: BODY DE LOS DATOS REQUERIDOS DEL USUARIO
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody PersonRegisterDTO person) {
+		
+		Map<String, String> errors = new HashMap<>();
 
 		System.out.println("Persona de entrada: " + person.toString());
 
 		if (ps.emailExists(person.getEmail())) {
 			System.err.println("El email " + person.getEmail() + " ya existe");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(Map.of("error", "El email " + person.getEmail() + " ya existe"));
+			errors.put("email", "El email " + person.getEmail() + " ya existe");
 		}
 
 		if (!person.getPassword1().equals(person.getPassword2())) {
 			System.err.println("Las contraseñas no coinciden");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Las contraseñas no coinciden"));
+			errors.put("password2", "Las contraseñas no coinciden");
+		}
+		
+		if (errors.size() > 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 		}
 
 		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), rs.getRole(4L), person.getName(),

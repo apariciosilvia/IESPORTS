@@ -115,30 +115,51 @@
          <div class="card-face card-back">
            <h2>Registro</h2>
            <form @submit.prevent="handleRegister">
-             <ion-input v-model="registerData.name" type="text" placeholder="Nombre completo" required class="custom-input" fill="outline" />
-             <ion-input v-model="registerData.email" type="email" placeholder="Correo electrónico" required class="custom-input" fill="outline" />
-             <ion-input v-model="registerData.password" type="password" placeholder="Contraseña" required class="custom-input" fill="outline" />
-             <ion-input v-model="registerData.confirmPassword" type="password" placeholder="Confirmar contraseña" required class="custom-input" fill="outline" />
-             <ion-select
-   class="custom-select"
-   v-model="selectedCourse"
-   aria-label="Courses"
-   interface="popover"
-   placeholder="Selecciona un curso"
-   :interfaceOptions="{ cssClass: 'wide-popover' }"
- >
-   <ion-select-option
-     v-for="course in courses"
-     :key="course.id"
-     :value="course.id"
-   >
-     {{ course.nombre }}
-   </ion-select-option>
- </ion-select>
-             <ion-button type="submit" expand="block" class="custom-button">
-               <ion-icon name="person-add-outline"></ion-icon>
-               Registrarse
-             </ion-button>
+            <div>
+              <span v-if="errores.name" class="error-msg">{{ errores.name }}</span>
+              <ion-input v-model="registerData.name" type="text" placeholder="Nombre completo" class="custom-input" fill="outline" :class="{ 'error-border': errores.name }" />
+            </div>
+
+            <div>
+              <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
+              <ion-input v-model="registerData.email" type="email" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email }" />
+            </div>
+
+            <div>
+              <span v-if="errores.password1" class="error-msg">{{ errores.password1 }}</span>
+              <ion-input v-model="registerData.password" type="password" placeholder="Contraseña" class="custom-input" fill="outline" :class="{ 'error-border': errores.password1 }" />
+            </div>
+
+            <div>
+              <span v-if="errores.password2" class="error-msg">{{ errores.password2 }}</span>
+              <ion-input v-model="registerData.confirmPassword" type="password" placeholder="Confirmar contraseña" class="custom-input" fill="outline" :class="{ 'error-border': errores.password2 }"/>
+            </div>
+            <div>
+              <span v-if="errores.courseId" class="error-msg">{{ errores.courseId }}</span>
+              <ion-select
+                class="custom-select"
+                v-model="selectedCourse"
+                aria-label="Courses"
+                interface="popover"
+                placeholder="Selecciona un curso"
+                :interfaceOptions="{ cssClass: 'wide-popover' }"
+                :class="{ 'error-border': errores.email }"
+              >
+                <ion-select-option
+                  v-for="course in courses"
+                  :key="course.id"
+                  :value="course.id"
+                >
+                  {{ course.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+
+            <ion-button id="present-alert" type="submit" expand="block" class="custom-button">
+              <ion-icon name="person-add-outline"></ion-icon>
+              Registrarse
+            </ion-button>
+
            </form>
            <div class="login-links">
              <a href="#" @click.prevent="showRegister = false">
@@ -188,24 +209,28 @@
      alert('Error al iniciar sesión. Verifica tus credenciales.')
    }
  }
- 
+
+
+// const showErrorAlert = ref(false);
+// const errorMessage = ref('');
+const errores = ref<Record<string, string>>({});
  
 async function handleRegister() {
-  if (registerData.value.password !== registerData.value.confirmPassword) {
-    alert('Las contraseñas no coinciden');
-    return;
-  }
+  // if (registerData.value.password !== registerData.value.confirmPassword) {
+  //   alert('Las contraseñas no coinciden');
+  //   return;
+  // }
 
-  if (!selectedCourse.value) {
-    alert('Por favor selecciona un curso');
-    return;
-  }
+  // if (!selectedCourse.value) {
+  //   errores.value = { courseId: 'Por favor selecciona un curso' };
+  // }
 
   try {
     const response = await register(
       registerData.value.name.trim(),
       registerData.value.email.trim(),
       registerData.value.password.trim(),
+      registerData.value.confirmPassword.trim(),
       Number(selectedCourse.value)
     );
 
@@ -214,33 +239,34 @@ async function handleRegister() {
       alert('Registro exitoso. Has iniciado sesión automáticamente.');
       router.push('/');
     }
-  } catch (error) {
-    console.error('Error en el registro:', error);
-    alert('Error en el registro. Revisa los datos e inténtalo de nuevo.');
+  } catch (error: any) {
+    console.error('Error al registrar:', error.response.data);
+  
+    if (error.response && error.response.status === 400) {
+      errores.value = error.response.data;
+    } else {
+      errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
+    }
   }
 }
 
-
-
+const courses:Ref<any[]> = ref([]);
+const selectedCourse = ref('');
  
- const courses:Ref<any[]> = ref([]);
- const selectedCourse = ref('');
+async function handleGetCourses() {
+  try {
+    const response = await getCourses() as any[]; 
+    courses.value = response;
+    console.log(courses.value);
+  } catch (error){
+    console.error('ERROR OBTENIENDO CURSOS: ', error)
+    alert('ERROR OBTENIENDO CURSOS');
+  }
+}
  
- async function handleGetCourses() {
-   try {
-     const response = await getCourses() as any[]; 
-     courses.value = response;
-     console.log(courses.value);
-   } catch (error){
-     console.error('ERROR OBTENIENDO CURSOS: ', error)
+</script>
  
-     alert('ERROR OBTENIENDO CURSOS');
-   }
- }
- 
- </script>
- 
- <style scoped>
+<style scoped>
  
  .vanta-bg {
    position: absolute;
@@ -346,12 +372,10 @@ async function handleRegister() {
    --box-shadow: none;
  }
  
- .custom-input:hover,
- .custom-input:focus,
- .custom-input.ion-touched.ion-valid{
-   --background:  #42b9831f;
-   --border-color: #cccccc38;
-   --box-shadow: 0 0 0 6px #42b9838e;
+ .custom-input.ion-focused,
+ .custom-select.ion-focused {
+  --border-color: #2cff02 !important;     /* tu color personalizado al enfocar */
+  --box-shadow: 0 0 0 3px rgba(233,30,99,0.2);
  }
  
  .custom-select {
@@ -373,15 +397,19 @@ async function handleRegister() {
    border: 1px solid var(--border-color);
    border-radius: var(--border-radius);
  }
- 
- .custom-select:hover,
- .custom-select:focus,
- .custom-select.ion-touched.ion-valid {
-   --background: #42b9831f;
-   --border-color: #cccccc38;
-   --box-shadow: 0 0 0 6px #42b9838e;
+  /*FOCO POR DEFECTO*/
+  /* Solo aplica el highlight si NO tiene clase error-border */
+ .custom-input.sc-ion-input-md-h:not(.error-border),
+ .custom-select.sc-ion-input-md-h:not(.error-border) {
+  --highlight-color: #43ba85;
  }
- 
+ /* 1) Hover solo si NO tiene error-border */
+.custom-input.sc-ion-input-md-h:not(.error-border):hover,
+.custom-select.sc-ion-input-md-h:not(.error-border):hover {
+  --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
+  --border-color: #43ba84fa;
+}
+
  .custom-button {
    width: 100%;
    margin-top: 5%;
@@ -420,14 +448,34 @@ async function handleRegister() {
  .login-links a:hover {
    text-decoration: underline;
  }
- </style>
+
+.error-msg {
+  color: red;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.error-border {
+  --highlight-color-focused: #fb2221;
+  --border-color: #fb2221;
+  --box-shadow: 0 0 0 1px #fb2221;
+}
+
+.error-border:hover{
+  --background: #eb8d8d27;
+  --border-color: #fb2221;
+  --box-shadow: 0 0 0 6px #fb2221;
+}
+
+</style>
  
  
- <style>
+<style>
  /*Hacer mas grande el popover*/
- ion-popover.wide-popover::part(content) {
-   width: 450px !important;
-   max-width: 90vw;
- }
- </style>
+ion-popover.wide-popover::part(content) {
+  width: 450px !important;
+  max-width: 90vw;
+}
+</style>
  

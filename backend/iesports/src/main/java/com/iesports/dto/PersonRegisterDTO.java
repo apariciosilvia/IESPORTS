@@ -1,6 +1,7 @@
 package com.iesports.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,9 +20,11 @@ public class PersonRegisterDTO {
 	private String password1;
 
 	@NotBlank(message = "La confirmación de contraseña es obligatoria")
+	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
 	private String password2;
 
-	@NotNull(message = "El ID del curso es obligatorio")
+	@NotNull(message = "El curso es obligatorio")
+	@Min(value = 1, message = "Debe seleccionar un curso válido")
 	private Long courseId;
 
 	public String getName() {
