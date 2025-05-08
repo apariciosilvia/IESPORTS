@@ -22,10 +22,9 @@ public class RoleServiceImpl implements IRoleService{
 	}
 	
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public Role getRole(Long idRole) {
-		return rp.getById(idRole);
+		return rp.findById(idRole).orElse(null);
 	}
 
 
