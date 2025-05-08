@@ -22,6 +22,8 @@ public class ValidationExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage())
         );
 
+        errors.forEach((campo, mensaje) -> System.err.println("- " + campo + ": " + mensaje));
+        
         return ResponseEntity.badRequest().body(errors);
     }
 }
