@@ -92,9 +92,16 @@
          />
      <div class="card-container" :class="{ 'show-back': showRegister }">
        <div class="card-inner">
+         
          <!-- Login -->
          <div class="card-face card-front">
-           <h2>Iniciar sesión</h2>
+          <div class="header-row">
+            <IonButton @click="goBack" slot="start" fill="clear">
+            <span class="material-symbols-outlined back-icon">arrow_back</span>
+            </IonButton>
+           <h2 class="tittle">Iniciar sesión</h2>
+          </div>
+            
            <form @submit.prevent="handleLogin">
               <ion-input v-model="loginData.email" type="email" placeholder="Correo electrónico" required class="custom-input" fill="outline" />
               <ion-input
@@ -133,7 +140,12 @@
  
          <!-- Registro -->
          <div class="card-face card-back">
-           <h2>Registro</h2>
+            <div class="header-row">
+              <IonButton @click="goBack" slot="start" fill="clear">
+              <span class="material-symbols-outlined back-icon">arrow_back</span>
+              </IonButton>
+            <h2 class="tittle">Registro</h2>
+            </div>
            <form @submit.prevent="handleRegister">
             <div>
               <span v-if="errores.name" class="error-msg">{{ errores.name }}</span>
@@ -248,6 +260,11 @@
  
  const loginData = ref({ email: '', password: '' })
  const registerData = ref({ name: '', email: '', password: '', confirmPassword: '' })
+
+function goBack() {
+  window.history.back();
+}
+
  
  async function handleLogin() {
    try {
@@ -359,35 +376,38 @@ const showLoginPassword = ref(false);
    position: relative;
    z-index: 1;
  }
- 
- /* @media (max-width: 480px) {
-   .card-container {
-     width: 95vw;
-     max-width: 360px;
-     aspect-ratio: 10 / 13;
-     margin-top: 25%;
-     
-   }
- 
-   .card-face {
-     padding: 1.5rem;
-     
-   }
- 
-   .card-face h2 {
-     font-size: 1.5rem;
-   }
- 
-   .custom-input,
-   .custom-button {
-     font-size: 0.9rem;
-     padding: 10px;
-   }
- 
-   .material-icons {
-     font-size: 20px;
-   }
- } */
+
+.header-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;  /* centra el contenido principal */
+  margin: 0;
+  text-align: center;
+}
+
+/* Botón anclado a la izquierda */
+.header-row IonButton {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+.back-icon {
+  font-size: 2.2rem;
+  color: #000000;
+}
+
+.card-face h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: bold;
+  font-size: 2.5rem;
+ }
+
  
  .card-inner {
    width: 100%;
@@ -423,13 +443,7 @@ const showLoginPassword = ref(false);
    transform: rotateY(180deg);
  }
  
- .card-face h2 {
-   text-align: center;
-   margin-bottom: 1.5rem;
-   color: #333;
-   font-weight: bold;
-   font-size: 2.5rem;
- }
+ 
  
  .custom-input {
    width: 100%;
@@ -568,6 +582,10 @@ const showLoginPassword = ref(false);
   --border-color: #fb2221;
   --box-shadow: 0 0 0 6px #fb2221;
 }
+
+
+
+
 
 
 /* Grandes pantallas: >1200px */
