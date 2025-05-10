@@ -96,12 +96,32 @@
          <div class="card-face card-front">
            <h2>Iniciar sesión</h2>
            <form @submit.prevent="handleLogin">
-             <ion-input v-model="loginData.email" type="email" placeholder="Correo electrónico" required class="custom-input" fill="outline" />
-             <ion-input v-model="loginData.password" type="password" placeholder="Contraseña" required class="custom-input" fill="outline" />
-             <ion-button type="submit" expand="block" class="custom-button">
-               <ion-icon name="log-in-outline"></ion-icon>
-               Entrar
-             </ion-button>
+              <ion-input v-model="loginData.email" type="email" placeholder="Correo electrónico" required class="custom-input" fill="outline" />
+              <ion-input
+                v-model="loginData.password"
+                :clear-on-edit="false"
+                :type="showLoginPassword ? 'text' : 'password'"   
+                placeholder="Contraseña"
+                required
+                class="custom-input"
+                fill="outline"
+                
+              >
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  @click="showLoginPassword = !showLoginPassword"  
+                  style="--padding:0; --min-width:auto; cursor:pointer;"
+                >
+                  <span class="material-symbols-outlined">
+                    {{ showLoginPassword ? 'visibility_off' : 'visibility' }}  <!-- 3) Ícono según estado -->
+                  </span>
+                </ion-button>
+              </ion-input>
+              <ion-button type="submit" expand="block" class="custom-button">
+                <ion-icon name="log-in-outline"></ion-icon>
+                Entrar
+              </ion-button>
            </form>
            <div class="login-links">
              <a href="#">¿Olvidaste tu contraseña?</a>
@@ -127,13 +147,52 @@
 
             <div>
               <span v-if="errores.password1" class="error-msg">{{ errores.password1 }}</span>
-              <ion-input v-model="registerData.password" type="password" placeholder="Contraseña" class="custom-input" fill="outline" :class="{ 'error-border': errores.password1 }" />
+              <ion-input
+                v-model="registerData.password"
+                :clear-on-edit="false"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="Contraseña"
+                class="custom-input"
+                fill="outline"
+                :class="{ 'error-border': errores.password1 }"
+              >
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  @click="showPassword = !showPassword"
+                  style="--padding:0; --min-width:auto; cursor:pointer;"
+                >
+                  <span class="material-symbols-outlined">
+                    {{ showPassword ? 'visibility_off' : 'visibility' }}
+                  </span>
+                </ion-button>
+              </ion-input>
             </div>
 
             <div>
-              <span v-if="errores.password2" class="error-msg">{{ errores.password2 }}</span>
-              <ion-input v-model="registerData.confirmPassword" type="password" placeholder="Confirmar contraseña" class="custom-input" fill="outline" :class="{ 'error-border': errores.password2 }"/>
-            </div>
+            <span v-if="errores.password2" class="error-msg">{{ errores.password2 }}</span>
+            <ion-input
+              v-model="registerData.confirmPassword"
+              :clear-on-edit="false"
+              :type="showConfirmPassword ? 'text' : 'password'"
+              placeholder="Confirmar contraseña"
+              class="custom-input"
+              fill="outline"
+              :class="{ 'error-border': errores.password2 }"
+            >
+              <ion-button
+                slot="end"
+                fill="clear"
+                @click="showConfirmPassword = !showConfirmPassword"
+                style="--padding:0; --min-width:auto; cursor:pointer;"
+              >
+                <span class="material-symbols-outlined">
+                  {{ showConfirmPassword ? 'visibility_off' : 'visibility' }}
+                </span>
+              </ion-button>
+            </ion-input>
+          </div>
+
             <div>
               <span v-if="errores.courseId" class="error-msg">{{ errores.courseId }}</span>
               <ion-select
@@ -263,6 +322,15 @@ async function handleGetCourses() {
     alert('ERROR OBTENIENDO CURSOS');
   }
 }
+
+//VER CONTRASEÑAS
+// para mostrar/ocultar la contraseña principal
+const showPassword = ref(false);
+// para mostrar/ocultar la confirmación
+const showConfirmPassword = ref(false);
+// para mostrar/ocultar la contraseña de login
+const showLoginPassword = ref(false);
+
  
 </script>
  
@@ -371,6 +439,13 @@ async function handleGetCourses() {
    --border-color: #ccc;
    --box-shadow: none;
  }
+
+ /* Icono de mostrar/ocultar dentro del input */
+.custom-input ion-button span.material-symbols-outlined {
+  color: #43ba85; /* pon aquí el color que quieras */
+  font-size: 1.5rem;
+}
+
  
  .custom-input.ion-focused,
  .custom-select.ion-focused {
@@ -418,8 +493,9 @@ async function handleGetCourses() {
   --border-color: #43ba85 !important;
   /* 2) Y forzamos también la regla de CSS normal */
   border: 1px solid var(--border-color) !important;
-  /* opcional: quitas sombras si las tienes */
-  --box-shadow: none !important;
+  
+  --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
+
 }
 
 /* 1) Redefine el var que Ionic usa para el subrayado */
