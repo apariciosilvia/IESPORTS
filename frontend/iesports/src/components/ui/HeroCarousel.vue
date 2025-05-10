@@ -179,7 +179,7 @@ function handleOutsideClick(event: MouseEvent) {
 
 .user-menu {
   position: absolute;
-  top: 70px;
+  top: 80px;
   right: 0;
   background: white;
   color: black;
