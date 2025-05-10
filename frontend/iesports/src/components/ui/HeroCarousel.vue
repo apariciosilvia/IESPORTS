@@ -9,10 +9,7 @@
     <!-- Menú desplegable solo si está logado -->
     <div v-if="usuarioLogado && menuVisible" class="user-menu" ref="menuRef">
       <ul>
-        <li @click="goTo('/perfil')">Perfil</li>
-        <li @click="goTo('/notas')">Calificaciones</li>
-        <li @click="goTo('/mensajes')">Mensajes</li>
-        <li @click="goTo('/preferencias')">Preferencias</li>
+        <li @click="goTo('/profile')">Perfil</li>
         <li @click="logout">Cerrar sesión</li>
       </ul>
     </div>
