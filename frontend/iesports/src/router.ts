@@ -12,6 +12,11 @@ const routes = [
     name: 'Login',
     component: () => import('./views/LoginView.vue')
   },
+  {
+    path: '/profile', // Ruta para la vista de inicio de sesión
+    name: 'Profile',
+    component: () => import('./views/ProfileView.vue')
+  },
 ]
 
 const router = createRouter({
