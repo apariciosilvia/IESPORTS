@@ -251,13 +251,13 @@
  
  async function handleLogin() {
    try {
-     const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim())
-     console.log('Login exitoso:', response)
+    const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim())
+    console.log('Login exitoso:', response)
  
-     if (response && response.email) {
-       // Guardar al usuario en localStorage
-       localStorage.setItem('usuario', JSON.stringify(response))
- 
+    const user = response.data ?? response;
+     if (user?.email) {
+       localStorage.setItem('usuario', JSON.stringify(user));
+     
        alert('Inicio de sesión exitoso')
        router.push('/');
      } else {
@@ -294,7 +294,7 @@ async function handleRegister() {
     );
 
     if (response) {
-      localStorage.setItem('usuario', JSON.stringify(response));
+      localStorage.setItem('usuario', JSON.stringify(response.data));
       alert('Registro exitoso. Has iniciado sesión automáticamente.');
       router.push('/');
     }
