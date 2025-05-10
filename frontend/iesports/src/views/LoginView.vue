@@ -331,6 +331,8 @@ const showConfirmPassword = ref(false);
 // para mostrar/ocultar la contraseña de login
 const showLoginPassword = ref(false);
 
+// alert(`Ancho de pantalla: ${window.innerWidth}px`);
+
  
 </script>
  
@@ -358,7 +360,7 @@ const showLoginPassword = ref(false);
    z-index: 1;
  }
  
- @media (max-width: 480px) {
+ /* @media (max-width: 480px) {
    .card-container {
      width: 95vw;
      max-width: 360px;
@@ -385,7 +387,7 @@ const showLoginPassword = ref(false);
    .material-icons {
      font-size: 20px;
    }
- }
+ } */
  
  .card-inner {
    width: 100%;
@@ -565,6 +567,264 @@ const showLoginPassword = ref(false);
   --background: #eb8d8d27;
   --border-color: #fb2221;
   --box-shadow: 0 0 0 6px #fb2221;
+}
+
+
+/* Grandes pantallas: >1200px */
+@media (min-width: 1920px) {
+  /* 1) Ajusta el padding de la tarjeta para que no quede tan “respirada” */
+  ::v-deep .card-face {
+    padding: 2rem !important;    /* antes era 3rem, lo bajamos a 2rem */
+  }
+
+  .card-container {
+    position: relative !important;
+    transform: none !important;
+    margin: auto !important;       /* centra horizontalmente */
+    width: 65vw !important;       
+    max-width: 800px !important;
+    height: auto !important;
+    margin-top: 5% !important;
+  }
+
+  /* 2) Reduce el padding interno de los inputs/selects */
+  ::v-deep .custom-input,
+  ::v-deep .custom-select {
+    --padding-start: 12px !important;  /* recorta espacio lateral */
+    --padding-end:   12px !important;
+    margin-bottom:   1.2rem !important;/* separación vertical cómoda */
+  }
+
+  /* 3) Opcional: haz la tarjeta un poco más estrecha proporcionalmente */
+  ::v-deep .card-container {
+    width: 35vw !important;       /* ocupa el 35% del ancho */
+    max-width: 650px !important;  /* pero no excede 650px */
+  }
+}
+
+
+/* --- Centrado general en pantallas grandes (>768px) --- */
+@media (min-width: 885px) and (max-width: 1919px) {
+  /* Hacemos de ion-content un flex container */
+  ion-content {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    
+  }
+
+  /* Nos aseguramos de que la tarjeta no esté en absoluto */
+  .card-container {
+    position: relative !important;
+    transform: none !important;
+    margin: auto !important;       /* centra horizontalmente */
+    width: 45vw !important;       
+    max-width: 600px !important;
+    height: auto !important;
+    margin-top: 3vw !important;
+  }
+}
+
+/* Tablet pequeño: entre 768px y 834px */
+@media (min-width: 768px) and (max-width: 884px) {
+  /* Centrado del contenido */
+  ::v-deep ion-content.login-page {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1rem !important;
+  }
+
+  /* Tamaño y centrado de la tarjeta */
+  ::v-deep .card-container {
+    width: 85vw !important;
+    max-width: 600px !important;
+    margin: 19vh auto !important;
+    height: auto !important;
+  }
+
+  /* Espacio interno */
+  ::v-deep .card-face {
+    padding: 2rem !important;
+  }
+
+  /* Título ajustado */
+  ::v-deep .card-face h2 {
+    font-size: 2rem !important;
+    margin-bottom: 1.2rem !important;
+  }
+
+  /* Inputs y selects */
+  ::v-deep .custom-input,
+  ::v-deep .custom-select {
+    font-size: 1.05rem !important;
+    --padding-start: 8px !important;
+    --padding-end:   8px !important;
+    margin-bottom:   0.8rem !important;
+  }
+
+  /* Botones */
+  ::v-deep .custom-button {
+    font-size: 1.1rem !important;
+    padding: 8px 0 !important;
+    gap: 6px !important;
+  }
+
+  /* Mensajes de error */
+  ::v-deep .error-msg {
+    font-size: 0.8rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Enlaces de login */
+  ::v-deep .login-links {
+    font-size: 1rem !important;
+    margin-top: 0.8rem !important;
+  }
+}
+
+
+/* Tablet: ancho entre 481px y 1024px */
+@media (min-width: 481px) and (max-width: 768px) {
+  /* 1) Selector profundo para ion-content */
+  ::v-deep ion-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 2) Y para la tarjeta */
+  ::v-deep .card-container {
+    position: absolute;
+    top: 31%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    max-width: 600px;
+    height: 65vh;
+    margin: 0;
+  }
+}
+
+
+
+
+/* Móvil: hasta 480px */
+@media (max-width: 480px) {
+  /* 1) Centrar dentro de ion-content */
+  ::v-deep ion-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 2) Saca la tarjeta del flujo y céntrala */
+  ::v-deep .card-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;        /* ocupa casi todo el ancho */
+    max-width: 360px;   /* no pase de cierto tamaño */
+    height: 90vh;
+    margin: 0;
+  }
+
+  /* Inputs y selects más compactos */
+  ::v-deep .custom-input,
+  ::v-deep .custom-select {
+    font-size: 0.9rem !important;
+    padding: 1px !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Botones más compactos */
+  ::v-deep .custom-button {
+    font-size: 1rem !important;
+    padding: 6px 0 !important;
+    /* quita gap para que quepa mejor */
+    gap: 4px !important;
+  }
+
+  /* Título un poco más pequeño */
+  ::v-deep .card-face h2 {
+    font-size: 1.2rem !important;
+    margin-bottom:  0.85rem !important;
+    margin-top: 0;
+    
+  }
+
+  /* Links pequeños */
+  ::v-deep .login-links {
+    font-size: 0.9rem !important;
+    margin-top: 0.5rem !important;
+  }
+   /* Mensajes de error más pequeños */
+  ::v-deep .error-msg {
+    font-size: 0.65rem !important;
+    margin-bottom: 0.3rem !important;
+  }
+} 
+
+
+/* Ultra-móvil (≤320px) */
+@media (max-width: 320px) {
+  /* 1) Evita scroll horizontal */
+  ::v-deep ion-content.login-page {
+    padding: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  /* 2) Tarjeta full-width con un pequeño “gap” (10px por lado) */
+  ::v-deep .card-container {
+    width: calc(100% - 20px) !important;
+    max-width: none !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+    height:90vh !important;
+  }
+
+  /* 3) Padding interno reducido */
+  ::v-deep .card-face {
+    padding: 0.25rem !important;
+  }
+
+  /* 4) Título compacto */
+  ::v-deep .card-face h2 {
+    font-size: 1.2rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+
+  /* 5) Inputs y selects muy ajustados */
+  ::v-deep .custom-input,
+  ::v-deep .custom-select {
+    --padding-start: 4px !important;
+    --padding-end:   4px !important;
+    margin-right: 1% !important;
+    margin-left: 1% !important;
+
+    margin-bottom:   0.1rem !important;
+  }
+
+  /* 6) Botón mínimo viable */
+  ::v-deep .custom-button {
+    font-size: 0.7rem !important;
+    padding:  0 !important;
+    gap: 1px !important;
+  }
+
+  /* 7) Mensajes de error y enlaces compactos */
+  ::v-deep .error-msg {
+    font-size: 0.55rem !important;
+    margin-bottom: 0.2rem !important;
+  }
+  ::v-deep .login-links {
+    font-size: 0.45rem !important;
+    margin-top: 0.2rem !important;
+  }
 }
 
 </style>
