@@ -15,4 +15,9 @@ public interface IPersonService {
 	public Person updatePerson(Person person);
 
 	public void deletePerson(Person person);
+	
+	// CUSTOM QUERYS
+	
+	public boolean emailExists(String email);
+
 }

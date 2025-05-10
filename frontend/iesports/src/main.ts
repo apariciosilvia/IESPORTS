@@ -1,15 +1,15 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';   // Crea la instancia principal de Vue
+import App from './App.vue';       // Tu componente raíz donde se monta la aplicación
 
-import { IonicVue } from '@ionic/vue'
-import { IonApp } from '@ionic/vue'
+import { IonicVue } from '@ionic/vue'; // Habilita Ionic para Vue
+import { IonApp } from '@ionic/vue';  // Contenedor principal que usas en App.vue para Ionic
 
-import Particles from "@tsparticles/vue3";
-import { loadSlim } from "@tsparticles/slim"; 
+import Particles from "@tsparticles/vue3"; // Librería de partículas para efectos visuales (FONDO ANIMADO)
+import { loadSlim } from "@tsparticles/slim";  // Carga la versión ligera de tsParticles
 
-import { createPinia } from 'pinia'
-import router from './router.ts'
-import i18n from './i18n.ts'
+import { createPinia } from 'pinia';   // Manejo de estado global
+import router from './router.ts';   // Sistema de rutas
+import i18n from './i18n.ts';   // Internacionalización
 
 /* Ionic styles */
 import '@ionic/vue/css/core.css'
@@ -23,19 +23,20 @@ import '@ionic/vue/css/text-transformation.css'
 import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 
-const app = createApp(App)
-app.component('ion-app', IonApp)
-app.use(Particles, {
-  init: async engine => {
-    // await loadFull(engine); // you can load the full tsParticles library from "tsparticles" if you need it
-    await loadSlim(engine); // or you can load the slim version from "@tsparticles/slim" if don't need Shapes or Animations
+const app = createApp(App);  // Crea la instancia de la aplicación Vue
+app.component('ion-app', IonApp)  // Registra el componente IonApp de Ionic
+app.use(Particles, {  // Configuración de la librería de partículas
+  init: async engine => {   // Inicializa la librería de partículas
+    await loadSlim(engine);  // Carga la versión ligera de tsParticles
   },
 });
-app.use(IonicVue)
-app.use(createPinia())
-app.use(router)
-app.use(i18n)
+app.use(IonicVue)  // Habilita Ionic para Vue
+app.use(createPinia())  // Habilita Pinia para el manejo de estado global
+app.use(router)   // Habilita el sistema de rutas
+app.use(i18n)   // Habilita la internacionalización
 
-router.isReady().then(() => {
-  app.mount('#app')
+
+//Espera a que el enrutador esté listo antes de montar la app. Esto evita errores de navegación en apps SPA.
+router.isReady().then(() => {   // Espera a que el enrutador esté listo antes de montar la aplicación
+  app.mount('#app')   // Monta la aplicación en el elemento con id "app"
 })

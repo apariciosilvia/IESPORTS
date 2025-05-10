@@ -20,10 +20,9 @@ public class CourseServiceImpl implements ICourseService {
 		return cr.findAll();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public Course getCourse(Long idCourse) {
-		return cr.getById(idCourse);
+		return cr.findById(idCourse).orElse(null);
 	}
 
 	@Override
