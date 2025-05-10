@@ -143,7 +143,7 @@
                 interface="popover"
                 placeholder="Selecciona un curso"
                 :interfaceOptions="{ cssClass: 'wide-popover' }"
-                :class="{ 'error-border': errores.email }"
+                :class="{ 'error-border': errores.courseId }"
               >
                 <ion-select-option
                   v-for="course in courses"
@@ -377,6 +377,19 @@ async function handleGetCourses() {
   --border-color: #2cff02 !important;     /* tu color personalizado al enfocar */
   --box-shadow: 0 0 0 3px rgba(233,30,99,0.2);
  }
+
+  /*FOCO POR DEFECTO*/
+  /* Solo aplica el highlight si NO tiene clase error-border */
+ .custom-input.sc-ion-input-md-h:not(.error-border),
+ .custom-select.sc-ion-input-md-h:not(.error-border) {
+  --highlight-color: #43ba85;
+ }
+ /* 1) Hover solo si NO tiene error-border */
+.custom-input.sc-ion-input-md-h:not(.error-border):hover,
+.custom-select.sc-ion-input-md-h:not(.error-border):hover {
+  --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
+  --border-color: #43ba84fa;
+}
  
  .custom-select {
    width: 100%;
@@ -397,19 +410,29 @@ async function handleGetCourses() {
    border: 1px solid var(--border-color);
    border-radius: var(--border-radius);
  }
-  /*FOCO POR DEFECTO*/
-  /* Solo aplica el highlight si NO tiene clase error-border */
- .custom-input.sc-ion-input-md-h:not(.error-border),
- .custom-select.sc-ion-input-md-h:not(.error-border) {
-  --highlight-color: #43ba85;
- }
- /* 1) Hover solo si NO tiene error-border */
-.custom-input.sc-ion-input-md-h:not(.error-border):hover,
-.custom-select.sc-ion-input-md-h:not(.error-border):hover {
-  --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
-  --border-color: #43ba84fa;
+
+
+/* Hover sólo en el ion-select cuando NO tenga error-border */
+.custom-select:not(.error-border):hover {
+  /* 1) Actualizamos la variable para Ionic */
+  --border-color: #43ba85 !important;
+  /* 2) Y forzamos también la regla de CSS normal */
+  border: 1px solid var(--border-color) !important;
+  /* opcional: quitas sombras si las tienes */
+  --box-shadow: none !important;
 }
 
+/* 1) Redefine el var que Ionic usa para el subrayado */
+.custom-select {
+  --highlight-color-focused: #43ba85; /* color del outline y subrayado */
+}
+
+/* 2) Cambia el color de texto y de la flecha (caret) */
+.custom-select::part(icon) {
+  color: #5b635f !important;
+
+}
+ 
  .custom-button {
    width: 100%;
    margin-top: 5%;
