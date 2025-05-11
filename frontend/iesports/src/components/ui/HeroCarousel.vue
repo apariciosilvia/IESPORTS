@@ -10,6 +10,7 @@
     <div v-if="usuarioLogado && menuVisible" class="user-menu" ref="menuRef">
       <ul>
         <li @click="goTo('/profile')">Perfil</li>
+        <li >Mi equipo</li>
         <li @click="logout">Cerrar sesión</li>
       </ul>
     </div>
