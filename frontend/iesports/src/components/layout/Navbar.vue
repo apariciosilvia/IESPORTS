@@ -135,7 +135,8 @@ onUnmounted(() => {
     flex: 1 1 30%;            /* ocupa ~30% del ancho */
     text-align: center;       
     margin: 0.25rem 0;        
-    font-size: 0.9rem;        
+    font-size: 0.9rem;      
+    color: rgb(255, 255, 255);  
   }
 }
 
