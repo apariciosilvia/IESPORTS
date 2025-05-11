@@ -18,8 +18,11 @@
       <!-- Galería de imágenes u otro contenido visual -->
       <Gallery />
 
+      <ContactComponent/>
+
       <!-- Lista de personas obtenidas desde la API -->
       <PersonList :personas="personas" />
+      <Footer />
 
     </ion-content>
   </ion-page>
@@ -40,6 +43,8 @@ import HeroCarousel from '@/components/ui/HeroCarousel.vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import Gallery from '@/components/ui/Gallery.vue';
 import PersonList from '@/components/ui/PersonList.vue';
+import ContactComponent from '@/components/layout/ContactComponent.vue';
+import Footer from '@/components/ui/Footer.vue';
 
 /* Importa lógica separada (composables) */
 import { usePersonList } from '@/composables/usePersonList'         // carga personas desde API
