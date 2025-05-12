@@ -25,9 +25,7 @@ const navItems = [
   { name: 'Inicio', href: '/' },
   { name: 'Torneos', href: '/tournaments' },
   { name: 'Equipos', href: '/teams' },
-  { name: 'Mi Equipo', href: '#mi-equipo' },
   { name: 'Calendario', href: '/calendar' },
-  { name: 'Contacto', href: '#contacto' },
   { name: 'Noticias', href: '#noticias' },
   { name: 'Perfil', href: '/profile' }
 ];
@@ -122,4 +120,24 @@ onUnmounted(() => {
   --color: white;
   --min-height: 60px;
 }
+
+/* En móviles (≤480px): 3 enlaces por fila */
+@media (max-width: 480px) {
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;          
+    justify-content: center;  
+    gap: 0.5rem;              
+    padding: 0.5rem;
+  }
+
+  .nav-links a {
+    flex: 1 1 30%;            /* ocupa ~30% del ancho */
+    text-align: center;       
+    margin: 0.25rem 0;        
+    font-size: 0.9rem;      
+    color: rgb(255, 255, 255);  
+  }
+}
+
 </style>
