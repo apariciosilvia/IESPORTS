@@ -173,4 +173,6 @@ import { logoTwitter, logoFacebook, logoInstagram } from 'ionicons/icons';
   vertical-align: middle;
 }
 
+
+
 </style>
