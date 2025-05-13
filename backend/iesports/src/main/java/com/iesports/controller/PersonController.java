@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iesports.dao.service.impl.CourseServiceImpl;
 import com.iesports.dao.service.impl.PersonServiceImpl;
 import com.iesports.dao.service.impl.RoleServiceImpl;
+import com.iesports.dto.PersonLoginDTO;
 import com.iesports.dto.PersonRegisterDTO;
 import com.iesports.model.Person;
 
@@ -41,19 +43,33 @@ public class PersonController {
 		return ps.getPersons();
 	}
 
-	@PostMapping("/login")
-	public Person login(@RequestParam String email, @RequestParam String password) {
-
-		List<Person> persons = ps.getPersons();
-		Person person = null;
-
-		for (Person currentPerson : persons) {
-			if (currentPerson.getEmail().compareTo(email) == 0 && currentPerson.getPassword().compareTo(password) == 0) {
-				person = currentPerson;
-			}
+	
+//	public Person login(@RequestParam String email, @RequestParam String password) {
+//
+//		List<Person> persons = ps.getPersons();
+//		Person person = null;
+//
+//		for (Person currentPerson : persons) {
+//			if (currentPerson.getEmail().compareTo(email) == 0 && currentPerson.getPassword().compareTo(password) == 0) {
+//				person = currentPerson;
+//			}
+//		}
+//		System.err.println("PERSONA OBTENIDA: " + person);
+//		return person;
+//	}
+	@PostMapping("/verify")
+	public ResponseEntity<?> login(@Valid @RequestBody PersonLoginDTO person)
+	{	
+		Person newPerson = ps.getPerson(person.getEmail(), person.getPassword());
+		
+		//El objeto es nulo en caso de que el password/email no son correctos
+		if(newPerson == null)
+		{
+			System.err.println("No se ha encontrado al usuario rey");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error, Correo/Contraseña no válidos");
 		}
-		System.err.println("PERSONA OBTENIDA: " + person);
-		return person;
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 	}
 	
 		
