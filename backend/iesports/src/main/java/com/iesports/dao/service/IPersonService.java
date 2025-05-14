@@ -17,7 +17,7 @@ public interface IPersonService {
 	public void deletePerson(Person person);
 	
 	// CUSTOM QUERYS
+	public Person getPerson(String email, String password);
 	
 	public boolean emailExists(String email);
-
 }
