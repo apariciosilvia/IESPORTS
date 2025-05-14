@@ -164,29 +164,4 @@ public class PersonController {
 
 	}
 
-	/*@PostMapping("/registro")
-	public void registroPersona(@RequestParam (name = "name") String name, @RequestParam (name = "email") String email, @RequestParam (name = "password") String password1, @RequestParam (name = "password1") String password2, @RequestParam (name = "curso") int curso_id) {
-		if(password1.compareTo(password2) == 0 && !password1.isEmpty() && !name.isEmpty() && !email.isEmpty() && !password1.isEmpty())
-		{
-			ps.addPerson(name, email, password1, curso_id);
-			System.out.println(":) SE HA GUARDADO LA PERSONA EN LA BASE DE DATOS");
-		}
-		else
-		{
-			System.err.println(":( ERROR, NO SE HA CUMPLIDO LOS REQUISITOS PARA EL REGISTRO");
-		}
-	}*/
-
-//	@PostMapping("/registro")
-//	public Persona registroPersona(@RequestParam (name = "name") String nombre, @RequestParam (name = "email") String email, @RequestParam (name = "password") String password1, @RequestParam (name = "password") String password2, @RequestParam (name = "curso") int curso_id) {
-//		
-//		if ( password1.equals(password2) && !password1.isEmpty() && !nombre.isEmpty() && !email.isEmpty() ) {
-//			
-//			pr.addUser(nombre, email, password1, curso_id );
-//		}
-//		
-//		return null;
-//		
-//	}
-
 }

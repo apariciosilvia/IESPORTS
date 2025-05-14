@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page class="page-wrapper">
     <!-- Contenido principal de la página -->
     <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
 

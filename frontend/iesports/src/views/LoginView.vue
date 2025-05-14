@@ -136,7 +136,7 @@
                ¿No tienes cuenta? Regístrate aquí
              </a>
            </div>
-         </div>
+          </div>
  
          <!-- Registro -->
          <div class="card-face card-back">
