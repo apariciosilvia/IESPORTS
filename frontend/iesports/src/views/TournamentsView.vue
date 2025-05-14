@@ -1,8 +1,9 @@
 <template>
-  <!-- Navbar solo visible cuando se hace scroll suficiente -->
+  
    <ion-page>
     <!-- Contenido principal de la página -->
       <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
+        <!-- Navbar visible siempre -->
         <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
 
         <!-- Contenedor de filtros -->
@@ -37,26 +38,23 @@
           </ion-item>
         </div>
         <IonList class="tournament-list">
+          <!-- Lista dinámica de torneos filtrados -->
+          <TournamentCard
+            v-for="t in filteredTournaments"
+            :key="t.id"
+            :tournament="t"
+            :sportName="sports.find(s => s.id === t.sportId)?.name"
+          />
 
-        <!-- Lista dinámica de torneos filtrados -->
-        <TournamentCard
-          v-for="t in filteredTournaments"
-          :key="t.id"
-          :tournament="t"
-          :sportName="sports.find(s => s.id === t.sportId)?.name"
-        />
-
-        <!-- Mensaje si no hay resultados -->
-        <ion-item
-          v-if="filteredTournaments.length === 0"
-          lines="none"
-          class="no-results"
-        >
-          No hay torneos que coincidan con los filtros.
-        </ion-item>
+          <!-- Mensaje si no hay resultados -->
+          <ion-item
+            v-if="filteredTournaments.length === 0"
+            lines="none"
+            class="no-results"
+          >No hay torneos que coincidan con los filtros.</ion-item>
         </IonList>
 
-      <Footer />
+        <Footer />
 
       </ion-content>
    </ion-page>
@@ -72,7 +70,9 @@ import TournamentCard from '@/components/layout/TournamentCard.vue'
 import { ref, watch, onMounted, computed } from 'vue';
 
 // 2. Importamos nuestros métodos del servicio
-import { getSports, getYears, getTournament } from '@/services/tournamentService';
+import { getTournament } from '@/services/tournamentService';
+
+// import { getSports, getYears, getTournament } from '@/services/tournamentService';
 import type { Sport } from '@/model/sport';
 import type { Tournament } from '@/model/tournament';
 
@@ -132,23 +132,23 @@ onMounted(() => {
 });
 
 // 7. watch(): observa cambios en los selects y trae el torneo
-watch(
-  [selectedSport, selectedYear],
-  async ([sport, year]) => {
-    if (sport && year) {
-      isLoadingTournament.value = true;
-      error.value = null;
-      try {
-        tournament.value = await getTournament(sport, year);
-      } catch (e: any) {
-        error.value = 'Error al cargar el torneo.';
-        console.error(e);
-      } finally {
-        isLoadingTournament.value = false;
-      }
-    }
-  }
-);
+// watch(
+//   [selectedSport, selectedYear],
+//   async ([sport, year]) => {
+//     if (sport && year) {
+//       isLoadingTournament.value = true;
+//       error.value = null;
+//       try {
+//         tournament.value = await getTournament(sport, year);
+//       } catch (e: any) {
+//         error.value = 'Error al cargar el torneo.';
+//         console.error(e);
+//       } finally {
+//         isLoadingTournament.value = false;
+//       }
+//     }
+//   }
+// );
 
 // 8. Computed para filtrar la lista de torneos
 const filteredTournaments = computed(() => {
@@ -165,7 +165,7 @@ const filteredTournaments = computed(() => {
   align-items: center;
   gap: 3rem;
   padding: 0.75rem 1rem;
-  margin: 6rem 8rem 4rem; /* 5rem para despejar la navbar, luego margen horizontal y abajo */
+  margin: 6rem 8rem 4rem; 
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -173,7 +173,7 @@ const filteredTournaments = computed(() => {
 }
 
 .filter-item {
-  flex: 1;            /* Para que cada ion-item crezca y ocupe el mismo espacio */
+  flex: 1;           
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -182,25 +182,23 @@ const filteredTournaments = computed(() => {
   --border-radius: 10px;
 }
 
-/* 2. Centramos el texto tanto de la etiqueta como del select */
 .filter-item ion-label,
 .filter-item ion-select {
   color: #0a2540;
   font-weight: 600;
   text-align: center;
-  width: 100%;  /* ocupan todo el ancho del contenedor */
+  width: 100%;  
 }
 
 @media (max-width: 600px) {
   .filters-container {
     flex-direction: column;
-    gap: 5rem;        /* menos separación ahora vertical */
+    gap: 5rem;       
     margin: 5rem 1rem; /* ajusta márgenes laterales para móvil */
     
   }
 }
 
-/* Mantén el resto de tus estilos aquí */
 .tournament-container {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -208,29 +206,6 @@ const filteredTournaments = computed(() => {
   align-items: start;
 }
 
-/* Grupos izquierda y derecha */
-.group {
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 8px;
-}
-.group-a { text-align: left; }
-.group-b { text-align: right; }
-
-/* Centro con copa */
-.center {
-  text-align: center;
-}
-.trophy {
-  margin: 1rem 0;
-}
-.round {
-  font-weight: bold;
-  margin-top: 1rem;
-}
-.match {
-  margin: 0.5rem 0;
-}
 .error {
   font-weight: 500;  
   font-size: 1.2rem;
