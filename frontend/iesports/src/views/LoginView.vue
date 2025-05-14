@@ -590,7 +590,6 @@ const showLoginPassword = ref(false);
   border-radius: 12px;
   padding: 20px;
   text-align: center;
-  top: ;
 }
 
 .error-msg {

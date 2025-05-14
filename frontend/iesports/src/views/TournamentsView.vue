@@ -24,7 +24,7 @@
           <ion-item class="filter-item">
             <ion-label>Filtra por año</ion-label>
             <ion-select v-model="selectedYear" placeholder="Selecciona la temporada">
-                  <ion-select-option :value="null">Todos</ion-select-option>
+              <ion-select-option :value="null">Todos</ion-select-option>
 
               <ion-select-option
                 v-for="year in years"
@@ -36,20 +36,15 @@
             </ion-select>
           </ion-item>
         </div>
+        <IonList class="tournament-list">
 
         <!-- Lista dinámica de torneos filtrados -->
-        <ion-list class="tournament-list">
-        <ion-item
+        <TournamentCard
           v-for="t in filteredTournaments"
           :key="t.id"
-          class="tournament-item"
-        >
-          <ion-label>
-            {{ t.name }} ({{ t.date }})  
-            — Estado: {{ t.state }}  
-            — Deporte: {{ sports.find(s => s.id === t.sportId)?.name }}
-          </ion-label>
-        </ion-item>
+          :tournament="t"
+          :sportName="sports.find(s => s.id === t.sportId)?.name"
+        />
 
         <!-- Mensaje si no hay resultados -->
         <ion-item
@@ -59,7 +54,7 @@
         >
           No hay torneos que coincidan con los filtros.
         </ion-item>
-      </ion-list>
+        </IonList>
 
       <Footer />
 
@@ -71,7 +66,7 @@ import { IonPage, IonContent, IonList,IonItem, IonLabel, IonSelect, IonSelectOpt
 import Navbar from '@/components/layout/Navbar.vue';
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 import Footer from '@/components/ui/Footer.vue';
-import TournamentItem from '@/components/TournamentItem.vue'
+import TournamentCard from '@/components/layout/TournamentCard.vue'
 
 // 1. Importamos los helpers de Vue
 import { ref, watch, onMounted, computed } from 'vue';
@@ -130,6 +125,7 @@ async function loadFilters() {
     isLoadingFilters.value = false;
   }
 }
+
 // 6. onMounted(): al montar el componente, ejecuta loadFilters()
 onMounted(() => {
   loadFilters();
@@ -154,7 +150,6 @@ watch(
   }
 );
 
-
 // 8. Computed para filtrar la lista de torneos
 const filteredTournaments = computed(() => {
   return tournamentsList.filter(t =>
@@ -162,8 +157,6 @@ const filteredTournaments = computed(() => {
     (!selectedYear.value  || t.date    === selectedYear.value)
   );
 });
-
-
 </script>
 
 <style scoped>
@@ -243,9 +236,6 @@ const filteredTournaments = computed(() => {
   font-size: 1.2rem;
   text-align: center;
 }
-
-
-
 
 .tournament-list {
   margin: 1.5rem;

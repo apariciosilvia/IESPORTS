@@ -18,22 +18,6 @@ function getPersonas() {
    });
 };
 
-// function login(email: string, password: string) {
-
-//   return new Promise((resolve, reject) => {
-
-//     const url = `${import.meta.env.VITE_URL_API}/person/login?email=${email}&password=${password}`;
-
-//     axios.post(url)
-//       .then(response => {
-//         resolve(response.data); 
-//       })
-//       .catch(error => {
-//         reject(error);
-//       });
-//   });
-// };
-
 function login(email: string, password: string) {
 
   const url = `${import.meta.env.VITE_URL_API}/person/login`;
@@ -64,41 +48,3 @@ function register(name: string, email: string, password1: string, password2: str
 }
 
 export { getPersonas, login, register};
-
-
-// src/services/personServices.ts
-
-// function register(name: string, email: string, password: string, cursoId: number) {
-//   const url = `${import.meta.env.VITE_URL_API}/person/registro`;
-
-//   const params = new URLSearchParams();
-//   params.append('name', name);
-//   params.append('email', email);
-//   params.append('password', password);
-//   params.append('password1', password);       
-//   params.append('curso', cursoId.toString());
-
-//   return axios.post(url, params, {
-//     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-//   });
-// }
-
-// import axios from 'axios';
-
-// function getPokemons(offset = 0, limit = 20) {
-
-//   return new Promise<any[]>((resolve, reject) => {
-
-//     const url = `${import.meta.env.VITE_URL_API}/pokemon?offset=${offset}&limit=${limit}`;
-
-//      axios.get(url)
-//        .then(response => {
-//          resolve(response.data.results);
-//        })
-//        .catch(error => {
-//          reject(error);
-//        });
-//    });
-// }
-
-// export { getPokemons };
