@@ -4,8 +4,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class PersonLoginDTO {
+	
 	@Email(message = "El email no es válido")
-	@NotBlank(message = "Debes de escribir un Email")
+	@NotBlank(message = "El email es obligatorio")
 	private String email;
 
 	@NotBlank(message = "La contraseña es obligatoria")
@@ -26,8 +27,4 @@ public class PersonLoginDTO {
 	public void setPassword1(String password1) {
 		this.password = password1;
 	}
-	
-	
-	
-	
 }
