@@ -165,7 +165,7 @@ const filteredTournaments = computed(() => {
   align-items: center;
   gap: 3rem;
   padding: 0.75rem 1rem;
-  margin: 6rem 8rem 4rem; 
+  margin: 6rem 8rem 0.5rem; 
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -217,8 +217,6 @@ const filteredTournaments = computed(() => {
   margin-bottom: 6rem;
   padding: 1rem;
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .tournament-item {
