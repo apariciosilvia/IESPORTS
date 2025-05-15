@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +56,7 @@ public class PersonController {
 //		System.err.println("PERSONA OBTENIDA: " + person);
 //		return person;
 //	}
-	@PostMapping("/verify")
+	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody PersonLoginDTO person)
 	{	
 		Person newPerson = ps.getPerson(person.getEmail(), person.getPassword());
@@ -66,7 +65,7 @@ public class PersonController {
 		if(newPerson == null)
 		{
 			System.err.println("No se ha encontrado al usuario rey");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error, Correo/Contraseña no válidos");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","Las credenciales introducidas no son válidas"));
 		}
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
