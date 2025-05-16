@@ -29,29 +29,28 @@
 
               <ion-select-option
                 v-for="year in years"
-                :key="year.date"
-                :value="year.date"
+                :key="year.toString()"
+                :value="year"
               >
-                {{ year.date }}
+                {{ year }}
               </ion-select-option>
             </ion-select>
           </ion-item>
         </div>
         <IonList class="tournament-list">
           <!-- Lista dinámica de torneos filtrados -->
-          <TournamentCard
-            v-for="t in filteredTournaments"
-            :key="t.id"
-            :tournament="t"
-            :sportName="sports.find(s => s.id === t.sportId)?.name"
-          />
+            <TournamentCard
+              v-for="(matchesList, tournamentId) in groupedMatches"
+              :key="tournamentId"
+              :matches="matchesList"
+            />
 
           <!-- Mensaje si no hay resultados -->
-          <ion-item
+          <!-- <ion-item
             v-if="filteredTournaments.length === 0"
             lines="none"
             class="no-results"
-          >No hay torneos que coincidan con los filtros.</ion-item>
+          >No hay torneos que coincidan con los filtros.</ion-item> -->
         </IonList>
 
         <Footer />
@@ -73,18 +72,20 @@ import { ref, watch, onMounted, computed } from 'vue';
 import { getTournament } from '@/services/tournamentService';
 
 // import { getSports, getYears, getTournament } from '@/services/tournamentService';
-import type { Sport } from '@/model/sport';
+import type { Match } from '@/model/match';
 import type { Tournament } from '@/model/tournament';
+import type { Sport } from '@/model/sport';
+
 
 // 3. Extraemos el control de la navbar
 const { showNav, handleScroll } = useNavbarVisibility();
 
 // 4. Definimos refs reactivas para filtros y datos
 const sports = ref<Sport[]>([]);
-const years = ref<Tournament[]>([]);
+const years = ref<String[]>([]);
 const selectedSport = ref<number | null>(null);
 const selectedYear = ref<string | null>(null);
-const tournament = ref<any>(null);
+// const tournament = ref<any>(null);
 
 // Estados de carga y error
 const isLoadingFilters = ref(false);
@@ -99,15 +100,95 @@ const sportsList: Sport[] = [
   { id: 5, name: 'Ping-pong'}
 ];
 
-const tournamentsList: Tournament[] = [
-  { id: 1, name: 'Torneo Primavera', date: '2024/25', state: 0, sportId: 1   },
-  { id: 1, name: 'Copa Mundial de Fútbol', date: '2023/24', state: 2, sportId: 1},
-  { id: 3, name: 'Torneo Internacional de Baloncesto', date: '2022/23', state: 2, sportId: 2 },
-  { id: 4, name: 'Masters de Tenis', date: '2021/22', state: 2, sportId: 3 },
-  { id: 5, name: 'Liga de Voleibol', date: '2020/21', state: 2, sportId: 4 },
-  { id: 6, name: 'Torneo de Ping-pong', date: '2019/20', state: 2, sportId: 5 }
-
+const ageList: string[] = [
+  '2018/19',
+  '2019/20',
+  '2020/21',
+  '2021/22',
+  '2022/23',
+  '2023/24',
+  '2024/25'
 ];
+
+// Deporte y torneo compartido
+const sport: Sport = { id: 1, name: 'Fútbol' };
+const tournament: Tournament = {
+  id: 1,
+  name: 'Copa Ejemplo',
+  date: '2023/24',
+  state: 0,
+  sport: sport
+};
+
+// Deporte y torneo compartido
+const sport3: Sport = { id: 3, name: 'Tenis' };
+const tournament2: Tournament = {
+  id: 2,
+  name: 'Torneaso de Tenis',
+  date: '2024/25',
+  state: 0,
+  sport: sport3
+};
+
+const matches: Match[] = [
+  // Octavos de final (Octavos)
+  { id: 1,  date: new Date('2025-06-01T18:00:00'), round: 'Octavos', tournament,
+    team1: { id: 1, name: 'Equipo A' }, team2: { id: 2, name: 'Equipo B' } },
+  { id: 2,  date: new Date('2025-06-01T20:00:00'), round: 'Octavos', tournament,
+    team1: { id: 3, name: 'Equipo C' }, team2: { id: 4, name: 'Equipo D' } },
+  { id: 3,  date: new Date('2025-06-02T18:00:00'), round: 'Octavos', tournament,
+    team1: { id: 5, name: 'Equipo E' }, team2: { id: 6, name: 'Equipo F' } },
+  { id: 4,  date: new Date('2025-06-02T20:00:00'), round: 'Octavos', tournament,
+    team1: { id: 7, name: 'Equipo G' }, team2: { id: 8, name: 'Equipo H' } },
+  { id: 5,  date: new Date('2025-06-03T18:00:00'), round: 'Octavos', tournament,
+    team1: { id: 9,  name: 'Equipo I' }, team2: { id: 10, name: 'Equipo J' } },
+  { id: 6,  date: new Date('2025-06-03T20:00:00'), round: 'Octavos', tournament,
+    team1: { id: 11, name: 'Equipo K' }, team2: { id: 12, name: 'Equipo L' } },
+  { id: 7,  date: new Date('2025-06-04T18:00:00'), round: 'Octavos', tournament,
+    team1: { id: 13, name: 'Equipo M' }, team2: { id: 14, name: 'Equipo N' } },
+  { id: 8,  date: new Date('2025-06-04T20:00:00'), round: 'Octavos', tournament,
+    team1: { id: 15, name: 'Equipo O' }, team2: { id: 16, name: 'Equipo P' } },
+
+  // Cuartos de final
+  { id: 9,  date: new Date('2025-06-05T18:00:00'), round: 'Cuartos', tournament,
+    team1: { id: 1, name: 'Equipo A' }, team2: { id: 3, name: 'Equipo C' } },
+  { id: 10, date: new Date('2025-06-05T20:00:00'), round: 'Cuartos', tournament,
+    team1: { id: 5, name: 'Equipo E' }, team2: { id: 7, name: 'Equipo G' } },
+  { id: 11, date: new Date('2025-06-06T18:00:00'), round: 'Cuartos', tournament,
+    team1: { id: 9, name: 'Equipo I' }, team2: { id: 11, name: 'Equipo K' } },
+  { id: 12, date: new Date('2025-06-06T20:00:00'), round: 'Cuartos', tournament,
+    team1: { id: 13, name: 'Equipo M' }, team2: { id: 15, name: 'Equipo O' } },
+
+  // Semifinales
+  { id: 13, date: new Date('2025-06-07T19:00:00'), round: 'Semi-finales', tournament,
+    team1: { id: 1, name: 'Equipo A' }, team2: { id: 5, name: 'Equipo E' } },
+  { id: 14, date: new Date('2025-06-07T21:00:00'), round: 'Semi-finales', tournament,
+    team1: { id: 9, name: 'Equipo I' }, team2: { id: 13, name: 'Equipo M' } },
+
+  // Final
+  { id: 15, date: new Date('2025-06-08T20:00:00'), round: 'Final', tournament,
+    team1: { id: 1, name: 'Equipo A' }, team2: { id: 9, name: 'Equipo I' } },
+
+  { id: 1,  date: new Date('2025-06-01T18:00:00'), round: 'Octavos', tournament: tournament2,
+    team1: { id: 1, name: 'Equipo A' }, team2: { id: 2, name: 'Equipo B' } },
+  { id: 1,  date: new Date('2025-06-01T18:00:00'), round: 'Octavos', tournament: tournament2,
+    team1: { id: 1, name: 'Equipo A' }, team2: { id: 2, name: 'Equipo B' } },
+  { id: 1,  date: new Date('2025-06-01T18:00:00'), round: 'Octavos', tournament: tournament2,
+    team1: { id: 1, name: 'Equipo A' }, team2: { id: 2, name: 'Equipo B' } },
+];
+
+const groupedMatches = computed<Record<number, Match[]>>(() =>
+//Creamos este mapa con todos los partidos que cumplen con todos los filtros
+  filteredMatches.value.reduce((acc, m) => {
+    const id = m.tournament.id;
+    if (!acc[id]){ 
+      acc[id] = [];
+    }
+    acc[id].push(m);
+    return acc;
+    //acc es un map clave-valor, donde la clave es el id del torneo y el valor es un array de partidos
+  }, {} as Record<number, Match[]>)
+);
 
 // 5. Función loadFilters(): carga deportes y años al iniciar
 async function loadFilters() {
@@ -116,7 +197,8 @@ async function loadFilters() {
   try {
     sports.value = sportsList;
     // sports.value = await getSports();
-    years.value = tournamentsList;
+    // years.value = tournamentsList;
+    years.value = ageList;
     // years.value  = await getYears();
   } catch (e: any) {
     error.value = 'No se pudieron cargar los filtros.';
@@ -151,10 +233,10 @@ onMounted(() => {
 // );
 
 // 8. Computed para filtrar la lista de torneos
-const filteredTournaments = computed(() => {
-  return tournamentsList.filter(t =>
-    (!selectedSport.value || t.sportId === selectedSport.value) &&
-    (!selectedYear.value  || t.date    === selectedYear.value)
+const filteredMatches = computed(() => {
+  return matches.filter(m =>
+    (!selectedSport.value || m.tournament.sport.id === selectedSport.value) &&
+    (!selectedYear.value  || m.tournament.date === selectedYear.value)
   );
 });
 </script>
