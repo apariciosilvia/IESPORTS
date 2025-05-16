@@ -31,7 +31,9 @@ interface Team {
 }
 
 // Recibimos el prop 'team'
-const props = defineProps<{ team: Team }>();
+const props = defineProps<{ 
+  team: Team 
+}>();
 
 // Estado reactivo: si la tarjeta está volteada o no
 const isFlipped = ref(false);
