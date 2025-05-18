@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.iesports.dao.repository.TeamRepository;
 import com.iesports.dao.service.ITeamService;
+import com.iesports.model.Sport;
 import com.iesports.model.Team;
 
 @Service
@@ -39,6 +40,11 @@ public class TeamServiceImpl implements ITeamService{
 	@Override
 	public void deleteTeam(Team team) {
 		tr.delete(team);
+	}
+
+	@Override
+	public List<Sport> getSportsByIdTeam(Long idTeam) {
+		return tr.getSportsByIdTeam(idTeam);
 	}
 
 }
