@@ -24,6 +24,18 @@ INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `passw
 INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 8, 4, 'lucas.alumno@example.com', 'Lucas Ortega', 'pass123');
 INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 10, 4, 'martina.alumno@example.com', 'Martina Castillo', 'pass123');
 
+INSERT INTO `sports` (`id`, `name`) VALUES (1, 'Fútbol');
+INSERT INTO `sports` (`id`, `name`) VALUES (2, 'Baloncesto');
+INSERT INTO `sports` (`id`, `name`) VALUES (3, 'Hockey');
 
+-- Fútbol Tournaments
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'Programado');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2021/22', 'Liga Juvenil Fútbol', 'Finalizado');
+-- Baloncesto Tournaments
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2022/23', 'Torneo Escolar Baloncesto', 'En curso');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2023/24', 'Campeonato Nacional Basket', 'Programado');
+-- Hockey Tournaments
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2021/22', 'Hockey Winter Cup', 'Finalizado');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2022/23', 'Liga Hockey Indoor', 'En curso');
 
 
