@@ -2,6 +2,8 @@ package com.iesports.model;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,8 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDate;
+import com.iesports.enums.StateTournamentEnum;
 
 @Entity
 @Table(name = "tournaments")
@@ -28,7 +29,8 @@ public class Tournament {
     private String date;
 
     @NotBlank(message = "El estado del torneo es obligatorio")
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private StateTournamentEnum state;
 
     @ManyToOne
     @JoinColumn(name = "sport_id", referencedColumnName = "id")
@@ -37,16 +39,18 @@ public class Tournament {
     public Tournament() {
     	
     }
+    public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
+			@NotNull(message = "La fecha del torneo es obligatoria") String date,
+			@NotBlank(message = "El estado del torneo es obligatorio") StateTournamentEnum state, Sport sport) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.date = date;
+		this.state = state;
+		this.sport = sport;
+	}
 
-    public Tournament(Long id, String name, String date, String state, Sport sport) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.state = state;
-        this.sport = sport;
-    }
-
-    // Getters and setters
+	// Getters and setters
 
     public Long getId() {
         return id;
@@ -72,15 +76,13 @@ public class Tournament {
         this.date = date;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public Sport getSport() {
+    public StateTournamentEnum getState() {
+		return state;
+	}
+	public void setState(StateTournamentEnum state) {
+		this.state = state;
+	}
+	public Sport getSport() {
         return sport;
     }
 
