@@ -42,6 +42,8 @@ const isFlipped = ref(false);
 function flipCard() {
   isFlipped.value = !isFlipped.value;
 }
+
+console.log(props.team);
 </script>
 
 <style scoped>
