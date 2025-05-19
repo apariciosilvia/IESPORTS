@@ -1,17 +1,12 @@
 import axios from 'axios';
 
-/**
- * Obtiene el listado de equipos de un deporte.
- * @param sportId - ID del deporte seleccionado
- * @returns Promise con array de equipos
- */
+function getTeamsInfo(): Promise<any[]> {
 
-function getTeams(sportId: number): Promise<any[]> {
-  const url = `${import.meta.env.VITE_URL_API}/teams?sportId=${sportId}`;
+  const url = `${import.meta.env.VITE_URL_API}/team/getTeamsInfo`;
+
   return new Promise((resolve, reject) => {
     axios.get(url)
       .then(response => {
-        // response.data debería ser el array de equipos
         resolve(response.data);
       })
       .catch(error => {
@@ -21,4 +16,4 @@ function getTeams(sportId: number): Promise<any[]> {
   });
 }
 
-export { getTeams };
+export { getTeamsInfo };
