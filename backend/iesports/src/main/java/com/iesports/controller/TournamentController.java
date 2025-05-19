@@ -19,13 +19,13 @@ import com.iesports.dto.TournamentFilterDTO;
 import com.iesports.model.Tournament;
 
 @RestController
-@RequestMapping("/Tournament")
+@RequestMapping("/tournament")
 public class TournamentController {
 
 	@Autowired
 	private TournamentServiceImpl ts;
 	
-	@PostMapping("/get-tournaments")
+	@PostMapping("/getTournaments")
 	public ResponseEntity<?> getTournaments(@RequestBody TournamentFilterDTO filterDTO) {
 	    Integer sport_id = filterDTO.getSport_id();
 	    String date = filterDTO.getDate();
@@ -67,7 +67,7 @@ public class TournamentController {
 	}
 
 
-	@GetMapping("/get-dates")
+	@GetMapping("/getYears")
 	public ResponseEntity<?> getDates() {
 	    System.out.println("Solicitud recibida para obtener fechas de torneos");
 
