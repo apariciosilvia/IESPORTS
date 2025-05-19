@@ -27,6 +27,7 @@ INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `passw
 INSERT INTO `sports` (`id`, `name`) VALUES (1, 'Fútbol');
 INSERT INTO `sports` (`id`, `name`) VALUES (2, 'Baloncesto');
 INSERT INTO `sports` (`id`, `name`) VALUES (3, 'Hockey');
+INSERT INTO `sports` (`id`, `name`) VALUES (4, 'Tenis');
 
 -- Fútbol Tournaments
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'PROCESO');
@@ -37,6 +38,9 @@ INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2023
 -- Hockey Tournaments
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2021/22', 'Hockey Winter Cup', 'FINALIZADO');
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2022/23', 'Liga Hockey Indoor', 'PROCESO');
+-- Tenis Tournaments
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2024/25', 'Tennis club', 'PROCESO');
+
 
 INSERT INTO teams (name) VALUES ('equipo 1');
 INSERT INTO teams (name) VALUES ('equipo 2');

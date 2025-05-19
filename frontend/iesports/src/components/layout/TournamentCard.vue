@@ -15,7 +15,7 @@
       
       <p>{{ }}</p>
       <p>Fase: {{ m.round }}</p>                    
-      <p>Fecha partido: {{ m.date.toLocaleDateString() }}</p> 
+      <p>Fecha partido: {{  new Date(m.date).toLocaleDateString() }}</p> 
      
       <div>
         <b>{{ m.team1.name }}</b>
@@ -24,7 +24,6 @@
         <b>{{ m.team2.name }}</b>
       </div>
       
-
     </div>
   </div>
 </template>
