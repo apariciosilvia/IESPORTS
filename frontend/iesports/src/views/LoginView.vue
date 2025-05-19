@@ -11,7 +11,7 @@
                              value: '#76d6ac'
                          }
                      },
-                     fpsLimit: 120,
+                     fpsLimit: 80,
                      interactivity: {
                          events: {
                              onClick: {
@@ -92,20 +92,34 @@
          />
      <div class="card-container" :class="{ 'show-back': showRegister }">
        <div class="card-inner">
+         
          <!-- Login -->
          <div class="card-face card-front">
-           <h2>Iniciar sesión</h2>
+          <span v-if="errores.error" class="error-credenciales">{{ errores.error }}</span>
+
+          <div class="header-row">
+
+            <IonButton @click="goBack" slot="start" fill="clear">
+              <span class="material-symbols-outlined back-icon">arrow_back</span>
+            </IonButton>
+
+
+            <h2 class="tittle">Iniciar sesión</h2>
+          </div>
+            
            <form @submit.prevent="handleLogin">
-              <ion-input v-model="loginData.email" type="email" placeholder="Correo electrónico" required class="custom-input" fill="outline" />
+             
+              <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
+              <ion-input v-model="loginData.email" type="text" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email || errores.error }"/>
+              <span v-if="errores.password" class="error-msg">{{ errores.password }}</span>
               <ion-input
                 v-model="loginData.password"
                 :clear-on-edit="false"
                 :type="showLoginPassword ? 'text' : 'password'"   
                 placeholder="Contraseña"
-                required
                 class="custom-input"
                 fill="outline"
-                
+                :class="{ 'error-border': errores.password || errores.error }"
               >
                 <ion-button
                   slot="end"
@@ -114,7 +128,7 @@
                   style="--padding:0; --min-width:auto; cursor:pointer;"
                 >
                   <span class="material-symbols-outlined">
-                    {{ showLoginPassword ? 'visibility_off' : 'visibility' }}  <!-- 3) Ícono según estado -->
+                    {{ showLoginPassword ? 'visibility_off' : 'visibility' }} 
                   </span>
                 </ion-button>
               </ion-input>
@@ -125,15 +139,20 @@
            </form>
            <div class="login-links">
              <a href="#">¿Olvidaste tu contraseña?</a>
-             <a href="#"  @click.prevent="showRegister = true; handleGetCourses()">
+             <a href="#"  @click.prevent="showRegister = true; handleGetCourses(); cleanInputs()">
                ¿No tienes cuenta? Regístrate aquí
              </a>
            </div>
-         </div>
+          </div>
  
          <!-- Registro -->
          <div class="card-face card-back">
-           <h2>Registro</h2>
+            <div class="header-row">
+              <IonButton @click="goBack" slot="start" fill="clear">
+              <span class="material-symbols-outlined back-icon">arrow_back</span>
+              </IonButton>
+            <h2 class="tittle">Registro</h2>
+            </div>
            <form @submit.prevent="handleRegister">
             <div>
               <span v-if="errores.name" class="error-msg">{{ errores.name }}</span>
@@ -142,7 +161,7 @@
 
             <div>
               <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
-              <ion-input v-model="registerData.email" type="email" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email }" />
+              <ion-input v-model="registerData.email" type="text" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email }" />
             </div>
 
             <div>
@@ -221,7 +240,7 @@
 
            </form>
            <div class="login-links">
-             <a href="#" @click.prevent="showRegister = false">
+             <a href="#" @click.prevent="showRegister = false; cleanInputs()">
                ¿Ya tienes cuenta? Inicia sesión
              </a>
            </div>
@@ -232,58 +251,73 @@
    </ion-page>
  </template>
  
- <script setup lang="ts">
- import { ref, type Ref } from 'vue';
- import { IonInput, IonButton, IonIcon, IonContent, IonPage, IonSelect, IonSelectOption } from '@ionic/vue';
- import { login, register } from '@/services/personServices';
- import { getCourses } from "@/services/courseService";
- import router from '@/router';
+<script setup lang="ts">
+import { ref, type Ref } from 'vue';
+import { IonInput, IonButton, IonIcon, IonContent, IonPage, IonSelect, IonSelectOption } from '@ionic/vue';
+import { login, register } from '@/services/personServices';
+import { getCourses } from "@/services/courseService";
+import router from '@/router';
+
+const particlesLoaded = async (container: any) => {
+  console.log("Particles container loaded", container);
+};
+
+const errores = ref<Record<string, string>>({});
  
+const showRegister = ref(false)
  
- const particlesLoaded = async (container: any) => {
-     console.log("Particles container loaded", container);
- };
+const loginData = ref({ email: '', password: '' })
+const registerData = ref({ name: '', email: '', password: '', confirmPassword: '' })
+
+function goBack() {
+  window.history.back();
+}
+
+
+function cleanInputs() {
+  loginData.value.email = '';
+  loginData.value.password = '';
+  registerData.value.name = '';
+  registerData.value.email = '';
+  registerData.value.password = '';
+  registerData.value.confirmPassword = '';
+  selectedCourse.value = '';
+  errores.value = {};
+}
+
+
+async function handleLogin() {
+  try {
+    const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim())
+    console.log('Login exitoso:', response)
  
- const showRegister = ref(false)
- 
- const loginData = ref({ email: '', password: '' })
- const registerData = ref({ name: '', email: '', password: '', confirmPassword: '' })
- 
- async function handleLogin() {
-   try {
-     const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim())
-     console.log('Login exitoso:', response)
- 
-     if (response && response.email) {
-       // Guardar al usuario en localStorage
-       localStorage.setItem('usuario', JSON.stringify(response))
- 
+    const user = response.data ?? response;
+     if (user?.email) {
+       localStorage.setItem('usuario', JSON.stringify(user));
+     
        alert('Inicio de sesión exitoso')
        router.push('/');
      } else {
-       alert('Credenciales incorrectas')
-     }
-   } catch (error) {
-     console.error('Error al iniciar sesión:', error)
-     alert('Error al iniciar sesión. Verifica tus credenciales.')
-   }
- }
+
+      alert('Credenciales incorrectas')
+    }
+  } catch (error: any) {
+    console.error('Error al iniciar sesión:', error.response.data);
+  
+    if (error.response && error.response.status === 400) {
+      errores.value = error.response.data;
+    } else {
+      errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
+    }
+  }
+}
 
 
 // const showErrorAlert = ref(false);
 // const errorMessage = ref('');
-const errores = ref<Record<string, string>>({});
+
  
 async function handleRegister() {
-  // if (registerData.value.password !== registerData.value.confirmPassword) {
-  //   alert('Las contraseñas no coinciden');
-  //   return;
-  // }
-
-  // if (!selectedCourse.value) {
-  //   errores.value = { courseId: 'Por favor selecciona un curso' };
-  // }
-
   try {
     const response = await register(
       registerData.value.name.trim(),
@@ -294,7 +328,7 @@ async function handleRegister() {
     );
 
     if (response) {
-      localStorage.setItem('usuario', JSON.stringify(response));
+      localStorage.setItem('usuario', JSON.stringify(response.data));
       alert('Registro exitoso. Has iniciado sesión automáticamente.');
       router.push('/');
     }
@@ -359,35 +393,38 @@ const showLoginPassword = ref(false);
    position: relative;
    z-index: 1;
  }
- 
- /* @media (max-width: 480px) {
-   .card-container {
-     width: 95vw;
-     max-width: 360px;
-     aspect-ratio: 10 / 13;
-     margin-top: 25%;
-     
-   }
- 
-   .card-face {
-     padding: 1.5rem;
-     
-   }
- 
-   .card-face h2 {
-     font-size: 1.5rem;
-   }
- 
-   .custom-input,
-   .custom-button {
-     font-size: 0.9rem;
-     padding: 10px;
-   }
- 
-   .material-icons {
-     font-size: 20px;
-   }
- } */
+
+.header-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;  /* centra el contenido principal */
+  margin: 0;
+  text-align: center;
+}
+
+/* Botón anclado a la izquierda */
+.header-row IonButton {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+.back-icon {
+  font-size: 2.2rem;
+  color: #000000;
+}
+
+.card-face h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: bold;
+  font-size: 2.5rem;
+ }
+
  
  .card-inner {
    width: 100%;
@@ -423,13 +460,7 @@ const showLoginPassword = ref(false);
    transform: rotateY(180deg);
  }
  
- .card-face h2 {
-   text-align: center;
-   margin-bottom: 1.5rem;
-   color: #333;
-   font-weight: bold;
-   font-size: 2.5rem;
- }
+ 
  
  .custom-input {
    width: 100%;
@@ -550,11 +581,23 @@ const showLoginPassword = ref(false);
    text-decoration: underline;
  }
 
+.error-credenciales{
+  color: #f44336;
+  font-weight: 600;
+  font-size: 1.2rem;
+  background-color: rgba(224, 128, 128, 0.562);
+  border: red;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
 .error-msg {
   color: red;
   font-size: 0.9rem;
   margin-bottom: 4px;
   display: block;
+  
 }
 
 .error-border {
@@ -568,6 +611,10 @@ const showLoginPassword = ref(false);
   --border-color: #fb2221;
   --box-shadow: 0 0 0 6px #fb2221;
 }
+
+
+
+
 
 
 /* Grandes pantallas: >1200px */

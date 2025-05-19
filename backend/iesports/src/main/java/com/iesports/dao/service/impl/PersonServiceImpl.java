@@ -55,6 +55,11 @@ public class PersonServiceImpl implements IPersonService {
 		
 		return pr.emailExists(email) != 0;
 	}
+
+	@Override
+	public Person getPerson(String email, String password) {
+		return pr.personExists(email, password);
+	}
 	
 //	public List<Person> getPersons(){
 //		return pr.findAll();

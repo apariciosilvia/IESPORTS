@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iesports.dao.service.impl.CourseServiceImpl;
 import com.iesports.dao.service.impl.PersonServiceImpl;
 import com.iesports.dao.service.impl.RoleServiceImpl;
+import com.iesports.dto.PersonLoginDTO;
 import com.iesports.dto.PersonRegisterDTO;
 import com.iesports.model.Person;
 
@@ -41,19 +42,33 @@ public class PersonController {
 		return ps.getPersons();
 	}
 
+	
+//	public Person login(@RequestParam String email, @RequestParam String password) {
+//
+//		List<Person> persons = ps.getPersons();
+//		Person person = null;
+//
+//		for (Person currentPerson : persons) {
+//			if (currentPerson.getEmail().compareTo(email) == 0 && currentPerson.getPassword().compareTo(password) == 0) {
+//				person = currentPerson;
+//			}
+//		}
+//		System.err.println("PERSONA OBTENIDA: " + person);
+//		return person;
+//	}
 	@PostMapping("/login")
-	public Person login(@RequestParam String email, @RequestParam String password) {
-
-		List<Person> persons = ps.getPersons();
-		Person person = null;
-
-		for (Person currentPerson : persons) {
-			if (currentPerson.getEmail().compareTo(email) == 0 && currentPerson.getPassword().compareTo(password) == 0) {
-				person = currentPerson;
-			}
+	public ResponseEntity<?> login(@Valid @RequestBody PersonLoginDTO person)
+	{	
+		Person newPerson = ps.getPerson(person.getEmail(), person.getPassword());
+		
+		//El objeto es nulo en caso de que el password/email no son correctos
+		if(newPerson == null)
+		{
+			System.err.println("No se ha encontrado al usuario rey");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","Las credenciales introducidas no son válidas"));
 		}
-		System.err.println("PERSONA OBTENIDA: " + person);
-		return person;
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 	}
 	
 		
@@ -147,30 +162,5 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 
 	}
-
-	/*@PostMapping("/registro")
-	public void registroPersona(@RequestParam (name = "name") String name, @RequestParam (name = "email") String email, @RequestParam (name = "password") String password1, @RequestParam (name = "password1") String password2, @RequestParam (name = "curso") int curso_id) {
-		if(password1.compareTo(password2) == 0 && !password1.isEmpty() && !name.isEmpty() && !email.isEmpty() && !password1.isEmpty())
-		{
-			ps.addPerson(name, email, password1, curso_id);
-			System.out.println(":) SE HA GUARDADO LA PERSONA EN LA BASE DE DATOS");
-		}
-		else
-		{
-			System.err.println(":( ERROR, NO SE HA CUMPLIDO LOS REQUISITOS PARA EL REGISTRO");
-		}
-	}*/
-
-//	@PostMapping("/registro")
-//	public Persona registroPersona(@RequestParam (name = "name") String nombre, @RequestParam (name = "email") String email, @RequestParam (name = "password") String password1, @RequestParam (name = "password") String password2, @RequestParam (name = "curso") int curso_id) {
-//		
-//		if ( password1.equals(password2) && !password1.isEmpty() && !nombre.isEmpty() && !email.isEmpty() ) {
-//			
-//			pr.addUser(nombre, email, password1, curso_id );
-//		}
-//		
-//		return null;
-//		
-//	}
 
 }

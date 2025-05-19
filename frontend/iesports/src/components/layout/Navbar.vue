@@ -2,63 +2,82 @@
   <div :class="['navbar', { 'navbar-visible': showNavbar }]">
     <IonToolbar class="custom-toolbar">
       <div class="nav-links">
-        <a href="#inicio">Inicio</a>
-        <a href="#torneos">Torneos</a>
-        <a href="#equipos">Equipos</a>
-        <a href="#calendario">Calendario</a>
-        <a href="#contacto">Contacto</a>
-        <a @click="goToLogin">Iniciar Sesión</a>
+        <a
+          v-for="item in navItems"
+          :key="item.name"
+          @click.prevent="handleNav(item)"
+          href="javascript:;"
+        >
+          {{ item.name }}
+        </a>
       </div>
     </IonToolbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IonToolbar } from '@ionic/vue';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { IonToolbar } from '@ionic/vue';
 
-
-const showNavbar = ref(false);
+// Lista de opciones de navegación
+const navItems = [
+  { name: 'Inicio', href: '/' },
+  { name: 'Torneos', href: '/tournaments' },
+  { name: 'Equipos', href: '/teams' },
+  { name: 'Calendario', href: '/calendar' },
+  { name: 'Noticias', href: '#noticias' },
+  { name: 'Perfil', href: '/profile' }
+];
 
 const router = useRouter();
+const showNavbar = ref(false);
 
-function goToLogin() {
-  router.push('/login')
+// Detecta si hay usuario logado
+const isLoggedIn = computed(() => !!localStorage.getItem('usuario'));
+
+// Maneja clicks de navegación
+function handleNav(item: { name: string; href: string }) {
+  if (item.href === '/') {
+    // fuerza recarga de la ruta raíz y scroll al top
+    window.location.href = '/'; 
+    return;
+  }
+
+  if (!isLoggedIn.value && item.name !== 'Inicio') {
+    router.push('/login');
+    return;
+  }
+
+  if (item.href.startsWith('#')) {
+    window.location.hash = item.href;
+  } else {
+    router.push(item.href);
+  }
 }
 
+
+// Lógica de scroll para mostrar navbar
 const handleScroll = (event: CustomEvent) => {
-  const scrollElement = (event.target as any).getScrollElement 
-    ? event.target 
+  const el = (event.target as any).getScrollElement
+    ? event.target
     : (event.target as any).scrollElement;
-
-  scrollElement.getScrollElement().then((scrollEl: HTMLElement) => {
-    const scrollTop = scrollEl.scrollTop;
-    const windowWidth = window.innerWidth;
-
-    if (windowWidth >= 1440) {
-      showNavbar.value = scrollTop > 900;
-    } else if (windowWidth >= 1024) {
-      showNavbar.value = scrollTop > 700;
-    } else if (windowWidth >= 768) {
-      showNavbar.value = scrollTop > 1000;
-    } else {
-      showNavbar.value = scrollTop > 600;
-    }
+  el.getScrollElement().then((scrollEl: HTMLElement) => {
+    const top = scrollEl.scrollTop;
+    const w = window.innerWidth;
+    if (w >= 1440) showNavbar.value = top > 900;
+    else if (w >= 1024) showNavbar.value = top > 700;
+    else if (w >= 768) showNavbar.value = top > 1000;
+    else showNavbar.value = top > 600;
   });
 };
 
 onMounted(() => {
   document.addEventListener('ionScroll', handleScroll as EventListener);
 });
-
 onUnmounted(() => {
   document.removeEventListener('ionScroll', handleScroll as EventListener);
 });
-
-
-
-
 </script>
 
 <style scoped>
@@ -71,7 +90,7 @@ onUnmounted(() => {
 }
 
 .nav-links a {
-  color: rgb(255, 255, 255);
+  color: white;
   text-decoration: none;
   font-weight: bold;
   font-size: 1rem;
@@ -89,7 +108,7 @@ onUnmounted(() => {
   transform: translateY(-100%);
   transition: transform 0.3s ease;
   z-index: 999;
-  background-color: rgb(0, 0, 0);
+  background-color: #0a2540;
 }
 
 .navbar-visible {
@@ -97,9 +116,28 @@ onUnmounted(() => {
 }
 
 .custom-toolbar {
-  --background: #0a2540; 
-  --color: white; 
-  --min-height: 60px; 
+  --background: #0a2540;
+  --color: white;
+  --min-height: 60px;
+}
+
+/* En móviles (≤480px): 3 enlaces por fila */
+@media (max-width: 480px) {
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;          
+    justify-content: center;  
+    gap: 0.5rem;              
+    padding: 0.5rem;
+  }
+
+  .nav-links a {
+    flex: 1 1 30%;            /* ocupa ~30% del ancho */
+    text-align: center;       
+    margin: 0.25rem 0;        
+    font-size: 0.9rem;      
+    color: rgb(255, 255, 255);  
+  }
 }
 
 </style>
