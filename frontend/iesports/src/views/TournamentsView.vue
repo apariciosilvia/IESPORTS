@@ -66,14 +66,17 @@ import Footer from '@/components/ui/Footer.vue';
 import TournamentCard from '@/components/layout/TournamentCard.vue'
 
 // 1. Importamos los helpers de Vue
-import { ref, watch, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 // 2. Importamos nuestros métodos del servicio
-import { getTournament } from '@/services/tournamentService';
+// import { getTournament } from '@/services/tournamentService';
+import { getSports } from '@/services/sportService';
+import { getYears } from '@/services/tournamentService';
+import { getMatches } from '@/services/matchService';
 
 // import { getSports, getYears, getTournament } from '@/services/tournamentService';
 import type { Match } from '@/model/match';
-import type { Tournament } from '@/model/tournament';
+// import type { Tournament } from '@/model/tournament';
 import type { Sport } from '@/model/sport';
 
 
@@ -83,99 +86,14 @@ const { showNav, handleScroll } = useNavbarVisibility();
 // 4. Definimos refs reactivas para filtros y datos
 const sports = ref<Sport[]>([]);
 const years = ref<String[]>([]);
+const matches = ref<Match[]>([]);
 const selectedSport = ref<number | null>(null);
 const selectedYear = ref<string | null>(null);
-// const tournament = ref<any>(null);
 
 // Estados de carga y error
 const isLoadingFilters = ref(false);
-const isLoadingTournament = ref(false);
+// const isLoadingTournament = ref(false);
 const error = ref<string | null>(null);
-
-const sportsList: Sport[] = [
-  { id: 1, name: 'Fútbol'},
-  { id: 2, name: 'Baloncesto'},
-  { id: 3, name: 'Tenis'},
-  { id: 4, name: 'Voleibol' },
-  { id: 5, name: 'Ping-pong'}
-];
-
-const ageList: string[] = [
-  '2018/19',
-  '2019/20',
-  '2020/21',
-  '2021/22',
-  '2022/23',
-  '2023/24',
-  '2024/25'
-];
-
-// Deporte y torneo compartido
-const sport: Sport = { id: 1, name: 'Fútbol' };
-const tournament: Tournament = {
-  id: 1,
-  name: 'Copa Ejemplo',
-  date: '2023/24',
-  state: 0,
-  sport: sport
-};
-
-// Deporte y torneo compartido
-const sport3: Sport = { id: 3, name: 'Tenis' };
-const tournament2: Tournament = {
-  id: 2,
-  name: 'Torneaso de Tenis',
-  date: '2024/25',
-  state: 0,
-  sport: sport3
-};
-
-const matches: Match[] = [
-  // Octavos de final (Octavos)
-  { id: 1,  date: new Date('2025-06-01T18:00:00'), round: 'Octavos', tournament,
-    team1: { id: 1, name: 'Equipo A' }, team2: { id: 2, name: 'Equipo B' } },
-  { id: 2,  date: new Date('2025-06-01T20:00:00'), round: 'Octavos', tournament,
-    team1: { id: 3, name: 'Equipo C' }, team2: { id: 4, name: 'Equipo D' } },
-  { id: 3,  date: new Date('2025-06-02T18:00:00'), round: 'Octavos', tournament,
-    team1: { id: 5, name: 'Equipo E' }, team2: { id: 6, name: 'Equipo F' } },
-  { id: 4,  date: new Date('2025-06-02T20:00:00'), round: 'Octavos', tournament,
-    team1: { id: 7, name: 'Equipo G' }, team2: { id: 8, name: 'Equipo H' } },
-  { id: 5,  date: new Date('2025-06-03T18:00:00'), round: 'Octavos', tournament,
-    team1: { id: 9,  name: 'Equipo I' }, team2: { id: 10, name: 'Equipo J' } },
-  { id: 6,  date: new Date('2025-06-03T20:00:00'), round: 'Octavos', tournament,
-    team1: { id: 11, name: 'Equipo K' }, team2: { id: 12, name: 'Equipo L' } },
-  { id: 7,  date: new Date('2025-06-04T18:00:00'), round: 'Octavos', tournament,
-    team1: { id: 13, name: 'Equipo M' }, team2: { id: 14, name: 'Equipo N' } },
-  { id: 8,  date: new Date('2025-06-04T20:00:00'), round: 'Octavos', tournament,
-    team1: { id: 15, name: 'Equipo O' }, team2: { id: 16, name: 'Equipo P' } },
-
-  // Cuartos de final
-  { id: 9,  date: new Date('2025-06-05T18:00:00'), round: 'Cuartos', tournament,
-    team1: { id: 1, name: 'Equipo A' }, team2: { id: 3, name: 'Equipo C' } },
-  { id: 10, date: new Date('2025-06-05T20:00:00'), round: 'Cuartos', tournament,
-    team1: { id: 5, name: 'Equipo E' }, team2: { id: 7, name: 'Equipo G' } },
-  { id: 11, date: new Date('2025-06-06T18:00:00'), round: 'Cuartos', tournament,
-    team1: { id: 9, name: 'Equipo I' }, team2: { id: 11, name: 'Equipo K' } },
-  { id: 12, date: new Date('2025-06-06T20:00:00'), round: 'Cuartos', tournament,
-    team1: { id: 13, name: 'Equipo M' }, team2: { id: 15, name: 'Equipo O' } },
-
-  // Semifinales
-  { id: 13, date: new Date('2025-06-07T19:00:00'), round: 'Semi-finales', tournament,
-    team1: { id: 1, name: 'Equipo A' }, team2: { id: 5, name: 'Equipo E' } },
-  { id: 14, date: new Date('2025-06-07T21:00:00'), round: 'Semi-finales', tournament,
-    team1: { id: 9, name: 'Equipo I' }, team2: { id: 13, name: 'Equipo M' } },
-
-  // Final
-  { id: 15, date: new Date('2025-06-08T20:00:00'), round: 'Final', tournament,
-    team1: { id: 1, name: 'Equipo A' }, team2: { id: 9, name: 'Equipo I' } },
-
-  { id: 1,  date: new Date('2025-06-01T18:00:00'), round: 'Octavos', tournament: tournament2,
-    team1: { id: 1, name: 'Equipo A' }, team2: { id: 2, name: 'Equipo B' } },
-  { id: 1,  date: new Date('2025-06-01T18:00:00'), round: 'Octavos', tournament: tournament2,
-    team1: { id: 1, name: 'Equipo A' }, team2: { id: 2, name: 'Equipo B' } },
-  { id: 1,  date: new Date('2025-06-01T18:00:00'), round: 'Octavos', tournament: tournament2,
-    team1: { id: 1, name: 'Equipo A' }, team2: { id: 2, name: 'Equipo B' } },
-];
 
 const groupedMatches = computed<Record<number, Match[]>>(() =>
 //Creamos este mapa con todos los partidos que cumplen con todos los filtros
@@ -195,11 +113,13 @@ async function loadFilters() {
   isLoadingFilters.value = true;
   error.value = null;
   try {
-    sports.value = sportsList;
-    // sports.value = await getSports();
-    // years.value = tournamentsList;
-    years.value = ageList;
-    // years.value  = await getYears();
+    sports.value = await getSports();
+    console.log('sports:', sports.value);
+    
+    years.value  = await getYears();
+    console.log('years:', years.value);
+
+    matches.value = await getMatches();
   } catch (e: any) {
     error.value = 'No se pudieron cargar los filtros.';
     console.error(e);
@@ -234,7 +154,7 @@ onMounted(() => {
 
 // 8. Computed para filtrar la lista de torneos
 const filteredMatches = computed(() => {
-  return matches.filter(m =>
+  return matches.value.filter(m =>
     (!selectedSport.value || m.tournament.sport.id === selectedSport.value) &&
     (!selectedYear.value  || m.tournament.date === selectedYear.value)
   );

@@ -1,28 +1,28 @@
 // services/tournamentService.ts
 import axios from 'axios';
 
-// 1. getSports(): devuelve una promesa con el array de deportes
-function getSports(): Promise<{ id: number; name: string }[]> {
+// // 1. getSports(): devuelve una promesa con el array de deportes
+// function getSports(): Promise<{ id: number; name: string }[]> {
 
-  const url = `${import.meta.env.VITE_URL_API}/sports`;
+//   const url = `${import.meta.env.VITE_URL_API}/sports`;
 
-  return new Promise((resolve, reject) => {
-    axios.get(url)
-      .then(response => {
-        // 2. response.data debe ser el array de deportes
-        resolve(response.data);
-      })
-      .catch(error => {
-        console.error('Error cargando deportes:', error);
-        reject(error);
-      });
-  });
-}
+//   return new Promise((resolve, reject) => {
+//     axios.get(url)
+//       .then(response => {
+//         // 2. response.data debe ser el array de deportes
+//         resolve(response.data);
+//       })
+//       .catch(error => {
+//         console.error('Error cargando deportes:', error);
+//         reject(error);
+//       });
+//   });
+// }
 
 // 3. getYears(): devuelve una promesa con el array de años
-function getYears(): Promise<number[]> {
+function getYears(): Promise<String[]> {
 
-  const url = `${import.meta.env.VITE_URL_API}/tournaments/years`;
+  const url = `${import.meta.env.VITE_URL_API}/tournament/getYears`;
   
   return new Promise((resolve, reject) => {
     axios.get(url)
@@ -37,21 +37,21 @@ function getYears(): Promise<number[]> {
 }
 
 // 4. getTournament(): devuelve una promesa con la estructura del torneo
-function getTournament(sportId: number, year: string): Promise<any> {
+function getTournaments(): Promise<any> {
 
-  const url = `${import.meta.env.VITE_URL_API}/tournaments`;
+  const url = `${import.meta.env.VITE_URL_API}/tournament/getTournaments`;
 
   return new Promise((resolve, reject) => {
-    axios.get(url, { params: { sportId, year } })
+    axios.post(url, { params: {  } })
       .then(response => {
         resolve(response.data);
       })
       .catch(error => {
-        console.error('Error cargando torneo:', error);
+        console.error('Error cargando listado de torneos:', error);
         reject(error);
       });
   });
 }
 
 
-export { getSports, getYears, getTournament};
+export { getYears, getTournaments};

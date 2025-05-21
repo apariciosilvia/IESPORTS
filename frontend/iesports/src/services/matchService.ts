@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-function getTeamsInfo(): Promise<any[]> {
+function getMatches(): Promise<any[]> {
 
-  const url = `${import.meta.env.VITE_URL_API}/team/getTeamsInfo`;
+  const url = `${import.meta.env.VITE_URL_API}/match/getMatches`;
 
   return new Promise((resolve, reject) => {
     axios.get(url)
@@ -10,10 +10,10 @@ function getTeamsInfo(): Promise<any[]> {
         resolve(response.data);
       })
       .catch(error => {
-        console.error('Error cargando equipos:', error);
+        console.error('Error cargando partidos:', error);
         reject(error);
       });
   });
 }
 
-export { getTeamsInfo };
+export { getMatches };

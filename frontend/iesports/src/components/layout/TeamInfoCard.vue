@@ -13,9 +13,11 @@ const { teamInfo } = defineProps<{
     <div class="card-inner">
       <!-- Cara frontal -->
       <div class="card-front">
-        <p>{{ teamInfo.team.name }}</p>
+        <h3>{{ teamInfo.team.name }} </h3> 
+        <br>
+        <p> Id:{{ teamInfo.team.id }}</p>
         <ul>
-          <li v-for="sport in teamInfo.sport" :key="sport.id">
+          <li v-for="sport in teamInfo.sports" :key="sport.id">
             {{ sport.name }}
           </li>
         </ul>
@@ -24,8 +26,8 @@ const { teamInfo } = defineProps<{
       <div class="card-back">
         <b>INTEGRANTES DEL EQUIPO:</b>
         <ul>
-          <li v-for="person in teamInfo.person" :key="person.id">
-            {{ person.name }}
+          <li v-for="person in teamInfo.team.players" :key="person.id">
+            {{ person.name }} 
           </li>
         </ul>
       </div>

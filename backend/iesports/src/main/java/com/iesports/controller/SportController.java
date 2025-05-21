@@ -20,18 +20,18 @@ import com.iesports.model.Sport;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/Sport")
+@RequestMapping("/sport")
 public class SportController {
 	
 	@Autowired
 	private SportServiceImpl ss;
 	
-	@GetMapping("/get-sports")
+	@GetMapping("/getSports")
 	public ResponseEntity<?> getAllSports(){
 		return ResponseEntity.ok(ss.getSports());
 	}
 	
-	@PostMapping("/add-sport")
+	@PostMapping("/addSport")
 	public ResponseEntity<?> addSports(@Valid @RequestBody SportRegisterDTO Sport){
 		
 		Map<String, String> errors = new HashMap<>();
