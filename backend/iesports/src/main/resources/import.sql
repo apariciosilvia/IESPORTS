@@ -33,7 +33,7 @@ INSERT INTO `sports` (`id`, `name`) VALUES (4, 'Tenis');
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'PROCESO');
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2021/22', 'Liga Juvenil Fútbol', 'PROCESO');
 -- Baloncesto Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2022/23', 'Torneo Escolar Baloncesto', 'PENDIENTE');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2021/22', 'Torneo Escolar Baloncesto', 'PENDIENTE');
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2023/24', 'Campeonato Nacional Basket', 'PROCESO');
 -- Hockey Tournaments
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2021/22', 'Hockey Winter Cup', 'FINALIZADO');
@@ -46,22 +46,66 @@ INSERT INTO teams (name) VALUES ('equipo 1');
 INSERT INTO teams (name) VALUES ('equipo 2');
 INSERT INTO teams (name) VALUES ('equipo 3');
 INSERT INTO teams (name) VALUES ('equipo 4');
+INSERT INTO teams (name) VALUES ('equipo 5');
+INSERT INTO teams (name) VALUES ('equipo 6');
+INSERT INTO teams (name) VALUES ('equipo 7');
+INSERT INTO teams (name) VALUES ('equipo 8');
+INSERT INTO teams (name) VALUES ('equipo 9');
+INSERT INTO teams (name) VALUES ('equipo 10');
+INSERT INTO teams (name) VALUES ('equipo 11');
+INSERT INTO teams (name) VALUES ('equipo 12');
+INSERT INTO teams (name) VALUES ('equipo 13');
+INSERT INTO teams (name) VALUES ('equipo 14');
+INSERT INTO teams (name) VALUES ('equipo 15');
+INSERT INTO teams (name) VALUES ('equipo 16');
 
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-01', 'FASE_GRUPOS', 1, 1, 2, 64, 58, 1);
--- Más partidos de fase de grupos
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-03', 'FASE_GRUPOS', 1, 3, 4, 70, 72, 4);
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-04', 'FASE_GRUPOS', 6, 1, 3, 61, 65, 3);
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'FASE_GRUPOS', 1, 2, 4, 55, 50, 2);
+-- Fase de grupos
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-01', 'OCTAVOS', 1, 1, 2, 64, 58, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-03', 'OCTAVOS', 1, 3, 4, 70, 72, 4);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-04', 'OCTAVOS', 1, 5, 6, 61, 65, 3);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 1, 7, 8, 55, 50, 2);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 1, 9, 10, 55, 50, 2);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 1, 11, 12, 55, 50, 2);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 1, 13, 14, 55, 50, 2);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 1, 15, 16, 55, 50, 2);
 
 -- Cuartos de final
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-07', 'CUARTOS_FINAL', 1, 1, 4, 80, 75, 1);
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-08', 'CUARTOS_FINAL', 1, 2, 3, 66, 74, 3);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-07', 'CUARTOS_FINAL', 1, 5, 8, 80, 75, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-08', 'CUARTOS_FINAL', 1, 9, 12, 66, 74, 3);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-07', 'CUARTOS_FINAL', 1, 13, 16, 80, 75, 1);
 
 -- Semifinal
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-10', 'SEMIFINAL', 1, 1, 3, 89, 85, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-10', 'SEMIFINAL', 1, 1, 12, 89, 85, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-10', 'SEMIFINAL', 1, 5, 16, 89, 85, 1);
 
 -- Final
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-12', 'FINAL', 4, 1, 3, 92, 90, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-12', 'FINAL', 1, 1, 16, 92, 90, 1);
+
+
+-- Fase de grupos
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-01', 'OCTAVOS', 3, 1, 2, 64, 58, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-03', 'OCTAVOS', 3, 3, 4, 70, 72, 4);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-04', 'OCTAVOS', 3, 5, 6, 61, 65, 3);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 3, 7, 8, 55, 50, 2);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 3, 9, 10, 55, 50, 2);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 3, 11, 12, 55, 50, 2);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 3, 13, 14, 55, 50, 2);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 3, 15, 16, 55, 50, 2);
+
+-- Cuartos de final
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-07', 'CUARTOS_FINAL', 3, 1, 4, 80, 75, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-07', 'CUARTOS_FINAL', 3, 5, 8, 80, 75, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-08', 'CUARTOS_FINAL', 3, 9, 12, 66, 74, 3);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-07', 'CUARTOS_FINAL', 3, 13, 16, 80, 75, 1);
+
+-- Semifinal
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-10', 'SEMIFINAL', 3, 1, 12, 89, 85, 1);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-10', 'SEMIFINAL', 3, 5, 16, 89, 85, 1);
+
+-- Final
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-12', 'FINAL', 3, 1, 16, 92, 90, 1);
+
 
 INSERT INTO players_team (player_id, team_id) VALUES (5, 1);  -- Julia en equipo 1
 INSERT INTO players_team (player_id, team_id) VALUES (6, 2);  -- David en equipo 2

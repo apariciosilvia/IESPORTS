@@ -8,4 +8,7 @@ export interface Match {
   tournament: Tournament;
   team1: Team;
   team2: Team;
+  pointsTeam1: number;
+  pointsTeam2: number;
+  winnerTeam: Team;
 }
