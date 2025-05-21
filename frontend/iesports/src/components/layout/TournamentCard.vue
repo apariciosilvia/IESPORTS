@@ -1,78 +1,159 @@
 <template>
   <div class="tournament-container">
     <!-- IZQUIERDA: Octavos -->
-    <div class="group-left" v-if="roundsGroups['OCTAVOS']">
+    <div class="group-left">
       <h3>{{ formatRoundName('OCTAVOS') }}</h3>
+
       <div
-        v-for="m in roundsGroups['OCTAVOS']"
+        v-for="m in roundsGroups['OCTAVOS'] || []"
         :key="m.id"
         class="match"
       >
         <div class="match-teams">
-          {{ m.team1.name }} ({{ m.pointsTeam1 }} Puntos) VS
-          {{ m.team2.name }} ({{ m.pointsTeam2 }} Puntos)
+          <!-- Equipo 1 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team1.id }"
+            >
+              {{ m.team1.name }}
+            </span>
+          </span>
+          VS
+          <!-- Equipo 2 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team2.id }"
+            >
+              {{ m.team2.name }}
+            </span>
+            <span class="points" v-if="m.winnerTeam">
+              ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})
+            </span>
+          </span>
         </div>
       </div>
+
+      <p v-if="!(roundsGroups['OCTAVOS'] && roundsGroups['OCTAVOS'].length)">
+        Todavía no hay partidos realizados.
+      </p>
     </div>
 
-    <!-- CENTRO: Final -->
-    <div class="center" v-if="roundsGroups['FINAL']">
+    <!-- FINAL -->
+    <div class="center">
       <h1>{{ tournamentName }}</h1>
       <div class="trophy">
-        <img src="c:/Users/apari/Downloads/copa-trofeo.png" width="100px" />
+        <img src="../../../src/assets/copa-trofeo.png" width="100px" />
       </div>
       <h2>{{ formatRoundName('FINAL') }}</h2>
+
       <div
-        v-for="m in roundsGroups['FINAL']"
+        v-for="m in roundsGroups['FINAL'] || []"
         :key="m.id"
         class="match"
       >
         <div class="match-teams">
-          {{ m.team1.name }} ({{ m.pointsTeam1 }} Puntos) VS
-          {{ m.team2.name }} ({{ m.pointsTeam2 }} Puntos)
+          {{ m.team1.name }}
+          VS
+          {{ m.team2.name }}
+          <span class="points"> ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})</span>
+
         </div>
-        <div class="match-winner">
+        <div class="match-winner" v-if="m.winnerTeam">
           Ganador: {{ m.winnerTeam.name }}
         </div>
       </div>
+
+      <p v-if="!(roundsGroups['FINAL'] && roundsGroups['FINAL'].length)">
+        Todavía no hay un ganador.
+      </p>
     </div>
 
     <!-- DERECHA: Cuartos y Semifinal -->
     <div class="group-right">
-      <div v-if="roundsGroups['CUARTOS_FINAL']">
+      <!-- CUARTOS de Final -->
+      <div>
         <h3>{{ formatRoundName('CUARTOS_FINAL') }}</h3>
+
         <div
-          v-for="m in roundsGroups['CUARTOS_FINAL']"
+          v-for="m in roundsGroups['CUARTOS_FINAL'] || []"
           :key="m.id"
           class="match"
         >
           <div class="match-teams">
-            {{ m.team1.name }} ({{ m.pointsTeam1 }} Puntos) VS
-            {{ m.team2.name }} ({{ m.pointsTeam2 }} Puntos)
-          </div>
+          <!-- Equipo 1 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team1.id }"
+            >
+              {{ m.team1.name }}
+            </span>
+          </span>
+          VS
+          <!-- Equipo 2 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team2.id }"
+            >
+              {{ m.team2.name }}
+            </span>
+            <span class="points" v-if="m.winnerTeam">
+              ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})
+            </span>
+          </span>
         </div>
+        </div>
+
+        <p v-if="!(roundsGroups['CUARTOS_FINAL'] && roundsGroups['CUARTOS_FINAL'].length)">
+          Todavía no hay partidos registrados.
+        </p>
       </div>
 
-      <div v-if="roundsGroups['SEMIFINAL']">
+      <!-- SEMIFINAL -->
+      <div>
         <h3>{{ formatRoundName('SEMIFINAL') }}</h3>
+
         <div
-          v-for="m in roundsGroups['SEMIFINAL']"
+          v-for="m in roundsGroups['SEMIFINAL'] || []"
           :key="m.id"
           class="match"
         >
           <div class="match-teams">
-            {{ m.team1.name }} ({{ m.pointsTeam1 }} Puntos) VS
-            {{ m.team2.name }} ({{ m.pointsTeam2 }} Puntos)
-          </div>
+          <!-- Equipo 1 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team1.id }"
+            >
+              {{ m.team1.name }}
+            </span>
+          </span>
+          VS
+          <!-- Equipo 2 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team2.id }"
+            >
+              {{ m.team2.name }}
+            </span>
+            <span class="points" v-if="m.winnerTeam">
+              ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})
+            </span>
+          </span>
         </div>
+        </div>
+
+        <p v-if="!(roundsGroups['SEMIFINAL'] && roundsGroups['SEMIFINAL'].length)">
+          Todavía no hay partidos registrados.
+        </p>
       </div>
     </div>
   </div>
 </template>
-
-
-
-
 
 <script setup lang="ts">
 import { computed, defineProps } from 'vue';
@@ -200,4 +281,12 @@ console.log('MATCHES', props.matches)
   margin-top: 1rem;
   text-transform: capitalize;
 }
+
+.winner {
+  color: #e0b403;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+
 </style>
