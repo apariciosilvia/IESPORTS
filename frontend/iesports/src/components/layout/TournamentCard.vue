@@ -1,5 +1,5 @@
 <template>
-  <div class="tournament-container">
+  <div :class="['tournament-container', sportClass]">
     <!-- IZQUIERDA: Octavos -->
     <div class="group-left">
       <h3>{{ formatRoundName('OCTAVOS') }}</h3>
@@ -58,14 +58,16 @@
           VS
           {{ m.team2.name }}
           <span class="points"> ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})</span>
+        </div>
 
-        </div>
-        <div class="match-winner" v-if="m.winnerTeam">
-          Ganador: {{ m.winnerTeam.name }}
-        </div>
       </div>
-
-      <p v-if="!(roundsGroups['FINAL'] && roundsGroups['FINAL'].length)">
+        <div
+        v-for="m in roundsGroups['FINAL'] || []"
+        :key="m.id"
+        class="final-winner"
+      > Ganador: {{ m.winnerTeam.name }}</div>
+      
+      <p class="match-empty" v-if="!(roundsGroups['FINAL'] && roundsGroups['FINAL'].length)">
         Todavía no hay un ganador.
       </p>
     </div>
@@ -107,7 +109,7 @@
         </div>
         </div>
 
-        <p v-if="!(roundsGroups['CUARTOS_FINAL'] && roundsGroups['CUARTOS_FINAL'].length)">
+        <p class="match-empty" v-if="!(roundsGroups['CUARTOS_FINAL'] && roundsGroups['CUARTOS_FINAL'].length)">
           Todavía no hay partidos registrados.
         </p>
       </div>
@@ -147,7 +149,7 @@
         </div>
         </div>
 
-        <p v-if="!(roundsGroups['SEMIFINAL'] && roundsGroups['SEMIFINAL'].length)">
+        <p class="match-empty" v-if="!(roundsGroups['SEMIFINAL'] && roundsGroups['SEMIFINAL'].length)">
           Todavía no hay partidos registrados.
         </p>
       </div>
@@ -172,7 +174,7 @@ const tournamentName = computed(() =>
 // 3) Función para convertir clave de ronda en texto legible
 function formatRoundName(key: typeof roundOrder[number]): string {
   switch (key) {
-    case 'OCTAVOS': return 'Octavos de Final';
+    case 'OCTAVOS': return 'Octavos';
     case 'CUARTOS_FINAL': return 'Cuartos de Final';
     case 'SEMIFINAL': return 'Semifinal';
     case 'FINAL': return 'Final';
@@ -188,11 +190,34 @@ const roundsGroups = computed<Record<string, Match[]>>(() =>
 );
 
 console.log('MATCHES', props.matches)
+
+
+const sportClass = computed(() => {
+  const sport = props.matches[0]?.tournament?.sport?.name?.toLowerCase() || '';
+  switch (sport) {
+    case 'ajedrez': return 'ajedrez-bg';
+    case 'fútbol': return 'futbol-bg';
+    case 'baloncesto': return 'baloncesto-bg';
+    case 'pingpong': return 'pingpong-bg';
+    default: return 'default-bg';
+  }
+})
+
+const tournamentState = computed(() =>
+  props.matches[0]?.tournament?.state ?? ''
+);
+
+const tournamentDate = computed(() =>
+  props.matches[0]?.tournament?.date ?? ''
+);
+
+
 </script>
 
 
 
 <style scoped>
+
 .tournament-container {
   display: flex;
   justify-content: center;
@@ -200,15 +225,40 @@ console.log('MATCHES', props.matches)
   padding: 60px;
   flex-wrap: wrap;
   margin-top: 5%;
-  background-color: #f2f2f2;
   border-radius: 12px;
 }
+
+.pingpong-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-pingpong.jpeg') center center;
+}
+
+.ajedrez-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-ajedrez.jpeg') center center;
+}
+
+.futbol-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-futbol.jpeg') center center;
+}
+
+.baloncesto-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-baloncesto.jpeg') center center;
+}
+
+.default-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-default.jpeg') center center;
+}
+
 
 .group-left,
 .group-right,
 .center {
   flex: 0 0 30%;
-  background-color: rgba(255, 255, 255, 0.829);
+  background-color: rgba(255, 255, 255, 0.938);
   padding: 20px;
   border-radius: 10px;
 }
@@ -221,7 +271,6 @@ console.log('MATCHES', props.matches)
 .center {
   width: 100%;
   text-align: center;
-  background-color: white;
   padding: 20px;
   border-radius: 10px;
   align-self: center;
@@ -233,12 +282,33 @@ console.log('MATCHES', props.matches)
 }
 
 .match {
-  background-color: #dbdada86;
+  background-color: #dbdada56;
   margin: 10px 0;
   padding: 10px;
   border-left: 4px solid #ffcc00;
   border-radius: 5px;
 }
+
+.match-empty{
+  background-color: #dbdada86;
+  margin: 10px 0;
+  padding: 10px;
+  border-left: 4px solid #ff0000;
+  border-radius: 5px;
+}
+
+.final-winner{
+  background-color: #dbdada86;
+  margin: 10px 0;
+  padding: 10px;
+  border: 4px solid #ffcc00;
+  border-radius: 5px;
+  color: #504724;
+  text-transform: uppercase;
+  font-weight: bold;
+} 
+
+
 
 /* Cabecera de cada partido: fecha y torneo */
 .match-header {
