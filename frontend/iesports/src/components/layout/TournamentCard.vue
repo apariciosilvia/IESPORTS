@@ -1,65 +1,359 @@
 <template>
-  <div class="match-card"> 
-    <h2 class="tournament-title">
-        Torneo: {{ matches[0]?.tournament.name }}          
-    </h2>
-    <b>Fecha torneo: {{ matches[0]?.tournament.date }}</b>
+  <div :class="['tournament-container', sportClass]">
+    <!-- IZQUIERDA: Octavos -->
+    <div class="group-left">
+      <h3>{{ formatRoundName('OCTAVOS') }}</h3>
 
-    <p>Deporte: {{ matches[0]?.tournament.sport.name }}</p> 
+      <div
+        v-for="m in roundsGroups['OCTAVOS'] || []"
+        :key="m.id"
+        class="match"
+      >
+        <div class="match-teams">
+          <!-- Equipo 1 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team1.id }"
+            >
+              {{ m.team1.name }}
+            </span>
+          </span>
+          VS
+          <!-- Equipo 2 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team2.id }"
+            >
+              {{ m.team2.name }}
+            </span>
+            <span class="points" v-if="m.winnerTeam">
+              ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})
+            </span>
+          </span>
+        </div>
+      </div>
 
-    <div
-      v-for="m in matches"              
-      :key="m.id"  
-      class="match-card"                     
-    >
-      
-      <p>{{ }}</p>
-      <p>Fase: {{ m.round }}</p>                    
-      <p>Fecha partido: {{  new Date(m.date).toLocaleDateString() }}</p> 
-     
-      <div>
-        <b>{{ m.team1.name }}</b>
+      <p v-if="!(roundsGroups['OCTAVOS'] && roundsGroups['OCTAVOS'].length)">
+        Todavía no hay partidos realizados.
+      </p>
+    </div>
+
+    <!-- FINAL -->
+    <div class="center">
+      <h1>{{ tournamentName }}</h1>
+      <div class="trophy">
+        <img src="../../../src/assets/copa-trofeo.png" width="100px" />
       </div>
-      <div>
-        <b>{{ m.team2.name }}</b>
+      <h2>{{ formatRoundName('FINAL') }}</h2>
+
+      <div
+        v-for="m in roundsGroups['FINAL'] || []"
+        :key="m.id"
+        class="match"
+      >
+        <div class="match-teams">
+          {{ m.team1.name }}
+          VS
+          {{ m.team2.name }}
+          <span class="points"> ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})</span>
+        </div>
+
       </div>
+        <div
+        v-for="m in roundsGroups['FINAL'] || []"
+        :key="m.id"
+        class="final-winner"
+      > Ganador: {{ m.winnerTeam.name }}</div>
       
+      <p class="match-empty" v-if="!(roundsGroups['FINAL'] && roundsGroups['FINAL'].length)">
+        Todavía no hay un ganador.
+      </p>
+    </div>
+
+    <!-- DERECHA: Cuartos y Semifinal -->
+    <div class="group-right">
+      <!-- CUARTOS de Final -->
+      <div>
+        <h3>{{ formatRoundName('CUARTOS_FINAL') }}</h3>
+
+        <div
+          v-for="m in roundsGroups['CUARTOS_FINAL'] || []"
+          :key="m.id"
+          class="match"
+        >
+          <div class="match-teams">
+          <!-- Equipo 1 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team1.id }"
+            >
+              {{ m.team1.name }}
+            </span>
+          </span>
+          VS
+          <!-- Equipo 2 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team2.id }"
+            >
+              {{ m.team2.name }}
+            </span>
+            <span class="points" v-if="m.winnerTeam">
+              ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})
+            </span>
+          </span>
+        </div>
+        </div>
+
+        <p class="match-empty" v-if="!(roundsGroups['CUARTOS_FINAL'] && roundsGroups['CUARTOS_FINAL'].length)">
+          Todavía no hay partidos registrados.
+        </p>
+      </div>
+
+      <!-- SEMIFINAL -->
+      <div>
+        <h3>{{ formatRoundName('SEMIFINAL') }}</h3>
+
+        <div
+          v-for="m in roundsGroups['SEMIFINAL'] || []"
+          :key="m.id"
+          class="match"
+        >
+          <div class="match-teams">
+          <!-- Equipo 1 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team1.id }"
+            >
+              {{ m.team1.name }}
+            </span>
+          </span>
+          VS
+          <!-- Equipo 2 -->
+          <span class="team-block">
+            <span
+              class="team-name"
+              :class="{ winner: m.winnerTeam && m.winnerTeam.id === m.team2.id }"
+            >
+              {{ m.team2.name }}
+            </span>
+            <span class="points" v-if="m.winnerTeam">
+              ({{ m.pointsTeam1 }} - {{ m.pointsTeam2 }})
+            </span>
+          </span>
+        </div>
+        </div>
+
+        <p class="match-empty" v-if="!(roundsGroups['SEMIFINAL'] && roundsGroups['SEMIFINAL'].length)">
+          Todavía no hay partidos registrados.
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { computed, defineProps } from 'vue';
 import type { Match } from '@/model/match';
 
-const props = defineProps<{
-  matches: Match[];                        
-}>();
+const props = defineProps<{ matches: Match[] }>();
+
+// 1) Orden de las fases que queremos mostrar
+const roundOrder = ['OCTAVOS', 'CUARTOS_FINAL', 'SEMIFINAL', 'FINAL'] as const;
+
+// 2) Nombre de la copa (del primer partido)
+const tournamentName = computed(() =>
+  props.matches.length ? props.matches[0].tournament.name : ''
+);
+
+// 3) Función para convertir clave de ronda en texto legible
+function formatRoundName(key: typeof roundOrder[number]): string {
+  switch (key) {
+    case 'OCTAVOS': return 'Octavos';
+    case 'CUARTOS_FINAL': return 'Cuartos de Final';
+    case 'SEMIFINAL': return 'Semifinal';
+    case 'FINAL': return 'Final';
+  }
+}
+
+// 4) Agrupar partidos por ronda
+const roundsGroups = computed<Record<string, Match[]>>(() =>
+  props.matches.reduce((acc, m) => {
+    (acc[m.round] = acc[m.round] || []).push(m);
+    return acc;
+  }, {} as Record<string, Match[]>)
+);
+
+console.log('MATCHES', props.matches)
 
 
-console.log('Matches:', props.matches); 
+const sportClass = computed(() => {
+  const sport = props.matches[0]?.tournament?.sport?.name?.toLowerCase() || '';
+  switch (sport) {
+    case 'ajedrez': return 'ajedrez-bg';
+    case 'fútbol': return 'futbol-bg';
+    case 'baloncesto': return 'baloncesto-bg';
+    case 'pingpong': return 'pingpong-bg';
+    default: return 'default-bg';
+  }
+})
+
+// const tournamentState = computed(() =>
+//   props.matches[0]?.tournament?.state ?? ''
+// );
+
+// const tournamentDate = computed(() =>
+//   props.matches[0]?.tournament?.date ?? ''
+// );
+
 </script>
 
+
+
 <style scoped>
-.matches-list {
+
+.tournament-container {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  justify-content: center;
+  gap: 20px;
+  padding: 60px;
+  flex-wrap: wrap;
+  margin-top: 5%;
+  border-radius: 12px;
 }
 
-.match-card {
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.pingpong-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-pingpong.jpeg') center center;
 }
 
-.tournament-title {
-  font-size: 1.25rem;
+.ajedrez-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-ajedrez.jpeg') center center;
+}
+
+.futbol-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-futbol.jpeg') center center;
+}
+
+.baloncesto-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-baloncesto.jpeg') center center;
+}
+
+.default-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-default.png') center center;
+}
+
+
+.group-left,
+.group-right,
+.center {
+  flex: 0 0 30%;
+  background-color: rgba(255, 255, 255, 0.938);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.group-right,
+.group-left {
+  height: 100%;
+}
+
+.center {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  align-self: center;
+}
+
+.trophy {
+  font-size: 60px;
+  margin: 20px 0;
+}
+
+.match {
+  background-color: #dbdada56;
+  margin: 10px 0;
+  padding: 10px;
+  border-left: 4px solid #ffcc00;
+  border-radius: 5px;
+}
+
+.match-empty{
+  background-color: #dbdada86;
+  margin: 10px 0;
+  padding: 10px;
+  border-left: 4px solid #ff0000;
+  border-radius: 5px;
+}
+
+.final-winner{
+  background-color: #dbdada86;
+  margin: 10px 0;
+  padding: 10px;
+  border: 4px solid #ffcc00;
+  border-radius: 5px;
+  color: #504724;
+  text-transform: uppercase;
+  font-weight: bold;
+} 
+
+/* Cabecera de cada partido: fecha y torneo */
+.match-header {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+/* Nombres de equipos y puntuación */
+.match-teams {
+  font-size: 1rem;
   margin-bottom: 0.5rem;
 }
 
-.match-card p {
-  margin: 0.25rem 0;
+/* Listado de jugadores por equipo */
+.match-players {
+  margin-bottom: 0.5rem;
 }
+.match-players strong {
+  display: block;
+  margin-top: 0.5rem;
+}
+.match-players ul {
+  list-style: disc inside;
+  margin: 0.25rem 0;
+  padding-left: 1rem;
+}
+
+/* Indicador de equipo ganador */
+.match-winner {
+  font-style: italic;
+  color: #006400;
+  margin-top: 0.5rem;
+}
+
+/* Título de cada sección de ronda */
+.round {
+  font-weight: bold;
+  margin-top: 1rem;
+  text-transform: capitalize;
+}
+
+.winner {
+  color: #e0b403;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+
 </style>

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,9 @@ public class PersonController {
 
 	@Autowired
 	private CourseServiceImpl cs;
+	
+	@Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 	/* Método que devuelve todos los datos de la BBDD */
 	@GetMapping("/getPersons")
@@ -42,33 +46,24 @@ public class PersonController {
 		return ps.getPersons();
 	}
 
-	
-//	public Person login(@RequestParam String email, @RequestParam String password) {
-//
-//		List<Person> persons = ps.getPersons();
-//		Person person = null;
-//
-//		for (Person currentPerson : persons) {
-//			if (currentPerson.getEmail().compareTo(email) == 0 && currentPerson.getPassword().compareTo(password) == 0) {
-//				person = currentPerson;
-//			}
-//		}
-//		System.err.println("PERSONA OBTENIDA: " + person);
-//		return person;
-//	}
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody PersonLoginDTO person)
 	{	
-		Person newPerson = ps.getPerson(person.getEmail(), person.getPassword());
+		Person foundPerson = ps.getPersonByEmail(person.getEmail());
 		
 		//El objeto es nulo en caso de que el password/email no son correctos
-		if(newPerson == null)
+		if(foundPerson == null)
 		{
-			System.err.println("No se ha encontrado al usuario rey");
+			System.err.println("No se ha encontrado al usuario");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","Las credenciales introducidas no son válidas"));
 		}
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
+		if (!passwordEncoder.matches(person.getPassword(), foundPerson.getPassword())) {
+			System.err.println("Las contraseñas no coinciden");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","Las credenciales introducidas no son válidas"));
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body(foundPerson);
 	}
 	
 		
@@ -95,8 +90,10 @@ public class PersonController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 		}
 
+		String passwordEncripted = passwordEncoder.encode(person.getPassword1());
+
 		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), rs.getRole(4L), person.getName(),
-				person.getEmail(), person.getPassword1(), 1);
+				person.getEmail(), passwordEncripted, 1);
 		System.out.println("Persona a registrar: " + person.toString());
 
 		newPerson = ps.savePerson(newPerson);
