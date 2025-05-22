@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iesports.dao.service.impl.SportServiceImpl;
 import com.iesports.dao.service.impl.TournamentServiceImpl;
 import com.iesports.dto.TournamentDTO;
 import com.iesports.dto.TournamentFilterDTO;
+import com.iesports.enums.StateTournamentEnum;
+import com.iesports.model.Sport;
 import com.iesports.model.Tournament;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tournament")
@@ -25,6 +30,9 @@ public class TournamentController {
 
 	@Autowired
 	private TournamentServiceImpl ts;
+	
+	@Autowired
+	private SportServiceImpl ss;
 	
 	@PostMapping("/getTournaments")
 	public ResponseEntity<?> getTournaments(@RequestBody TournamentFilterDTO filterDTO) {
@@ -68,11 +76,32 @@ public class TournamentController {
 	}
 	
 	@PostMapping("/addTournament")
-	public ResponseEntity<?> addTournament(@RequestBody TournamentDTO tournamentDTO){
+	public ResponseEntity<?> addTournament(@Valid @RequestBody TournamentDTO tournamentDTO){
+		int resultado = ts.countTournamentsBySportIdAndDate(tournamentDTO.getSportId(), tournamentDTO.getDate());
 		
+		Map<String, String> errores = new HashMap<>();
 		
+		System.out.println(tournamentDTO.toString());
 		
-		return null;
+		//En caso de que haya un torneo del mismo deporte en el mismo año salta error
+		if(resultado > 0)
+		{
+			errores.put("error", "Ya hay un torneo del mismo deporte creado este año");
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
+		}
+		
+		//Si el administrador escoge el número de equipos máximos distintos a 4,8,16 saltará error
+		if(tournamentDTO.getMaxTeams() != 4 && tournamentDTO.getMaxTeams() != 8 && tournamentDTO.getMaxTeams() != 16)
+		{
+			errores.put("error", "Tienes que escoger un rango de equipos máximos correcta");
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
+		}
+		
+		Sport currentSport = ss.getSportById(tournamentDTO.getSportId());
+		Tournament newTournament = new Tournament(null ,tournamentDTO.getName(), tournamentDTO.getDate(),StateTournamentEnum.PROCESO,tournamentDTO.getMaxTeams(),currentSport);
+		
+		ts.saveTournament(newTournament);
+		return ResponseEntity.status(HttpStatus.CREATED).body(newTournament);
 	}
 
 

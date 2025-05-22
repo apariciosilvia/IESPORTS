@@ -1,13 +1,23 @@
 package com.iesports.dto;
 
-import com.iesports.model.Sport;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class TournamentDTO {
 	
+	@NotBlank(message = "El nombre es obligatorio")
+	@NotNull (message = "El nombre es obligatorio")
 	private String name;
+	@NotBlank(message = "La fecha es obligatoria")
+	@NotNull
 	private String date;
-	private Sport sport;
-	private int max_equipos;
+	@NotNull(message = "El id deporte es obligatorio")
+	@Min(value = 1, message = "Debe seleccionar un deporte válido")
+	private Long sportId;
+	@Min(value = 4, message = "Tienen que ser 4 equipos totales como mínimo")
+	@NotNull (message = "Tienen que ser 4 equipos totales como mínimo")
+	private int maxTeams;
 	
 	
 	public String getName() {
@@ -22,16 +32,25 @@ public class TournamentDTO {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public Sport getSport() {
-		return sport;
+	
+	public Long getSportId() {
+		return sportId;
 	}
-	public void setSport(Sport sport) {
-		this.sport = sport;
+	public void setSportId(Long sportId) {
+		this.sportId = sportId;
 	}
-	public int getMax_equipos() {
-		return max_equipos;
+	
+	public int getMaxTeams() {
+		return maxTeams;
 	}
-	public void setMax_equipos(int max_equipos) {
-		this.max_equipos = max_equipos;
+	public void setMaxEquipos(int max_equipos) {
+		this.maxTeams = max_equipos;
 	}
+	@Override
+	public String toString() {
+		return "TournamentDTO [name=" + name + ", date=" + date + ", sportId=" + sportId + ", maxEquipos=" + maxTeams
+				+ "]";
+	}
+	
+	
 }

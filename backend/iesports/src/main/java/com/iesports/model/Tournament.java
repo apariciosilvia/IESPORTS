@@ -1,6 +1,7 @@
 package com.iesports.model;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,57 +29,49 @@ public class Tournament {
     @NotNull(message = "La fecha del torneo es obligatoria")
     private String date;
 
-    @NotBlank(message = "El estado del torneo es obligatorio")
+    @NotNull(message = "El estado del torneo es obligatorio")
     @Enumerated(EnumType.STRING)
     private StateTournamentEnum state;
     
-    @NotBlank(message = "El número de equipos es obligatoria")
-    private int max_equipos;
+    @Column(name = "max_teams")
+    @NotNull(message = "El número de equipos es obligatoria")
+    private int maxTeams;
     
+    @Column(name = "current_teams")
     //Esta variable siempre va a empezar con 0 (SE IRA ACTUALIZANDO CON UPDATES)
-    private int current_equipos;
+    private int currentTeams;
 
     @ManyToOne
     @JoinColumn(name = "sport_id", referencedColumnName = "id")
     private Sport sport;
 
     public Tournament() {
-    	current_equipos = 0;
+    	currentTeams = 0;
     }
     
-//    public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
-//			@NotNull(message = "La fecha del torneo es obligatoria") String date,
-//			@NotBlank(message = "El estado del torneo es obligatorio") StateTournamentEnum state, Sport sport) {
-//		super();
-//		this.id = id;
-//		this.name = name;
-//		this.date = date;
-//		this.state = state;
-//		this.sport = sport;
-//	}
     
-    
+
+	public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
+			@NotNull(message = "La fecha del torneo es obligatoria") String date,
+			@NotBlank(message = "El estado del torneo es obligatorio") StateTournamentEnum state,
+			@NotBlank(message = "El número de equipos es obligatoria") int maxTeams, Sport sport) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.date = date;
+		this.state = state;
+		this.maxTeams = maxTeams;
+		this.currentTeams = 0;
+		this.sport = sport;
+	}
+
+
 
 	// Getters and setters
 
     public Long getId() {
         return id;
     }
-
-    public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
-		@NotNull(message = "La fecha del torneo es obligatoria") String date, int max_equipos, Sport sport) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.date = date;
-		
-		//TODO REALIZAR COMPROBACIÓN FECHA
-		
-		this.state = StateTournamentEnum.PENDIENTE;
-		this.max_equipos = max_equipos;
-		this.current_equipos = 0;
-		this.sport = sport;
-}
 
 	public void setId(Long id) {
         this.id = id;
@@ -113,22 +106,31 @@ public class Tournament {
     public void setSport(Sport sport) {
         this.sport = sport;
     }
-
-    public int getMax_equipos() {
-		return max_equipos;
+    
+    
+	public int getMaxTeams() {
+		return maxTeams;
 	}
 
-	public void setMax_equipos(int max_equipos) {
-		this.max_equipos = max_equipos;
+
+
+	public void setMaxTeams(int maxTeams) {
+		this.maxTeams = maxTeams;
 	}
 
-	public int getCurrent_equipos() {
-		return current_equipos;
+
+
+	public int getCurrentTeams() {
+		return currentTeams;
 	}
 
-	public void setCurrent_equipos(int current_equipos) {
-		this.current_equipos = current_equipos;
+
+
+	public void setCurrentTeams(int currentTeams) {
+		this.currentTeams = currentTeams;
 	}
+
+
 
 	@Override
     public String toString() {
