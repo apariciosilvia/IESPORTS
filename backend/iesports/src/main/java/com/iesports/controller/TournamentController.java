@@ -98,7 +98,17 @@ public class TournamentController {
 		}
 		
 		Sport currentSport = ss.getSportById(tournamentDTO.getSportId());
-		Tournament newTournament = new Tournament(null ,tournamentDTO.getName(), tournamentDTO.getDate(),StateTournamentEnum.PROCESO,tournamentDTO.getMaxTeams(),currentSport);
+		
+		
+		//Si el administrador escoge el número de equipos máximos distintos a 4,8,16 saltará error
+		if(currentSport == null)
+		{
+			errores.put("error", "Deporte no válido");
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
+		}
+		
+		
+		Tournament newTournament = new Tournament(null ,tournamentDTO.getName(), tournamentDTO.getDate(),StateTournamentEnum.PENDIENTE,tournamentDTO.getMaxTeams(),currentSport);
 		
 		ts.saveTournament(newTournament);
 		return ResponseEntity.status(HttpStatus.CREATED).body(newTournament);
