@@ -20,4 +20,6 @@ public interface IPersonService {
 	public Person getPerson(String email, String password);
 	
 	public boolean emailExists(String email);
+	
+	Person getPersonByEmail(String email);
 }
