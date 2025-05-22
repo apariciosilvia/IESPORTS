@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iesports.dao.service.impl.TournamentServiceImpl;
+import com.iesports.dto.TournamentDTO;
 import com.iesports.dto.TournamentFilterDTO;
 import com.iesports.model.Tournament;
 
@@ -64,6 +65,14 @@ public class TournamentController {
 	    }
 
 	    return ResponseEntity.ok(tournaments);
+	}
+	
+	@PostMapping("/addTournament")
+	public ResponseEntity<?> addTournament(@RequestBody TournamentDTO tournamentDTO){
+		
+		
+		
+		return null;
 	}
 
 
