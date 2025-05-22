@@ -11,7 +11,7 @@ import com.iesports.model.Person;
 
 @Service
 public class PersonServiceImpl implements IPersonService {
-
+	
 	@Autowired
 	private PersonRepository pr;
 
@@ -59,6 +59,11 @@ public class PersonServiceImpl implements IPersonService {
 	@Override
 	public Person getPerson(String email, String password) {
 		return pr.personExists(email, password);
+	}
+
+	@Override
+	public Person getPersonByEmail(String email) {
+		return pr.getPersonByEmail(email);
 	}
 	
 //	public List<Person> getPersons(){

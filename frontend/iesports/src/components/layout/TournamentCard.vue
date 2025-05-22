@@ -203,14 +203,13 @@ const sportClass = computed(() => {
   }
 })
 
-const tournamentState = computed(() =>
-  props.matches[0]?.tournament?.state ?? ''
-);
+// const tournamentState = computed(() =>
+//   props.matches[0]?.tournament?.state ?? ''
+// );
 
-const tournamentDate = computed(() =>
-  props.matches[0]?.tournament?.date ?? ''
-);
-
+// const tournamentDate = computed(() =>
+//   props.matches[0]?.tournament?.date ?? ''
+// );
 
 </script>
 
@@ -250,7 +249,7 @@ const tournamentDate = computed(() =>
 
 .default-bg {
   background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
-              url('@/assets/fondos/fondo-default.jpeg') center center;
+              url('@/assets/fondos/fondo-default.png') center center;
 }
 
 
@@ -307,8 +306,6 @@ const tournamentDate = computed(() =>
   text-transform: uppercase;
   font-weight: bold;
 } 
-
-
 
 /* Cabecera de cada partido: fecha y torneo */
 .match-header {
