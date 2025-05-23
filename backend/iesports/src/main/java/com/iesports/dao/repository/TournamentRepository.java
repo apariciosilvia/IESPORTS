@@ -21,4 +21,7 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long>{
 	@Query(value = "SELECT DISTINCT date FROM tournaments ORDER by date DESC", nativeQuery = true)
 	List<String> getTournamentsDates();
 	
+	@Query(value = "SELECT COUNT(*) FROM tournaments WHERE date= ?1 AND sport_id= ?2", nativeQuery = true)
+	int countTournamentsBySportIdAndDate(String date, Long sport_id);
+	
 }
