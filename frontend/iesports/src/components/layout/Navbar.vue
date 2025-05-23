@@ -7,6 +7,7 @@
           :key="item.name"
           @click.prevent="handleNav(item)"
           href="javascript:;"
+          :class="{ active: route.path === item.href }"
         >
           {{ item.name }}
         </a>
@@ -17,7 +18,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { IonToolbar } from '@ionic/vue';
 
 // Lista de opciones de navegación
@@ -31,6 +32,7 @@ const navItems = [
 ];
 
 const router = useRouter();
+const route = useRoute();
 const showNavbar = ref(false);
 
 // Detecta si hay usuario logado
@@ -138,6 +140,12 @@ onUnmounted(() => {
     font-size: 0.9rem;      
     color: rgb(255, 255, 255);  
   }
+}
+
+/* Enlace activo */
+.nav-links a.active {
+  color: #ffd700;          /* pinta el texto de dorado */
+  border-bottom: 2px solid #ffd700; /* opcional, subraya el enlace */
 }
 
 </style>
