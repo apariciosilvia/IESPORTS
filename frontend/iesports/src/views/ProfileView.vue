@@ -67,8 +67,8 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>   
+    </div> <!-- .right-column -->
+  </div>   <!-- .profile-container -->
 </IonContent>
 </template>
 
@@ -125,9 +125,9 @@ console.log(user.value);
   align-items: center;
   width: 25%;
   max-width: 550px;
-  align-self: stretch;    
-  flex: 0 0 25%;          
-  max-width: 300px;      
+  align-self: stretch;    /* ocupa la misma altura que .right-column */
+  flex: 0 0 25%;          /* ocupa el 25% de ancho (puedes ajustar %) */
+  max-width: 300px;       /* no crecerá más de 300px de ancho */
 }
 
 .left-column h3 {
@@ -140,10 +140,10 @@ console.log(user.value);
 }
 
 .profile-logo {
-  width: 100%;
-  max-width: 230px;
-  height: auto;
-  margin-bottom: 0;
+  width: 100%;            /* ocupa el ancho de su columna */
+  max-width: 230px;       /* pero como máximo 200px */
+  height: auto;           /* mantiene proporciones */
+  margin-bottom: 0;       /* sin margen extra */
 }
 
 /* Columna derecha: tarjetas apiladas */
@@ -163,10 +163,10 @@ console.log(user.value);
   padding: 1rem;
 
 
-  width: 90%;
-  max-width: 550px;
-  margin: 0 auto;
-  box-sizing: border-box;
+  width: 90%;             /* ocupan el 90% de su contenedor */
+  max-width: 550px;       /* no crecerán más allá de 550px */
+  margin: 0 auto;         /* centradas dentro de la columna */
+  box-sizing: border-box; /* padding incluido en el ancho */
 
 }
 
