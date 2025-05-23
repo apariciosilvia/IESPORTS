@@ -1,84 +1,62 @@
 <template>
-  <IonHeader>
-    <IonToolbar style="--background: #002F3D; --color: white;">
-      <IonButton @click="goTo('/')" slot="start" fill="clear">
-        <span class="material-symbols-outlined back-icon">arrow_back</span>
-      </IonButton>
-      <IonTitle>Perfil de {{ user.name }}</IonTitle>
-    </IonToolbar>
-  </IonHeader>
+    <IonHeader>
+      <IonToolbar style="--background: #42b983; --color: white;">
+        <IonButton @click="goTo('/')" slot="start" fill="clear">
+          <span class="material-symbols-outlined back-icon">arrow_back</span>
+        </IonButton>
 
-  <IonContent class="ion-padding">
-    <div class="profile-container">
+        <IonTitle>Perfil</IonTitle>
+      </IonToolbar>
+    </IonHeader>
+ 
+    <IonContent class="ion-padding">
+      <IonCard class="profile-card">
+        
 
-      <!-- Columna izquierda: Logo + botón -->
-      <div class="left-column">
-        <img src="../assets/logoSinFondo.png" alt="IESPORTS" class="profile-logo" />
-        <h3>IESPORTS</h3>
-        <IonButton fill="outline" class="logout-button" @click="logout"><span class="material-symbols-outlined">logout</span>Cerrar sesión</IonButton>
-      </div>
-
-      <!-- Columna derecha: tarjetas -->
-      <div class="right-column">
-        <!-- Tarjeta de datos de usuario -->
-        <div class="card-section">
-          <div class="card-header">
-            <h4>Datos de usuario</h4>
-            <IonButton fill="outline" size="small" class="buttons">
-              <span class="material-symbols-outlined">edit</span> EDITAR
-            </IonButton>
-          </div>
-          <div class="card-body">
-            <!-- Nombre -->
-            <div class="input-group">
+        <IonCardContent>
+          <IonList lines="full">
+            <IonItem>
               <span class="material-symbols-outlined">person</span>
-              <input type="text" :value="user.name" disabled />
-            </div>
-            <!-- Email -->
-            <div class="input-group">
+              <IonLabel class="item-label">
+                <span class="item-title">Nombre</span>
+                <span class="item-value">{{ user.name }}</span>
+              </IonLabel>
+            </IonItem>
+            <IonItem>
               <span class="material-symbols-outlined">mail</span>
-              <input type="text" :value="user.email" disabled />
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta de cambio de contraseña -->
-      <div class="card-section">
-        <div class="card-header">
-          <h4>Cambiar contraseña</h4>
-          <IonButton fill="outline" size="small" class="buttons">
-            <span class="material-symbols-outlined">edit</span> EDITAR
-          </IonButton>
-        </div>
-        <div class="card-body">
-          <!-- Contraseña actual -->
-          <div class="input-group">
-            <span class="material-symbols-outlined">key</span>
-            <input type="password" placeholder="Contraseña actual" disabled />
-          </div>
-          <!-- Contraseña nueva -->
-          <div class="input-group">
-            <span class="material-symbols-outlined">key</span>
-            <input type="password" placeholder="Contraseña nueva" disabled />
-          </div>
-          <!-- Confirmar contraseña -->
-          <div class="input-group">
-            <span class="material-symbols-outlined">key</span>
-            <input type="password" placeholder="Confirmar contraseña" disabled />
-          </div>
-        </div>
-      </div>
-    </div> <!-- .right-column -->
-  </div>   <!-- .profile-container -->
-</IonContent>
+              <IonLabel class="item-label">
+                <span class="item-title">Correo</span>
+                <span class="item-value">{{ user.email }}</span>
+              </IonLabel>
+            </IonItem>
+            <IonItem>
+              <span class="material-symbols-outlined">school</span>
+              <IonLabel class="item-label">
+                <span class="item-title">Curso</span>
+                <span class="item-value">{{ user.course?.nombre || 'No disponible' }}</span>
+              </IonLabel>
+            </IonItem>
+            <IonItem>
+              <span class="material-symbols-outlined">assignment_ind</span>
+              <IonLabel class="item-label">
+                <span class="item-title">Rol</span>
+                <span class="item-value">{{ user.role?.name || 'Usuario' }}</span>
+              </IonLabel>
+            </IonItem>
+          </IonList>
+        </IonCardContent>
+
+      </IonCard>
+    </IonContent>
+
+
 </template>
 
 <script setup lang="ts">
-import { IonHeader, IonContent, IonToolbar, IonTitle, IonButton } from '@ionic/vue';
-import { ref, onMounted } from 'vue';
-import { useUserMenu } from '@/composables/useUserMenu';
-
-// Extraemos sólo lo que necesitamos
-const { goTo, logout } = useUserMenu();
+import { IonHeader, IonContent, IonToolbar, IonTitle, IonButton,   IonItem,IonList, IonCardContent, IonCard, IonLabel } from '@ionic/vue';
+import { ref, onMounted} from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const user = ref<{ name: string; email: string; course?: { nombre: string } | null; role?: { name: string } | null }>({
   name: '',
@@ -86,8 +64,6 @@ const user = ref<{ name: string; email: string; course?: { nombre: string } | nu
   course: null,
   role: null
 });
-
-
 
 onMounted(() => {
   const stored = localStorage.getItem('usuario');
@@ -97,185 +73,143 @@ onMounted(() => {
   }
 });
 
+function goTo(ruta: string) {
+  router.push(ruta)
+}
 
 console.log(user.value);
 </script>
 
 <style scoped>
-.profile-container {
-  margin-top: 4%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  font-size: 1.05rem; 
-   align-items: stretch;
-}
-
-.left-column,
-.right-column {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Columna izquierda: logo y botón */
-.left-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 25%;
-  max-width: 550px;
-  align-self: stretch;    /* ocupa la misma altura que .right-column */
-  flex: 0 0 25%;          /* ocupa el 25% de ancho (puedes ajustar %) */
-  max-width: 300px;       /* no crecerá más de 300px de ancho */
-}
-
-.left-column h3 {
-  margin-top: 0 !important;
-  margin-bottom: 3%;
-  line-height: 1.2; 
-  font-size: 2.5rem;  
-  color: #002f3d;
-  font-weight: bolder;
-}
-
-.profile-logo {
-  width: 100%;            /* ocupa el ancho de su columna */
-  max-width: 230px;       /* pero como máximo 200px */
-  height: auto;           /* mantiene proporciones */
-  margin-bottom: 0;       /* sin margen extra */
-}
-
-/* Columna derecha: tarjetas apiladas */
-.right-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1.8rem;
-  flex: 1;
-  max-width: 550px;
-}
-
-/* Cada sección (tarjeta) */
-.card-section {
-  background: #ffffff;
+/* Estilos para la tarjeta de perfil */
+IonCard {
+  --background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 1rem;
-
-
-  width: 90%;             /* ocupan el 90% de su contenedor */
-  max-width: 550px;       /* no crecerán más allá de 550px */
-  margin: 0 auto;         /* centradas dentro de la columna */
-  box-sizing: border-box; /* padding incluido en el ancho */
-
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  margin: 1rem 0;
 }
 
-/* Encabezado con título y botón editar */
-.card-header {
+/* Lista de ítems */
+IonList {
+  --padding-top: 0;
+  --padding-bottom: 0;
+  
+}
+
+/* Cada elemento de la lista */
+IonItem {
+  --inner-padding-end: 16px;
+  --inner-padding-start: 16px;
+  --border-width: 0 0 1px 0;
+  --border-style: solid;
+  --border-color: #eee;
+  padding: 12px 0;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
 }
-.card-header h4 {
-  margin: 0;
-  font-size: 1.3rem;
+
+/* Iconos al inicio de cada ítem */
+IonIcon[slot="start"] {
+  font-size: 1.4rem;
+  color: #42b983;
+  margin-right: 12px;
+}
+
+/* Etiquetas de texto */
+IonLabel {
+  font-size: 1rem;
+  font-weight: 500;
   color: #333;
 }
+
+/* Ajuste de título de la tarjeta (si lo quieres) */
+IonCardTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Espaciado extra al primer ítem */
+IonItem:first-child {
+  padding-top: 16px;
+}
+
+/* Espaciado extra al último ítem */
+IonItem:last-child {
+  padding-bottom: 16px;
+  --border-width: 0; /* sin línea inferior */
+}
+
+/* Estilo para los spans de icono */
+.profile-card span.material-symbols-outlined {
+  font-size: 1.5rem;           /* tamaño más grande */
+  color: #42b983;              /* verde de la app */
+  margin-right: 0.75rem;       /* separa del texto */
+  min-width: 1.5rem;           /* fuerza ancho mínimo */
+  text-align: center;          /* centra el glifo */
+}
+
 .back-icon {
-  font-size: 1.7rem;
-  vertical-align: middle;
-  color: #fff;
+  color: white !important;
+  font-size: 1.6rem; /* opcional: aumenta un poco el tamaño */
 }
 
-.logout-button{
-  /* Fondo sólido naranja */
-  background-color: #B92E21;
-  --background-activated: #d83523;
-  --background-focused: #d83523;
 
-  /* Elimina cualquier borde o sombra interna */
-  --border-width: 0;
-  --box-shadow: none;
-
-  color: #ffffff;
-  border-radius: 6px;
-  font-weight: 600;
-  text-transform: none;
-  padding: 4px 22px;
+.profile-card {
+  --background: #ffffff;
+  width: 90vw !important;
+  max-width: 920px !important;
+  margin: 3rem auto !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
-.buttons {
-  /* Fondo sólido naranja */
-  background-color: #F03726;
-  --background-activated: #d83523;
-  --background-focused: #d83523;
 
-  /* Elimina cualquier borde o sombra interna */
-  --border-width: 0;
-  --box-shadow: none;
-
-  color: #ffffff;
-  border-radius: 6px;
-  font-weight: 600;
-  text-transform: none;
-}
-
-.buttons .material-symbols-outlined {
-  font-size: 1rem;
-  margin-right: 4px;
-  color: #ffffff;
-}
-
-/* Cuerpo con inputs */
-.card-body {
+/* Etiqueta con título y valor */
+.item-label {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
-/* Cada fila: icono + input */
-.input-group {
-  display: flex;
+/* El texto del título (e.g. “Nombre”) */
+.item-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+/* El valor en sí (e.g. “Pepito”) */
+.item-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Ajuste para que icono y label queden alineados */
+IonItem {
+  display: flex !important;
   align-items: center;
-  gap: 0.75rem;
-}
-.input-group .material-symbols-outlined {
-  font-size: 1.6rem;
-  color: #F03726;
-}
-.input-group input {
-  flex: 1;
-  padding: 0.6rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: #f9f9f9;
-  font-size: 1.1rem;
 }
 
-/* Ajustes responsive */
-@media (max-width: 600px) {
-  .profile-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  .right-column, .left-column {
-    max-width: 90%;
+.profile-card span.material-symbols-outlined {
+  font-size: 1.5rem;
+  color: #42b983;
+  margin-right: 0.75rem;
+}
+
+
+/* Móvil: hasta 480px */
+@media (max-width: 480px) {
+  .profile-card {
+    --background: #ffffff;
+    width: 90vw !important;
+    max-width: 320px !important;
+    margin: 2rem auto !important;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   }
 }
 
-/* Al final de tu <style scoped> */
-ion-toolbar {
-  position: relative;
-}
 
-/* Centrar el título */
-ion-title {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-}
 </style>
-

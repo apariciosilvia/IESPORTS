@@ -10,6 +10,7 @@
     <div v-if="usuarioLogado && menuVisible" class="user-menu" ref="menuRef">
       <ul>
         <li @click="goTo('/profile')">Perfil</li>
+        <li >Mi equipo</li>
         <li @click="logout">Cerrar sesión</li>
       </ul>
     </div>
@@ -39,18 +40,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { useUserMenu } from '@/composables/useUserMenu'
+import { useRouter } from 'vue-router'
 
-const {
-  nombre,
-  usuarioLogado,
-  menuVisible,
-  iconRef,
-  menuRef,
-  toggleMenu,
-  goTo,
-  logout
-} = useUserMenu()
+const router = useRouter()
+
+const nombre = ref('')
+const usuarioLogado = ref(false)
+const menuVisible = ref(false)
+const iconRef = ref<HTMLElement | null>(null)
+const menuRef = ref<HTMLElement | null>(null)
+
+defineProps<{ nombre: string }>()
 
 // Lógica carrusel
 const slides = [
@@ -65,12 +65,56 @@ onMounted(() => {
   intervalId = setInterval(() => {
     currentSlide.value = (currentSlide.value + 1) % slides.length
   }, 4000)
+
+  const storedUser = localStorage.getItem('usuario')
+  if (storedUser) {
+    usuarioLogado.value = true
+    nombre.value = JSON.parse(storedUser).name
+  }
+
+  document.addEventListener('click', handleOutsideClick)
 })
 
 onBeforeUnmount(() => {
   clearInterval(intervalId)
+  document.removeEventListener('click', handleOutsideClick)
 })
+
+// Abrir/cerrar menú
+function toggleMenu() {
+  if (usuarioLogado.value) {
+    menuVisible.value = !menuVisible.value
+  } else {
+    router.push('/login')
+  }
+}
+
+function goTo(ruta: string) {
+  menuVisible.value = false
+  router.push(ruta)
+}
+
+function logout() {
+  localStorage.removeItem('usuario')
+  usuarioLogado.value = false
+  nombre.value = ''
+  menuVisible.value = false
+  router.push('/')
+}
+
+// Cerrar menú si haces clic fuera
+function handleOutsideClick(event: MouseEvent) {
+  if (
+    menuVisible.value &&
+    menuRef.value &&
+    !menuRef.value.contains(event.target as Node) &&
+    !iconRef.value?.contains(event.target as Node)
+  ) {
+    menuVisible.value = false
+  }
+}
 </script>
+
 
 <style scoped>
 /* Contenedor principal del carrusel, ocupa toda la pantalla */
