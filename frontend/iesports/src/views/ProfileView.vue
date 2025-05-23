@@ -1,6 +1,6 @@
 <template>
     <IonHeader>
-      <IonToolbar style="--background: #42b983; --color: white;">
+      <IonToolbar style="--background: #002F3D; --color: white;">
         <IonButton @click="goTo('/')" slot="start" fill="clear">
           <span class="material-symbols-outlined back-icon">arrow_back</span>
         </IonButton>
