@@ -25,6 +25,9 @@ public class Team {
     )
 	List<Person> players;
 	
+	@ManyToMany(mappedBy = "teamsTournament")
+	private List<Tournament> tournaments;
+	
 	public Team(Long id, String name, List<Person> players) {
 		super();
 		this.id = id;

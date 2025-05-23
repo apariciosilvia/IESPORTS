@@ -1,8 +1,18 @@
 package com.iesports.dto;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.iesports.model.Team;
+
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class TournamentDTO {
 	
@@ -18,6 +28,20 @@ public class TournamentDTO {
 	@Min(value = 4, message = "Tienen que ser 4 equipos totales como mínimo")
 	@NotNull (message = "Tienen que ser 4 equipos totales como mínimo")
 	private int maxTeams;
+	
+	//private Date dateBeginMatch;
+	
+	@NotNull(message = "Tienes que introducir equipos")
+	@ManyToMany
+	@JoinTable(
+	    name = "tournament_team",
+	    joinColumns = @JoinColumn (name = "tournament_id"),
+	    inverseJoinColumns = @JoinColumn(name = "team_id")
+	)
+	@NotNull(message = "Tienes que introducir equipos")
+	@Size(min = 4, message = "Tienen que ser al menos 4 equipos")
+	private List<Team> teamsTournament = new ArrayList<>();
+	
 	
 	
 	public String getName() {

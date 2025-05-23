@@ -2,6 +2,7 @@ package com.iesports.dao.service;
 
 import java.util.List;
 
+import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
 public interface ITournamentService {
@@ -25,5 +26,4 @@ public interface ITournamentService {
 	public List<Tournament> findTournamentsDates();
 	
 	public int countTournamentsBySportIdAndDate(Long sport_id, String date);
-	
 }

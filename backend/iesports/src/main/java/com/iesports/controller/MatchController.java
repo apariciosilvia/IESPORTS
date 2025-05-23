@@ -23,7 +23,7 @@ public class MatchController {
 	public ResponseEntity<List<Match>> getMatches(){
 		List<Match> matches = ms.getMatchs();
 		
-		if (matches.isEmpty()) {
+		if (matches.isEmpty()){
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(matches);
 		}
 		
