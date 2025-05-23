@@ -61,9 +61,4 @@ public class TournamentServiceImpl implements ITournamentService{
 		return tr.getTournamentsDates();
 	}
 
-	@Override
-	public int countTournamentsBySportIdAndDate(Long sport_id, String date) {
-		return tr.countTournamentsBySportIdAndDate(date, sport_id);
-	}
-
 }
