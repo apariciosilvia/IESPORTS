@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.iesports.dao.repository.TournamentRepository;
 import com.iesports.dao.service.ITournamentService;
-import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
 @Service
@@ -66,4 +65,5 @@ public class TournamentServiceImpl implements ITournamentService{
 	public int countTournamentsBySportIdAndDate(Long sport_id, String date) {
 		return tr.countTournamentsBySportIdAndDate(date, sport_id);
 	}
+
 }

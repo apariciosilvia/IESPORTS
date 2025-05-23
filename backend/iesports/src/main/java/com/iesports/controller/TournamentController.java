@@ -1,6 +1,5 @@
 package com.iesports.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,14 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iesports.dao.service.impl.SportServiceImpl;
-import com.iesports.dao.service.impl.TeamServiceImpl;
 import com.iesports.dao.service.impl.TournamentServiceImpl;
-import com.iesports.dto.TournamentAdminDTO;
 import com.iesports.dto.TournamentDTO;
 import com.iesports.dto.TournamentFilterDTO;
 import com.iesports.enums.StateTournamentEnum;
 import com.iesports.model.Sport;
-import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
 import jakarta.validation.Valid;
@@ -34,9 +30,6 @@ public class TournamentController {
 
 	@Autowired
 	private TournamentServiceImpl ts;
-	
-	@Autowired
-	private TeamServiceImpl teamS;
 	
 	@Autowired
 	private SportServiceImpl ss;
@@ -137,31 +130,5 @@ public class TournamentController {
 
 	    System.out.println("Se encontraron " + fechas.size() + " fechas de torneos");
 	    return ResponseEntity.ok(fechas);
-	}
-	
-	@GetMapping("/getTeamsByTournamentId")
-	public ResponseEntity<?> getTeamsByTournamentId(){
-		List<TournamentAdminDTO> result = new ArrayList<TournamentAdminDTO>();
-		
-		List<Tournament> tournaments = ts.getTournaments();
-		
-		for (Tournament currentTournament : tournaments)
-		{
-			TournamentAdminDTO newTournamentAdmin = new TournamentAdminDTO();
-			List<Team> teamsCurrentTournament = teamS.getTeamsByTournamentId(currentTournament.getId());
-			
-			newTournamentAdmin.setTournament(currentTournament);
-			newTournamentAdmin.setTeams(teamsCurrentTournament);
-			
-			
-			
-			result.add(newTournamentAdmin);
-		}
-		
-		
-		
-		
-		
-		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 }

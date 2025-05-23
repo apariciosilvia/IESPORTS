@@ -38,13 +38,5 @@ public class TeamController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
-	
-	@GetMapping("/getTeamsByTournamentId")
-	public ResponseEntity<?> getTeamsByTournamentId(){
-		
-		
-		
-		return null;
-	}
 
 }

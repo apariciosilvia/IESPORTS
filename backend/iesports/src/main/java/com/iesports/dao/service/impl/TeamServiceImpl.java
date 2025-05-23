@@ -47,9 +47,4 @@ public class TeamServiceImpl implements ITeamService{
 		return tr.getSportsByIdTeam(idTeam);
 	}
 
-	@Override
-	public List<Team> getTeamsByTournamentId(Long tournamentId) {
-		return tr.getTeamsByTournamentId(tournamentId);
-	}
-
 }

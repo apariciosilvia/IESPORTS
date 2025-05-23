@@ -19,5 +19,5 @@ public interface ITeamService {
 	
 	public List<Sport> getSportsByIdTeam(Long idTeam);
 	
-	public List<Team> getTeamsByTournamentId(Long tournamentId);
+	
 }

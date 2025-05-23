@@ -137,10 +137,10 @@ INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`,
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-03', 'OCTAVOS', 7, 3, 4, 0, 0);
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-04', 'OCTAVOS', 7, 5, 6, 0, 0);
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-05', 'OCTAVOS', 7, 7, 8, 54, 32, 7);
--- INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-05', 'OCTAVOS', 7, 9, 10, 0, 0);
--- INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-05', 'OCTAVOS', 7, 11, 12, 0, 0);
--- INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-05', 'OCTAVOS', 7, 13, 14, 0, 0);
--- INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-05', 'OCTAVOS', 7, 15, 16, 0, 0);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-05', 'OCTAVOS', 7, 9, 10, 0, 0);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-05', 'OCTAVOS', 7, 11, 12, 0, 0);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-05', 'OCTAVOS', 7, 13, 14, 0, 0);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2025-05-05', 'OCTAVOS', 7, 15, 16, 0, 0);
 
 
 
