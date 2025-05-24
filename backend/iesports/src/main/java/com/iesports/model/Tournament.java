@@ -33,7 +33,7 @@ public class Tournament {
     @Column(name = "max_team")
     private int maxTeams;
 
-    @NotBlank(message = "El estado del torneo es obligatorio")
+    @NotNull(message = "El estado del torneo es obligatorio")
     @Enumerated(EnumType.STRING)
     private StateTournamentEnum state;
 
