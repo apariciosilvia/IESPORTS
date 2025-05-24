@@ -21,15 +21,26 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { IonToolbar } from '@ionic/vue';
 
-// Lista de opciones de navegación
-const navItems = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Torneos', href: '/tournaments' },
-  { name: 'Equipos', href: '/teams' },
-  { name: 'Calendario', href: '/calendar' },
-  { name: 'Noticias', href: '#noticias' },
-  { name: 'Perfil', href: '/profile' }
-];
+// 1. Recuperamos el usuario
+const userJson = localStorage.getItem('usuario')
+const user = userJson ? JSON.parse(userJson) : null
+
+// 2. Definimos navItems como computed
+const navItems = computed(() => {
+  const inicioHref = user?.role.name === 'Administrador'
+    ? '/homeAdmin'
+    : '/'
+
+  // Lista de opciones de navegación
+  return [
+    { name: 'Inicio', href: inicioHref },
+    { name: 'Torneos', href: '/tournaments' },
+    { name: 'Equipos', href: '/teams' },
+    { name: 'Calendario', href: '/calendar' },
+    { name: 'Noticias', href: '#noticias' },
+    { name: 'Perfil', href: '/profile' }
+  ]
+})
 
 const router = useRouter();
 const route = useRoute();

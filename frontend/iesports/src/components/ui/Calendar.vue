@@ -61,7 +61,7 @@ watch(
 
 /* Contenedor */
 .calendar-container {
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 8% auto 0;
 }
 

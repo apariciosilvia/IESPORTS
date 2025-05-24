@@ -14,6 +14,10 @@ INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Anfitrión');
 INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Profesor');
 INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Alumno');
 
+-- USUARIOS POR DEFECTO (ADMIN CONTRA: a Y ALUMNO CONTRA: s)
+INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 7, 1, 'a@a', 'a', '$2a$10$w9wUgqR.juKPsuU8.TPwY.acNWPaIbOWHnVlNwQZpPRqcuQmtS.72');
+INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 5, 4, 's@s', 's', '$2a$10$CqPlbAfH5vfKuCZfhnSQBemQcMyAm1gjq4.m3ItJ/kjmeTHmKGlXW');
+
 INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 5, 3, 'laura.prof@example.com', 'Laura Ruiz', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
 INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 7, 2, 'ana.host@example.com', 'Ana Pérez', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
 INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 2, 2, 'mario.host@example.com', 'Mario López', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
