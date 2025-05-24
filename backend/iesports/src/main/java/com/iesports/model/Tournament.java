@@ -28,52 +28,54 @@ public class Tournament {
 
     @NotNull(message = "La fecha del torneo es obligatoria")
     private String date;
+    
+    @NotNull(message = "El número tiene que ser mínimo 4")
+    @Column(name = "max_team")
+    private int maxTeams;
 
-    @NotNull(message = "El estado del torneo es obligatorio")
+    @NotBlank(message = "El estado del torneo es obligatorio")
     @Enumerated(EnumType.STRING)
     private StateTournamentEnum state;
-    
-    @Column(name = "max_teams")
-    @NotNull(message = "El número de equipos es obligatoria")
-    private int maxTeams;
-    
-    @Column(name = "current_teams")
-    //Esta variable siempre va a empezar con 0 (SE IRA ACTUALIZANDO CON UPDATES)
-    private int currentTeams;
 
     @ManyToOne
     @JoinColumn(name = "sport_id", referencedColumnName = "id")
     private Sport sport;
 
     public Tournament() {
-    	currentTeams = 0;
+    	
     }
     
-    
+//    public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
+//			@NotNull(message = "La fecha del torneo es obligatoria") String date,
+//			@NotBlank(message = "El estado del torneo es obligatorio") StateTournamentEnum state, Sport sport) {
+//		super();
+//		this.id = id;
+//		this.name = name;
+//		this.date = date;
+//		this.state = state;
+//		this.sport = sport;
+//	}
 
-	public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
+	// Getters and setters
+
+    public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
 			@NotNull(message = "La fecha del torneo es obligatoria") String date,
-			@NotBlank(message = "El estado del torneo es obligatorio") StateTournamentEnum state,
-			@NotBlank(message = "El número de equipos es obligatoria") int maxTeams, Sport sport) {
+			@NotBlank(message = "El estado del torneo es obligatorio") StateTournamentEnum state, Sport sport,
+			@NotNull(message = "El número tiene que ser mínimo 4") int maxTeams) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.date = date;
-		this.state = state;
 		this.maxTeams = maxTeams;
-		this.currentTeams = 0;
+		this.state = state;
 		this.sport = sport;
 	}
 
-
-
-	// Getters and setters
-
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 
-	public void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -107,33 +109,19 @@ public class Tournament {
         this.sport = sport;
     }
     
-    
-	public int getMaxTeams() {
+    public int getMaxTeams() {
 		return maxTeams;
 	}
-
-
 
 	public void setMaxTeams(int maxTeams) {
 		this.maxTeams = maxTeams;
 	}
 
-
-
-	public int getCurrentTeams() {
-		return currentTeams;
-	}
-
-
-
-	public void setCurrentTeams(int currentTeams) {
-		this.currentTeams = currentTeams;
-	}
-
-
-
 	@Override
-    public String toString() {
-        return "Tournament [id=" + id + ", name=" + name + ", date=" + date + ", state=" + state + ", sport=" + sport + "]";
-    }
+	public String toString() {
+		return "Tournament [id=" + id + ", name=" + name + ", date=" + date + ", maxTeams=" + maxTeams + ", state="
+				+ state + ", sport=" + sport + "]";
+	}
+	
+	
 }

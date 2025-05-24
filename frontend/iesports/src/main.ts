@@ -1,3 +1,10 @@
+// Schedule-X: solo el tema y el componente
+import '@schedule-x/theme-default/dist/index.css'
+import './style.css';
+
+import { ScheduleXCalendar } from '@schedule-x/vue'
+
+
 import { createApp } from 'vue';   // Crea la instancia principal de Vue
 import App from './App.vue';       // Tu componente raíz donde se monta la aplicación
 
@@ -24,6 +31,9 @@ import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 
 const app = createApp(App);  // Crea la instancia de la aplicación Vue
+
+app.component('ScheduleXCalendar', ScheduleXCalendar); // Registra globalmente el componente de calendario
+
 app.component('ion-app', IonApp)  // Registra el componente IonApp de Ionic
 app.use(Particles, {  // Configuración de la librería de partículas
   init: async engine => {   // Inicializa la librería de partículas

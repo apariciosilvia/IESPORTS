@@ -7,6 +7,7 @@
           :key="item.name"
           @click.prevent="handleNav(item)"
           href="javascript:;"
+          :class="{ active: route.path === item.href }"
         >
           {{ item.name }}
         </a>
@@ -17,20 +18,32 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { IonToolbar } from '@ionic/vue';
 
-// Lista de opciones de navegación
-const navItems = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Torneos', href: '/tournaments' },
-  { name: 'Equipos', href: '/teams' },
-  { name: 'Calendario', href: '/calendar' },
-  { name: 'Noticias', href: '#noticias' },
-  { name: 'Perfil', href: '/profile' }
-];
+// 1. Recuperamos el usuario
+const userJson = localStorage.getItem('usuario')
+const user = userJson ? JSON.parse(userJson) : null
+
+// 2. Definimos navItems como computed
+const navItems = computed(() => {
+  const inicioHref = user?.role.name === 'Administrador'
+    ? '/homeAdmin'
+    : '/'
+
+  // Lista de opciones de navegación
+  return [
+    { name: 'Inicio', href: inicioHref },
+    { name: 'Torneos', href: '/tournaments' },
+    { name: 'Equipos', href: '/teams' },
+    { name: 'Calendario', href: '/calendar' },
+    { name: 'Noticias', href: '#noticias' },
+    { name: 'Perfil', href: '/profile' }
+  ]
+})
 
 const router = useRouter();
+const route = useRoute();
 const showNavbar = ref(false);
 
 // Detecta si hay usuario logado
@@ -132,12 +145,18 @@ onUnmounted(() => {
   }
 
   .nav-links a {
-    flex: 1 1 30%;            /* ocupa ~30% del ancho */
+    flex: 1 1 30%;
     text-align: center;       
     margin: 0.25rem 0;        
     font-size: 0.9rem;      
     color: rgb(255, 255, 255);  
   }
+}
+
+/* Enlace activo */
+.nav-links a.active {
+  color: #ffd700;
+  border-bottom: 2px solid #ffd700;
 }
 
 </style>
