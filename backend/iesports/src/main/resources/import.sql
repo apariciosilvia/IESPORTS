@@ -34,16 +34,16 @@ INSERT INTO `sports` (`id`, `name`) VALUES (3, 'PingPong');
 INSERT INTO `sports` (`id`, `name`) VALUES (4, 'Ajedrez');
 
 -- Fútbol Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'PROCESO');
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2021/22', 'Liga Juvenil Fútbol', 'PROCESO');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'PROCESO',16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (1, '2021/22', 'Liga Juvenil Fútbol', 'PROCESO',16);
 -- Baloncesto Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2021/22', 'Torneo Escolar Baloncesto', 'PENDIENTE');
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2023/24', 'Campeonato Nacional Basket', 'PROCESO');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (2, '2021/22', 'Torneo Escolar Baloncesto', 'PENDIENTE',16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (2, '2023/24', 'Campeonato Nacional Basket', 'PROCESO',16);
 -- Ping Pong Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2024/25', 'Ping Pong club', 'PROCESO');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (3, '2024/25', 'Ping Pong club', 'PROCESO',16);
 -- Ajedrez Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2021/22', 'Ajedrez Winter', 'FINALIZADO');
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2022/23', 'Liga Ajedrez Indoor', 'PROCESO');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (4, '2021/22', 'Ajedrez Winter', 'FINALIZADO',16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (4, '2022/23', 'Liga Ajedrez Indoor', 'PROCESO',16);
 
 
 
