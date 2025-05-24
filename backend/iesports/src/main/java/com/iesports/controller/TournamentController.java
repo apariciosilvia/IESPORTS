@@ -120,6 +120,7 @@ public class TournamentController {
 		if(tournamentDTO.getTournament().getMaxTeams() == 16)
 			currentRoundState = RoundMatchEnum.OCTAVOS;
 		
+		
 		for (int i = 0; i < numMatches; i++)
 		{
 			Match currentMatch = new Match(null, tournamentDTO.getMatches().get(i).getDate(), currentRoundState, currentTournament,
