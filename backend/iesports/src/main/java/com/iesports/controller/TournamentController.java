@@ -2,7 +2,6 @@ package com.iesports.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,17 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iesports.dao.service.impl.MatchServiceImpl;
+import com.iesports.dao.service.impl.TeamServiceImpl;
 import com.iesports.dao.service.impl.TournamentServiceImpl;
 import com.iesports.dto.TournamentAddDTO;
+import com.iesports.dto.TournamentAdminDTO;
 import com.iesports.dto.TournamentFilterDTO;
 import com.iesports.enums.RoundMatchEnum;
-import com.iesports.enums.StateTournamentEnum;
 import com.iesports.model.Match;
-import com.iesports.model.Sport;
+import com.iesports.model.Team;
 import com.iesports.model.Tournament;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/tournament")
@@ -35,10 +32,13 @@ public class TournamentController {
 
 	RoundMatchEnum currentRoundState = null;
 	@Autowired
-	private TournamentServiceImpl ts;
+	private TournamentServiceImpl tournamentS;
 	
 	@Autowired
 	private MatchServiceImpl matchS;
+	
+	@Autowired
+	TeamServiceImpl teamS;
 	
 	@PostMapping("/getTournaments")
 	public ResponseEntity<?> getTournaments(@RequestBody TournamentFilterDTO filterDTO) {
@@ -52,16 +52,16 @@ public class TournamentController {
 
 	    if (sport_id != null && date != null) {
 	        System.out.println("Buscando torneos por sport_id y fecha");
-	        tournaments = ts.findTournamentsBySportIdAndDate(sport_id, date);
+	        tournaments = tournamentS.findTournamentsBySportIdAndDate(sport_id, date);
 	    } else if (sport_id != null) {
 	        System.out.println("Buscando torneos por sport_id");
-	        tournaments = ts.findTournamentsBySportId(sport_id);
+	        tournaments = tournamentS.findTournamentsBySportId(sport_id);
 	    } else if (date != null) {
 	        System.out.println("Buscando torneos por fecha");
-	        tournaments = ts.findTournamentsByDate(date);
+	        tournaments = tournamentS.findTournamentsByDate(date);
 	    } else {
 	        System.out.println("Obteniendo todos los torneos");
-	        tournaments = ts.getTournaments();
+	        tournaments = tournamentS.getTournaments();
 
 	        tournaments = tournaments.stream()
 	                .sorted((t1, t2) -> t2.getDate().compareTo(t1.getDate()))
@@ -86,7 +86,7 @@ public class TournamentController {
 	public ResponseEntity<?> getDates() {
 	    System.out.println("Solicitud recibida para obtener fechas de torneos");
 
-	    List<String> fechas = ts.findTournamentsDates();
+	    List<String> fechas = tournamentS.findTournamentsDates();
 
 	    if (fechas == null || fechas.isEmpty()) {
 	        System.err.println("No se encontraron fechas de torneos");
@@ -99,6 +99,27 @@ public class TournamentController {
 	    return ResponseEntity.ok(fechas);
 	}
 	
+	@GetMapping("/getTeamsByTournamentId")
+	public ResponseEntity<?> getTeamsByTournamentId(){
+		List<TournamentAdminDTO> result = new ArrayList<TournamentAdminDTO>();
+		
+		List<Tournament> tournaments = tournamentS.getTournaments();
+		
+		for (Tournament currentTournament : tournaments)
+		{
+			TournamentAdminDTO newTournamentAdmin = new TournamentAdminDTO();
+			List<Team> teamsCurrentTournament = teamS.getTeamsByTournamentId(currentTournament.getId());
+			
+			newTournamentAdmin.setTournament(currentTournament);
+			newTournamentAdmin.setTeams(teamsCurrentTournament);
+			
+			
+			
+			result.add(newTournamentAdmin);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+	
 	@PostMapping("/addTournament")
 	public ResponseEntity<?> addTournament(@RequestBody TournamentAddDTO tournamentDTO){
 		
@@ -108,7 +129,7 @@ public class TournamentController {
 		
 		
 		//Primero añadimos el nuevo torneo
-		ts.saveTournament(currentTournament);
+		tournamentS.saveTournament(currentTournament);
 		
 		//Calculamos el número de partidos
 		int numMatches = tournamentDTO.getTournament().getMaxTeams() / 2;
