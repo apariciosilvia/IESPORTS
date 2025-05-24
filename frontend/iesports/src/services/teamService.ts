@@ -16,4 +16,7 @@ function getTeamsInfo(): Promise<any[]> {
   });
 }
 
+
+
+
 export { getTeamsInfo };
