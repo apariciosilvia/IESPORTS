@@ -3,7 +3,7 @@
   <!-- Navbar visible siempre -->
   <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
   
-  <CreateTournaments />
+  <AdminTournaments />
  
 </ion-content>
 </template>
@@ -12,7 +12,7 @@
 import { IonContent } from '@ionic/vue';
 
 import Navbar from '@/components/layout/Navbar.vue';
-import CreateTournaments from '@/components/layout/CreateTournaments.vue';
+import AdminTournaments from '@/components/layout/AdminTournaments.vue';
 
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 
