@@ -8,7 +8,7 @@
              :options="{
                      background: {
                          color: {
-                             value: '#76d6ac'
+                             value: '#255766'
                          }
                      },
                      fpsLimit: 80,
@@ -27,7 +27,7 @@
                              bubble: {
                                  distance: 400,
                                  duration: 2,
-                                 opacity: 0.8,
+                                 opacity: 0.5,
                                  size: 40
                              },
                              push: {
@@ -41,10 +41,10 @@
                      },
                      particles: {
                          color: {
-                             value: '#ffffff'
+                             value: '#cee6ed'
                          },
                          links: {
-                             color: '#ffffff',
+                             color: '#cee6ed',
                              distance: 150,
                              enable: true,
                              opacity: 0.8,
@@ -475,7 +475,7 @@ const showLoginPassword = ref(false);
 
  /* Icono de mostrar/ocultar dentro del input */
 .custom-input ion-button span.material-symbols-outlined {
-  color: #43ba85; /* pon aquí el color que quieras */
+  color: #002F3D; /* pon aquí el color que quieras */
   font-size: 1.5rem;
 }
 
@@ -490,13 +490,13 @@ const showLoginPassword = ref(false);
   /* Solo aplica el highlight si NO tiene clase error-border */
  .custom-input.sc-ion-input-md-h:not(.error-border),
  .custom-select.sc-ion-input-md-h:not(.error-border) {
-  --highlight-color: #43ba85;
+  --highlight-color: #002F3D;
  }
  /* 1) Hover solo si NO tiene error-border */
 .custom-input.sc-ion-input-md-h:not(.error-border):hover,
 .custom-select.sc-ion-input-md-h:not(.error-border):hover {
   --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
-  --border-color: #43ba84fa;
+  --border-color: #002F3D;
 }
  
  .custom-select {
@@ -523,7 +523,7 @@ const showLoginPassword = ref(false);
 /* Hover sólo en el ion-select cuando NO tenga error-border */
 .custom-select:not(.error-border):hover {
   /* 1) Actualizamos la variable para Ionic */
-  --border-color: #43ba85 !important;
+  --border-color: #002F3D !important;
   /* 2) Y forzamos también la regla de CSS normal */
   border: 1px solid var(--border-color) !important;
   
@@ -533,7 +533,7 @@ const showLoginPassword = ref(false);
 
 /* 1) Redefine el var que Ionic usa para el subrayado */
 .custom-select {
-  --highlight-color-focused: #43ba85; /* color del outline y subrayado */
+  --highlight-color-focused: #002F3D; /* color del outline y subrayado */
 }
 
 /* 2) Cambia el color de texto y de la flecha (caret) */
@@ -545,7 +545,7 @@ const showLoginPassword = ref(false);
  .custom-button {
    width: 100%;
    margin-top: 5%;
-   --background: #42b983;
+   --background: #002F3D;
    --color: white;
    --border-radius: 8px;
    font-weight: bold;
@@ -557,7 +557,7 @@ const showLoginPassword = ref(false);
  }
  
  .custom-button:hover {
-   --background: #369e6f;
+   --background: #002F3D;
  }
  
  .material-icons {
@@ -573,7 +573,7 @@ const showLoginPassword = ref(false);
  .login-links a {
    display: block;
    margin-top: 0.5rem;
-   color: #42b983;
+   color: #002F3D;
    text-decoration: none;
  }
  
