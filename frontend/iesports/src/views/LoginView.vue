@@ -108,7 +108,6 @@
           </div>
             
            <form @submit.prevent="handleLogin">
-             
               <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
               <ion-input v-model="loginData.email" type="text" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email || errores.error }"/>
               <span v-if="errores.password" class="error-msg">{{ errores.password }}</span>
@@ -258,6 +257,9 @@ import { login, register } from '@/services/personServices';
 import { getCourses } from "@/services/courseService";
 import router from '@/router';
 
+import type { Person } from '@/model/person';
+
+
 const particlesLoaded = async (container: any) => {
   console.log("Particles container loaded", container);
 };
@@ -291,12 +293,17 @@ async function handleLogin() {
     const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim())
     console.log('Login exitoso:', response)
  
-    const user = response.data ?? response;
-     if (user?.email) {
-       localStorage.setItem('usuario', JSON.stringify(user));
-     
-       alert('Inicio de sesión exitoso')
-       router.push('/');
+    // const user = response.data ?? response;
+    const person :Person = response.data;
+    console.log('Persona:', person)
+     if (person != null) {
+        localStorage.setItem('usuario', JSON.stringify(person));
+
+        if (person?.role.name === 'Administrador') {
+          router.push({ name: 'HomeAdmin' });
+        } else {
+          router.push({ name: 'Home' });
+        }
      } else {
 
       alert('Credenciales incorrectas')
