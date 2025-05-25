@@ -47,7 +47,16 @@
           </td>
           <td>{{ t.tournament.sport.name }}</td>
           <td>
-
+            <div class="actions">
+              <!-- Botón de editar, que abrirá el popup -->
+              <button type="button" class="action-btn edit-btn">
+                <span class="material-symbols-outlined edit-icon">edit_square</span>
+              </button>
+              <!-- Botón de eliminar -->
+              <button type="button" class="action-btn delete-btn">
+                <span class="material-symbols-outlined delete-icon">delete</span>
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -132,18 +141,18 @@ onMounted(async () => {
 /* Habilita scroll horizontal cuando no quepa */
 .table {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* suave en iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Asegura que la tabla use todo el ancho disponible */
 .table .tournaments-table {
   width: 100%;
-  min-width: 600px; /* ajusta según tu número de columnas */
+  min-width: 600px;
 }
 
 
 .tournaments-table {
-  border-collapse: collapse; /* ya lo tienes */
+  border-collapse: collapse; 
   width: 100%;
 }
 
@@ -175,11 +184,47 @@ onMounted(async () => {
 
 /* 1) Estilo del encabezado */
 .tournaments-table thead {
-  background-color: #f5f5f5; /* fondo gris */
+  background-color: #f5f5f5;
 }
 
 .tournaments-table thead  {
-  border: 1px solid #ddd;    /* borde alrededor de cada celda */
+  border: 1px solid #ddd;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0a2540;
+  border-radius: 5px;
+  padding: 10px 2px;
+  max-width: 110px;
+  gap: 20%;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.action-btn .material-symbols-outlined {
+  font-weight: 700;
+}
+
+.actions button:last-child {
+  border-left: 1px solid rgba(255, 255, 255, 0.466);
+  padding-left: 15%;
+}
+
+.edit-icon{
+  color: white;
+}
+
+.delete-icon{
+  color: #e22f28;
 }
 
 </style>
