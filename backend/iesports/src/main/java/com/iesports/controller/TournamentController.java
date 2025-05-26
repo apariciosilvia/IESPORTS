@@ -133,10 +133,12 @@ public class TournamentController {
 		StateTournamentEnum currentStateTournament = StateTournamentEnum.PENDIENTE;
 		Sport currentSport = sportS.getSportById(tournamentDTO.getSportId());
 		
-		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, currentStateTournament, currentSport, tournamentDTO.getNumTeams());
+		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, currentStateTournament, currentSport);
 		
 		//Primero añadimos el nuevo torneo
-		tournamentS.saveTournament(currentTournament);
+		currentTournament = tournamentS.saveTournament(currentTournament);
+		
+		System.out.println("SE HA GUARDADO EL TORNEO"+currentTournament);
 		
 		//Calculamos el número de partidos
 		int numMatches = tournamentDTO.getNumTeams() / 2;
@@ -157,7 +159,9 @@ public class TournamentController {
 											currentTeam1,currentTeam2 , 0, 0 ,null);
 			
 			matchS.saveMatch(currentMatch);
+			System.out.println("SE HA GUARDADO EL PARTIDO" + currentMatch);
 		}
+		
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(currentTournament);
 	}
