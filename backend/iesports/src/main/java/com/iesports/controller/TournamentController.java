@@ -118,17 +118,15 @@ public class TournamentController {
 			
 			newTournamentAdmin.setTournament(currentTournament);
 			newTournamentAdmin.setTeams(teamsCurrentTournament);
-			
-			
-			
+
 			result.add(newTournamentAdmin);
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
 	@PostMapping("/addTournament")
-	public ResponseEntity<?> addTournament(@Valid @RequestBody  TournamentAddDTO tournamentDTO){
-		
+	public ResponseEntity<?> addTournament(@Valid @RequestBody TournamentAddDTO tournamentDTO){
+
 		String currentNextYear = String.valueOf((LocalDate.now().getYear()%100));
 		
 		String currentYear = String.valueOf(LocalDate.now().getYear()-1)+"/"+currentNextYear;
@@ -136,7 +134,6 @@ public class TournamentController {
 		Sport currentSport = sportS.getSportById(tournamentDTO.getSportId());
 		
 		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, currentStateTournament, currentSport, tournamentDTO.getNumTeams());
-		
 		
 		//Primero añadimos el nuevo torneo
 		tournamentS.saveTournament(currentTournament);
@@ -151,12 +148,10 @@ public class TournamentController {
 		if(tournamentDTO.getNumTeams() == 16)
 			currentRoundState = RoundMatchEnum.OCTAVOS;
 		
-		
 		for (int i = 0; i < numMatches; i++)
 		{
 			Team currentTeam1 = teamS.getTeam(tournamentDTO.getMatches().get(i).getTeam1Id());
 			Team currentTeam2 = teamS.getTeam(tournamentDTO.getMatches().get(i).getTeam2Id());
-			
 			
 			Match currentMatch = new Match(null, tournamentDTO.getMatches().get(i).getMatchDate(), currentRoundState, currentTournament,
 											currentTeam1,currentTeam2 , 0, 0 ,null);
@@ -166,7 +161,4 @@ public class TournamentController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(currentTournament);
 	}
-	
-	
-	
 }
