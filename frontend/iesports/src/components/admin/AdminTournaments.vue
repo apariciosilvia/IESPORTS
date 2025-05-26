@@ -62,17 +62,15 @@
       </tbody>
     </table>
     </div>
-
-    <!-- 2) Definimos el modal, ligado a isModalOpen -->
-      <!-- Modal principal -->
-      <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
-        <component
-          :is="modalMode === 'add' ? AdminAddTournaments : AdminEditTournaments"
-          @close="closeModal"
-          :tournament="tournamentToEdit"
-        />
-      </ion-modal>
-    </section>
+    <!-- Modal principal -->
+    <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
+      <component
+        :is="modalMode === 'add' ? AdminAddTournaments : AdminEditTournaments"
+        @close="closeModal"
+        :tournament="tournamentToEdit"
+      />
+    </ion-modal>
+  </section>
   </ion-content>
 </template>
 
