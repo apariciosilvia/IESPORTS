@@ -4,7 +4,7 @@
   <section class="tournaments">
     <div class="header">
       <h2 class="tittle">Torneos</h2>
-      <ion-button class="new-btn">
+      <ion-button class="new-btn" @click="openAddModal">
         <span class="material-symbols-outlined">add_circle</span>
         Nuevo Torneo
       </ion-button>
@@ -47,23 +47,61 @@
           </td>
           <td>{{ t.tournament.sport.name }}</td>
           <td>
-
+            <div class="actions">
+              <!-- Botón de editar, que abrirá el popup -->
+              <button type="button" class="action-btn edit-btn" @click="openEditModal(t.tournament)">
+                <span class="material-symbols-outlined edit-icon">edit_square</span>
+              </button>
+              <!-- Botón de eliminar -->
+              <button type="button" class="action-btn delete-btn">
+                <span class="material-symbols-outlined delete-icon">delete</span>
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
     </div>
-  </section>
+
+    <!-- 2) Definimos el modal, ligado a isModalOpen -->
+      <!-- Modal principal -->
+      <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
+        <component
+          :is="modalMode === 'add' ? AdminAddTournaments : AdminEditTournaments"
+          @close="closeModal"
+          :tournament="tournamentToEdit"
+        />
+      </ion-modal>
+    </section>
   </ion-content>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { IonSelect, IonSelectOption, IonContent } from '@ionic/vue';
+import { IonSelect, IonSelectOption, IonContent, IonModal, IonButton} from '@ionic/vue';
+import AdminAddTournaments from '@/components/admin/AdminAddTournaments.vue';
+import AdminEditTournaments from '@/components/admin/AdminEditTournaments.vue';
 
 import type { TournamentAdminDTO } from '@/model/tournamentAdminDTO';
 
 import { getTeamsByTournamentId } from '@/services/tournamentService';
+
+const modalMode = ref<'add' | 'edit'>('add');
+
+function openAddModal() {
+  modalMode.value = 'add';
+  isModalOpen.value = true;
+}
+
+const tournamentToEdit = ref(null); // opcional, si necesitas pasar datos
+
+function openEditModal(tournament: any) {
+  modalMode.value = 'edit';
+  tournamentToEdit.value = tournament; // si luego lo quieres pasar como prop
+  isModalOpen.value = true;
+}
+
+const isModalOpen = ref(false); // controla visibilidad del popup
 
 // 1) Array reactivo que usa tu DTO
 const tournamentsAdminDTO = ref<TournamentAdminDTO[]>([]);
@@ -79,8 +117,10 @@ onMounted(async () => {
   }
 });
 
-
-
+function closeModal() {
+  document.activeElement instanceof HTMLElement && document.activeElement.blur();
+  isModalOpen.value = false;
+}
 </script>
 
 <style scoped>
@@ -128,26 +168,21 @@ onMounted(async () => {
   color: white;
 }
 
-
-/* Habilita scroll horizontal cuando no quepa */
 .table {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* suave en iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Asegura que la tabla use todo el ancho disponible */
 .table .tournaments-table {
   width: 100%;
-  min-width: 600px; /* ajusta según tu número de columnas */
+  min-width: 600px;
 }
 
-
 .tournaments-table {
-  border-collapse: collapse; /* ya lo tienes */
+  border-collapse: collapse; 
   width: 100%;
 }
 
-/* 1) Eliminamos cualquier borde en los lados de celdas */
 .tournaments-table th,
 .tournaments-table td {
   padding: 1rem 3rem;
@@ -163,23 +198,67 @@ onMounted(async () => {
   border-bottom: 1px solid #ddd;
 }
 
-/* 5) Hover suave en filas */
 .tournaments-table tbody tr:hover {
   background-color: #fafafa;
 }
 
-/* 3) Para la primera fila del body, igualar estilo con el thead si quieres */
 .tournaments-table tbody tr:first-child td {
   border-top: 1px solid #ddd;
 }
 
-/* 1) Estilo del encabezado */
 .tournaments-table thead {
-  background-color: #f5f5f5; /* fondo gris */
+  background-color: #f5f5f5;
 }
 
 .tournaments-table thead  {
-  border: 1px solid #ddd;    /* borde alrededor de cada celda */
+  border: 1px solid #ddd;
 }
 
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0a2540;
+  border-radius: 5px;
+  padding: 10px 2px;
+  max-width: 110px;
+  gap: 20%;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.action-btn .material-symbols-outlined {
+  font-weight: 700;
+}
+
+.actions button:last-child {
+  border-left: 1px solid rgba(255, 255, 255, 0.466);
+  padding-left: 15%;
+}
+
+.edit-icon{
+  color: white;
+}
+
+.delete-icon{
+  color: #e22f28;
+}
+
+ion-modal {
+  --border-radius: 10px;
+  --backdrop-opacity: 0.6;/* opacidad del fondo para que no quede tan oscuro */
+  --width: 100%;
+  --max-width: 1300px;
+  --height: 700px;
+}
+ion-modal::part(backdrop) {
+  backdrop-filter: blur(1px); /* desenfoque */
+  background-color: rgba(0, 0, 0, 0.3); /* semitransparente */
+}
 </style>
