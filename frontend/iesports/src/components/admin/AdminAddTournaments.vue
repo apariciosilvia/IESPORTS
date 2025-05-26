@@ -29,9 +29,12 @@
                   placeholder="Selecciona un deporte"
                   class="list-sports"
                 >
-                  <ion-select-option value="apples">Apples</ion-select-option>
-                  <ion-select-option value="oranges">Oranges</ion-select-option>
-                  <ion-select-option value="bananas">Bananas</ion-select-option>
+                  <ion-select-option  v-for="sport in sportsList"
+                  :key="sport.id"
+                  :value="sport.id">
+                    {{ sport.name }}
+                  </ion-select-option>
+                 
                 </ion-select>
               </ion-item>
             </ion-list>
@@ -133,8 +136,33 @@
 <script setup lang="ts">
 defineEmits(['close'])
 
+import { ref, onMounted } from 'vue';
+
 import { IonSelect, IonSelectOption, IonContent, IonSearchbar, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
 
+import { getSports } from '@/services/sportService';
+
+
+
+const sportsList = ref<any[]>([]);
+const error = ref<string | null>(null);
+
+
+async function loadData () {
+  error.value = null;
+  try {
+    sportsList.value = await getSports();
+    console.log('sports:', sportsList.value);
+  
+  } catch (e: any) {
+    error.value = 'No se pudieron cargar los filtros.';
+    console.error(e);
+  } 
+}
+
+onMounted(() => {
+  loadData();
+});
 </script>
 
 <style scoped>

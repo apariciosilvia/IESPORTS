@@ -26,6 +26,8 @@ import com.iesports.model.Match;
 import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/tournament")
 public class TournamentController {
@@ -121,7 +123,7 @@ public class TournamentController {
 	}
 	
 	@PostMapping("/addTournament")
-	public ResponseEntity<?> addTournament(@RequestBody TournamentAddDTO tournamentDTO){
+	public ResponseEntity<?> addTournament(@Valid @RequestBody TournamentAddDTO tournamentDTO){
 		
 		Tournament currentTournament = new Tournament(null,tournamentDTO.getTournament().getName(),
 										tournamentDTO.getTournament().getDate(),tournamentDTO.getTournament().getState(),tournamentDTO.getTournament().getSport(),
