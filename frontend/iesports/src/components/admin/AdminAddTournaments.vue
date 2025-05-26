@@ -89,16 +89,12 @@
         <!-- Tabla de emparejamientos -->
         <div class="row">
           <div class="colum-down">
-            <table class="match-table">
-              <thead>
-                <tr>
-                  <th>Equipo 1</th>
-                  <th>Equipo 2</th>
-                  <th>Fecha partido (opcional)</th>
-                  <th>Ronda</th>
-                </tr>
-              </thead>
-              <tbody>
+            <div class="match-header">
+              <span>Equipo 1</span>
+              <span>Equipo 2</span>
+              <span>Fecha partido (opcional)</span>
+              <span>Ronda</span>
+            </div>
                 <!-- <tr
                   v-for="(m, i) in matches"
                   :key="i"
@@ -114,8 +110,7 @@
                   </td>
                   <td>{{ m.round }}</td>
                 </tr> -->
-              </tbody>
-            </table>
+
             <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam cumque iste, error reprehenderit culpa enim soluta dolorem non sint nam ducimus sequi a nobis illum repudiandae libero reiciendis adipisci dolor?</h1>
                       <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam cumque iste, error reprehenderit culpa enim soluta dolorem non sint nam ducimus sequi a nobis illum repudiandae libero reiciendis adipisci dolor?</h1>
 
@@ -144,7 +139,7 @@ defineEmits(['close'])
 
 import { ref, onMounted, computed } from 'vue';
 
-import { IonSelect, IonSelectOption, IonContent, IonSearchbar, IonList, IonIcon, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
+import { IonSelect, IonSelectOption, IonContent, IonSearchbar, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
 
 import { getSports } from '@/services/sportService';
 
@@ -425,7 +420,7 @@ onMounted(() => {
 
 .column-right {
   max-width: 60%;
-  background-color: #f3f3f3;
+  background-color: #EDEDED;
   border-radius: 10px;
   padding: 2%;
 }
@@ -435,6 +430,7 @@ onMounted(() => {
   max-width: 100%;
   box-sizing: border-box;
   padding: 1rem 0.5rem;
+  border-radius: 10px;
   background-color: #30f000;
 }
 
@@ -566,7 +562,7 @@ ion-select::part(placeholder) {
 .custom-search {
   --border-radius: 8px;
   --box-shadow: none;
-  border: 1px solid #0a2540;
+  border: 1px solid #0a254098;
   border-radius: 5px;
 }
 
@@ -638,8 +634,9 @@ ion-select::part(placeholder) {
   justify-content: center;
   padding: 0;
   flex-shrink: 0;
-  margin-right: 0.5rem; /* ⬅️ aquí separas el botón del borde */
+  margin-right: 0.5rem;
 }
+
 .btn-clean, .btn-save {
   --background: #0a2540;
   --border-radius: 8px;
@@ -648,8 +645,20 @@ ion-select::part(placeholder) {
   --padding-end: 1rem;
   font-weight: bold;
 }
+
 .btn-clean .material-symbols-outlined,
 .btn-save .material-symbols-outlined {
   margin-right: 5px;
+}
+
+.match-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #EDEDED;
+  color: #042935;
+  font-weight: bold;
+  border-radius: 8px;
 }
 </style>
