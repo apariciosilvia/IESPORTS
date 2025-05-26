@@ -30,6 +30,15 @@ import '@ionic/vue/css/text-transformation.css'
 import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 
+
+import { addIcons } from 'ionicons';
+import { logInOutline, personAddOutline } from 'ionicons/icons';
+
+addIcons({
+  'log-in-outline': logInOutline,
+  'person-add-outline': personAddOutline
+});
+
 const app = createApp(App);  // Crea la instancia de la aplicación Vue
 
 app.component('ScheduleXCalendar', ScheduleXCalendar); // Registra globalmente el componente de calendario

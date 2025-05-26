@@ -17,6 +17,7 @@
     "@tsparticles/engine": "^3.8.1",
     "@tsparticles/vue3": "^3.0.1",
     "axios": "^1.9.0",
+    "ionicons": "^8.0.8",
     "pinia": "^3.0.2",
     "schedule-x": "^0.0.9",
     "swiper": "^11.2.6",
