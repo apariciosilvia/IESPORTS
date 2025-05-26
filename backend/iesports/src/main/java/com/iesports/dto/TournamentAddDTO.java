@@ -13,11 +13,13 @@ public class TournamentAddDTO {
 	
 	@NotNull(message = "El nombre del torneo es obligatorio")
 	private String name;
-	@NotBlank(message = "El deporte tiene que ser obligatorio")
+	
+	@NotNull(message = "El deporte tiene que ser obligatorio")
 	private Long sportId;
-	@NotBlank(message = "El número de equipos tiene que ser obligatorio")
+	
 	private int numTeams;
-	@NotNull(message = "debes asignar todos los partidos")
+	
+	@NotNull(message = "Debes asignar todos los partidos")
 	private List<MatchDTO> matches;
 	
 	public String getName() {
