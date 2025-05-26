@@ -1,7 +1,17 @@
 <template>
   <ion-page class="page-wrapper">
+
     <!-- Contenido principal de la página -->
-    <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
+    <!-- <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true"> -->
+
+      <!-- ② Spinner mientras isLoading es true; contenido cuando termine -->
+    <LoadingSpinner v-if="isLoading" />
+    <ion-content
+      v-else
+      fullscreen
+      @ionScroll="handleScroll"
+      :scroll-events="true"
+    >
 
       <!-- Carrusel principal (portada visual) -->
       <HeroCarousel :nombre="nombre" />
@@ -20,8 +30,6 @@
 
       <ContactComponent/>
 
-      <!-- Lista de personas obtenidas desde la API -->
-      <PersonList :personas="personas" />
       <Footer />
 
     </ion-content>
@@ -33,24 +41,24 @@
 // import { useRouter } from 'vue-router'
 
 /* Importa componentes de Ionic usados en la vista */
-import {
-  IonContent,
-  IonPage,
-} from '@ionic/vue'
+import { IonContent, IonPage } from '@ionic/vue'
 
 /* Importa componentes visuales personalizados */
 import HeroCarousel from '@/components/ui/HeroCarousel.vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import Gallery from '@/components/ui/Gallery.vue';
-import PersonList from '@/components/ui/PersonList.vue';
 import ContactComponent from '@/components/layout/ContactComponent.vue';
 import Footer from '@/components/ui/Footer.vue';
+import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
 
 /* Importa lógica separada (composables) */
-import { usePersonList } from '@/composables/usePersonList'         // carga personas desde API
+import { useLoadingEffect } from '@/composables//useLoadingEffect';
 import { useNavbarScroll } from '@/composables/useNavbarScroll'     // gestiona scroll dinámico
 
 import { onMounted, ref } from 'vue';
+
+// Llamamos al composable de carga
+const { isLoading, loadData } = useLoadingEffect();
 
 const nombre = ref('');
 
@@ -66,7 +74,6 @@ onMounted(() => {
 // const router = useRouter()
 
 /* Obtiene datos y funciones desde composables */
-const { personas } = usePersonList()
 const { showNavbar, handleScroll } = useNavbarScroll()
 
 /* Redirige al login al hacer clic */

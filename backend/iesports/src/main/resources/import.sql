@@ -14,6 +14,10 @@ INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Anfitrión');
 INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Profesor');
 INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Alumno');
 
+-- USUARIOS POR DEFECTO (ADMIN CONTRA: a Y ALUMNO CONTRA: s)
+INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 7, 1, 'a@a', 'a', '$2a$10$w9wUgqR.juKPsuU8.TPwY.acNWPaIbOWHnVlNwQZpPRqcuQmtS.72');
+INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 5, 4, 's@s', 's', '$2a$10$CqPlbAfH5vfKuCZfhnSQBemQcMyAm1gjq4.m3ItJ/kjmeTHmKGlXW');
+
 INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 5, 3, 'laura.prof@example.com', 'Laura Ruiz', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
 INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 7, 2, 'ana.host@example.com', 'Ana Pérez', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
 INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 2, 2, 'mario.host@example.com', 'Mario López', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
@@ -30,16 +34,16 @@ INSERT INTO `sports` (`id`, `name`) VALUES (3, 'PingPong');
 INSERT INTO `sports` (`id`, `name`) VALUES (4, 'Ajedrez');
 
 -- Fútbol Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'PROCESO',16);
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (1, '2021/22', 'Liga Juvenil Fútbol', 'PROCESO',16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'PROCESO', 16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (1, '2021/22', 'Liga Juvenil Fútbol', 'PROCESO', 16);
 -- Baloncesto Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (2, '2021/22', 'Torneo Escolar Baloncesto', 'PENDIENTE',16);
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (2, '2023/24', 'Campeonato Nacional Basket', 'PROCESO',16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (2, '2021/22', 'Torneo Escolar Baloncesto', 'PENDIENTE', 16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (2, '2023/24', 'Campeonato Nacional Basket', 'PROCESO', 16);
 -- Ping Pong Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (3, '2024/25', 'Ping Pong club', 'PROCESO',16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (3, '2024/25', 'Ping Pong club', 'PROCESO', 16);
 -- Ajedrez Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (4, '2021/22', 'Ajedrez Winter', 'FINALIZADO',16);
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (4, '2022/23', 'Liga Ajedrez Indoor', 'PROCESO',16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (4, '2021/22', 'Ajedrez Winter', 'FINALIZADO', 16);
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`, `max_team`) VALUES (4, '2022/23', 'Liga Ajedrez Indoor', 'PROCESO', 16);
 
 
 

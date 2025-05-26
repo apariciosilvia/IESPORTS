@@ -1,6 +1,8 @@
 // services/tournamentService.ts
 import axios from 'axios';
 
+import type { TournamentAdminDTO } from '@/model/tournamentAdminDTO';
+
 // // 1. getSports(): devuelve una promesa con el array de deportes
 // function getSports(): Promise<{ id: number; name: string }[]> {
 
@@ -53,5 +55,21 @@ function getTournaments(): Promise<any> {
   });
 }
 
+function getTeamsByTournamentId(): Promise<TournamentAdminDTO[]> {
 
-export { getYears, getTournaments};
+  const url = `${import.meta.env.VITE_URL_API}/tournament/getTeamsByTournamentId`;
+  
+  return new Promise((resolve, reject) => {
+    axios.get(url)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.error('Error listado de torneos con los equipos:', error);
+        reject(error);
+      });
+  });
+}
+
+
+export { getYears, getTournaments, getTeamsByTournamentId};
