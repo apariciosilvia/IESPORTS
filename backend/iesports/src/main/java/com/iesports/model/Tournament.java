@@ -28,10 +28,6 @@ public class Tournament {
 
     @NotNull(message = "La fecha del torneo es obligatoria")
     private String date;
-    
-    @NotNull(message = "El número tiene que ser mínimo 4")
-    @Column(name = "max_team")
-    private int maxTeams;
 
     @NotNull(message = "El estado del torneo es obligatorio")
     @Enumerated(EnumType.STRING)
@@ -44,29 +40,12 @@ public class Tournament {
     public Tournament() {
     	
     }
-    
-//    public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
-//			@NotNull(message = "La fecha del torneo es obligatoria") String date,
-//			@NotBlank(message = "El estado del torneo es obligatorio") StateTournamentEnum state, Sport sport) {
-//		super();
-//		this.id = id;
-//		this.name = name;
-//		this.date = date;
-//		this.state = state;
-//		this.sport = sport;
-//	}
 
-	// Getters and setters
-
-    public Tournament(Long id, @NotBlank(message = "El nombre del torneo es obligatorio") String name,
-			@NotNull(message = "La fecha del torneo es obligatoria") String date,
-			@NotBlank(message = "El estado del torneo es obligatorio") StateTournamentEnum state, Sport sport,
-			@NotNull(message = "El número tiene que ser mínimo 4") int maxTeams) {
+    public Tournament(Long id,String name, String date, StateTournamentEnum state, Sport sport, int maxTeams) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.date = date;
-		this.maxTeams = maxTeams;
 		this.state = state;
 		this.sport = sport;
 	}
@@ -108,18 +87,10 @@ public class Tournament {
     public void setSport(Sport sport) {
         this.sport = sport;
     }
-    
-    public int getMaxTeams() {
-		return maxTeams;
-	}
-
-	public void setMaxTeams(int maxTeams) {
-		this.maxTeams = maxTeams;
-	}
 
 	@Override
 	public String toString() {
-		return "Tournament [id=" + id + ", name=" + name + ", date=" + date + ", maxTeams=" + maxTeams + ", state="
+		return "Tournament [id=" + id + ", name=" + name + ", date=" + date + ", maxTeams=" + ", state="
 				+ state + ", sport=" + sport + "]";
 	}
 	
