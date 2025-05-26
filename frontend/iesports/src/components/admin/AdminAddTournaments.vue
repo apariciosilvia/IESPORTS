@@ -29,10 +29,10 @@
                   placeholder="Selecciona un deporte"
                   class="list-sports"
                 >
-                  <ion-select-option  v-for="sport in sportsList"
-                  :key="sport.id"
-                  :value="sport.id">
-                    {{ sport.name }}
+                  <ion-select-option  v-for="s in sports"
+                  :key="s.id"
+                  :value="s.id">
+                    {{ s.name }}
                   </ion-select-option>
                  
                 </ion-select>
@@ -42,10 +42,10 @@
             <div class="radio-item">
               <h6>Número de equipos</h6>
               <div class="glass-radio-group">
-                <input type="radio" name="teams" id="glass-silver" checked />
+                <input type="radio" name="teams" id="glass-silver"  />
                 <label for="glass-silver">4</label>
-                <input type="radio" name="teams" id="glass-gold" />
-                <label for="glass-gold">8</label>
+                <input type="radio" name="teams" id="glass-gold" checked />
+                <label for="glass-gold">8</label> 
                 <input type="radio" name="teams" id="glass-platinum" />
                 <label for="glass-platinum">16</label>
                 <div class="glass-glider"></div>
@@ -55,27 +55,33 @@
 
           <!-- Columna Derecha (60%) -->
           <div class="column-right">
-            <div class="teams-panel">
-              <div class="panel-header">
-                <span>Equipos</span>
-                <span class="count"></span>
+            <div class="team-selector">
+              <div class="header">
+                <h2>Equipos</h2>
+                <!-- <span class="counter">{{ selectedTeams }}/{{ totalTeams }}</span> -->
+                <span class="counter">3/4</span>
               </div>
+
               <ion-searchbar
-                class="custom-searchbar"
-                placeholder="Buscar equipo…"
-                show-cancel-button="focus"
+                v-model="searchText"
+                placeholder="Buscar equipo ..."
+                class="custom-search"
               />
-              <ion-list>
-                <!-- <ion-item
+
+             <div class="team-list">
+                <div
+                  class="team-row"
                   v-for="team in filteredTeams"
                   :key="team.id"
                 >
-                  <ion-label>{{ team.name }}</ion-label>
-                  <ion-button slot="end" fill="clear" @click="addTeam(team)">
-                    <ion-icon slot="icon-only" name="add-circle-outline" />
-                  </ion-button>
-                </ion-item> -->
-              </ion-list>
+                  <div class="team-card">
+                    <span class="team-name">{{ team.name }}</span>
+                  </div>
+                  <button class="add-button">
+                    <span class="material-symbols-outlined">add_circle</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -136,26 +142,234 @@
 <script setup lang="ts">
 defineEmits(['close'])
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
-import { IonSelect, IonSelectOption, IonContent, IonSearchbar, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
+import { IonSelect, IonSelectOption, IonContent, IonSearchbar, IonList, IonIcon, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
 
 import { getSports } from '@/services/sportService';
 
+import type { Team } from '@/model/team';
 
-
-const sportsList = ref<any[]>([]);
 const error = ref<string | null>(null);
 
+const sports = ref<any[]>([]);
+const teams = ref<Team[]>([]);
+
+//LISTA DE EJEMPLO PARA SIMULAR LOS EQUIPOS
+const teamsList = ref<Team[]>([
+  {
+    id: 1,
+    name: 'The winners',
+    players: [
+      {
+        id: 101,
+        name: 'Juan Pérez',
+        email: 'juan@example.com',
+        password: '1234',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 1, name: '1º Bach', age: '16-17' }
+      },
+      {
+        id: 102,
+        name: 'Ana López',
+        email: 'ana@example.com',
+        password: '5678',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 1, name: '1º Bach', age: '16-17' }
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Los campeones',
+    players: [
+      {
+        id: 103,
+        name: 'Carlos Ruiz',
+        email: 'carlos@example.com',
+        password: 'abcd',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 2, name: '2º Bach', age: '17-18' }
+      },
+      {
+        id: 104,
+        name: 'Lucía Gómez',
+        email: 'lucia@example.com',
+        password: 'efgh',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 2, name: '2º Bach', age: '17-18' }
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: 'The challengers',
+    players: [
+      {
+        id: 105,
+        name: 'Pedro Martínez',
+        email: 'pedro@example.com',
+        password: 'ijkl',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 3, name: '3º ESO', age: '14-15' }
+      },
+      {
+        id: 106,
+        name: 'María Torres',
+        email: 'maria@example.com',
+        password: 'mnop',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 3, name: '3º ESO', age: '14-15' }
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Equipo D',
+    players: [
+      {
+        id: 107,
+        name: 'Andrés Ramos',
+        email: 'andres@example.com',
+        password: 'qrst',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 4, name: '4º ESO', age: '15-16' }
+      },
+      {
+        id: 108,
+        name: 'Claudia Vega',
+        email: 'claudia@example.com',
+        password: 'uvwx',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 4, name: '4º ESO', age: '15-16' }
+      }
+    ]
+  },
+  {
+    id: 5,
+    name: 'Las estrellas',
+    players: [
+      {
+        id: 109,
+        name: 'Diego Navarro',
+        email: 'diego@example.com',
+        password: 'yz12',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 5, name: '1º ESO', age: '12-13' }
+      },
+      {
+        id: 110,
+        name: 'Paula Nieto',
+        email: 'paula@example.com',
+        password: '3456',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 5, name: '1º ESO', age: '12-13' }
+      }
+    ]
+  },
+  {
+    id: 6,
+    name: 'Equipo F',
+    players: [
+      {
+        id: 111,
+        name: 'Alberto León',
+        email: 'alberto@example.com',
+        password: '7890',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 6, name: '2º ESO', age: '13-14' }
+      },
+      {
+        id: 112,
+        name: 'Sara Molina',
+        email: 'sara@example.com',
+        password: 'abcd',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 6, name: '2º ESO', age: '13-14' }
+      }
+    ]
+  },
+  {
+    id: 7,
+    name: 'Equipo G',
+    players: [
+      {
+        id: 113,
+        name: 'Tomás Gil',
+        email: 'tomas@example.com',
+        password: 'efgh',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 7, name: '1º FP', age: '16-17' }
+      },
+      {
+        id: 114,
+        name: 'Nuria Díaz',
+        email: 'nuria@example.com',
+        password: 'ijkl',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 7, name: '1º FP', age: '16-17' }
+      }
+    ]
+  },
+  {
+    id: 8,
+    name: 'Equipo H',
+    players: [
+      {
+        id: 115,
+        name: 'Esteban Ramos',
+        email: 'esteban@example.com',
+        password: 'mnop',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 8, name: '2º FP', age: '17-18' }
+      },
+      {
+        id: 116,
+        name: 'Laura Romero',
+        email: 'laura@example.com',
+        password: 'qrst',
+        active: 1,
+        role: { id: 1, name: 'Jugador', active: 1 },
+        course: { id: 8, name: '2º FP', age: '17-18' }
+      }
+    ]
+  }
+]);
+
+const searchText = ref('');
+const filteredTeams = computed(() =>
+  teams.value.filter(team =>
+    team.name.toLowerCase().includes(searchText.value.toLowerCase())
+  )
+);
 
 async function loadData () {
   error.value = null;
   try {
-    sportsList.value = await getSports();
-    console.log('sports:', sportsList.value);
+    sports.value = await getSports();
+    console.log('Lista de deportes :', sports.value);
+
+    // teams.value = await getTeams();
+    teams.value = teamsList.value;
+    console.log('Lista de equipos :', teams.value);
   
   } catch (e: any) {
-    error.value = 'No se pudieron cargar los filtros.';
+    error.value = 'No se pudieron cargar los datos';
     console.error(e);
   } 
 }
@@ -163,6 +377,7 @@ async function loadData () {
 onMounted(() => {
   loadData();
 });
+
 </script>
 
 <style scoped>
@@ -201,6 +416,10 @@ onMounted(() => {
 }
 
 .column-left {
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   max-width: 40%;
 }
 
@@ -208,7 +427,7 @@ onMounted(() => {
   max-width: 60%;
   background-color: #f3f3f3;
   border-radius: 10px;
-  padding: 4%;
+  padding: 2%;
 }
 
 .colum-down {
@@ -321,17 +540,106 @@ ion-select::part(placeholder) {
   background: linear-gradient(135deg, #d0e7ff55, #0a2540);
 }
 
-.custom-searchbar {
-  --background: #ffffff;
-  --border-radius: 8px;
-  --border-color: #0a2540;
-  --min-height: 40px;
-  --padding-start: 0.75rem;
-  --padding-end: 0.75rem;
-  --icon-color: #0a2540;
-  --placeholder-color: #888888;
+.team-selector {
+  background: #f1f1f1;
+  padding: 1rem;
+  border-radius: 12px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.counter {
+  font-weight: bold;
+  color: #ff3c2f;
+}
+
+.custom-search {
+  --border-radius: 8px;
+  --box-shadow: none;
+  border: 1px solid #0a2540;
+  border-radius: 5px;
+}
+
+.sc-ion-searchbar-md-h {
+  -webkit-padding-start: 0;
+  padding-inline-start: 0;
+  -webkit-padding-end: 0;
+  padding-inline-end: 0 ;
+  padding: 0;
+  margin: 0 0 1rem 0;
+
+
+}
+.team-selector {
+  background: #f1f1f1;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.counter {
+  font-weight: bold;
+  color: #ff3c2f;
+}
+
+.team-list {
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 0.5rem;
+}
+
+.team-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem; /* aumenta este valor para más separación */
+  background: #f1f1f1;
+}
+
+.team-card {
+  background: white;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  flex: 1;
+}
+
+.team-name {
+  font-weight: 500;
+  color: #0b2c3e;
+}
+
+.add-button {
+  background-color: #ff3c2f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  margin-right: 0.5rem; /* ⬅️ aquí separas el botón del borde */
+}
 .btn-clean, .btn-save {
   --background: #0a2540;
   --border-radius: 8px;
