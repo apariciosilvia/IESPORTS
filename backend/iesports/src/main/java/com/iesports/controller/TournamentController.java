@@ -129,20 +129,53 @@ public class TournamentController {
 	@PostMapping("/addTournament")
 	public ResponseEntity<?> addTournament(@Valid @RequestBody  TournamentAddDTO tournamentDTO){
 		
-		String currentNextYear = String.valueOf((LocalDate.now().getYear()%100));
+		String currentYear = null;
+		Map<String, String> errores = new HashMap<>();
+        
 		
-		String currentYear = String.valueOf(LocalDate.now().getYear()-1)+"/"+currentNextYear;
-		StateTournamentEnum currentStateTournament = StateTournamentEnum.PENDIENTE;
+		if(tournamentDTO.getSportId() == 0 || tournamentDTO.getSportId().toString() == null || tournamentDTO.getSportId().toString().isEmpty())
+		{
+			errores.put("error", "No se ha encontrado el deporte");
+			System.err.println("No se ha encontrado el deporte");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
+		}
+		
+		//EN CASO DE ESTAR EN EL RANGO DE SEPTIEMBRE-DICIEMBRE, EL AÑO QUE SE GENERA
+		//SEGUIRÁ LA SIGUIENTE ESTRUCTURA --> año actual/año siguiente
+		if(LocalDate.now().getMonthValue() >= 9 && LocalDate.now().getMonthValue() <= 12)
+		{
+			String currentNextYear = String.valueOf((LocalDate.now().getYear()%100)+1);
+			currentYear = String.valueOf(LocalDate.now().getYear())+"/"+currentNextYear;
+		}
+		//EN CASO CONTRARIO UTILIZARÁ ESTA ESTRUCTURA --> AÑO PASADO/AÑO ACTUAL
+		else
+		{
+			String currentNextYear = String.valueOf((LocalDate.now().getYear()%100));
+			currentYear = String.valueOf(LocalDate.now().getYear()-1)+"/"+currentNextYear;
+		}
+		
+		
+		
+		
+		
 		Sport currentSport = sportS.getSportById(tournamentDTO.getSportId());
 		
-		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, currentStateTournament, currentSport, tournamentDTO.getNumTeams());
+		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, StateTournamentEnum.PENDIENTE, currentSport, tournamentDTO.getNumTeams());
 		
 		
 		//Primero añadimos el nuevo torneo
-		tournamentS.saveTournament(currentTournament);
+		//Actualizamos
+		currentTournament = tournamentS.saveTournament(currentTournament);
 		
 		//Calculamos el número de partidos
 		int numMatches = tournamentDTO.getNumTeams() / 2;
+		
+		if (tournamentDTO.getNumTeams() != 4 && tournamentDTO.getNumTeams() == 8 && tournamentDTO.getNumTeams() == 16)
+		{
+			errores.put("error", "No se ha encontrado el deporte");
+			System.err.println("No se ha encontrado el deporte");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
+		}
 		
 		if(tournamentDTO.getNumTeams() == 4)
 			currentRoundState = RoundMatchEnum.SEMIFINAL;
