@@ -40,13 +40,13 @@
             </ion-list>
 
             <div class="radio-item">
-              <h6>Número de equipos</h6>
+              <h5>Número de equipos</h5>
               <div class="glass-radio-group">
-                <input type="radio" name="teams" id="glass-silver"  />
+                <input type="radio"  name="teams" id="glass-silver" value="4" v-model="selectedTeams" />
                 <label for="glass-silver">4</label>
-                <input type="radio" name="teams" id="glass-gold" checked />
-                <label for="glass-gold">8</label> 
-                <input type="radio" name="teams" id="glass-platinum" />
+                <input type="radio" name="teams" id="glass-gold" value="8" checked v-model="selectedTeams" />
+                <label for="glass-gold">8</label>
+                <input type="radio" name="teams" id="glass-platinum" value="16" v-model="selectedTeams" />
                 <label for="glass-platinum">16</label>
                 <div class="glass-glider"></div>
               </div>
@@ -95,28 +95,42 @@
               <span>Fecha partido (opcional)</span>
               <span>Ronda</span>
             </div>
-                <!-- <tr
-                  v-for="(m, i) in matches"
-                  :key="i"
-                >
-                  <td>{{ m.team1.name }}</td>
-                  <td>{{ m.team2.name }}</td>
-                  <td>
-                    <ion-datetime
-                      display-format="DD/MM/YYYY"
-                      picker-format="DD/MM/YYYY"
-                      v-model="m.date"
-                    />
-                  </td>
-                  <td>{{ m.round }}</td>
-                </tr> -->
+            <div class="match-rows">
+              <div
+                class="match-row"
+                v-for="n in matchesToRender"
+                :key="n"
+              >
+                <!-- Equipo 1 -->
+                <div class="team-box">
+                  <span>Equipo {{ n * 2 - 1 }}</span>
+                  <button class="delete-btn">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
 
-            <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam cumque iste, error reprehenderit culpa enim soluta dolorem non sint nam ducimus sequi a nobis illum repudiandae libero reiciendis adipisci dolor?</h1>
-                      <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam cumque iste, error reprehenderit culpa enim soluta dolorem non sint nam ducimus sequi a nobis illum repudiandae libero reiciendis adipisci dolor?</h1>
+                <span class="vs-text">VS</span>
 
-          </div>
+                <!-- Equipo 2 -->
+                <div class="team-box">
+                  <span>Equipo {{ n * 2 }}</span>
+                  <button class="delete-btn">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+
+                <!-- Fecha -->
+                <div class="date-btn">
+                  <input type="date" name="" id="" class="date-input" />
+                </div>
+
+                <!-- Ronda -->
+                <span class="round-label">Cuartos</span>
+              </div>
+            </div>
+
         </div>
-        
+      </div>
       </div>
     </ion-content>
     <ion-footer class="row">
@@ -149,6 +163,10 @@ const error = ref<string | null>(null);
 
 const sports = ref<any[]>([]);
 const teams = ref<Team[]>([]);
+
+const selectedTeams = ref<number>(8); // valor por defecto
+
+const matchesToRender = computed(() => selectedTeams.value / 2);
 
 //LISTA DE EJEMPLO PARA SIMULAR LOS EQUIPOS
 const teamsList = ref<Team[]>([
@@ -431,7 +449,7 @@ onMounted(() => {
   box-sizing: border-box;
   padding: 1rem 0.5rem;
   border-radius: 10px;
-  background-color: #30f000;
+  margin-bottom: 1rem;
 }
 
 .colum-down2 {
@@ -487,7 +505,7 @@ ion-select::part(placeholder) {
 .radio-item {
   margin-top: 1rem;
 }
-.radio-item h6 {
+.radio-item h5 {
   margin: 0 0 0.5rem;
   font-weight: 600;
   text-align: left;
@@ -537,7 +555,6 @@ ion-select::part(placeholder) {
 }
 
 .team-selector {
-  background: #f1f1f1;
   padding: 1rem;
   border-radius: 12px;
 }
@@ -577,7 +594,6 @@ ion-select::part(placeholder) {
 
 }
 .team-selector {
-  background: #f1f1f1;
   padding: 1rem;
   border-radius: 12px;
 }
@@ -660,5 +676,122 @@ ion-select::part(placeholder) {
   color: #042935;
   font-weight: bold;
   border-radius: 8px;
+  margin-bottom: 1rem;
 }
+
+.match-header span {
+  flex: 1;
+  text-align: center;
+} 
+
+
+
+
+/* .match-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+} */
+
+/* .match-row {
+  display: flex;
+  justify-content: space-between;
+  background-color: #EDEDED;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #0b2c3e;
+  margin-top: 0.65rem;
+} */
+
+.match-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.match-row {
+  display: grid;
+  grid-template-columns: 1fr 0.2fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f1f1f1;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.team-box {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  padding: 0.4rem; /* más espacio a la derecha */
+  display: flex;
+  font-size: 0.85rem;
+  color: #0b2c3e;
+  align-items: center; /* centra verticalmente */
+}
+
+.team-box span {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-items: left;
+
+}
+
+.delete-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #ff3c2f;
+  cursor: pointer;
+  padding: 0;
+  font-size: 18px; /* más pequeño */
+}
+.vs-text {
+  font-weight: bold;
+  color: #0b2c3e;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+
+}
+
+
+.date-btn {
+  margin: 0;  
+  padding: 0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-input{
+  background-color: #ff3c2f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.round-label {
+  font-weight: bold;
+  color: #0b2c3e;
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
 </style>
