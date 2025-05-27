@@ -1,5 +1,28 @@
 :root {
-   
+
+  /*FONDOS*/
     --login-background-color: #255766;
-    
+    --blue-primary-color: #002f3d;
+    --blue-primary-color-hover: #002F3D;
+
+    --orange-secundary-color: #e32f29;
+    --bold-tertiary-color: #e0b402;
+    --background-div-color: #ededed;
+
+
+  /*TEXTOS*/
+    --text-color-primary: #002f3d;
+    --text-color-secundary: #ffffff;
+
+  /*BORDES*/
+    --border-color-blue: #002F3D;
+
+
+  /*ERRORES*/
+    --text-error-color: #f44336;
+    --border-error-color: red;
+    --background-div-error-color: rgba(224, 128, 128, 0.562);
+    --background-error-color-hover: #eb8d8d27;
+
+  
 }

@@ -92,7 +92,7 @@
         <div class="row">
           <div class="colum-down">
             <div class="match-header">
-              <span>Equipo 1     </span>
+              <span>Equipo 1</span>
               <span>Equipo 2</span>
               <span>Fecha partido (opcional)</span>
               <span>Ronda</span>
@@ -123,11 +123,11 @@
 
                 <!-- Fecha -->
                 <div class="date-btn">
-                  <input type="date" name="" id="" class="date-input" />
+                  <input type="date" v-model="matchDates[n - 1]" name="" id="" class="date-input" />
                 </div>
 
                 <!-- Ronda -->
-                <span class="round-label">Cuartos</span>
+                <span class="round-label">{{ selectedNumberTeams == 4 ? 'Semis' : selectedNumberTeams == 8 ? 'Cuartos' : selectedNumberTeams == 16 ? 'Octavos' : '' }}</span>
               </div>
             </div>
 
@@ -154,7 +154,7 @@
 <script setup lang="ts">
 defineEmits(['close'])
 
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch  } from 'vue';
 
 import { IonSelect, IonSelectOption, IonContent, IonSearchbar, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
 
@@ -171,6 +171,7 @@ const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
 const selectedNumberTeams = ref<number>(8); // valor por defecto
 const selectedTeams = ref<string[]>([]);
+const matchDates = ref<(string | null)[]>([]);
 
 function addTeam(teamName: string) {
   if (
@@ -186,6 +187,12 @@ function removeTeam(index: number) {
 }
 
 const matchesToRender = computed(() => selectedNumberTeams.value / 2);
+
+
+// Cada vez que cambia el número de equipos seleccionados, actualizamos el array de fechas para que tenga un campo por cada partido
+watch(selectedNumberTeams, (newVal) => {
+  matchDates.value = Array(newVal / 2).fill(null);
+});
 
 //LISTA DE EJEMPLO PARA SIMULAR LOS EQUIPOS
 const teamsList = ref<Team[]>([
@@ -237,12 +244,14 @@ async function loadData () {
 }
 
 
+
 function resetForm() {
-  tournamentName.value = '';
-  selectedSportId.value = null;
-  selectedTeams.value = [];
-  searchText.value = '';
-  selectedNumberTeams.value = 8; // puedes poner 4 o 16 si quieres otro por defecto
+  tournamentName.value = ''; //resetea el nombre del torneo
+  selectedSportId.value = null; //resetea el deporte seleccionado 
+  selectedTeams.value = []; //resetea los equipos seleccionados
+  searchText.value = '';  //resetea el texto de búsqueda
+  selectedNumberTeams.value = 8; // resetea el numero de equipos a 8
+  matchDates.value = Array(matchesToRender.value).fill(null); //resetea la fecha
 }
 
 onMounted(() => {
@@ -323,6 +332,8 @@ onMounted(() => {
   margin-left: auto;
 }
 
+
+
 .input-name {
   --border-color: #022029;
   --border-style: solid;
@@ -331,6 +342,16 @@ onMounted(() => {
   --placeholder-color: #999999;
   text-align: left ;
 }
+/* Estilos para ion-input forzados */
+.sc-ion-input-md-h {
+    --placeholder-color: var(--text-color-primary);
+    --highlight-color-focused: var(--ion-color-primary, #0054e9);
+    --highlight-color-valid: var(--ion-color-success, #2dd55b);
+    --highlight-color-invalid: var(--ion-color-danger, #c5000f);
+    --highlight-color: var(--border-color-blue);
+}
+
+
 
 .sports {
   padding: 0;
