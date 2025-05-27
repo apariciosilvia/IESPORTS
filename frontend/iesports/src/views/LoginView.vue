@@ -469,16 +469,18 @@ const showLoginPassword = ref(false);
  
  
  
- .custom-input {
+.custom-input {
    width: 100%;
    margin-bottom: 1rem;
-   
+   text-align: left;
    font-size: 1.5rem;
    --border-radius: 8px;
    --background: #ffffff10;
    --border-color: #ccc;
    --box-shadow: none;
- }
+}
+
+
 
  /* Icono de mostrar/ocultar dentro del input */
 .custom-input ion-button span.material-symbols-outlined {
@@ -529,18 +531,13 @@ const showLoginPassword = ref(false);
 
 /* Hover sólo en el ion-select cuando NO tenga error-border */
 .custom-select:not(.error-border):hover {
-  /* 1) Actualizamos la variable para Ionic */
-  --border-color: #002F3D !important;
-  /* 2) Y forzamos también la regla de CSS normal */
-  border: 1px solid var(--border-color) !important;
-  
+  border: 1px solid var(--border-color-blue) !important;
   --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
-
 }
 
 /* 1) Redefine el var que Ionic usa para el subrayado */
 .custom-select {
-  --highlight-color-focused: #002F3D; /* color del outline y subrayado */
+  --highlight-color-focused: var(--blue-primary-color-hover);
 }
 
 /* 2) Cambia el color de texto y de la flecha (caret) */
@@ -552,8 +549,8 @@ const showLoginPassword = ref(false);
  .custom-button {
    width: 100%;
    margin-top: 5%;
-   --background: #002F3D;
-   --color: white;
+   --background: var(--blue-primary-color);
+   --color: var(--text-color-secundary);
    --border-radius: 8px;
    font-weight: bold;
    font-size: 1.5rem;
@@ -564,7 +561,7 @@ const showLoginPassword = ref(false);
  }
  
  .custom-button:hover {
-   --background: #002F3D;
+   --background: var(--blue-primary-color-hover);
  }
  
  .material-icons {
@@ -580,7 +577,7 @@ const showLoginPassword = ref(false);
  .login-links a {
    display: block;
    margin-top: 0.5rem;
-   color: #002F3D;
+   color: var(--text-color-primary);
    text-decoration: none;
  }
  
@@ -589,18 +586,18 @@ const showLoginPassword = ref(false);
  }
 
 .error-credenciales{
-  color: #f44336;
+  color: var(--text-error-color);
   font-weight: 600;
   font-size: 1.2rem;
-  background-color: rgba(224, 128, 128, 0.562);
-  border: red;
+  background-color: var(--background-div-error-color);
+  border: var(--border-error-color);
   border-radius: 12px;
   padding: 20px;
   text-align: center;
 }
 
 .error-msg {
-  color: red;
+  color: var(--text-error-color);
   font-size: 0.9rem;
   margin-bottom: 4px;
   display: block;
@@ -608,20 +605,16 @@ const showLoginPassword = ref(false);
 }
 
 .error-border {
-  --highlight-color-focused: #fb2221;
-  --border-color: #fb2221;
-  --box-shadow: 0 0 0 1px #fb2221;
+  --highlight-color-focused: var(--border-error-color);
+  --border-color: var(--border-error-color);
+  --box-shadow: 0 0 0 1px var(--border-error-color);
 }
 
 .error-border:hover{
-  --background: #eb8d8d27;
-  --border-color: #fb2221;
-  --box-shadow: 0 0 0 6px #fb2221;
+  --background: var(--background-error-color-hover);
+  --border-color: var(--border-error-color);
+  --box-shadow: 0 0 0 6px var(--border-error-color);
 }
-
-
-
-
 
 
 /* Grandes pantallas: >1200px */

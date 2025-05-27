@@ -30,6 +30,10 @@ import '@ionic/vue/css/text-transformation.css'
 import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 
+/*Estilos propios*/
+import '@/assets/css/colors.css';
+import '@/assets/css/fonts.css';
+
 
 import { addIcons } from 'ionicons';
 import { logInOutline, personAddOutline } from 'ionicons/icons';

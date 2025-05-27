@@ -37,4 +37,10 @@ public class TeamController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
+	
+	@GetMapping("/getTeams")
+	public ResponseEntity<List<Team>> getTeams(){
+		List<Team> teams = tr.getTeams();
+		return ResponseEntity.status(HttpStatus.OK).body(teams);
+	}
 }

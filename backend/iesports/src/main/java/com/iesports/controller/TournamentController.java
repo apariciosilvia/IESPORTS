@@ -182,8 +182,7 @@ public class TournamentController {
 			Team currentTeam1 = teamS.getTeam(tournamentDTO.getMatches().get(i).getTeam1Id());
 			Team currentTeam2 = teamS.getTeam(tournamentDTO.getMatches().get(i).getTeam2Id());
 			
-			Match currentMatch = new Match(null, tournamentDTO.getMatches().get(i).getMatchDate(), currentRoundState, currentTournament,
-											currentTeam1,currentTeam2 , 0, 0 ,null);
+			Match currentMatch = new Match(null, tournamentDTO.getMatches().get(i).getMatchDate(), currentRoundState, currentTournament, currentTeam1,currentTeam2 , 0, 0 ,null);
 			
 			matchS.saveMatch(currentMatch);
 			System.out.println("SE HA GUARDADO EL PARTIDO" + currentMatch);
