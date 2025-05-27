@@ -589,7 +589,7 @@ const showLoginPassword = ref(false);
   color: var(--text-error-color);
   font-weight: 600;
   font-size: 1.2rem;
-  background-color: rgba(224, 128, 128, 0.562);
+  background-color: var(--background-div-error-color);
   border: var(--border-error-color);
   border-radius: 12px;
   padding: 20px;
@@ -611,7 +611,7 @@ const showLoginPassword = ref(false);
 }
 
 .error-border:hover{
-  --background: #eb8d8d27;
+  --background: var(--background-error-color-hover);
   --border-color: var(--border-error-color);
   --box-shadow: 0 0 0 6px var(--border-error-color);
 }
