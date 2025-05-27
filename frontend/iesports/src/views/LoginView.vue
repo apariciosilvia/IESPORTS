@@ -469,16 +469,18 @@ const showLoginPassword = ref(false);
  
  
  
- .custom-input {
+.custom-input {
    width: 100%;
    margin-bottom: 1rem;
-   
+   text-align: left;
    font-size: 1.5rem;
    --border-radius: 8px;
    --background: #ffffff10;
    --border-color: #ccc;
    --box-shadow: none;
- }
+}
+
+
 
  /* Icono de mostrar/ocultar dentro del input */
 .custom-input ion-button span.material-symbols-outlined {
