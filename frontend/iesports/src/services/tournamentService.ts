@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 import type { TournamentAdminDTO } from '@/model/tournamentAdminDTO';
+import type { TournamentAddDTO } from '@/model/TournamentAddDTO';
 
 // // 1. getSports(): devuelve una promesa con el array de deportes
 // function getSports(): Promise<{ id: number; name: string }[]> {
@@ -71,5 +72,20 @@ function getTeamsByTournamentId(): Promise<TournamentAdminDTO[]> {
   });
 }
 
+function addTournament(TournamentAddDTO: TournamentAddDTO) {
+  
+  const url = `${import.meta.env.VITE_URL_API}/tournament/addTournament`;
 
-export { getYears, getTournaments, getTeamsByTournamentId};
+  return new Promise((resolve, reject) => {
+    axios.post(url, TournamentAddDTO)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.error('Error al añadir un nuevo torneo:', error);
+        reject(error);
+      });
+  });
+}
+
+export { getYears, getTournaments, getTeamsByTournamentId, addTournament};

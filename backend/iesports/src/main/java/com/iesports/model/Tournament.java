@@ -1,4 +1,5 @@
 package com.iesports.model;
+import com.iesports.enums.StateTournamentEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import com.iesports.enums.StateTournamentEnum;
 
 @Entity
 @Table(name = "tournaments")
@@ -38,7 +38,7 @@ public class Tournament {
     	
     }
 
-    public Tournament(Long id,String name, String date, StateTournamentEnum state, Sport sport, int maxTeams) {
+    public Tournament(Long id,String name, String date, StateTournamentEnum state, Sport sport) {
 		super();
 		this.id = id;
 		this.name = name;

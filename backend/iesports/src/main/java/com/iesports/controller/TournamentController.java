@@ -118,9 +118,7 @@ public class TournamentController {
 			
 			newTournamentAdmin.setTournament(currentTournament);
 			newTournamentAdmin.setTeams(teamsCurrentTournament);
-			
-			
-			
+
 			result.add(newTournamentAdmin);
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -154,18 +152,13 @@ public class TournamentController {
 			currentYear = String.valueOf(LocalDate.now().getYear()-1)+"/"+currentNextYear;
 		}
 		
-		
-		
-		
-		
 		Sport currentSport = sportS.getSportById(tournamentDTO.getSportId());
-		
-		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, StateTournamentEnum.PENDIENTE, currentSport, tournamentDTO.getNumTeams());
-		
+		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, currentStateTournament, currentSport);
 		
 		//Primero añadimos el nuevo torneo
-		//Actualizamos
 		currentTournament = tournamentS.saveTournament(currentTournament);
+		
+		System.out.println("SE HA GUARDADO EL TORNEO"+currentTournament);
 		
 		//Calculamos el número de partidos
 		int numMatches = tournamentDTO.getNumTeams() / 2;
@@ -184,22 +177,19 @@ public class TournamentController {
 		if(tournamentDTO.getNumTeams() == 16)
 			currentRoundState = RoundMatchEnum.OCTAVOS;
 		
-		
 		for (int i = 0; i < numMatches; i++)
 		{
 			Team currentTeam1 = teamS.getTeam(tournamentDTO.getMatches().get(i).getTeam1Id());
 			Team currentTeam2 = teamS.getTeam(tournamentDTO.getMatches().get(i).getTeam2Id());
 			
-			
 			Match currentMatch = new Match(null, tournamentDTO.getMatches().get(i).getMatchDate(), currentRoundState, currentTournament,
 											currentTeam1,currentTeam2 , 0, 0 ,null);
 			
 			matchS.saveMatch(currentMatch);
+			System.out.println("SE HA GUARDADO EL PARTIDO" + currentMatch);
 		}
+		
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(currentTournament);
 	}
-	
-	
-	
 }
