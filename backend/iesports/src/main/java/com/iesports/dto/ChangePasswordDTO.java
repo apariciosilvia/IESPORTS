@@ -1,25 +1,25 @@
 package com.iesports.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class ChangePasswordDTO {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@NotNull(message = "La persona no puede ser nula")
+	private Long personId;
 	
-	@NotBlank(message = "La contraseña es obligatoria")
+	@NotNull(message = "La contraseña actual es obligatoria")
+	@NotBlank(message = "La contraseña actual es obligatoria")
 	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
-	private String actualPassword;
+	private String currentPassword;
 	
+	@NotNull(message = "La contraseña no puede estar vacia")
 	@NotBlank(message = "La contraseña es obligatoria")
 	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
 	private String password1;
 
+	@NotNull(message = "La confirmación de contraseña no puede estar vacia")
 	@NotBlank(message = "La confirmación de contraseña es obligatoria")
 	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
 	private String password2;
@@ -27,28 +27,32 @@ public class ChangePasswordDTO {
 	public ChangePasswordDTO() {
 		
 	}
-
-	public ChangePasswordDTO(Long id, String actualPassword, String password1,  String password2) {
-		this.id = id;
-		this.actualPassword = actualPassword;
+	
+	public ChangePasswordDTO(@NotNull(message = "La persona no puede ser nula") Long personId,
+			@NotNull(message = "La contraseña actual es obligatoria") @NotBlank(message = "La contraseña actual es obligatoria") @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres") String currentPassword,
+			@NotNull(message = "La contraseña no puede estar vacia") @NotBlank(message = "La contraseña es obligatoria") @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres") String password1,
+			@NotNull(message = "La confirmación de contraseña no puede estar vacia") @NotBlank(message = "La confirmación de contraseña es obligatoria") @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres") String password2) {
+		super();
+		this.personId = personId;
+		this.currentPassword = currentPassword;
 		this.password1 = password1;
 		this.password2 = password2;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getPersonId() {
+		return personId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPersonId(Long personId) {
+		this.personId = personId;
 	}
 
-	public String getActualPassword() {
-		return actualPassword;
+	public String getCurrentPassword() {
+		return currentPassword;
 	}
 
-	public void setActualPassword(String actualPassword) {
-		this.actualPassword = actualPassword;
+	public void setCurrentPassword(String currentPassword) {
+		this.currentPassword = currentPassword;
 	}
 
 	public String getPassword1() {
@@ -69,8 +73,7 @@ public class ChangePasswordDTO {
 
 	@Override
 	public String toString() {
-		return "ChangePasswordDTO [id=" + id + ", actualPassword=" + actualPassword + ", password1=" + password1
-				+ ", password2=" + password2 + "]";
-	}
-	
+		return "ChangePasswordDTO [personId=" + personId + ", currentPassword=" + currentPassword + ", password1="
+				+ password1 + ", password2=" + password2 + "]";
+	}	
 }

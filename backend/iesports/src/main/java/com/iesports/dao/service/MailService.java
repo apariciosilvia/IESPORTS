@@ -11,7 +11,8 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendTemporaryPassword(String toEmail, String tempPassword) {
+    //HACER UN MENSAJE DE CORREO BONITO
+    public void sendMailForgotPassword(String toEmail, String tempPassword) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setSubject("Contraseña temporal");
