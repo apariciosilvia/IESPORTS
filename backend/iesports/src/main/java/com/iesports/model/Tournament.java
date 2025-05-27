@@ -1,6 +1,5 @@
 package com.iesports.model;
 import com.iesports.enums.StateTournamentEnum;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
