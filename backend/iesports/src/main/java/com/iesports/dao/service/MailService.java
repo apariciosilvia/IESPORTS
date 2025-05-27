@@ -63,7 +63,6 @@ public class MailService {
             e.printStackTrace();
         }
     }
-
     
     public void sendWelcomeEmail(String toEmail, String userName) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
