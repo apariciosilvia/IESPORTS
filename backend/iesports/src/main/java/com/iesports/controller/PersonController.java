@@ -173,40 +173,46 @@ public class PersonController {
 
 	}
 	
-	@PostMapping("getTempPassword")
-	public ResponseEntity<?> getTempPassword(@RequestBody ForgotPasswordRequestDTO emailDTO){
-		if (!ps.emailExists(emailDTO.getEmail())) {
+	@PostMapping("/forgotPassword")
+	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO emailDTO){
+		
+		Person person = ps.getPersonByEmail(emailDTO.getEmail());
+		
+		if(person == null) {
 			System.err.println("El email " + emailDTO.getEmail() + " no pertenece a un usuario registrado");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "No existe un usuario registrado con el correo "+emailDTO.getEmail()));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("email", "No existe un usuario registrado con el correo " + emailDTO.getEmail()));
 		}
+
+		String passwordTemp = gtps.generateTemporaryPassword();
+		String passwordTempEncripted = passwordEncoder.encode(passwordTemp);
 		
-		String newPassword = gtps.generateTemporaryPassword();
-		String passwordEncripted = passwordEncoder.encode(newPassword);
-		Person user= ps.getPersonByEmail(emailDTO.getEmail());
-		user.setForgotPassword(1);
-		user.setPassword(passwordEncripted);
-		ps.updatePerson(user);
-		ms.sendTemporaryPassword(emailDTO.getEmail(), newPassword, user.getName());
-		System.out.println("Contraseña temporal para el usuario "+user.getId()+" es: "+newPassword);
-		return ResponseEntity.status(HttpStatus.OK).body(user);
+		person.setTempPassword(1);
+		person.setPassword(passwordTempEncripted);
 		
+		person = ps.updatePerson(person);
+		ms.sendMailForgotPassword(emailDTO.getEmail(), passwordTemp, person.getName());
+		
+		System.out.println("Contraseña temporal para el usuario " + person.getId() + " es: " + passwordTemp);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
 	
-	@PostMapping("changeTempPassword")
-	public ResponseEntity<?> changeTempPassword(@RequestBody ChangeForgottenPasswordDTO changePassDTO){
+	@PostMapping("/changeTempPassword")
+	public ResponseEntity<?> changeTempPassword(@Valid @RequestBody ChangeForgottenPasswordDTO changePassDTO){
 		
 		Map<String, String> errors = new HashMap<>();
 		
-		if (!changePassDTO.getPassword1().equals(changePassDTO.getPassword2())) {
-			System.err.println("Las contraseñas no coinciden");
-			errors.put("error", "Las contraseñas no coinciden");
+		Person person = ps.getPersonById(changePassDTO.getPersonId());
+		
+		if(person == null) {
+			System.err.println("Usuario no encontrado");
+			errors.put("personId", "Usuario no encontrado");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 		}
 		
-		Person user= ps.getPersonById(changePassDTO.getId());
-		
-		if(user == null) {
-			System.err.println("Usuario no encontrado");
-			errors.put("error", "Usuario no encontrado");
+		if (!changePassDTO.getPassword1().equals(changePassDTO.getPassword2())) {
+			System.err.println("Las contraseñas no coinciden");
+			errors.put("password2", "Las contraseñas no coinciden");
 		}
 		
 		if (errors.size() > 0) {
@@ -214,33 +220,36 @@ public class PersonController {
 		}
 		
 		String passwordEncripted = passwordEncoder.encode(changePassDTO.getPassword1());
-		user.setPassword(passwordEncripted);
-		user.setForgotPassword(0);
-		ps.savePerson(user);
-		return ResponseEntity.status(HttpStatus.OK).body(user);
+		
+		person.setPassword(passwordEncripted);
+		person.setTempPassword(0);
+		
+		person = ps.updatePerson(person);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
 	
-	@PostMapping("changePassword")
-	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePassDTO){
+	@PostMapping("/changePassword")
+	public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePassDTO){
 		
 		Map<String, String> errors = new HashMap<>();
 		
-		Person user= ps.getPersonById(changePassDTO.getId());
+		Person person = ps.getPersonById(changePassDTO.getPersonId());
 		
-		if(user == null) {
+		if(person == null) {
 			System.err.println("Usuario no encontrado");
-			errors.put("error", "Usuario no encontrado");
+			errors.put("personId", "Usuario no encontrado");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 		}
 		
-		if(!passwordEncoder.matches(changePassDTO.getActualPassword(), user.getPassword())) {
+		if(!passwordEncoder.matches(changePassDTO.getCurrentPassword(), person.getPassword())) {
 			System.err.println("Credenciales no validas");
 			errors.put("credenciales", "Credenciales no validas");
 		}
 		
 		if (!changePassDTO.getPassword1().equals(changePassDTO.getPassword2())) {
 			System.err.println("Las contraseñas no coinciden");
-			errors.put("error", "Las contraseñas no coinciden");
+			errors.put("password2", "Las contraseñas no coinciden");
 		}
 		
 		if (errors.size() > 0) {
@@ -248,10 +257,8 @@ public class PersonController {
 		}
 		
 		String passwordEncripted = passwordEncoder.encode(changePassDTO.getPassword1());
-		user.setPassword(passwordEncripted);
-		ps.savePerson(user);
-		return ResponseEntity.status(HttpStatus.OK).body(user);
+		person.setPassword(passwordEncripted);
+		person = ps.updatePerson(person);
+		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
-	
-
 }

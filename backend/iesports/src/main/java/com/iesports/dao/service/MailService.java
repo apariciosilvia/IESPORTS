@@ -15,13 +15,13 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendTemporaryPassword(String toEmail, String code, String userName) {
+    public void sendMailForgotPassword(String toEmail, String code, String userName) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setTo(toEmail);
-            helper.setSubject("Código de verificación");
+            helper.setSubject("Contraseña temporal IESPORTS");
 
             String htmlContent = "<html>\n" +
             		"  <body style=\"font-family: Arial, sans-serif; background-color: #f5f6fa; padding: 20px;\">\n" +
