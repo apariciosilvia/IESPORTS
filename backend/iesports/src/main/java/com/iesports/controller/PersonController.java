@@ -110,6 +110,7 @@ public class PersonController {
 
 		newPerson = ps.savePerson(newPerson);
 		System.out.println("Persona registrada: " + newPerson.toString());
+		ms.sendWelcomeEmail(person.getEmail(), person.getName());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 	}
@@ -185,7 +186,7 @@ public class PersonController {
 		user.setForgotPassword(1);
 		user.setPassword(passwordEncripted);
 		ps.updatePerson(user);
-		ms.sendTemporaryPassword(emailDTO.getEmail(), newPassword);
+		ms.sendTemporaryPassword(emailDTO.getEmail(), newPassword, user.getName());
 		System.out.println("Contraseña temporal para el usuario "+user.getId()+" es: "+newPassword);
 		return ResponseEntity.status(HttpStatus.OK).body(user);
 		
