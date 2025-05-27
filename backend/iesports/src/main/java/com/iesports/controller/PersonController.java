@@ -1,5 +1,6 @@
 package com.iesports.controller;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iesports.dao.service.GenerateTempPasswordService;
+import com.iesports.dao.service.MailService;
 import com.iesports.dao.service.impl.CourseServiceImpl;
 import com.iesports.dao.service.impl.PersonServiceImpl;
 import com.iesports.dao.service.impl.RoleServiceImpl;
+import com.iesports.dto.ChangeForgottenPasswordDTO;
+import com.iesports.dto.ChangePasswordDTO;
+import com.iesports.dto.ForgotPasswordRequestDTO;
 import com.iesports.dto.PersonLoginDTO;
 import com.iesports.dto.PersonRegisterDTO;
 import com.iesports.model.Person;
@@ -39,6 +45,12 @@ public class PersonController {
 	
 	@Autowired
     private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private MailService ms;
+	
+	@Autowired
+	private GenerateTempPasswordService gtps;
 
 	/* Método que devuelve todos los datos de la BBDD */
 	@GetMapping("/getPersons")
@@ -93,7 +105,7 @@ public class PersonController {
 		String passwordEncripted = passwordEncoder.encode(person.getPassword1());
 
 		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), rs.getRole(4L), person.getName(),
-				person.getEmail(), passwordEncripted, 1);
+				person.getEmail(), passwordEncripted, 1, 0);
 		System.out.println("Persona a registrar: " + person.toString());
 
 		newPerson = ps.savePerson(newPerson);
@@ -150,7 +162,7 @@ public class PersonController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El email " + email + " ya existe"));
 		}
 
-		Person newPerson = new Person(null, cs.getCourse(cursoId), rs.getRole(4L), name, email, password1, 1);
+		Person newPerson = new Person(null, cs.getCourse(cursoId), rs.getRole(4L), name, email, password1, 1, 0);
 		System.out.println("Persona a registrar: " + newPerson.toString());
 
 		newPerson = ps.savePerson(newPerson);
@@ -159,5 +171,86 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 
 	}
+	
+	@PostMapping("getTempPassword")
+	public ResponseEntity<?> getTempPassword(@RequestBody ForgotPasswordRequestDTO emailDTO){
+		if (!ps.emailExists(emailDTO.getEmail())) {
+			System.err.println("El email " + emailDTO.getEmail() + " no pertenece a un usuario registrado");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "No existe un usuario registrado con el correo "+emailDTO.getEmail()));
+		}
+		
+		String newPassword = gtps.generateTemporaryPassword();
+		String passwordEncripted = passwordEncoder.encode(newPassword);
+		Person user= ps.getPersonByEmail(emailDTO.getEmail());
+		user.setForgotPassword(1);
+		user.setPassword(passwordEncripted);
+		ps.updatePerson(user);
+		ms.sendTemporaryPassword(emailDTO.getEmail(), newPassword);
+		System.out.println("Contraseña temporal para el usuario "+user.getId()+" es: "+newPassword);
+		return ResponseEntity.status(HttpStatus.OK).body(user);
+		
+	}
+	
+	@PostMapping("changeTempPassword")
+	public ResponseEntity<?> changeTempPassword(@RequestBody ChangeForgottenPasswordDTO changePassDTO){
+		
+		Map<String, String> errors = new HashMap<>();
+		
+		if (!changePassDTO.getPassword1().equals(changePassDTO.getPassword2())) {
+			System.err.println("Las contraseñas no coinciden");
+			errors.put("error", "Las contraseñas no coinciden");
+		}
+		
+		Person user= ps.getPersonById(changePassDTO.getId());
+		
+		if(user == null) {
+			System.err.println("Usuario no encontrado");
+			errors.put("error", "Usuario no encontrado");
+		}
+		
+		if (errors.size() > 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+		
+		String passwordEncripted = passwordEncoder.encode(changePassDTO.getPassword1());
+		user.setPassword(passwordEncripted);
+		user.setForgotPassword(0);
+		ps.savePerson(user);
+		return ResponseEntity.status(HttpStatus.OK).body(user);
+	}
+	
+	@PostMapping("changePassword")
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePassDTO){
+		
+		Map<String, String> errors = new HashMap<>();
+		
+		Person user= ps.getPersonById(changePassDTO.getId());
+		
+		if(user == null) {
+			System.err.println("Usuario no encontrado");
+			errors.put("error", "Usuario no encontrado");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+		
+		if(!passwordEncoder.matches(changePassDTO.getActualPassword(), user.getPassword())) {
+			System.err.println("Credenciales no validas");
+			errors.put("credenciales", "Credenciales no validas");
+		}
+		
+		if (!changePassDTO.getPassword1().equals(changePassDTO.getPassword2())) {
+			System.err.println("Las contraseñas no coinciden");
+			errors.put("error", "Las contraseñas no coinciden");
+		}
+		
+		if (errors.size() > 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+		
+		String passwordEncripted = passwordEncoder.encode(changePassDTO.getPassword1());
+		user.setPassword(passwordEncripted);
+		ps.savePerson(user);
+		return ResponseEntity.status(HttpStatus.OK).body(user);
+	}
+	
 
 }

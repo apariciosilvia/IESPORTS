@@ -40,12 +40,17 @@ public class Person {
 	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
 	private String password;
 	private int active;
+	@Column(name = "forgot_password")
+	private int forgotPassword;
 
 	public Person() {
 
 	}
 
-	public Person(Long id, Course course, Role role, String name, String email, String password, int active) {
+
+
+	public Person(Long id, Course course, Role role, String name, String email, String password, int active, int forgotPassword) {
+		super();
 		this.id = id;
 		this.course = course;
 		this.role = role;
@@ -53,7 +58,10 @@ public class Person {
 		this.email = email;
 		this.password = password;
 		this.active = active;
+		this.forgotPassword = forgotPassword;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -110,11 +118,19 @@ public class Person {
 	public void setActive(int active) {
 		this.active = active;
 	}
+	
+	public int getForgotPassword() {
+		return forgotPassword;
+	}
+
+	public void setForgotPassword(int forgotPassword) {
+		this.forgotPassword = forgotPassword;
+	}
 
 	@Override
 	public String toString() {
 		return "Person [id=" + id + ", course=" + course + ", role=" + role + ", name=" + name + ", email=" + email
-				+ ", password=" + password + ", active=" + active + "]";
+				+ ", password=" + password + ", active=" + active + ", forgotPassword=" + forgotPassword + "]";
 	}
 	
 }

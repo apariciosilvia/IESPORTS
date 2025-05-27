@@ -15,18 +15,19 @@ INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Profesor');
 INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Alumno');
 
 -- USUARIOS POR DEFECTO (ADMIN CONTRA: a Y ALUMNO CONTRA: s)
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 7, 1, 'a@a', 'a', '$2a$10$w9wUgqR.juKPsuU8.TPwY.acNWPaIbOWHnVlNwQZpPRqcuQmtS.72');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 5, 4, 's@s', 's', '$2a$10$CqPlbAfH5vfKuCZfhnSQBemQcMyAm1gjq4.m3ItJ/kjmeTHmKGlXW');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 7, 1, 'a@a', 'a', '$2a$10$w9wUgqR.juKPsuU8.TPwY.acNWPaIbOWHnVlNwQZpPRqcuQmtS.72');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 5, 4, 's@s', 's', '$2a$10$CqPlbAfH5vfKuCZfhnSQBemQcMyAm1gjq4.m3ItJ/kjmeTHmKGlXW');
 
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 5, 3, 'laura.prof@example.com', 'Laura Ruiz', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 7, 2, 'ana.host@example.com', 'Ana Pérez', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 2, 2, 'mario.host@example.com', 'Mario López', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 1, 1, 'admin@example.com', 'Administrador General', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 6, 4, 'julia.alumno@example.com', 'Julia Medina', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 9, 4, 'david.alumno@example.com', 'David Ramos', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 4, 4, 'sofia.alumno@example.com', 'Sofía Navarro', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 8, 4, 'lucas.alumno@example.com', 'Lucas Ortega', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
-INSERT INTO `persons` (`active`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 10, 4, 'martina.alumno@example.com', 'Martina Castillo', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 5, 3, 'laura.prof@example.com', 'Laura Ruiz', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 7, 2, 'ana.host@example.com', 'Ana Pérez', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 2, 2, 'mario.host@example.com', 'Mario López', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 1, 1, 'admin@example.com', 'Administrador General', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 6, 4, 'julia.alumno@example.com', 'Julia Medina', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 9, 4, 'david.alumno@example.com', 'David Ramos', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 4, 4, 'sofia.alumno@example.com', 'Sofía Navarro', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 8, 4, 'lucas.alumno@example.com', 'Lucas Ortega', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `forgot_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 10, 4, 'martina.alumno@example.com', 'Martina Castillo', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+
 
 INSERT INTO `sports` (`id`, `name`) VALUES (1, 'Fútbol');
 INSERT INTO `sports` (`id`, `name`) VALUES (2, 'Baloncesto');
