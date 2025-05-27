@@ -153,7 +153,7 @@ public class TournamentController {
 		}
 		
 		Sport currentSport = sportS.getSportById(tournamentDTO.getSportId());
-		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, currentStateTournament, currentSport);
+		Tournament currentTournament = new Tournament(null,tournamentDTO.getName(),currentYear, StateTournamentEnum.PENDIENTE, currentSport);
 		
 		//Primero añadimos el nuevo torneo
 		currentTournament = tournamentS.saveTournament(currentTournament);
