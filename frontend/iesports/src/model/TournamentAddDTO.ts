@@ -1,9 +1,8 @@
-import type { Tournament } from '@/model/tournament';
-import type { Team } from '@/model/team';
-import type { Match } from '@/model/match';
+import type { MatchDTO } from '@/model/matchDTO';
 
 export interface TournamentAddDTO {
-  tournament: Tournament;
-  teams: Team[];
-  matches: Match[];
+  name: string;
+  sportId: number;
+  numTeams: number;
+  matches: MatchDTO[];
 }

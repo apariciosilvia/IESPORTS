@@ -10,5 +10,5 @@ export interface Match {
   team2: Team;
   pointsTeam1: number;
   pointsTeam2: number;
-  winnerTeam: Team;
+  winnerTeam?: Team;
 }

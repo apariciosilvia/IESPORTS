@@ -86,6 +86,7 @@
   animation: cycle-words 5s infinite;
 }
 
+
 @keyframes cycle-words {
   10% {
     -webkit-transform: translateY(-105%);
