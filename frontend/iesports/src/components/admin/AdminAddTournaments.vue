@@ -441,6 +441,7 @@ ion-select::part(placeholder) {
   --box-shadow: none;
   border: 1px solid #0a254098;
   border-radius: 5px;
+  text-align: left;
 }
 
 .sc-ion-searchbar-md-h {
@@ -450,9 +451,8 @@ ion-select::part(placeholder) {
   padding-inline-end: 0 ;
   padding: 0;
   margin: 0 0 1rem 0;
-
-
 }
+
 .team-selector {
   padding: 1rem;
   border-radius: 12px;
@@ -572,7 +572,7 @@ ion-select::part(placeholder) {
 
 .match-row {
   display: grid;
-  grid-template-columns: 1fr 0.2fr 1fr 1fr 1fr;
+  grid-template-columns: 0.9fr 0.1fr 0.9fr 1fr 1fr;
   align-items: center;
   gap: 0.5rem;
   background-color: #f1f1f1;
