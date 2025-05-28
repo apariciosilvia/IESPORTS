@@ -1,6 +1,5 @@
 package com.iesports.controller;
 
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +109,7 @@ public class PersonController {
 
 		newPerson = ps.savePerson(newPerson);
 		System.out.println("Persona registrada: " + newPerson.toString());
+		ms.sendWelcomeEmail(person.getEmail(), person.getName());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 	}
@@ -181,7 +181,7 @@ public class PersonController {
 			System.err.println("El email " + emailDTO.getEmail() + " no pertenece a un usuario registrado");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("email", "No existe un usuario registrado con el correo " + emailDTO.getEmail()));
 		}
-		
+
 		String passwordTemp = gtps.generateTemporaryPassword();
 		String passwordTempEncripted = passwordEncoder.encode(passwordTemp);
 		
@@ -189,7 +189,7 @@ public class PersonController {
 		person.setPassword(passwordTempEncripted);
 		
 		person = ps.updatePerson(person);
-		ms.sendMailForgotPassword(emailDTO.getEmail(), passwordTemp);
+		ms.sendMailForgotPassword(emailDTO.getEmail(), passwordTemp, person.getName());
 		
 		System.out.println("Contraseña temporal para el usuario " + person.getId() + " es: " + passwordTemp);
 		
