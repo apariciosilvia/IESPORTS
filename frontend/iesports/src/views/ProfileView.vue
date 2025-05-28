@@ -10,95 +10,172 @@
 
   <IonContent class="ion-padding">
     <div class="profile-container">
-
-      <!-- Columna izquierda: Logo + botón -->
+      <!-- Columna izquierda -->
       <div class="left-column">
         <img src="../assets/logoSinFondo.png" alt="IESPORTS" class="profile-logo" />
         <h3>IESPORTS</h3>
-        <IonButton fill="outline" class="logout-button" @click="logout"><span class="material-symbols-outlined">logout</span>Cerrar sesión</IonButton>
+        <IonButton fill="outline" class="logout-button" @click="logout">
+          <span class="material-symbols-outlined">logout</span>
+          Cerrar sesión
+        </IonButton>
       </div>
 
-      <!-- Columna derecha: tarjetas -->
+      <!-- Columna derecha -->
       <div class="right-column">
-        <!-- Tarjeta de datos de usuario -->
+        <!-- Datos de usuario -->
         <div class="card-section">
           <div class="card-header">
             <h4>Datos de usuario</h4>
-            <IonButton fill="outline" size="small" class="buttons">
-              <span class="material-symbols-outlined">edit</span> EDITAR
+            <!-- 1) Botón dinámico -->
+            <IonButton
+              fill="outline"
+              size="small"
+              class="buttons"
+              @click="toggleUserEdit"
+            >
+              <span class="material-symbols-outlined">edit</span>
+              <!-- 2) Texto cambia según estado -->
+              {{ isEditingUser ? 'GUARDAR' : 'EDITAR' }}
             </IonButton>
           </div>
           <div class="card-body">
-            <!-- Nombre -->
+            <!-- 3) Inputs enlazados y deshabilitados según flag -->
             <div class="input-group">
               <span class="material-symbols-outlined">person</span>
-              <input type="text" :value="user.name" disabled />
+              <input
+                type="text"
+                v-model="user.name"
+                :disabled="!isEditingUser"
+              />
             </div>
-            <!-- Email -->
             <div class="input-group">
               <span class="material-symbols-outlined">mail</span>
-              <input type="text" :value="user.email" disabled />
+              <input
+                type="text"
+                v-model="user.email"
+                :disabled="!isEditingUser"
+              />
             </div>
           </div>
         </div>
-        <!-- Tarjeta de cambio de contraseña -->
-      <div class="card-section">
-        <div class="card-header">
-          <h4>Cambiar contraseña</h4>
-          <IonButton fill="outline" size="small" class="buttons">
-            <span class="material-symbols-outlined">edit</span> EDITAR
-          </IonButton>
-        </div>
-        <div class="card-body">
-          <!-- Contraseña actual -->
-          <div class="input-group">
-            <span class="material-symbols-outlined">key</span>
-            <input type="password" placeholder="Contraseña actual" disabled />
+
+        <!-- Cambio de contraseña -->
+        <div class="card-section">
+          <div class="card-header">
+            <h4>Cambiar contraseña</h4>
+            <!-- 4) Botón dinámico para contraseña -->
+            <IonButton
+              fill="outline"
+              size="small"
+              class="buttons"
+              @click="togglePasswordEdit"
+            >
+              <span class="material-symbols-outlined">edit</span>
+              {{ isEditingPassword ? 'GUARDAR' : 'EDITAR' }}
+            </IonButton>
           </div>
-          <!-- Contraseña nueva -->
-          <div class="input-group">
-            <span class="material-symbols-outlined">key</span>
-            <input type="password" placeholder="Contraseña nueva" disabled />
-          </div>
-          <!-- Confirmar contraseña -->
-          <div class="input-group">
-            <span class="material-symbols-outlined">key</span>
-            <input type="password" placeholder="Confirmar contraseña" disabled />
+          <div class="card-body">
+            <!-- 5) Inputs de contraseña según flag -->
+            <div class="input-group">
+              <span class="material-symbols-outlined">key</span>
+              <input
+                type="password"
+                placeholder="Contraseña actual"
+                v-model="currentPassword"
+                :disabled="!isEditingPassword"
+              />
+            </div>
+            <div class="input-group">
+              <span class="material-symbols-outlined">key</span>
+              <input
+                type="password"
+                placeholder="Contraseña nueva"
+                v-model="newPassword"
+                :disabled="!isEditingPassword"
+              />
+            </div>
+            <div class="input-group">
+              <span class="material-symbols-outlined">key</span>
+              <input
+                type="password"
+                placeholder="Confirmar contraseña"
+                v-model="confirmPassword"
+                :disabled="!isEditingPassword"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>   
-</IonContent>
+  </IonContent>
 </template>
 
 <script setup lang="ts">
-import { IonHeader, IonContent, IonToolbar, IonTitle, IonButton } from '@ionic/vue';
 import { ref, onMounted } from 'vue';
+import { IonHeader, IonContent, IonToolbar, IonTitle, IonButton } from '@ionic/vue';
 import { useUserMenu } from '@/composables/useUserMenu';
+import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
+import { changePassword } from '@/services/personServices';
+// import { updateUser } from '@/services/personServices'; // tu servicio de perfil
 
-// Extraemos sólo lo que necesitamos
 const { goTo, logout } = useUserMenu();
 
-const user = ref<{ name: string; email: string; course?: { nombre: string } | null; role?: { name: string } | null }>({
-  name: '',
-  email: '',
-  course: null,
-  role: null
-});
+// 1) Datos de usuario y flags
+const user = ref<{ id: number; name: string; email: string }>({ id: 0, name: '', email: '' });
+const isEditingUser = ref(false);
+const isEditingPassword = ref(false);
 
+// 2) Campos para contraseña
+const currentPassword = ref('');
+const newPassword = ref('');
+const confirmPassword = ref('');
 
-
+// 3) Carga inicial desde localStorage
 onMounted(() => {
   const stored = localStorage.getItem('usuario');
-  if (stored) {
-    // Cargamos directamente el objeto guardado
-    Object.assign(user.value, JSON.parse(stored));
-  }
+  if (stored) Object.assign(user.value, JSON.parse(stored));
 });
 
+// 4) Alternar edición de perfil
+async function toggleUserEdit() {
+  if (isEditingUser.value) {
+    // Ha pulsado GUARDAR
+    try {
+      // await updateUser(user.value); // llama a tu API real
+      localStorage.setItem('usuario', JSON.stringify(user.value)); // fallback
+      alert('Perfil actualizado');
+    } catch {
+      alert('Error al actualizar perfil');
+    }
+  }
+  isEditingUser.value = !isEditingUser.value;
+}
 
-console.log(user.value);
+// 5) Alternar edición y guardar contraseña
+async function togglePasswordEdit() {
+  if (isEditingPassword.value) {
+    // Ha pulsado GUARDAR
+    const changePasswordDTO: ChangePasswordDTO = {
+      personId: user.value.id,
+      currentPassword: currentPassword.value,
+      password1: newPassword.value,
+      password2: confirmPassword.value
+    };
+    try {
+      await changePassword(changePasswordDTO);
+      alert('Contraseña cambiada');
+      currentPassword.value = '';
+      newPassword.value = '';
+      confirmPassword.value = '';
+    } catch {
+      alert('Error al cambiar contraseña');
+      currentPassword.value = '';
+      newPassword.value = '';
+      confirmPassword.value = '';
+    }
+  }
+  isEditingPassword.value = !isEditingPassword.value;
+}
 </script>
 
 <style scoped>
@@ -277,5 +354,5 @@ ion-title {
   transform: translate(-50%, -50%);
   margin: 0;
 }
-</style>
 
+</style>
