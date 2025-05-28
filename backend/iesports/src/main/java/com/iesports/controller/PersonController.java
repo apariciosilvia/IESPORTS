@@ -120,64 +120,6 @@ public class PersonController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 
-		}
-
-	// OPCION 2: BODY DEL USUARIO COMPLETO
-	@PostMapping("/register2")
-	public ResponseEntity<?> register(@Valid @RequestBody Person person) {
-
-		System.out.println("Persona de entrada: " + person.toString());
-
-		if (ps.emailExists(person.getEmail())) {
-			System.err.println("El email " + person.getEmail() + " ya existe");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El email " + person.getEmail() + " ya existe"));
-		}
-
-		// Creamos la persona por defecto con rol de Alumno
-		person.setRole(rs.getRole(4L));
-		person.setActive(1);
-		System.out.println("Persona a registrar: " + person.toString());
-
-		Person newPerson = ps.savePerson(person);
-		System.out.println("Persona registrada: " + newPerson.toString());
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
-	}
-
-	
-	
-	// OPCION 3: PARAMETROS DE LOS DATOS REQUERIDOS DEL USUARIO
-	@PostMapping("/register3")
-	public ResponseEntity<?> register(@RequestParam String name, @RequestParam String email, @RequestParam String password1, @RequestParam String password2, @RequestParam Long cursoId) {
-
-		System.out.println("Persona de entrada:" + "\nname: " + name + "\nemail: " + email + "\npassword1: " + password1
-				+ "\npassword2: " + password2 + "\ncursoId: " + cursoId);
-
-		if (name == null || name.isBlank() || email == null || email.isBlank() || password1 == null|| password1.isBlank() || password2 == null || password2.isBlank()) {
-			System.err.println("Todos los campos son obligatorios");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Todos los campos son obligatorios"));
-		}
-
-		if (!password1.equals(password2)) {
-			System.err.println("Las contraseñas no coinciden");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Las contraseñas no coinciden"));
-		}
-
-		if (ps.emailExists(email)) {
-			System.err.println("El email " + email + " ya existe");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El email " + email + " ya existe"));
-		}
-
-		Person newPerson = new Person(null, cs.getCourse(cursoId), rs.getRole(4L), name, email, password1, 1, 0);
-		System.out.println("Persona a registrar: " + newPerson.toString());
-
-		newPerson = ps.savePerson(newPerson);
-		System.out.println("Persona registrada: " + newPerson.toString());
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
-
-	}
-	
 	@PostMapping("/forgotPassword")
 	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO emailDTO){
 		
@@ -274,5 +216,67 @@ public class PersonController {
 		person.setPassword(passwordEncripted);
 		person = ps.updatePerson(person);
 		return ResponseEntity.status(HttpStatus.OK).body(person);
+	}
+	
+	
+	
+	
+	
+
+	//SIRVE DE RELLENO PARA LA DOCUMENTACIÓN
+
+	// OPCION 2: BODY DEL USUARIO COMPLETO
+	@PostMapping("/register2")
+	public ResponseEntity<?> register(@Valid @RequestBody Person person) {
+
+		System.out.println("Persona de entrada: " + person.toString());
+
+		if (ps.emailExists(person.getEmail())) {
+			System.err.println("El email " + person.getEmail() + " ya existe");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El email " + person.getEmail() + " ya existe"));
+		}
+
+		// Creamos la persona por defecto con rol de Alumno
+		person.setRole(rs.getRole(4L));
+		person.setActive(1);
+		System.out.println("Persona a registrar: " + person.toString());
+
+		Person newPerson = ps.savePerson(person);
+		System.out.println("Persona registrada: " + newPerson.toString());
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
+	}
+
+	
+	
+	// OPCION 3: PARAMETROS DE LOS DATOS REQUERIDOS DEL USUARIO
+	@PostMapping("/register3")
+	public ResponseEntity<?> register(@RequestParam String name, @RequestParam String email, @RequestParam String password1, @RequestParam String password2, @RequestParam Long cursoId) {
+
+		System.out.println("Persona de entrada:" + "\nname: " + name + "\nemail: " + email + "\npassword1: " + password1
+				+ "\npassword2: " + password2 + "\ncursoId: " + cursoId);
+
+		if (name == null || name.isBlank() || email == null || email.isBlank() || password1 == null|| password1.isBlank() || password2 == null || password2.isBlank()) {
+			System.err.println("Todos los campos son obligatorios");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Todos los campos son obligatorios"));
+		}
+
+		if (!password1.equals(password2)) {
+			System.err.println("Las contraseñas no coinciden");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Las contraseñas no coinciden"));
+		}
+
+		if (ps.emailExists(email)) {
+			System.err.println("El email " + email + " ya existe");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "El email " + email + " ya existe"));
+		}
+
+		Person newPerson = new Person(null, cs.getCourse(cursoId), rs.getRole(4L), name, email, password1, 1, 0);
+		System.out.println("Persona a registrar: " + newPerson.toString());
+
+		newPerson = ps.savePerson(newPerson);
+		System.out.println("Persona registrada: " + newPerson.toString());
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 	}
 }

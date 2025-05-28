@@ -48,25 +48,24 @@ INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2021
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2022/23', 'Liga Ajedrez Indoor', 'PROCESO');
 
 
-
-INSERT INTO teams (name) VALUES ('equipo 1');
-INSERT INTO teams (name) VALUES ('equipo 2');
-INSERT INTO teams (name) VALUES ('equipo 3');
-INSERT INTO teams (name) VALUES ('equipo 4');
-INSERT INTO teams (name) VALUES ('equipo 5');
-INSERT INTO teams (name) VALUES ('equipo 6');
-INSERT INTO teams (name) VALUES ('equipo 7');
-INSERT INTO teams (name) VALUES ('equipo 8');
-INSERT INTO teams (name) VALUES ('equipo 9');
-INSERT INTO teams (name) VALUES ('equipo 10');
-INSERT INTO teams (name) VALUES ('equipo 11');
-INSERT INTO teams (name) VALUES ('equipo 12');
-INSERT INTO teams (name) VALUES ('equipo 13');
-INSERT INTO teams (name) VALUES ('equipo 14');
-INSERT INTO teams (name) VALUES ('equipo 15');
-INSERT INTO teams (name) VALUES ('equipo 16');
-INSERT INTO teams (name) VALUES ('equipo 17');
-INSERT INTO teams (name) VALUES ('equipo 18');
+INSERT INTO teams (name) VALUES ('Raimon Eleven');
+INSERT INTO teams (name) VALUES ('Zeus Junior High');
+INSERT INTO teams (name) VALUES ('Advance Junior High');
+INSERT INTO teams (name) VALUES ('Aliea Gakuen');
+INSERT INTO teams (name) VALUES ('Hakkoku Junior High');
+INSERT INTO teams (name) VALUES ('Teikoku Gakuen');
+INSERT INTO teams (name) VALUES ('Kaminari Junior High');
+INSERT INTO teams (name) VALUES ('Gendaijin Middle School');
+INSERT INTO teams (name) VALUES ('Holy Road Christian School');
+INSERT INTO teams (name) VALUES ('Otomari Dormitory');
+INSERT INTO teams (name) VALUES ('Itochu Commercial High');
+INSERT INTO teams (name) VALUES ('Shirouzu Junior High');
+INSERT INTO teams (name) VALUES ('Ichidai Junior High');
+INSERT INTO teams (name) VALUES ('Momoyama Middle School');
+INSERT INTO teams (name) VALUES ('Marugame Middle School');
+INSERT INTO teams (name) VALUES ('Kagemori Middle School');
+INSERT INTO teams (name) VALUES ('Musashi Middle School');
+INSERT INTO teams (name) VALUES ('Hakuren Phoenix');
 
 
 -- Fase de grupos
