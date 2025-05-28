@@ -27,7 +27,6 @@ import com.iesports.dto.PersonLoginDTO;
 import com.iesports.dto.PersonRegisterDTO;
 import com.iesports.model.Person;
 
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -119,6 +118,7 @@ public class PersonController {
 		}
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
+	}
 
 	@PostMapping("/forgotPassword")
 	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO emailDTO){
