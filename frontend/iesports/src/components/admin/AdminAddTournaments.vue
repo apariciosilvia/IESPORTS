@@ -164,6 +164,8 @@ import { getSports } from '@/services/sportService';
 import type { Team } from '@/model/team';
 
 import { addTournament } from '@/services/tournamentService';
+import { getTeams } from '@/services/teamService';
+
 import type { TournamentAddDTO } from '@/model/TournamentAddDTO';
 import type { MatchDTO } from '@/model/matchDTO';
 
@@ -224,24 +226,24 @@ watch(selectedNumberTeams, (newVal) => {
 //   { id: 20, name: 'Leones del Norte', players: [ { id: 139, name: 'Álex Vega', email: 'alex@example.com', password: 'av876', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 20, name: '1º FP', age: '16-17' } }, { id: 140, name: 'Carmen Soto', email: 'carmen@example.com', password: 'cs123', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 20, name: '1º FP', age: '16-17' } } ] }
 // ]);
 
-const teamsList = ref<Team[]>([
-  { id: 1, name: 'equipo 1', players: null },
-  { id: 2, name: 'equipo 2', players: null },
-  { id: 3, name: 'equipo 3', players: null },
-  { id: 4, name: 'equipo 4', players: null },
-  { id: 5, name: 'equipo 5', players: null },
-  { id: 6, name: 'equipo 6', players: null },
-  { id: 7, name: 'equipo 7', players: null },
-  { id: 8, name: 'equipo 8', players: null },
-  { id: 9, name: 'equipo 9', players: null },
-  { id: 10, name: 'equipo 10', players: null },
-  { id: 11, name: 'equipo 11', players: null },
-  { id: 12, name: 'equipo 12', players: null },
-  { id: 13, name: 'equipo 13', players: null },
-  { id: 14, name: 'equipo 14', players: null },
-  { id: 15, name: 'equipo 15', players: null },
-  { id: 16, name: 'equipo 16', players: null },
-]);
+// const teamsList = ref<Team[]>([
+//   { id: 1, name: 'equipo 1', players: null },
+//   { id: 2, name: 'equipo 2', players: null },
+//   { id: 3, name: 'equipo 3', players: null },
+//   { id: 4, name: 'equipo 4', players: null },
+//   { id: 5, name: 'equipo 5', players: null },
+//   { id: 6, name: 'equipo 6', players: null },
+//   { id: 7, name: 'equipo 7', players: null },
+//   { id: 8, name: 'equipo 8', players: null },
+//   { id: 9, name: 'equipo 9', players: null },
+//   { id: 10, name: 'equipo 10', players: null },
+//   { id: 11, name: 'equipo 11', players: null },
+//   { id: 12, name: 'equipo 12', players: null },
+//   { id: 13, name: 'equipo 13', players: null },
+//   { id: 14, name: 'equipo 14', players: null },
+//   { id: 15, name: 'equipo 15', players: null },
+//   { id: 16, name: 'equipo 16', players: null },
+// ]);
 
 
 
@@ -259,8 +261,8 @@ async function loadData () {
     sports.value = await getSports();
     console.log('Lista de deportes :', sports.value);
 
-    // teams.value = await getTeams();
-    teams.value = teamsList.value;
+    teams.value = await getTeams();
+    // teams.value = teamsList.value;
     console.log('Lista de equipos :', teams.value);
 
   } catch (e: any) {
