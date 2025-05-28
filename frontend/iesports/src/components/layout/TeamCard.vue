@@ -21,8 +21,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';              // Para crear estado reactivo
-import { defineProps } from 'vue';      // Para recibir props
-import { IonItem, IonLabel } from '@ionic/vue';  // Componentes Ionic
 
 // Definimos la interfaz del equipo
 interface Team {

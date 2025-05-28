@@ -129,7 +129,7 @@ onUnmounted(() => {
 }
 
 .custom-toolbar {
-  --background: #0a2540;
+  --background: #002F3D;
   --color: white;
   --min-height: 60px;
 }

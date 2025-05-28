@@ -12,7 +12,7 @@
 import { IonContent } from '@ionic/vue';
 
 import Navbar from '@/components/layout/Navbar.vue';
-import AdminTournaments from '@/components/layout/AdminTournaments.vue';
+import AdminTournaments from '@/components/admin/AdminTournaments.vue';
 
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 

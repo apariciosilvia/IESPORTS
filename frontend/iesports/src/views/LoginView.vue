@@ -469,16 +469,18 @@ const showLoginPassword = ref(false);
  
  
  
- .custom-input {
+.custom-input {
    width: 100%;
    margin-bottom: 1rem;
-   
+   text-align: left;
    font-size: 1.5rem;
    --border-radius: 8px;
    --background: #ffffff10;
    --border-color: #ccc;
    --box-shadow: none;
- }
+}
+
+
 
  /* Icono de mostrar/ocultar dentro del input */
 .custom-input ion-button span.material-symbols-outlined {
@@ -529,18 +531,13 @@ const showLoginPassword = ref(false);
 
 /* Hover sólo en el ion-select cuando NO tenga error-border */
 .custom-select:not(.error-border):hover {
-  /* 1) Actualizamos la variable para Ionic */
-  --border-color: #002F3D !important;
-  /* 2) Y forzamos también la regla de CSS normal */
-  border: 1px solid var(--border-color) !important;
-  
+  border: 1px solid var(--border-color-blue) !important;
   --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
-
 }
 
 /* 1) Redefine el var que Ionic usa para el subrayado */
 .custom-select {
-  --highlight-color-focused: #002F3D; /* color del outline y subrayado */
+  --highlight-color-focused: var(--blue-primary-color-hover);
 }
 
 /* 2) Cambia el color de texto y de la flecha (caret) */
@@ -552,8 +549,8 @@ const showLoginPassword = ref(false);
  .custom-button {
    width: 100%;
    margin-top: 5%;
-   --background: #002F3D;
-   --color: white;
+   --background: var(--blue-primary-color);
+   --color: var(--text-color-secundary);
    --border-radius: 8px;
    font-weight: bold;
    font-size: 1.5rem;
@@ -564,7 +561,7 @@ const showLoginPassword = ref(false);
  }
  
  .custom-button:hover {
-   --background: #002F3D;
+   --background: var(--blue-primary-color-hover);
  }
  
  .material-icons {
@@ -580,7 +577,7 @@ const showLoginPassword = ref(false);
  .login-links a {
    display: block;
    margin-top: 0.5rem;
-   color: #002F3D;
+   color: var(--text-color-primary);
    text-decoration: none;
  }
  
@@ -589,18 +586,18 @@ const showLoginPassword = ref(false);
  }
 
 .error-credenciales{
-  color: #f44336;
+  color: var(--text-error-color);
   font-weight: 600;
   font-size: 1.2rem;
-  background-color: rgba(224, 128, 128, 0.562);
-  border: red;
+  background-color: var(--background-div-error-color);
+  border: var(--border-error-color);
   border-radius: 12px;
   padding: 20px;
   text-align: center;
 }
 
 .error-msg {
-  color: red;
+  color: var(--text-error-color);
   font-size: 0.9rem;
   margin-bottom: 4px;
   display: block;
@@ -608,26 +605,22 @@ const showLoginPassword = ref(false);
 }
 
 .error-border {
-  --highlight-color-focused: #fb2221;
-  --border-color: #fb2221;
-  --box-shadow: 0 0 0 1px #fb2221;
+  --highlight-color-focused: var(--border-error-color);
+  --border-color: var(--border-error-color);
+  --box-shadow: 0 0 0 1px var(--border-error-color);
 }
 
 .error-border:hover{
-  --background: #eb8d8d27;
-  --border-color: #fb2221;
-  --box-shadow: 0 0 0 6px #fb2221;
+  --background: var(--background-error-color-hover);
+  --border-color: var(--border-error-color);
+  --box-shadow: 0 0 0 6px var(--border-error-color);
 }
-
-
-
-
 
 
 /* Grandes pantallas: >1200px */
 @media (min-width: 1920px) {
   /* 1) Ajusta el padding de la tarjeta para que no quede tan “respirada” */
-  ::v-deep .card-face {
+  :deep(.card-face)  {
     padding: 2rem !important;    /* antes era 3rem, lo bajamos a 2rem */
   }
 
@@ -642,15 +635,15 @@ const showLoginPassword = ref(false);
   }
 
   /* 2) Reduce el padding interno de los inputs/selects */
-  ::v-deep .custom-input,
-  ::v-deep .custom-select {
+  :deep(.custom-input) ,
+  :deep(.custom-select) {
     --padding-start: 12px !important;  /* recorta espacio lateral */
     --padding-end:   12px !important;
     margin-bottom:   1.2rem !important;/* separación vertical cómoda */
   }
 
   /* 3) Opcional: haz la tarjeta un poco más estrecha proporcionalmente */
-  ::v-deep .card-container {
+  :deep(.card-container) {
     width: 35vw !important;       /* ocupa el 35% del ancho */
     max-width: 650px !important;  /* pero no excede 650px */
   }
@@ -683,7 +676,7 @@ const showLoginPassword = ref(false);
 /* Tablet pequeño: entre 768px y 834px */
 @media (min-width: 768px) and (max-width: 884px) {
   /* Centrado del contenido */
-  ::v-deep ion-content.login-page {
+  :deep(ion-content.login-page) {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -691,7 +684,7 @@ const showLoginPassword = ref(false);
   }
 
   /* Tamaño y centrado de la tarjeta */
-  ::v-deep .card-container {
+  :deep(.card-container) {
     width: 85vw !important;
     max-width: 600px !important;
     margin: 19vh auto !important;
@@ -699,19 +692,19 @@ const showLoginPassword = ref(false);
   }
 
   /* Espacio interno */
-  ::v-deep .card-face {
+  :deep( .card-face) {
     padding: 2rem !important;
   }
 
   /* Título ajustado */
-  ::v-deep .card-face h2 {
+  :deep( .card-face h2) {
     font-size: 2rem !important;
     margin-bottom: 1.2rem !important;
   }
 
   /* Inputs y selects */
-  ::v-deep .custom-input,
-  ::v-deep .custom-select {
+  :deep(.custom-input),
+  :deep(.custom-select) {
     font-size: 1.05rem !important;
     --padding-start: 8px !important;
     --padding-end:   8px !important;
@@ -719,20 +712,20 @@ const showLoginPassword = ref(false);
   }
 
   /* Botones */
-  ::v-deep .custom-button {
+  :deep(.custom-button) {
     font-size: 1.1rem !important;
     padding: 8px 0 !important;
     gap: 6px !important;
   }
 
   /* Mensajes de error */
-  ::v-deep .error-msg {
+  :deep(.error-msg) {
     font-size: 0.8rem !important;
     margin-bottom: 0.5rem !important;
   }
 
   /* Enlaces de login */
-  ::v-deep .login-links {
+  :deep(.login-links) {
     font-size: 1rem !important;
     margin-top: 0.8rem !important;
   }
@@ -742,7 +735,7 @@ const showLoginPassword = ref(false);
 /* Tablet: ancho entre 481px y 1024px */
 @media (min-width: 481px) and (max-width: 768px) {
   /* 1) Selector profundo para ion-content */
-  ::v-deep ion-content {
+  :deep(ion-content) {
     position: relative;
     display: flex;
     align-items: center;
@@ -750,7 +743,7 @@ const showLoginPassword = ref(false);
   }
 
   /* 2) Y para la tarjeta */
-  ::v-deep .card-container {
+  :deep(.card-container) {
     position: absolute;
     top: 31%;
     left: 50%;
@@ -768,7 +761,7 @@ const showLoginPassword = ref(false);
 /* Móvil: hasta 480px */
 @media (max-width: 480px) {
   /* 1) Centrar dentro de ion-content */
-  ::v-deep ion-content {
+  :deep(ion-content) {
     position: relative;
     display: flex;
     align-items: center;
@@ -776,7 +769,7 @@ const showLoginPassword = ref(false);
   }
 
   /* 2) Saca la tarjeta del flujo y céntrala */
-  ::v-deep .card-container {
+:deep(.card-container) {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -788,15 +781,15 @@ const showLoginPassword = ref(false);
   }
 
   /* Inputs y selects más compactos */
-  ::v-deep .custom-input,
-  ::v-deep .custom-select {
+  :deep(.custom-input),
+  :deep(.custom-select) {
     font-size: 0.9rem !important;
     padding: 1px !important;
     margin-bottom: 0.5rem !important;
   }
 
   /* Botones más compactos */
-  ::v-deep .custom-button {
+  :deep(.custom-button) {
     font-size: 1rem !important;
     padding: 6px 0 !important;
     /* quita gap para que quepa mejor */
@@ -804,7 +797,7 @@ const showLoginPassword = ref(false);
   }
 
   /* Título un poco más pequeño */
-  ::v-deep .card-face h2 {
+  :deep(.card-face h2) {
     font-size: 1.2rem !important;
     margin-bottom:  0.85rem !important;
     margin-top: 0;
@@ -812,12 +805,12 @@ const showLoginPassword = ref(false);
   }
 
   /* Links pequeños */
-  ::v-deep .login-links {
+  :deep(.login-links) {
     font-size: 0.9rem !important;
     margin-top: 0.5rem !important;
   }
    /* Mensajes de error más pequeños */
-  ::v-deep .error-msg {
+  :deep(.error-msg) {
     font-size: 0.65rem !important;
     margin-bottom: 0.3rem !important;
   }
@@ -827,13 +820,13 @@ const showLoginPassword = ref(false);
 /* Ultra-móvil (≤320px) */
 @media (max-width: 320px) {
   /* 1) Evita scroll horizontal */
-  ::v-deep ion-content.login-page {
+  :deep(ion-content.login-page) {
     padding: 0 !important;
     overflow-x: hidden !important;
   }
 
   /* 2) Tarjeta full-width con un pequeño “gap” (10px por lado) */
-  ::v-deep .card-container {
+  :deep(.card-container) {
     width: calc(100% - 20px) !important;
     max-width: none !important;
     border-radius: 4px !important;
@@ -842,19 +835,19 @@ const showLoginPassword = ref(false);
   }
 
   /* 3) Padding interno reducido */
-  ::v-deep .card-face {
+  :deep(.card-face) {
     padding: 0.25rem !important;
   }
 
   /* 4) Título compacto */
-  ::v-deep .card-face h2 {
+  :deep(.card-face h2) {
     font-size: 1.2rem !important;
     margin-bottom: 0.4rem !important;
   }
 
   /* 5) Inputs y selects muy ajustados */
-  ::v-deep .custom-input,
-  ::v-deep .custom-select {
+  :deep(.custom-input),
+  :deep(.custom-select) {
     --padding-start: 4px !important;
     --padding-end:   4px !important;
     margin-right: 1% !important;
@@ -864,18 +857,18 @@ const showLoginPassword = ref(false);
   }
 
   /* 6) Botón mínimo viable */
-  ::v-deep .custom-button {
+  :deep(.custom-button) {
     font-size: 0.7rem !important;
     padding:  0 !important;
     gap: 1px !important;
   }
 
   /* 7) Mensajes de error y enlaces compactos */
-  ::v-deep .error-msg {
+  :deep(.error-msg) {
     font-size: 0.55rem !important;
     margin-bottom: 0.2rem !important;
   }
-  ::v-deep .login-links {
+  :deep(.login-links) {
     font-size: 0.45rem !important;
     margin-top: 0.2rem !important;
   }

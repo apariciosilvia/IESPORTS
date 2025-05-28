@@ -6,35 +6,52 @@ import com.iesports.model.Match;
 import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class TournamentAddDTO {
-
-	private Tournament tournament;
-	private List<Team> teams;
-	private List<Match> matches;
 	
-	public Tournament getTournament() {
-		return tournament;
+	@NotNull(message = "El nombre del torneo es obligatorio")
+	private String name;
+	@NotNull(message = "El deporte tiene que ser obligatorio")
+	private Long sportId;
+	private int numTeams;
+	
+	@NotNull(message = "Debes asignar todos los partidos")
+	private List<MatchDTO> matches;
+	
+	public String getName() {
+		return name;
 	}
 	
-	public void setTournament(Tournament tournament) {
-		this.tournament = tournament;
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public Long getSportId() {
+		return sportId;
 	}
 
-	public List<Match> getMatches() {
+	public void setSportId(Long sportId) {
+		this.sportId = sportId;
+	}
+
+	public int getNumTeams() {
+		return numTeams;
+	}
+	public void setNumTeams(int numTeams) {
+		this.numTeams = numTeams;
+	}
+	public List<MatchDTO> getMatches() {
 		return matches;
 	}
-
-	public void setMatches(List<Match> matches) {
+	public void setMatches(List<MatchDTO> matches) {
 		this.matches = matches;
 	}
-
-	public List<Team> getTeams() {
-		return teams;
-	}
-
-	public void setTeams(List<Team> teams) {
-		this.teams = teams;
-	}
+	
+	
+	
+	
 	
 	
 }

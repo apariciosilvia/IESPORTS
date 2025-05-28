@@ -30,22 +30,28 @@ public class Person {
 
 	@NotBlank(message = "El nombre es obligatorio")
 	private String name;
-	
+
 	@Email(message = "El email no es válido")
 	@NotBlank(message = "El email es obligatorio")
 	@Column(name = "email", unique = true)
 	private String email;
-	
+
 	@NotBlank(message = "La contraseña es obligatoria")
 	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
 	private String password;
 	private int active;
+	@Column(name = "temp_password")
+	private int tempPassword;
 
 	public Person() {
 
 	}
 
-	public Person(Long id, Course course, Role role, String name, String email, String password, int active) {
+	public Person(Long id, Course course, Role role, @NotBlank(message = "El nombre es obligatorio") String name,
+			@Email(message = "El email no es válido") @NotBlank(message = "El email es obligatorio") String email,
+			@NotBlank(message = "La contraseña es obligatoria") @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres") String password,
+			int active, int tempPassword) {
+		super();
 		this.id = id;
 		this.course = course;
 		this.role = role;
@@ -53,6 +59,7 @@ public class Person {
 		this.email = email;
 		this.password = password;
 		this.active = active;
+		this.tempPassword = tempPassword;
 	}
 
 	public Long getId() {
@@ -111,10 +118,18 @@ public class Person {
 		this.active = active;
 	}
 
+	public int getTempPassword() {
+		return tempPassword;
+	}
+
+	public void setTempPassword(int tempPassword) {
+		this.tempPassword = tempPassword;
+	}
+
 	@Override
 	public String toString() {
 		return "Person [id=" + id + ", course=" + course + ", role=" + role + ", name=" + name + ", email=" + email
-				+ ", password=" + password + ", active=" + active + "]";
+				+ ", password=" + password + ", active=" + active + ", tempPassword=" + tempPassword + "]";
 	}
-	
+
 }
