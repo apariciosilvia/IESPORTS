@@ -65,6 +65,8 @@ INSERT INTO teams (name) VALUES ('equipo 13');
 INSERT INTO teams (name) VALUES ('equipo 14');
 INSERT INTO teams (name) VALUES ('equipo 15');
 INSERT INTO teams (name) VALUES ('equipo 16');
+INSERT INTO teams (name) VALUES ('equipo 17');
+INSERT INTO teams (name) VALUES ('equipo 18');
 
 
 -- Fase de grupos
