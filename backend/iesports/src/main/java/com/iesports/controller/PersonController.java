@@ -27,6 +27,7 @@ import com.iesports.dto.PersonLoginDTO;
 import com.iesports.dto.PersonRegisterDTO;
 import com.iesports.model.Person;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -41,9 +42,6 @@ public class PersonController {
 
 	@Autowired
 	private CourseServiceImpl cs;
-	
-	@Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private MailService ms;
@@ -78,6 +76,9 @@ public class PersonController {
 	}
 	
 		
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
 	// La ? en el tipo de respuesta es que puedes devolver cualquier tipo de dato
 	// OPCION 1: BODY DE LOS DATOS REQUERIDOS DEL USUARIO
 	@PostMapping("/register")
@@ -103,16 +104,21 @@ public class PersonController {
 
 		String passwordEncripted = passwordEncoder.encode(person.getPassword1());
 
-		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), rs.getRole(4L), person.getName(),
-				person.getEmail(), passwordEncripted, 1, 0);
+		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), rs.getRole(4L), person.getName(), person.getEmail(), passwordEncripted, 1, 0);
 		System.out.println("Persona a registrar: " + person.toString());
 
 		newPerson = ps.savePerson(newPerson);
+		
 		System.out.println("Persona registrada: " + newPerson.toString());
-		ms.sendWelcomeEmail(person.getEmail(), person.getName());
+		
+		try {
+		    ms.sendWelcomeEmail(person.getEmail(), person.getName());
 
+		} catch (Exception e) {
+			 e.printStackTrace();
+		}
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
-	}
 
 	@PostMapping("/forgotPassword")
 	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO emailDTO){
@@ -130,12 +136,21 @@ public class PersonController {
 		person.setTempPassword(1);
 		person.setPassword(passwordTempEncripted);
 		
-		person = ps.updatePerson(person);
-		ms.sendMailForgotPassword(emailDTO.getEmail(), passwordTemp, person.getName());
+		try {
+			ms.sendMailForgotPassword(emailDTO.getEmail(), passwordTemp, person.getName());
+			person = ps.updatePerson(person);
+			
+			System.out.println("Contraseña temporal para el usuario " + person.getId() + " es: " + passwordTemp);
+
+			return ResponseEntity.status(HttpStatus.OK).body(person);
+		} catch (Exception e) {
+			 e.printStackTrace();
+			 
+			System.out.println("No se pudo enviar la contraseña temporal al correo "+emailDTO.getEmail()+" del usuario "+person.getName());
+
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("correo", "No se pudo enviar el correo con la contraseña temporal. Por favor intentelo de nuevo"));
+		}
 		
-		System.out.println("Contraseña temporal para el usuario " + person.getId() + " es: " + passwordTemp);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
 	
 	@PostMapping("/changeTempPassword")
