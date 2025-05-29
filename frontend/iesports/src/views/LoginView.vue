@@ -137,7 +137,7 @@
               </ion-button>
            </form>
            <div class="login-links">
-             <a href="#">¿Olvidaste tu contraseña?</a>
+             <a href="#" @click.prevent="showForgotPassword = true">¿Olvidaste tu contraseña?</a>
              <a href="#"  @click.prevent="showRegister = true; handleGetCourses(); cleanInputs()">
                ¿No tienes cuenta? Regístrate aquí
              </a>
@@ -246,19 +246,52 @@
          </div>
        </div>
      </div>
-   </ion-content>
+<ion-modal :is-open="showForgotPassword" @did-dismiss="showForgotPassword = false">
+  <ion-header class="modal-header">
+    <ion-toolbar>
+      <ion-title>Recuperar contraseña</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" @click="showForgotPassword = false">
+          <span class="material-symbols-outlined">close</span>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-padding">
+    <ion-input
+      v-model="forgotEmail"
+      type="email"
+      placeholder="Introduce tu correo"
+      fill="outline"
+      class="custom-input"
+    />
+
+    <ion-button class="enviar" expand="block" @click="enviarEmailRecuperacion">
+      Enviar correo de recuperación
+    </ion-button>
+
+    <ion-button class="clean" expand="block" @click="forgotEmail = ''">
+      Limpiar
+    </ion-button>
+  </ion-content>
+</ion-modal>
+
+
+
+    </ion-content>
    </ion-page>
  </template>
  
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import { IonInput, IonButton, IonIcon, IonContent, IonPage, IonSelect, IonSelectOption } from '@ionic/vue';
-import { login, register } from '@/services/personServices';
+import { login, register, forgotPassword } from '@/services/personServices';
 import { getCourses } from "@/services/courseService";
 import router from '@/router';
 
 import type { Person } from '@/model/person';
-
+import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO';
 
 const particlesLoaded = async (container: any) => {
   console.log("Particles container loaded", container);
@@ -374,7 +407,30 @@ const showLoginPassword = ref(false);
 
 // alert(`Ancho de pantalla: ${window.innerWidth}px`);
 
- 
+
+/* OLVIDATE TU CONTRASEÑA START*/
+const showForgotPassword = ref(false); // controla si se muestra el modal
+const forgotEmail = ref(''); // almacena el email introducido
+
+async function enviarEmailRecuperacion() {
+  if (!forgotEmail.value || !forgotEmail.value.includes('@')) {
+    alert('Introduce un correo válido');
+    return;
+  }
+
+  const email: ForgotPasswordRequestDTO = { email: forgotEmail.value.trim() };
+
+  try {
+    await forgotPassword(email); 
+    alert('Correo enviado. Revisa tu bandeja de entrada.');
+    showForgotPassword.value = false;
+    forgotEmail.value = '';
+  } catch (error) {
+    console.error('Error al recuperar contraseña:', error);
+    alert('Error al enviar el correo. Intenta de nuevo.');
+  }
+}
+/* OLVIDATE TU CONTRASEÑA END*/
 </script>
  
 <style scoped>
@@ -873,6 +929,72 @@ const showLoginPassword = ref(false);
     margin-top: 0.2rem !important;
   }
 }
+
+
+
+
+
+
+/* OLVIDASTE TU CONTRASEÑA START */
+
+ion-modal::part(content) {
+  border-radius: 16px;
+  max-width: 410px;
+  margin: auto;
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+   /* 👇 Ajusta la altura al contenido */
+  height: 270px;
+  max-height: fit-content;
+  display: inline-block;
+}
+
+.modal-header {
+  margin: 0;
+  padding: 0;
+  border-radius: 16px 16px 0 0;
+}
+
+ion-toolbar {
+  --min-height: 56px;
+  --background:var(--blue-primary-color);
+  --color: var(--text-color-secundary);
+  
+  font-weight: bold;
+}
+
+ion-title {
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+
+.custom-input {
+  margin-top: 3%;
+  font-size: 1.2rem;
+}
+
+.enviar {
+  --background: var(--blue-primary-color);
+  --color: var(--text-color-secundary);
+  font-weight: bold;
+  margin-bottom: 4%;
+}
+
+.clean {
+  --color: var(--text-color-secundary);
+  --background: var(--orange-secundary-color);
+  font-weight: bold;
+  margin-top: -4px;
+}
+/* OLVIDASTE TU CONTRASEÑA END */
 
 </style>
  

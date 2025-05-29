@@ -153,7 +153,9 @@
 </template>
 
 <script setup lang="ts">
-defineEmits(['close'])
+const emit = defineEmits<{
+  (e: 'close'): void;
+}>();
 
 import { ref, onMounted, computed, watch  } from 'vue';
 
@@ -164,6 +166,8 @@ import { getSports } from '@/services/sportService';
 import type { Team } from '@/model/team';
 
 import { addTournament } from '@/services/tournamentService';
+import { getTeams } from '@/services/teamService';
+
 import type { TournamentAddDTO } from '@/model/TournamentAddDTO';
 import type { MatchDTO } from '@/model/matchDTO';
 
@@ -200,50 +204,6 @@ watch(selectedNumberTeams, (newVal) => {
   matchDates.value = Array(newVal / 2).fill(null);
 });
 
-//LISTA DE EJEMPLO PARA SIMULAR LOS EQUIPOS
-// const teamsList = ref<Team[]>([
-//   { id: 1, name: 'The winners', players: [ { id: 101, name: 'Juan Pérez', email: 'juan@example.com', password: '1234', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 1, name: '1º Bach', age: '16-17' } }, { id: 102, name: 'Ana López', email: 'ana@example.com', password: '5678', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 1, name: '1º Bach', age: '16-17' } } ] },
-//   { id: 2, name: 'Los campeones', players: [ { id: 103, name: 'Carlos Ruiz', email: 'carlos@example.com', password: 'abcd', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 2, name: '2º Bach', age: '17-18' } }, { id: 104, name: 'Lucía Gómez', email: 'lucia@example.com', password: 'efgh', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 2, name: '2º Bach', age: '17-18' } } ] },
-//   { id: 3, name: 'The challengers', players: [ { id: 105, name: 'Pedro Martínez', email: 'pedro@example.com', password: 'ijkl', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 3, name: '3º ESO', age: '14-15' } }, { id: 106, name: 'María Torres', email: 'maria@example.com', password: 'mnop', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 3, name: '3º ESO', age: '14-15' } } ] },
-//   { id: 4, name: 'Equipo D', players: [ { id: 107, name: 'Andrés Ramos', email: 'andres@example.com', password: 'qrst', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 4, name: '4º ESO', age: '15-16' } }, { id: 108, name: 'Claudia Vega', email: 'claudia@example.com', password: 'uvwx', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 4, name: '4º ESO', age: '15-16' } } ] },
-//   { id: 5, name: 'Las estrellas', players: [ { id: 109, name: 'Diego Navarro', email: 'diego@example.com', password: 'yz12', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 5, name: '1º ESO', age: '12-13' } }, { id: 110, name: 'Paula Nieto', email: 'paula@example.com', password: '3456', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 5, name: '1º ESO', age: '12-13' } } ] },
-//   { id: 6, name: 'Equipo F', players: [ { id: 111, name: 'Alberto León', email: 'alberto@example.com', password: '7890', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 6, name: '2º ESO', age: '13-14' } }, { id: 112, name: 'Sara Molina', email: 'sara@example.com', password: 'abcd', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 6, name: '2º ESO', age: '13-14' } } ] },
-//   { id: 7, name: 'Equipo G', players: [ { id: 113, name: 'Tomás Gil', email: 'tomas@example.com', password: 'efgh', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 7, name: '1º FP', age: '16-17' } }, { id: 114, name: 'Nuria Díaz', email: 'nuria@example.com', password: 'ijkl', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 7, name: '1º FP', age: '16-17' } } ] },
-//   { id: 8, name: 'Equipo H', players: [ { id: 115, name: 'Esteban Ramos', email: 'esteban@example.com', password: 'mnop', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 8, name: '2º FP', age: '17-18' } }, { id: 116, name: 'Laura Romero', email: 'laura@example.com', password: 'qrst', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 8, name: '2º FP', age: '17-18' } } ] },
-//   { id: 9, name: 'Los Invencibles', players: [ { id: 117, name: 'Iván Herrera', email: 'ivan@example.com', password: 'abcd1234', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 9, name: '1º Bach', age: '16-17' } }, { id: 118, name: 'Sofía Martín', email: 'sofia@example.com', password: 'pass4567', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 9, name: '1º Bach', age: '16-17' } } ] },
-//   { id: 10, name: 'Equipo X', players: [ { id: 119, name: 'Mario Díaz', email: 'mario@example.com', password: 'xyz890', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 10, name: '3º ESO', age: '14-15' } }, { id: 120, name: 'Valeria Ruiz', email: 'valeria@example.com', password: 'qwerty', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 10, name: '3º ESO', age: '14-15' } } ] },
-//   { id: 11, name: 'Furia Roja', players: [ { id: 121, name: 'Hugo Serrano', email: 'hugo@example.com', password: 'hugo123', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 11, name: '2º Bach', age: '17-18' } }, { id: 122, name: 'Daniela Ortega', email: 'daniela@example.com', password: 'daniela456', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 11, name: '2º Bach', age: '17-18' } } ] },
-//   { id: 12, name: 'Tiburones', players: [ { id: 123, name: 'Fernando Gálvez', email: 'fernando@example.com', password: 'f123', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 12, name: '1º ESO', age: '12-13' } }, { id: 124, name: 'Lucía Gil', email: 'lucia.gil@example.com', password: 'l456', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 12, name: '1º ESO', age: '12-13' } } ] },
-//   { id: 13, name: 'Los Titanes', players: [ { id: 125, name: 'Álvaro Mena', email: 'alvaro@example.com', password: 'mena789', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 13, name: '4º ESO', age: '15-16' } }, { id: 126, name: 'Elena Blanco', email: 'elena@example.com', password: 'e123', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 13, name: '4º ESO', age: '15-16' } } ] },
-//   { id: 14, name: 'Gladiadores', players: [ { id: 127, name: 'Sergio López', email: 'sergio@example.com', password: 'sl456', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 14, name: '2º ESO', age: '13-14' } }, { id: 128, name: 'Marta Ramos', email: 'marta@example.com', password: 'mr789', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 14, name: '2º ESO', age: '13-14' } } ] },
-//   { id: 15, name: 'Los Panteras', players: [ { id: 129, name: 'David Ortega', email: 'david@example.com', password: 'do321', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 15, name: '1º Bach', age: '16-17' } }, { id: 130, name: 'Irene Gutiérrez', email: 'irene@example.com', password: 'ig654', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 15, name: '1º Bach', age: '16-17' } } ] },
-//   { id: 16, name: 'Los Rápidos', players: [ { id: 131, name: 'Óscar Nieto', email: 'oscar@example.com', password: 'on987', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 16, name: '3º ESO', age: '14-15' } }, { id: 132, name: 'Natalia Pérez', email: 'natalia@example.com', password: 'np111', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 16, name: '3º ESO', age: '14-15' } } ] },
-//   { id: 17, name: 'Águilas Doradas', players: [ { id: 133, name: 'Pablo Reina', email: 'pablo@example.com', password: 'pr123', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 17, name: '2º Bach', age: '17-18' } }, { id: 134, name: 'Carla Morales', email: 'carla@example.com', password: 'cm456', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 17, name: '2º Bach', age: '17-18' } } ] },
-//   { id: 18, name: 'Los Relámpagos', players: [ { id: 135, name: 'Rubén Cano', email: 'ruben@example.com', password: 'rc789', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 18, name: '2º FP', age: '17-18' } }, { id: 136, name: 'Julia Castillo', email: 'julia@example.com', password: 'jc000', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 18, name: '2º FP', age: '17-18' } } ] },
-//   { id: 19, name: 'Los Lobos', players: [ { id: 137, name: 'Bruno Delgado', email: 'bruno@example.com', password: 'bd432', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 19, name: '4º ESO', age: '15-16' } }, { id: 138, name: 'Sandra Ramos', email: 'sandra@example.com', password: 'sr321', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 19, name: '4º ESO', age: '15-16' } } ] },
-//   { id: 20, name: 'Leones del Norte', players: [ { id: 139, name: 'Álex Vega', email: 'alex@example.com', password: 'av876', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 20, name: '1º FP', age: '16-17' } }, { id: 140, name: 'Carmen Soto', email: 'carmen@example.com', password: 'cs123', active: 1, role: { id: 1, name: 'Jugador', active: 1 }, course: { id: 20, name: '1º FP', age: '16-17' } } ] }
-// ]);
-
-const teamsList = ref<Team[]>([
-  { id: 1, name: 'equipo 1', players: null },
-  { id: 2, name: 'equipo 2', players: null },
-  { id: 3, name: 'equipo 3', players: null },
-  { id: 4, name: 'equipo 4', players: null },
-  { id: 5, name: 'equipo 5', players: null },
-  { id: 6, name: 'equipo 6', players: null },
-  { id: 7, name: 'equipo 7', players: null },
-  { id: 8, name: 'equipo 8', players: null },
-  { id: 9, name: 'equipo 9', players: null },
-  { id: 10, name: 'equipo 10', players: null },
-  { id: 11, name: 'equipo 11', players: null },
-  { id: 12, name: 'equipo 12', players: null },
-  { id: 13, name: 'equipo 13', players: null },
-  { id: 14, name: 'equipo 14', players: null },
-  { id: 15, name: 'equipo 15', players: null },
-  { id: 16, name: 'equipo 16', players: null },
-]);
-
-
 
 const searchText = ref('');
 const filteredTeams = computed(() =>
@@ -259,8 +219,8 @@ async function loadData () {
     sports.value = await getSports();
     console.log('Lista de deportes :', sports.value);
 
-    // teams.value = await getTeams();
-    teams.value = teamsList.value;
+    teams.value = await getTeams();
+    // teams.value = teamsList.value;
     console.log('Lista de equipos :', teams.value);
 
   } catch (e: any) {
@@ -311,7 +271,16 @@ async function createTournament() {
     console.log('Datos del torneo a crear:', tournamentData);
     await addTournament(tournamentData);
     alert('Torneo creado correctamente');
+
+    //Se limpian los campos del formulario
     resetForm();
+
+    // Cerramos el modal
+    emit('close');
+
+    // Refrescamos la página
+    window.location.reload();
+    
   } catch (error) {
     console.error(error);
     alert('Error al crear el torneo');

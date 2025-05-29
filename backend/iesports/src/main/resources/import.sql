@@ -17,7 +17,7 @@ INSERT INTO `roles` (`active`, `name`) VALUES (1, 'Alumno');
 -- USUARIOS POR DEFECTO (ADMIN CONTRA: a Y ALUMNO CONTRA: s)
 INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 7, 1, 'a@a', 'a', '$2a$10$w9wUgqR.juKPsuU8.TPwY.acNWPaIbOWHnVlNwQZpPRqcuQmtS.72');
 INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 5, 4, 's@s', 's', '$2a$10$CqPlbAfH5vfKuCZfhnSQBemQcMyAm1gjq4.m3ItJ/kjmeTHmKGlXW');
-INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 5, 4, 'apariciosilvia8@gmail.com', 'silvia', '$2a$10$CqPlbAfH5vfKuCZfhnSQBemQcMyAm1gjq4.m3ItJ/kjmeTHmKGlXW');
+INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 5, 4, 'apariciosilvia8@gmail.com', 'silvia', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
 
 INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 5, 3, 'laura.prof@example.com', 'Laura Ruiz', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
 INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 7, 2, 'ana.host@example.com', 'Ana Pérez', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
@@ -48,23 +48,24 @@ INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2021
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2022/23', 'Liga Ajedrez Indoor', 'PROCESO');
 
 
-
-INSERT INTO teams (name) VALUES ('equipo 1');
-INSERT INTO teams (name) VALUES ('equipo 2');
-INSERT INTO teams (name) VALUES ('equipo 3');
-INSERT INTO teams (name) VALUES ('equipo 4');
-INSERT INTO teams (name) VALUES ('equipo 5');
-INSERT INTO teams (name) VALUES ('equipo 6');
-INSERT INTO teams (name) VALUES ('equipo 7');
-INSERT INTO teams (name) VALUES ('equipo 8');
-INSERT INTO teams (name) VALUES ('equipo 9');
-INSERT INTO teams (name) VALUES ('equipo 10');
-INSERT INTO teams (name) VALUES ('equipo 11');
-INSERT INTO teams (name) VALUES ('equipo 12');
-INSERT INTO teams (name) VALUES ('equipo 13');
-INSERT INTO teams (name) VALUES ('equipo 14');
-INSERT INTO teams (name) VALUES ('equipo 15');
-INSERT INTO teams (name) VALUES ('equipo 16');
+INSERT INTO teams (name) VALUES ('Raimon Eleven');
+INSERT INTO teams (name) VALUES ('Zeus Junior High');
+INSERT INTO teams (name) VALUES ('Advance Junior High');
+INSERT INTO teams (name) VALUES ('Aliea Gakuen');
+INSERT INTO teams (name) VALUES ('Hakkoku Junior High');
+INSERT INTO teams (name) VALUES ('Teikoku Gakuen');
+INSERT INTO teams (name) VALUES ('Kaminari Junior High');
+INSERT INTO teams (name) VALUES ('Gendaijin Middle School');
+INSERT INTO teams (name) VALUES ('Holy Road Christian School');
+INSERT INTO teams (name) VALUES ('Otomari Dormitory');
+INSERT INTO teams (name) VALUES ('Itochu Commercial High');
+INSERT INTO teams (name) VALUES ('Shirouzu Junior High');
+INSERT INTO teams (name) VALUES ('Ichidai Junior High');
+INSERT INTO teams (name) VALUES ('Momoyama Middle School');
+INSERT INTO teams (name) VALUES ('Marugame Middle School');
+INSERT INTO teams (name) VALUES ('Kagemori Middle School');
+INSERT INTO teams (name) VALUES ('Musashi Middle School');
+INSERT INTO teams (name) VALUES ('Hakuren Phoenix');
 
 
 -- Fase de grupos
