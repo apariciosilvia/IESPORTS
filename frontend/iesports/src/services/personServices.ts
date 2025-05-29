@@ -1,4 +1,5 @@
 import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
+import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO'
 import axios from 'axios';
 
 function getPersonas() {
@@ -57,5 +58,13 @@ function changePassword(ChangePasswordDTO: ChangePasswordDTO) {
   });
 };
 
+function forgotPassword(ForgotPasswordRequestDTO: ForgotPasswordRequestDTO) {
 
-export { getPersonas, login, register, changePassword};
+  const url = `${import.meta.env.VITE_URL_API}/person/forgotPassword`;
+
+  return axios.post(url, ForgotPasswordRequestDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+export { getPersonas, login, register, changePassword, forgotPassword };
