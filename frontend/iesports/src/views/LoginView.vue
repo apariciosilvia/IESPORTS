@@ -27,15 +27,15 @@
                              bubble: {
                                  distance: 400,
                                  duration: 2,
-                                 opacity: 0.5,
-                                 size: 40
+                                 opacity: 0.2,
+                                 size: 20
                              },
                              push: {
                                  quantity: 4
                              },
                              repulse: {
                                  distance: 200,
-                                 duration: 0.4
+                                 duration: 0.2
                              }
                          }
                      },
@@ -246,7 +246,7 @@
          </div>
        </div>
      </div>
-<ion-modal :is-open="showForgotPassword" @did-dismiss="showForgotPassword = false">
+<ion-modal :is-open="showForgotPassword" @did-dismiss="showForgotPassword = false" :backdrop-dismiss="false">
   <ion-header class="modal-header">
     <ion-toolbar>
       <ion-title>Recuperar contraseña</ion-title>
