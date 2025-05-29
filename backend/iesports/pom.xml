@@ -5,6 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
+		<!-- 3.1.5 Swagger - 3.4.4 No Swagger -->
 		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
@@ -79,13 +80,19 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-data-jpa</artifactId>
-		    <version>3.4.4</version>
-		</dependency>
+		    </dependency>
 		<!-- Permite enviar correos electrónicos desde la aplicación,
      	útil para funciones como recuperación de contraseña o notificaciones. -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		
+		<!-- Genera automaticamente el swagger-->
+		<dependency>
+		  <groupId>org.springdoc</groupId>
+		  <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+		  <version>2.5.0</version>
 		</dependency>
 	</dependencies>
 
