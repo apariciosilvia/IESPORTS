@@ -21,6 +21,7 @@ import com.iesports.dao.service.impl.CourseServiceImpl;
 import com.iesports.dao.service.impl.PersonServiceImpl;
 import com.iesports.dao.service.impl.RoleServiceImpl;
 import com.iesports.dto.ChangeForgottenPasswordDTO;
+import com.iesports.dto.ChangeNameAndEmailDTO;
 import com.iesports.dto.ChangePasswordDTO;
 import com.iesports.dto.ForgotPasswordRequestDTO;
 import com.iesports.dto.PersonLoginDTO;
@@ -272,6 +273,35 @@ public class PersonController {
 		
 		String passwordEncripted = passwordEncoder.encode(changePassDTO.getPassword1());
 		person.setPassword(passwordEncripted);
+		person = ps.updatePerson(person);
+		return ResponseEntity.status(HttpStatus.OK).body(person);
+	}
+	
+	@PostMapping("/changeNameAndEmail")
+	public ResponseEntity<?> changeNameAndEmail(@Valid @RequestBody ChangeNameAndEmailDTO changeNameEmailDTO){
+		
+		Map<String, String> errors = new HashMap<>();
+		
+		Person person = ps.getPersonById(changeNameEmailDTO.getPersonId());
+		
+		if(person == null) {
+			System.err.println("Usuario no encontrado");
+			errors.put("personId", "Usuario no encontrado");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+		
+		if(!person.getEmail().equals(changeNameEmailDTO.getEmail())&& ps.emailExists(changeNameEmailDTO.getEmail())) {
+			System.err.println("El correo electronico ya pertenece a un usuario");
+			errors.put("email", "El correo electronico ya pertenece a un usuario");
+			
+		}
+		
+		if (errors.size() > 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+		
+		person.setName(changeNameEmailDTO.getName());
+		person.setEmail(changeNameEmailDTO.getEmail());
 		person = ps.updatePerson(person);
 		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
