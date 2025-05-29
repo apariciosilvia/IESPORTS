@@ -80,7 +80,6 @@
                                    width: 32,
                                    height: 32
                                },
-                               
                            ]
                        },
                          size: {
@@ -106,8 +105,8 @@
 
             <h2 class="tittle">Iniciar sesión</h2>
           </div>
-            
-           <form @submit.prevent="handleLogin">
+          <!-- LOGIN START -->
+          <form @submit.prevent="handleLogin">
               <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
               <ion-input v-model="loginData.email" type="text" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email || errores.error }"/>
               <span v-if="errores.password" class="error-msg">{{ errores.password }}</span>
@@ -143,6 +142,7 @@
              </a>
            </div>
           </div>
+          <!-- LOGIN END -->
  
          <!-- Registro -->
          <div class="card-face card-back">
@@ -246,38 +246,81 @@
          </div>
        </div>
      </div>
-<ion-modal :is-open="showForgotPassword" @did-dismiss="showForgotPassword = false" :backdrop-dismiss="false">
-  <ion-header class="modal-header">
-    <ion-toolbar>
-      <ion-title>Recuperar contraseña</ion-title>
-      <ion-buttons slot="end">
-        <ion-button fill="clear" @click="showForgotPassword = false">
-          <span class="material-symbols-outlined">close</span>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-content class="ion-padding">
-    <ion-input
-      v-model="forgotEmail"
-      type="email"
-      placeholder="Introduce tu correo"
-      fill="outline"
-      class="custom-input"
-    />
-
-    <ion-button class="enviar" expand="block" @click="enviarEmailRecuperacion">
-      Enviar correo de recuperación
-    </ion-button>
-
-    <ion-button class="clean" expand="block" @click="forgotEmail = ''">
-      Limpiar
-    </ion-button>
-  </ion-content>
-</ion-modal>
 
 
+      <!-- POP UP HAS OLVIDADO CONTRASEÑA START -->
+      <ion-modal :is-open="showForgotPassword" @did-dismiss="showForgotPassword = false" :backdrop-dismiss="false">
+        <ion-header class="modal-header">
+          <ion-toolbar>
+            <ion-title>Recuperar contraseña</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" @click="showForgotPassword = false">
+                <span class="material-symbols-outlined">close</span>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+          <ion-input
+            v-model="forgotEmail"
+            type="email"
+            placeholder="Introduce tu correo"
+            fill="outline"
+            class="custom-input"
+          />
+
+          <ion-button class="enviar" expand="block" @click="sendEmailRecovery">
+            Enviar correo de recuperación
+          </ion-button>
+
+          <ion-button class="clean" expand="block" @click="forgotEmail = ''">
+            Limpiar
+          </ion-button>
+        </ion-content>
+      </ion-modal>
+      <!-- POP UP HAS OLVIDADO CONTRASEÑA END -->
+
+      <!-- POP UP CAMBIO CONTRASEÑA TEMPORAL START -->
+      <ion-modal :is-open="showResetPassword" @did-dismiss="showResetPassword = true" :backdrop-dismiss="false">
+        <ion-header class="modal-header">
+          <ion-toolbar>
+            <ion-title>Recuperar contraseña</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" @click="showResetPassword = false">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+          <ion-input
+            v-model="newPassword"
+            type="password"
+            placeholder="Nueva contraseña"
+            fill="outline"
+            class="custom-input"
+          />
+
+          <ion-input
+            v-model="confirmPassword"
+            type="password"
+            placeholder="Confirmar contraseña"
+            fill="outline"
+            class="custom-input"
+          />
+
+          <ion-button class="enviar" expand="block" @click="changeTemporalPassword">
+            Restablecer contraseña
+          </ion-button>
+
+          <ion-button class="clean" expand="block" @click="newPassword = ''; confirmPassword = ''">
+            Limpiar
+          </ion-button>
+        </ion-content>
+      </ion-modal>
+      <!-- POP UP CAMBIO CONTRASEÑA TEMPORAL END -->
 
     </ion-content>
    </ion-page>
@@ -286,57 +329,55 @@
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import { IonInput, IonButton, IonIcon, IonContent, IonPage, IonSelect, IonSelectOption } from '@ionic/vue';
-import { login, register, forgotPassword } from '@/services/personServices';
-import { getCourses } from "@/services/courseService";
 import router from '@/router';
 
+//MODELOS 
 import type { Person } from '@/model/person';
-import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO';
 
+//SERVICIOS
+import { getCourses } from "@/services/courseService";
+import { login, register, forgotPassword, changeTempPassword } from '@/services/personServices';
+import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO';
+import type { ChangeForgottenPasswordDTO } from '@/model/changeForgottenPasswordDTO';
+
+
+/* FONDO ANIMADO START */
 const particlesLoaded = async (container: any) => {
   console.log("Particles container loaded", container);
 };
+/* FONDO ANIMADO END */
 
-const errores = ref<Record<string, string>>({});
  
-const showRegister = ref(false)
- 
-const loginData = ref({ email: '', password: '' })
-const registerData = ref({ name: '', email: '', password: '', confirmPassword: '' })
-
-function goBack() {
-  window.history.back();
-}
 
 
-function cleanInputs() {
-  loginData.value.email = '';
-  loginData.value.password = '';
-  registerData.value.name = '';
-  registerData.value.email = '';
-  registerData.value.password = '';
-  registerData.value.confirmPassword = '';
-  selectedCourse.value = '';
-  errores.value = {};
-}
 
+
+
+/* FUNCION PARA LOGEARSE START */
+const loginData = ref({ email: '', password: '' });
 
 async function handleLogin() {
   try {
-    const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim())
-    console.log('Login exitoso:', response)
+    const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim());
+    console.log('Login exitoso:', response);
  
     // const user = response.data ?? response;
     const person :Person = response.data;
-    console.log('Persona:', person)
+    console.log('Persona:', person);
+
      if (person != null) {
         localStorage.setItem('usuario', JSON.stringify(person));
 
-        if (person?.role.name === 'Administrador') {
-          router.push({ name: 'HomeAdmin' });
+        if(person.tempPassword == 1){
+          showResetPassword.value = true; //Activar el popup de restablecer contraseña temporal
         } else {
-          router.push({ name: 'Home' });
+          if (person?.role.name === 'Administrador') {
+            router.push({ name: 'HomeAdmin' });
+          } else {
+            router.push({ name: 'Home' });
+          }
         }
+
      } else {
 
       alert('Credenciales incorrectas')
@@ -351,12 +392,22 @@ async function handleLogin() {
     }
   }
 }
+/* FUNCION PARA LOGEARSE END */
 
 
+
+/* ERRORES START */
+const errores = ref<Record<string, string>>({});
 // const showErrorAlert = ref(false);
 // const errorMessage = ref('');
+/* ERRORES END */
 
- 
+
+
+/* FUNCION PARA REGISTRARSE START */
+const showRegister = ref(false);
+const registerData = ref({ name: '', email: '', password: '', confirmPassword: '' })
+
 async function handleRegister() {
   try {
     const response = await register(
@@ -382,37 +433,15 @@ async function handleRegister() {
     }
   }
 }
+/* FUNCION PARA REGISTRARSE END */
 
-const courses:Ref<any[]> = ref([]);
-const selectedCourse = ref('');
- 
-async function handleGetCourses() {
-  try {
-    const response = await getCourses() as any[]; 
-    courses.value = response;
-    console.log(courses.value);
-  } catch (error){
-    console.error('ERROR OBTENIENDO CURSOS: ', error)
-    alert('ERROR OBTENIENDO CURSOS');
-  }
-}
-
-//VER CONTRASEÑAS
-// para mostrar/ocultar la contraseña principal
-const showPassword = ref(false);
-// para mostrar/ocultar la confirmación
-const showConfirmPassword = ref(false);
-// para mostrar/ocultar la contraseña de login
-const showLoginPassword = ref(false);
-
-// alert(`Ancho de pantalla: ${window.innerWidth}px`);
 
 
 /* OLVIDATE TU CONTRASEÑA START*/
 const showForgotPassword = ref(false); // controla si se muestra el modal
 const forgotEmail = ref(''); // almacena el email introducido
 
-async function enviarEmailRecuperacion() {
+async function sendEmailRecovery() {
   if (!forgotEmail.value || !forgotEmail.value.includes('@')) {
     alert('Introduce un correo válido');
     return;
@@ -431,6 +460,111 @@ async function enviarEmailRecuperacion() {
   }
 }
 /* OLVIDATE TU CONTRASEÑA END*/
+
+
+
+/* CAMBIO CONTRASEÑA TEMPORAL START */
+const showResetPassword = ref(false);
+const newPassword = ref('');
+const confirmPassword = ref('');
+
+async function changeTemporalPassword(){
+
+  const person = JSON.parse(localStorage.getItem('usuario') || '{}');
+  console.log('PERSONITA' , person);
+
+  try {
+    const changePasswordDto: ChangeForgottenPasswordDTO = {
+      personId: person.id,
+      password1: newPassword.value.trim(),
+      password2: confirmPassword.value.trim()
+    };
+
+    await changeTempPassword(changePasswordDto);
+    alert('Contraseña restablecida con exito');
+    // window.location.reload(); // recarga la página
+
+    // 1️⃣ Cerrar el popup
+    showResetPassword.value = false;
+    
+
+    if (person?.role.name === 'Administrador') {
+      router.push({ name: 'HomeAdmin' });
+      console.log('ADMIN');
+    } else {
+      router.push({ name: 'Home' });
+      console.log('ALUMNO');
+    }
+
+  } catch (error: any) {
+
+    alert('Error al restablecer la contraseña');
+    
+    console.error('Error al restablecer la contraseña', error.response.data);
+  
+    if (error.response && error.response.status === 400) {
+      errores.value = error.response.data;
+    } else {
+      errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
+    }
+  }
+}
+/* CAMBIO CONTRASEÑA TEMPORAL END */
+
+
+
+/* OBTENER TODOS LOS CURSOS START */
+const courses:Ref<any[]> = ref([]);
+const selectedCourse = ref('');
+ 
+async function handleGetCourses() {
+  try {
+    const response = await getCourses() as any[]; 
+    courses.value = response;
+    console.log(courses.value);
+  } catch (error){
+    console.error('ERROR OBTENIENDO CURSOS: ', error)
+    alert('ERROR OBTENIENDO CURSOS');
+  }
+}
+/* OBTENER TODOS LOS CURSOS END */
+
+
+
+/* VER CONTRASEÑAS START */
+const showPassword = ref(false);  // para mostrar/ocultar la contraseña principal
+const showConfirmPassword = ref(false);  // para mostrar/ocultar la confirmación
+const showLoginPassword = ref(false);  // para mostrar/ocultar la contraseña de login
+/* VER CONTRASEÑAS END */
+
+
+
+/* BOTON VOLVER START */
+function goBack() {
+  window.history.back();
+}
+/* BOTON VOLVER END */
+
+
+
+/* LIMPIAR CAMPOS START */
+function cleanInputs() {
+  loginData.value.email = '';
+  loginData.value.password = '';
+  registerData.value.name = '';
+  registerData.value.email = '';
+  registerData.value.password = '';
+  registerData.value.confirmPassword = '';
+  selectedCourse.value = '';
+  errores.value = {};
+}
+/* LIMPIAR CAMPOS END */
+
+
+
+/* ALERT PARA VER EL ANCHO DE LA PANTALLA */
+// alert(`Ancho de pantalla: ${window.innerWidth}px`);
+
 </script>
  
 <style scoped>
@@ -945,7 +1079,7 @@ ion-modal::part(content) {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 
    /* 👇 Ajusta la altura al contenido */
-  height: 270px;
+  height: 350px;
   max-height: fit-content;
   display: inline-block;
 }

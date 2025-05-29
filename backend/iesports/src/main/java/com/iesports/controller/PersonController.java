@@ -248,6 +248,9 @@ public class PersonController {
 		person = ps.updatePerson(person);
 		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}	
+	
+	
+	
 
 	//SIRVE DE RELLENO PARA LA DOCUMENTACIÓN
 
