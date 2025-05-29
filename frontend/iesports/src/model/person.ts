@@ -9,4 +9,5 @@ export interface Person {
   password: string;
   active: number;
   role: Role;
+  tempPassword: number;
 }
