@@ -6,25 +6,23 @@ import jakarta.validation.constraints.NotNull;
 
 public class ForgotPasswordRequestDTO {
 
-	@NotNull
-	@NotBlank
-	@Email
-	private String email;
+	@NotNull(message = "El email es obligatorio")
+	@NotBlank(message = "El email es obligatorio")
+	@Email(message = "El email no tiene el formato correcto")
+	private String emailForgotPassword;
 
-	public String getEmail() {
-		return email;
+	public String getEmailForgotPassword() {
+		return emailForgotPassword;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public ForgotPasswordRequestDTO() {
-
+	public void setEmailForgotPassword(String emailForgotPassword) {
+		this.emailForgotPassword = emailForgotPassword;
 	}
 
-	public ForgotPasswordRequestDTO(String email) {
-		this.email = email;
+	public ForgotPasswordRequestDTO(@NotNull @NotBlank @Email String emailForgotPassword) {
+		super();
+		this.emailForgotPassword = emailForgotPassword;
 	}
+
 	
 }

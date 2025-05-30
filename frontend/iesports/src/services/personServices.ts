@@ -1,4 +1,8 @@
 import axios from 'axios';
+import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
+import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO';
+import type { ChangeForgottenPasswordDTO } from '@/model/changeForgottenPasswordDTO';
+import type { ChangeNameAndEmailDTO } from '@/model/DTO/changeNameAndEmailDTO';
 
 function getPersonas() {
 
@@ -47,4 +51,42 @@ function register(name: string, email: string, password1: string, password2: str
   });
 }
 
-export { getPersonas, login, register};
+function changeNameAndEmail(changeNameAndEmailDTO: ChangeNameAndEmailDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/changeNameAndEmail`;
+
+  return axios.post(url, changeNameAndEmailDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+function changePassword(ChangePasswordDTO: ChangePasswordDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/changePassword`;
+
+  return axios.post(url, ChangePasswordDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+function forgotPassword(ForgotPasswordRequestDTO: ForgotPasswordRequestDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/forgotPassword`;
+
+  return axios.post(url, ForgotPasswordRequestDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+
+function changeTempPassword(ChangeForgottenPasswordDTO: ChangeForgottenPasswordDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/changeTempPassword`;
+
+  return axios.post(url, ChangeForgottenPasswordDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+
+export { getPersonas, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};

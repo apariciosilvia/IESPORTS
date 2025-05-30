@@ -12,24 +12,24 @@ public class ChangeForgottenPasswordDTO {
 	@NotNull(message = "La contraseña es obligatoria")
 	@NotBlank(message = "La contraseña es obligatoria")
 	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
-	private String password1;
+	private String password1TempPaswword;
 
 	@NotNull(message = "La confirmación de contraseña no puede estar vacia")
 	@NotBlank(message = "La confirmación de contraseña es obligatoria")
 	@Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
-	private String password2;
+	private String password2TempPaswword;
 	
 	public ChangeForgottenPasswordDTO() {
 		
 	}
 
 	public ChangeForgottenPasswordDTO(@NotNull(message = "La persona no puede ser nula") Long personId,
-			@NotNull(message = "La contraseña es obligatoria") @NotBlank(message = "La contraseña es obligatoria") @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres") String password1,
-			@NotNull(message = "La confirmación de contraseña no puede estar vacia") @NotBlank(message = "La confirmación de contraseña es obligatoria") @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres") String password2) {
+			@NotNull(message = "La contraseña es obligatoria") @NotBlank(message = "La contraseña es obligatoria") @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres") String password1TempPaswword,
+			@NotNull(message = "La confirmación de contraseña no puede estar vacia") @NotBlank(message = "La confirmación de contraseña es obligatoria") @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres") String password2TempPaswword) {
 		super();
 		this.personId = personId;
-		this.password1 = password1;
-		this.password2 = password2;
+		this.password1TempPaswword = password1TempPaswword;
+		this.password2TempPaswword = password2TempPaswword;
 	}
 
 	public Long getPersonId() {
@@ -40,25 +40,25 @@ public class ChangeForgottenPasswordDTO {
 		this.personId = personId;
 	}
 
-	public String getPassword1() {
-		return password1;
+	public String getPassword1TempPaswword() {
+		return password1TempPaswword;
 	}
 
-	public void setPassword1(String password1) {
-		this.password1 = password1;
+	public void setPassword1TempPaswword(String password1TempPaswword) {
+		this.password1TempPaswword = password1TempPaswword;
 	}
 
-	public String getPassword2() {
-		return password2;
+	public String getPassword2TempPaswword() {
+		return password2TempPaswword;
 	}
 
-	public void setPassword2(String password2) {
-		this.password2 = password2;
+	public void setPassword2TempPaswword(String password2TempPaswword) {
+		this.password2TempPaswword = password2TempPaswword;
 	}
 
 	@Override
 	public String toString() {
-		return "ChangeForgottenPasswordDTO [personId=" + personId + ", password1=" + password1 + ", password2="
-				+ password2 + "]";
+		return "ChangeForgottenPasswordDTO [personId=" + personId + ", password1TempPaswword=" + password1TempPaswword
+				+ ", password2TempPaswword=" + password2TempPaswword + "]";
 	}
 }
