@@ -48,7 +48,7 @@
                 v-model="user.name"
                 :disabled="!isEditingUser"
                 placeholder="Escribe tu nombre..."
-                class="inputs"
+                :class="{ 'error-border': errores.name }"
               />
             </div>
             <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
@@ -59,7 +59,7 @@
                 v-model="user.email"
                 :disabled="!isEditingUser"
                 placeholder="Escribe tu correo..."
-                class="inputs"
+                :class="{ 'error-border': errores.email }"
               />
             </div>
           </div>
@@ -69,7 +69,6 @@
         <div class="card-section">
           <div class="card-header">
             <h4>Cambiar contraseña</h4>
-            <!-- 4) Botón dinámico para contraseña -->
             <IonButton
               fill="outline"
               size="small"
@@ -90,7 +89,7 @@
                 placeholder="Contraseña actual"
                 v-model="currentPassword"
                 :disabled="!isEditingPassword"
-                class="inputs"
+                :class="{ 'error-border': errores.currentPassword }"
               />
             </div>
 
@@ -102,7 +101,7 @@
                 placeholder="Contraseña nueva"
                 v-model="newPassword"
                 :disabled="!isEditingPassword"
-                class="inputs"
+                :class="{ 'error-border': errores.password1ChangePassword }"
               />
             </div>
 
@@ -114,7 +113,7 @@
                 placeholder="Confirmar contraseña"
                 v-model="confirmPassword"
                 :disabled="!isEditingPassword"
-                class="inputs"
+                :class="{ 'error-border': errores.password2ChangePassword }"
               />
             </div>
           </div>
