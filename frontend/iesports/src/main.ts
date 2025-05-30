@@ -33,6 +33,7 @@ import '@ionic/vue/css/display.css'
 /*Estilos propios*/
 import '@/assets/css/colors.css';
 import '@/assets/css/fonts.css';
+import '@/assets/css/errores.css';
 
 
 import { addIcons } from 'ionicons';

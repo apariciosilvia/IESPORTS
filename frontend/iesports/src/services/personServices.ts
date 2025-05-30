@@ -1,7 +1,8 @@
+import axios from 'axios';
 import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
 import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO';
 import type { ChangeForgottenPasswordDTO } from '@/model/changeForgottenPasswordDTO';
-import axios from 'axios';
+import type { ChangeNameAndEmailDTO } from '@/model/DTO/changeNameAndEmailDTO';
 
 function getPersonas() {
 
@@ -50,6 +51,15 @@ function register(name: string, email: string, password1: string, password2: str
   });
 }
 
+function changeNameAndEmail(changeNameAndEmailDTO: ChangeNameAndEmailDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/changeNameAndEmail`;
+
+  return axios.post(url, changeNameAndEmailDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
 function changePassword(ChangePasswordDTO: ChangePasswordDTO) {
 
   const url = `${import.meta.env.VITE_URL_API}/person/changePassword`;
@@ -79,4 +89,4 @@ function changeTempPassword(ChangeForgottenPasswordDTO: ChangeForgottenPasswordD
 };
 
 
-export { getPersonas, login, register, changePassword, forgotPassword, changeTempPassword};
+export { getPersonas, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};

@@ -40,20 +40,24 @@
           </div>
           <div class="card-body">
             <!-- 3) Inputs enlazados y deshabilitados según flag -->
+             <span v-if="errores.name" class="error-msg">{{ errores.name }}</span>
             <div class="input-group">
               <span class="material-symbols-outlined">person</span>
               <input
                 type="text"
                 v-model="user.name"
                 :disabled="!isEditingUser"
+                placeholder="Escribe tu nombre..."
               />
             </div>
+            <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
             <div class="input-group">
               <span class="material-symbols-outlined">mail</span>
               <input
                 type="text"
                 v-model="user.email"
                 :disabled="!isEditingUser"
+                placeholder="Escribe tu correo..."
               />
             </div>
           </div>
@@ -85,6 +89,8 @@
                 :disabled="!isEditingPassword"
               />
             </div>
+
+            <span v-if="errores.password1ChangePassword" class="error-msg">{{ errores.password1ChangePassword }}</span>
             <div class="input-group">
               <span class="material-symbols-outlined">key</span>
               <input
@@ -94,6 +100,8 @@
                 :disabled="!isEditingPassword"
               />
             </div>
+
+            <span v-if="errores.password2ChangePassword" class="error-msg">{{ errores.password2ChangePassword }}</span>
             <div class="input-group">
               <span class="material-symbols-outlined">key</span>
               <input
@@ -113,53 +121,75 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { IonHeader, IonContent, IonToolbar, IonTitle, IonButton } from '@ionic/vue';
+
+// COMPOSTABLES
 import { useUserMenu } from '@/composables/useUserMenu';
+
+// CLASES
+import type { ChangeNameAndEmailDTO } from '@/model/DTO/changeNameAndEmailDTO';
 import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
-import { changePassword } from '@/services/personServices';
-// import { updateUser } from '@/services/personServices'; // tu servicio de perfil
+
+// SERVICIOS
+import { changeNameAndEmail, changePassword } from '@/services/personServices';
 
 const { goTo, logout } = useUserMenu();
 
-// 1) Datos de usuario y flags
-const user = ref<{ id: number; name: string; email: string }>({ id: 0, name: '', email: '' });
-const isEditingUser = ref(false);
-const isEditingPassword = ref(false);
 
-// 2) Campos para contraseña
-const currentPassword = ref('');
-const newPassword = ref('');
-const confirmPassword = ref('');
+/* ERRORES START */
+const errores = ref<Record<string, string>>({});
+/* ERRORES END */
 
-// 3) Carga inicial desde localStorage
-onMounted(() => {
-  const stored = localStorage.getItem('usuario');
-  if (stored) Object.assign(user.value, JSON.parse(stored));
-});
 
-// 4) Alternar edición de perfil
+
+/* CAMBIO DE NOMBRE Y EMAIL START */
+  // Datos de usuario y flags
+  const user = ref<{ id: number; name: string; email: string }>({ id: 0, name: '', email: '' });
+  const isEditingUser = ref(false);
+  const isEditingPassword = ref(false);
+
 async function toggleUserEdit() {
   if (isEditingUser.value) {
     // Ha pulsado GUARDAR
+    const changeNameAndEmailDTO: ChangeNameAndEmailDTO = {
+        personId: user.value.id,
+        name: user.value.name,
+        email: user.value.email,
+    }
     try {
-      // await updateUser(user.value); // llama a tu API real
-      localStorage.setItem('usuario', JSON.stringify(user.value)); // fallback
+      await changeNameAndEmail(changeNameAndEmailDTO);
+      errores.value = {};
+      // localStorage.setItem('usuario', JSON.stringify(user.value)); // fallback
       alert('Perfil actualizado');
-    } catch {
-      alert('Error al actualizar perfil');
+    } catch (error: any) {
+      console.log('Error al actualizar perfil');
+
+      if (error.response && error.response.status === 400) {
+        errores.value = error.response.data;
+      } else {
+        errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
+      }
     }
   }
   isEditingUser.value = !isEditingUser.value;
 }
+/* CAMBIO DE NOMBRE Y EMAIL END */
 
-// 5) Alternar edición y guardar contraseña
+
+
+/* CAMBIO DE CONTRASEÑA START */
+  // Campos para contraseña
+  const currentPassword = ref('');
+  const newPassword = ref('');
+  const confirmPassword = ref('');
+
 async function togglePasswordEdit() {
   if (isEditingPassword.value) {
     // Ha pulsado GUARDAR
     const changePasswordDTO: ChangePasswordDTO = {
       personId: user.value.id,
       currentPassword: currentPassword.value,
-      password1: newPassword.value,
-      password2: confirmPassword.value
+      password1ChangePassword: newPassword.value,
+      password2ChangePassword: confirmPassword.value
     };
     try {
       await changePassword(changePasswordDTO);
@@ -167,15 +197,33 @@ async function togglePasswordEdit() {
       currentPassword.value = '';
       newPassword.value = '';
       confirmPassword.value = '';
-    } catch {
-      alert('Error al cambiar contraseña');
+      errores.value = {};
+    } catch (error: any) {
+      console.log('Error al cambiar contraseña');
+      
+      if (error.response && error.response.status === 400) {
+        errores.value = error.response.data;
+      } else {
+        errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
+      }
+
       currentPassword.value = '';
       newPassword.value = '';
       confirmPassword.value = '';
+      
     }
   }
   isEditingPassword.value = !isEditingPassword.value;
 }
+/* CAMBIO DE CONTRASEÑA END */
+
+
+
+// CARGA INICIAL DESDE LOCALSTORAGE
+onMounted(() => {
+  const stored = localStorage.getItem('usuario');
+  if (stored) Object.assign(user.value, JSON.parse(stored));
+});
 </script>
 
 <style scoped>

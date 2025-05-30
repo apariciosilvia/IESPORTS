@@ -170,7 +170,7 @@ public class PersonController {
 		
 		if (!changePassDTO.getPassword1TempPaswword().equals(changePassDTO.getPassword2TempPaswword())) {
 			System.err.println("Las contraseñas no coinciden");
-			errors.put("password2", "Las contraseñas no coinciden");
+			errors.put("password2TempPaswword", "Las contraseñas no coinciden");
 		}
 		
 		if (errors.size() > 0) {
@@ -187,38 +187,7 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
 	
-	@PostMapping("/changePassword")
-	public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePassDTO){
-		
-		Map<String, String> errors = new HashMap<>();
-		
-		Person person = ps.getPersonById(changePassDTO.getPersonId());
-		
-		if(person == null) {
-			System.err.println("Usuario no encontrado");
-			errors.put("personId", "Usuario no encontrado");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-		}
-		
-		if(!passwordEncoder.matches(changePassDTO.getCurrentPassword(), person.getPassword())) {
-			System.err.println("Credenciales no validas");
-			errors.put("credenciales", "Credenciales no validas");
-		}
-		
-		if (!changePassDTO.getPassword1().equals(changePassDTO.getPassword2())) {
-			System.err.println("Las contraseñas no coinciden");
-			errors.put("password2", "Las contraseñas no coinciden");
-		}
-		
-		if (errors.size() > 0) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-		}
-		
-		String passwordEncripted = passwordEncoder.encode(changePassDTO.getPassword1());
-		person.setPassword(passwordEncripted);
-		person = ps.updatePerson(person);
-		return ResponseEntity.status(HttpStatus.OK).body(person);
-	}
+	
 	
 	@PostMapping("/changeNameAndEmail")
 	public ResponseEntity<?> changeNameAndEmail(@Valid @RequestBody ChangeNameAndEmailDTO changeNameEmailDTO){
@@ -230,6 +199,12 @@ public class PersonController {
 		if(person == null) {
 			System.err.println("Usuario no encontrado");
 			errors.put("personId", "Usuario no encontrado");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+		
+		if(person.getEmail().equals(changeNameEmailDTO.getEmail())&& person.getName().equals(changeNameEmailDTO.getName())) {
+			System.err.println("No se ha realizado ningun cambio en el usuario");
+			errors.put("name", "No se ha realizado ningun cambio en el usuario");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 		}
 		
@@ -249,7 +224,38 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}	
 	
-	
+	@PostMapping("/changePassword")
+	public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePassDTO){
+		
+		Map<String, String> errors = new HashMap<>();
+		
+		Person person = ps.getPersonById(changePassDTO.getPersonId());
+		
+		if(person == null) {
+			System.err.println("Usuario no encontrado");
+			errors.put("personId", "Usuario no encontrado");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+		
+		if(!passwordEncoder.matches(changePassDTO.getCurrentPassword(), person.getPassword())) {
+			System.err.println("Credenciales no validas");
+			errors.put("currentPassword", "Credenciales no validas");
+		}
+		
+		if (!changePassDTO.getPassword1ChangePassword().equals(changePassDTO.getPassword2ChangePassword())) {
+			System.err.println("Las contraseñas no coinciden");
+			errors.put("password2ChangePassword", "Las contraseñas no coinciden");
+		}
+		
+		if (errors.size() > 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+		
+		String passwordEncripted = passwordEncoder.encode(changePassDTO.getPassword1ChangePassword());
+		person.setPassword(passwordEncripted);
+		person = ps.updatePerson(person);
+		return ResponseEntity.status(HttpStatus.OK).body(person);
+	}
 	
 
 	//SIRVE DE RELLENO PARA LA DOCUMENTACIÓN

@@ -658,7 +658,6 @@ function cleanInputs() {
   transform: rotateY(180deg);
 }
 
- 
 .custom-input {
   width: 100%;
   margin-bottom: 1rem;
@@ -727,79 +726,43 @@ function cleanInputs() {
 }
  
 .custom-button {
-   width: 100%;
-   margin-top: 5%;
-   --background: var(--blue-primary-color);
-   --color: var(--text-color-secundary);
-   --border-radius: 8px;
-   font-weight: bold;
-   font-size: 1.5rem;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   gap: 8px;
- }
+  width: 100%;
+  margin-top: 5%;
+  --background: var(--blue-primary-color);
+  --color: var(--text-color-secundary);
+  --border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
  
- .custom-button:hover {
-   --background: var(--blue-primary-color-hover);
- }
+.custom-button:hover {
+  --background: var(--blue-primary-color-hover);
+}
  
- .material-icons {
-   font-size: 26px;
- }
+.material-icons {
+  font-size: 26px;
+}
  
- .login-links {
-   margin-top: 1rem;
-   text-align: center;
-   font-size: 1.3rem;
- }
- 
- .login-links a {
-   display: block;
-   margin-top: 0.5rem;
-   color: var(--text-color-primary);
-   text-decoration: none;
- }
- 
- .login-links a:hover {
-   text-decoration: underline;
- }
-
-
-/* DISEÑO ERRORES START */
-.error-credenciales{
-  color: var(--text-error-color);
-  font-weight: 600;
-  font-size: 1.2rem;
-  background-color: var(--background-div-error-color);
-  border: var(--border-error-color);
-  border-radius: 12px;
-  padding: 20px;
+.login-links {
+  margin-top: 1rem;
   text-align: center;
+  font-size: 1.3rem;
 }
-
-.error-msg {
-  color: var(--text-error-color);
-  font-size: 0.9rem;
-  margin-bottom: 4px;
+ 
+.login-links a {
   display: block;
-  
+  margin-top: 0.5rem;
+  color: var(--text-color-primary);
+  text-decoration: none;
 }
-
-.error-border {
-  --highlight-color-focused: var(--border-error-color);
-  --border-color: var(--border-error-color);
-  --box-shadow: 0 0 0 1px var(--border-error-color);
+ 
+.login-links a:hover {
+  text-decoration: underline;
 }
-
-.error-border:hover{
-  --background: var(--background-error-color-hover);
-  --border-color: var(--border-error-color);
-  --box-shadow: 0 0 0 6px var(--border-error-color);
-}
-/* DISEÑO ERRORES END */
-
-
 
 /* Grandes pantallas: >1200px */
 @media (min-width: 1920px) {
