@@ -2,157 +2,160 @@
   <ion-page>
    <ion-content>
      <!-- <div id="vanta-login" class="vanta-bg"></div> -->
-     <vue-particles
-             id="tsparticles"
-             @particles-loaded="particlesLoaded"
-             :options="{
-                     background: {
-                         color: {
-                             value: '#255766'
-                         }
-                     },
-                     fpsLimit: 80,
-                     interactivity: {
-                         events: {
-                             onClick: {
-                                 enable: true,
-                                 mode: 'push'
-                             },
-                             onHover: {
-                                 enable: true,
-                                 mode: 'repulse'
-                             },
-                         },
-                         modes: {
-                             bubble: {
-                                 distance: 400,
-                                 duration: 2,
-                                 opacity: 0.2,
-                                 size: 20
-                             },
-                             push: {
-                                 quantity: 4
-                             },
-                             repulse: {
-                                 distance: 200,
-                                 duration: 0.2
-                             }
-                         }
-                     },
-                     particles: {
-                         color: {
-                             value: '#cee6ed'
-                         },
-                         links: {
-                             color: '#cee6ed',
-                             distance: 150,
-                             enable: true,
-                             opacity: 0.8,
-                             width: 6
-                         },
-                         move: {
-                             direction: 'none',
-                             enable: true,
-                             outModes: 'bounce',
-                             random: false,
-                             speed: 6,
-                             straight: false
-                         },
-                         number: {
-                             density: {
-                                 enable: true,
-                             },
-                             value: 80
-                         },
-                         opacity: {
-                             value: 0.5
-                         },
-                         shape: {
-                           type: 'image',
-                           image: [
-                               {
-                                   src: '/racket.png',
-                                   width: 32,
-                                   height: 32
-                               },
-                               {
-                                   src: '/ball.png',
-                                   width: 32,
-                                   height: 32
-                               },
-                           ]
-                       },
-                         size: {
-                             value: { min: 1, max: 5 }
-                         }
-                     },
-                     detectRetina: true
-                 }"
-         />
-     <div class="card-container" :class="{ 'show-back': showRegister }">
-       <div class="card-inner">
-         
-         <!-- Login -->
-         <div class="card-face card-front">
-          <span v-if="errores.error" class="error-credenciales">{{ errores.error }}</span>
-
-          <div class="header-row">
-
-            <IonButton @click="goBack" slot="start" fill="clear">
-              <span class="material-symbols-outlined back-icon">arrow_back</span>
-            </IonButton>
 
 
-            <h2 class="tittle">Iniciar sesión</h2>
-          </div>
-          <!-- LOGIN START -->
-          <form @submit.prevent="handleLogin">
-              <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
-              <ion-input v-model="loginData.email" type="text" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email || errores.error }"/>
-              <span v-if="errores.password" class="error-msg">{{ errores.password }}</span>
-              <ion-input
-                v-model="loginData.password"
-                :clear-on-edit="false"
-                :type="showLoginPassword ? 'text' : 'password'"   
-                placeholder="Contraseña"
-                class="custom-input"
-                fill="outline"
-                :class="{ 'error-border': errores.password || errores.error }"
+    <vue-particles
+      id="tsparticles"
+      @particles-loaded="particlesLoaded"
+      :options="{
+        background: {
+          color: {
+            value: '#255766'
+          }
+        },
+        fpsLimit: 80,
+        interactivity: {
+          events: {
+            onClick: {
+              enable: true,
+              mode: 'push'
+            },
+            onHover: {
+              enable: true,
+              mode: 'repulse'
+            },
+          },
+          modes: {
+            bubble: {
+              distance: 400,
+              duration: 2,
+              opacity: 0.2,
+              size: 20
+            },
+            push: {
+              quantity: 4
+            },
+            repulse: {
+              distance: 200,
+              duration: 0.2
+            }
+          }
+        },
+        particles: {
+          color: {
+            value: '#cee6ed'
+          },
+          links: {
+            color: '#cee6ed',
+            distance: 150,
+            enable: true,
+            opacity: 0.8,
+            width: 6
+          },
+          move: {
+            direction: 'none',
+            enable: true,
+            outModes: 'bounce',
+            random: false,
+            speed: 6,
+            straight: false
+          },
+          number: {
+            density: {
+              enable: true,
+            },
+            value: 80
+          },
+          opacity: {
+            value: 0.5
+          },
+          shape: {
+            type: 'image',
+            image: [
+              {
+                src: '/racket.png',
+                width: 32,
+                height: 32
+              },
+              {
+                src: '/ball.png',
+                width: 32,
+                height: 32
+              },
+            ]
+          },
+          size: {
+            value: { min: 1, max: 5 }
+          }
+        },
+        detectRetina: true
+      }"
+    />
+    <div class="card-container" :class="{ 'show-back': showRegister }">
+      <div class="card-inner">
+        
+        <!-- Login -->
+        <div class="card-face card-front">
+        <span v-if="errores.error" class="error-credenciales">{{ errores.error }}</span>
+
+        <div class="header-row">
+
+          <IonButton @click="goBack" slot="start" fill="clear">
+            <span class="material-symbols-outlined back-icon">arrow_back</span>
+          </IonButton>
+
+
+          <h2 class="tittle">Iniciar sesión</h2>
+        </div>
+        <!-- LOGIN START -->
+        <form @submit.prevent="handleLogin">
+            <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
+            <ion-input v-model="loginData.email" type="text" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email || errores.error }"/>
+            
+            <span v-if="errores.password" class="error-msg">{{ errores.password }}</span>
+            <ion-input
+              v-model="loginData.password"
+              :clear-on-edit="false"
+              :type="showLoginPassword ? 'text' : 'password'"   
+              placeholder="Contraseña"
+              class="custom-input"
+              fill="outline"
+              :class="{ 'error-border': errores.password || errores.error }"
+            >
+              <ion-button
+                slot="end"
+                fill="clear"
+                @click="showLoginPassword = !showLoginPassword"  
+                style="--padding:0; --min-width:auto; cursor:pointer;"
               >
-                <ion-button
-                  slot="end"
-                  fill="clear"
-                  @click="showLoginPassword = !showLoginPassword"  
-                  style="--padding:0; --min-width:auto; cursor:pointer;"
-                >
-                  <span class="material-symbols-outlined">
-                    {{ showLoginPassword ? 'visibility_off' : 'visibility' }} 
-                  </span>
-                </ion-button>
-              </ion-input>
-              <ion-button type="submit" expand="block" class="custom-button">
-                <ion-icon name="log-in-outline"></ion-icon>
-                Entrar
+                <span class="material-symbols-outlined">
+                  {{ showLoginPassword ? 'visibility_off' : 'visibility' }} 
+                </span>
               </ion-button>
-           </form>
-           <div class="login-links">
-             <a href="#" @click.prevent="showForgotPassword = true">¿Olvidaste tu contraseña?</a>
-             <a href="#"  @click.prevent="showRegister = true; handleGetCourses(); cleanInputs()">
-               ¿No tienes cuenta? Regístrate aquí
-             </a>
-           </div>
+            </ion-input>
+
+            <ion-button type="submit" expand="block" class="custom-button">
+              <ion-icon name="log-in-outline"></ion-icon>Entrar
+            </ion-button>
+          </form>
+
+          <div class="login-links">
+            <a href="#" @click.prevent="showForgotPassword = true">¿Olvidaste tu contraseña?</a>
+            <a href="#" @click.prevent="showRegister = true; handleGetCourses(); cleanInputs()">¿No tienes cuenta? Regístrate aquí</a>
           </div>
-          <!-- LOGIN END -->
- 
-         <!-- Registro -->
-         <div class="card-face card-back">
-            <div class="header-row">
-              <IonButton @click="goBack" slot="start" fill="clear">
-              <span class="material-symbols-outlined back-icon">arrow_back</span>
-              </IonButton>
+        </div>
+        <!-- LOGIN END -->
+
+        <!-- REGISTRO START -->
+        <div class="card-face card-back">
+          <div class="header-row">
+            <IonButton @click="goBack" slot="start" fill="clear">
+            <span class="material-symbols-outlined back-icon">arrow_back</span>
+            </IonButton>
             <h2 class="tittle">Registro</h2>
-            </div>
-           <form @submit.prevent="handleRegister">
+          </div>
+
+          <form @submit.prevent="handleRegister">
             <div>
               <span v-if="errores.name" class="error-msg">{{ errores.name }}</span>
               <ion-input v-model="registerData.name" type="text" placeholder="Nombre completo" class="custom-input" fill="outline" :class="{ 'error-border': errores.name }" />
@@ -188,28 +191,28 @@
             </div>
 
             <div>
-            <span v-if="errores.password2" class="error-msg">{{ errores.password2 }}</span>
-            <ion-input
-              v-model="registerData.confirmPassword"
-              :clear-on-edit="false"
-              :type="showConfirmPassword ? 'text' : 'password'"
-              placeholder="Confirmar contraseña"
-              class="custom-input"
-              fill="outline"
-              :class="{ 'error-border': errores.password2 }"
-            >
-              <ion-button
-                slot="end"
-                fill="clear"
-                @click="showConfirmPassword = !showConfirmPassword"
-                style="--padding:0; --min-width:auto; cursor:pointer;"
+              <span v-if="errores.password2" class="error-msg">{{ errores.password2 }}</span>
+              <ion-input
+                v-model="registerData.confirmPassword"
+                :clear-on-edit="false"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                placeholder="Confirmar contraseña"
+                class="custom-input"
+                fill="outline"
+                :class="{ 'error-border': errores.password2 }"
               >
-                <span class="material-symbols-outlined">
-                  {{ showConfirmPassword ? 'visibility_off' : 'visibility' }}
-                </span>
-              </ion-button>
-            </ion-input>
-          </div>
+                <ion-button
+                  slot="end"
+                  fill="clear"
+                  @click="showConfirmPassword = !showConfirmPassword"
+                  style="--padding:0; --min-width:auto; cursor:pointer;"
+                >
+                  <span class="material-symbols-outlined">
+                    {{ showConfirmPassword ? 'visibility_off' : 'visibility' }}
+                  </span>
+                </ion-button>
+              </ion-input>
+            </div>
 
             <div>
               <span v-if="errores.courseId" class="error-msg">{{ errores.courseId }}</span>
@@ -233,98 +236,97 @@
             </div>
 
             <ion-button id="present-alert" type="submit" expand="block" class="custom-button">
-              <ion-icon name="person-add-outline"></ion-icon>
-              Registrarse
+              <ion-icon name="person-add-outline"></ion-icon>Registrarse
             </ion-button>
+          </form>
 
-           </form>
-           <div class="login-links">
-             <a href="#" @click.prevent="showRegister = false; cleanInputs()">
-               ¿Ya tienes cuenta? Inicia sesión
-             </a>
-           </div>
-         </div>
-       </div>
-     </div>
+          <div class="login-links">
+            <a href="#" @click.prevent="showRegister = false; cleanInputs()">¿Ya tienes cuenta? Inicia sesión</a>
+          </div>
+        </div>
+        <!-- REGISTRO END -->
+      </div>
+    </div>
 
+    <!-- POP UP HAS OLVIDADO CONTRASEÑA START -->
+    <ion-modal class="forgot-password-modal" :is-open="showForgotPassword" @did-dismiss="showForgotPassword = false" :backdrop-dismiss="false">
+      <ion-header class="modal-header">
+        <ion-toolbar>
+          <ion-title>Recuperar contraseña</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" @click="showForgotPassword = false">
+              <span class="material-symbols-outlined">close</span>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-      <!-- POP UP HAS OLVIDADO CONTRASEÑA START -->
-      <ion-modal :is-open="showForgotPassword" @did-dismiss="showForgotPassword = false" :backdrop-dismiss="false">
-        <ion-header class="modal-header">
-          <ion-toolbar>
-            <ion-title>Recuperar contraseña</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" @click="showForgotPassword = false">
-                <span class="material-symbols-outlined">close</span>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+      <ion-content class="ion-padding">
+        <span v-if="errores.emailForgotPassword" class="error-msg">{{ errores.emailForgotPassword }}</span>
+        <ion-input
+          v-model="forgotEmail"
+          type="email"
+          placeholder="Introduce tu correo"
+          fill="outline"
+          class="custom-input"
+        />
 
-        <ion-content class="ion-padding">
-          <ion-input
-            v-model="forgotEmail"
-            type="email"
-            placeholder="Introduce tu correo"
-            fill="outline"
-            class="custom-input"
-          />
+        <ion-button class="enviar" expand="block" @click="sendEmailRecovery">
+          Enviar correo de recuperación
+        </ion-button>
 
-          <ion-button class="enviar" expand="block" @click="sendEmailRecovery">
-            Enviar correo de recuperación
-          </ion-button>
+        <ion-button class="clean" expand="block" @click="forgotEmail = ''; errores = {}">
+          Limpiar
+        </ion-button>
+      </ion-content>
+    </ion-modal>
+    <!-- POP UP HAS OLVIDADO CONTRASEÑA END -->
 
-          <ion-button class="clean" expand="block" @click="forgotEmail = ''">
-            Limpiar
-          </ion-button>
-        </ion-content>
-      </ion-modal>
-      <!-- POP UP HAS OLVIDADO CONTRASEÑA END -->
+    <!-- POP UP CAMBIO CONTRASEÑA TEMPORAL START -->
+    <ion-modal class="reset-password-modal" :is-open="showResetPassword" @did-dismiss="showResetPassword = true" :backdrop-dismiss="false">
+      <ion-header class="modal-header">
+        <ion-toolbar>
+          <ion-title>Recuperar contraseña</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" @click="showResetPassword = false">
+              <span class="material-symbols-outlined">close</span>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-      <!-- POP UP CAMBIO CONTRASEÑA TEMPORAL START -->
-      <ion-modal :is-open="showResetPassword" @did-dismiss="showResetPassword = true" :backdrop-dismiss="false">
-        <ion-header class="modal-header">
-          <ion-toolbar>
-            <ion-title>Recuperar contraseña</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" @click="showResetPassword = false">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+      <ion-content class="ion-padding">
+        <span v-if="errores.password1TempPaswword" class="error-msg">{{ errores.password1TempPaswword }}</span>
+        <ion-input
+          v-model="newPassword"
+          type="password"
+          placeholder="Nueva contraseña"
+          fill="outline"
+          class="custom-input"
+        />
+        <span v-if="errores.password2TempPaswword" class="error-msg">{{ errores.password2TempPaswword }}</span>
+        <ion-input
+          v-model="confirmPassword"
+          type="password"
+          placeholder="Confirmar contraseña"
+          fill="outline"
+          class="custom-input"
+        />
 
-        <ion-content class="ion-padding">
-          <ion-input
-            v-model="newPassword"
-            type="password"
-            placeholder="Nueva contraseña"
-            fill="outline"
-            class="custom-input"
-          />
+        <ion-button class="enviar" expand="block" @click="changeTemporalPassword">
+          Restablecer contraseña
+        </ion-button>
 
-          <ion-input
-            v-model="confirmPassword"
-            type="password"
-            placeholder="Confirmar contraseña"
-            fill="outline"
-            class="custom-input"
-          />
+        <ion-button class="clean" expand="block" @click="newPassword = ''; confirmPassword = ''; errores = {}">
+          Limpiar
+        </ion-button>
+      </ion-content>
+    </ion-modal>
+    <!-- POP UP CAMBIO CONTRASEÑA TEMPORAL END -->
 
-          <ion-button class="enviar" expand="block" @click="changeTemporalPassword">
-            Restablecer contraseña
-          </ion-button>
-
-          <ion-button class="clean" expand="block" @click="newPassword = ''; confirmPassword = ''">
-            Limpiar
-          </ion-button>
-        </ion-content>
-      </ion-modal>
-      <!-- POP UP CAMBIO CONTRASEÑA TEMPORAL END -->
-
-    </ion-content>
-   </ion-page>
- </template>
+  </ion-content>
+  </ion-page>
+</template>
  
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
@@ -442,21 +444,24 @@ const showForgotPassword = ref(false); // controla si se muestra el modal
 const forgotEmail = ref(''); // almacena el email introducido
 
 async function sendEmailRecovery() {
-  if (!forgotEmail.value || !forgotEmail.value.includes('@')) {
-    alert('Introduce un correo válido');
-    return;
-  }
+  
+  const email: ForgotPasswordRequestDTO = { emailForgotPassword: forgotEmail.value.trim() };
 
-  const email: ForgotPasswordRequestDTO = { email: forgotEmail.value.trim() };
+  console.log(email);
 
   try {
     await forgotPassword(email); 
     alert('Correo enviado. Revisa tu bandeja de entrada.');
     showForgotPassword.value = false;
     forgotEmail.value = '';
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error al recuperar contraseña:', error);
-    alert('Error al enviar el correo. Intenta de nuevo.');
+
+    if (error.response && error.response.status === 400) {
+      errores.value = error.response.data;
+    } else {
+      errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
+    }
   }
 }
 /* OLVIDATE TU CONTRASEÑA END*/
@@ -476,13 +481,12 @@ async function changeTemporalPassword(){
   try {
     const changePasswordDto: ChangeForgottenPasswordDTO = {
       personId: person.id,
-      password1: newPassword.value.trim(),
-      password2: confirmPassword.value.trim()
+      password1TempPaswword: newPassword.value.trim(),
+      password2TempPaswword: confirmPassword.value.trim()
     };
 
     await changeTempPassword(changePasswordDto);
     alert('Contraseña restablecida con exito');
-    // window.location.reload(); // recarga la página
 
     // 1️⃣ Cerrar el popup
     showResetPassword.value = false;
@@ -497,8 +501,6 @@ async function changeTemporalPassword(){
     }
 
   } catch (error: any) {
-
-    alert('Error al restablecer la contraseña');
     
     console.error('Error al restablecer la contraseña', error.response.data);
   
@@ -569,38 +571,37 @@ function cleanInputs() {
  
 <style scoped>
  
- .vanta-bg {
-   position: absolute;
-   top: 0;
-   left: 0;
-   width: 100%;
-   height: 100%;
-   z-index: 0;
-   pointer-events: none;
- }
+.vanta-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
  
- .card-container {
-   width: 100vw;
-   max-width: 600px;
-   height: auto;
-   aspect-ratio: 10 / 11;
-   perspective: 1000px;
-   margin: auto;
-   margin-top: 10%;
-   position: relative;
-   z-index: 1;
- }
+.card-container {
+  width: 100vw;
+  max-width: 600px;
+  height: auto;
+  aspect-ratio: 10 / 11;
+  perspective: 1000px;
+  margin: auto;
+  margin-top: 10%;
+  position: relative;
+  z-index: 1;
+}
 
 .header-row {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;  /* centra el contenido principal */
+  justify-content: center;
   margin: 0;
   text-align: center;
 }
 
-/* Botón anclado a la izquierda */
 .header-row IonButton {
   position: absolute;
   left: 1rem;
@@ -620,68 +621,64 @@ function cleanInputs() {
   color: #333;
   font-weight: bold;
   font-size: 2.5rem;
- }
-
- 
- .card-inner {
-   width: 100%;
-   height: 100%;
-   position: relative;
-   transition: transform 0.8s ease;
-   transform-style: preserve-3d;
- }
- 
- .card-container.show-back .card-inner {
-   transform: rotateY(180deg);
- }
- 
- .card-face {
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   background: rgba(255, 255, 255, 0.788);
-   padding: 2.5rem;
-   border-radius: 16px;
-   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-   backface-visibility: hidden;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
- }
- 
- .card-front {
-   z-index: 2;
- }
- 
- .card-back {
-   transform: rotateY(180deg);
- }
- 
- 
- 
-.custom-input {
-   width: 100%;
-   margin-bottom: 1rem;
-   text-align: left;
-   font-size: 1.5rem;
-   --border-radius: 8px;
-   --background: #ffffff10;
-   --border-color: #ccc;
-   --box-shadow: none;
 }
 
+ 
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.8s ease;
+  transform-style: preserve-3d;
+}
+ 
+.card-container.show-back .card-inner {
+  transform: rotateY(180deg);
+}
+ 
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.788);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+ 
+.card-front {
+  z-index: 2;
+}
+ 
+.card-back {
+  transform: rotateY(180deg);
+}
 
+ 
+.custom-input {
+  width: 100%;
+  margin-bottom: 1rem;
+  text-align: left;
+  font-size: 1.5rem;
+  --border-radius: 8px;
+  --background: #ffffff10;
+  --border-color: #ccc;
+  --box-shadow: none;
+}
 
- /* Icono de mostrar/ocultar dentro del input */
 .custom-input ion-button span.material-symbols-outlined {
-  color: #002F3D; /* pon aquí el color que quieras */
+  color: #002F3D;
   font-size: 1.5rem;
 }
 
  
- .custom-input.ion-focused,
- .custom-select.ion-focused {
-  --border-color: #2cff02 !important;     /* tu color personalizado al enfocar */
+.custom-input.ion-focused,
+.custom-select.ion-focused {
+  --border-color: #2cff02 !important;
   --box-shadow: 0 0 0 3px rgba(233,30,99,0.2);
  }
 
@@ -694,49 +691,42 @@ function cleanInputs() {
  /* 1) Hover solo si NO tiene error-border */
 .custom-input.sc-ion-input-md-h:not(.error-border):hover,
 .custom-select.sc-ion-input-md-h:not(.error-border):hover {
-  --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
+  --background: rgba(60, 187, 130, 0.055);
   --border-color: #002F3D;
 }
  
- .custom-select {
-   width: 100%;
-   margin-bottom: 1rem;
-   font-size: 1.5rem;
- 
-   /* Igual que custom-input */
-   --border-radius: 8px;
-   --background: #ffffff10;
-   --border-color: #ccc;
-   --box-shadow: none;
- 
-   --padding-start: 10px;
-   --padding-end: 10px;
-   --min-height: 48px;
- 
-   color: #000; /* texto negro como los inputs */
-   border: 1px solid var(--border-color);
-   border-radius: var(--border-radius);
- }
+.custom-select {
+  width: 100%;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  --border-radius: 8px;
+  --background: #ffffff10;
+  --border-color: #ccc;
+  --box-shadow: none;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --min-height: 48px;
+  color: #000; 
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
 
 
-/* Hover sólo en el ion-select cuando NO tenga error-border */
 .custom-select:not(.error-border):hover {
   border: 1px solid var(--border-color-blue) !important;
   --background: rgba(60, 187, 130, 0.055); /* fondo suave al pasar el ratón */
 }
 
-/* 1) Redefine el var que Ionic usa para el subrayado */
 .custom-select {
   --highlight-color-focused: var(--blue-primary-color-hover);
 }
 
-/* 2) Cambia el color de texto y de la flecha (caret) */
 .custom-select::part(icon) {
   color: #5b635f !important;
 
 }
  
- .custom-button {
+.custom-button {
    width: 100%;
    margin-top: 5%;
    --background: var(--blue-primary-color);
@@ -775,6 +765,8 @@ function cleanInputs() {
    text-decoration: underline;
  }
 
+
+/* DISEÑO ERRORES START */
 .error-credenciales{
   color: var(--text-error-color);
   font-weight: 600;
@@ -805,44 +797,42 @@ function cleanInputs() {
   --border-color: var(--border-error-color);
   --box-shadow: 0 0 0 6px var(--border-error-color);
 }
+/* DISEÑO ERRORES END */
+
 
 
 /* Grandes pantallas: >1200px */
 @media (min-width: 1920px) {
-  /* 1) Ajusta el padding de la tarjeta para que no quede tan “respirada” */
   :deep(.card-face)  {
-    padding: 2rem !important;    /* antes era 3rem, lo bajamos a 2rem */
+    padding: 2rem !important;
   }
 
   .card-container {
     position: relative !important;
     transform: none !important;
-    margin: auto !important;       /* centra horizontalmente */
+    margin: auto !important;
     width: 65vw !important;       
     max-width: 800px !important;
     height: auto !important;
     margin-top: 5% !important;
   }
 
-  /* 2) Reduce el padding interno de los inputs/selects */
   :deep(.custom-input) ,
   :deep(.custom-select) {
-    --padding-start: 12px !important;  /* recorta espacio lateral */
+    --padding-start: 12px !important;
     --padding-end:   12px !important;
-    margin-bottom:   1.2rem !important;/* separación vertical cómoda */
+    margin-bottom:   1.2rem !important;
   }
 
-  /* 3) Opcional: haz la tarjeta un poco más estrecha proporcionalmente */
   :deep(.card-container) {
-    width: 35vw !important;       /* ocupa el 35% del ancho */
-    max-width: 650px !important;  /* pero no excede 650px */
+    width: 35vw !important;
+    max-width: 650px !important;
   }
 }
 
 
-/* --- Centrado general en pantallas grandes (>768px) --- */
+/* MEDIA QUERY PARA PANTALLAS GRANDES (>768px) START */
 @media (min-width: 885px) and (max-width: 1919px) {
-  /* Hacemos de ion-content un flex container */
   ion-content {
     display: flex !important;
     align-items: center !important;
@@ -851,19 +841,21 @@ function cleanInputs() {
     
   }
 
-  /* Nos aseguramos de que la tarjeta no esté en absoluto */
   .card-container {
     position: relative !important;
     transform: none !important;
-    margin: auto !important;       /* centra horizontalmente */
+    margin: auto !important;
     width: 45vw !important;       
     max-width: 600px !important;
     height: auto !important;
     margin-top: 3vw !important;
   }
 }
+/* MEDIA QUERY PARA PANTALLAS GRANDES (>768px) END */
 
-/* Tablet pequeño: entre 768px y 834px */
+
+
+/* MEDIA QUERY PARA TABLET PEQUEÑA ENTRE 768px y 834px START */
 @media (min-width: 768px) and (max-width: 884px) {
   /* Centrado del contenido */
   :deep(ion-content.login-page) {
@@ -920,9 +912,11 @@ function cleanInputs() {
     margin-top: 0.8rem !important;
   }
 }
+/* MEDIA QUERY PARA TABLET PEQUEÑA ENTRE 768px y 834px END */
 
 
-/* Tablet: ancho entre 481px y 1024px */
+
+/* MEDIA QUERY PARA TABLET ENTRE 481px y 1024px START */
 @media (min-width: 481px) and (max-width: 768px) {
   /* 1) Selector profundo para ion-content */
   :deep(ion-content) {
@@ -944,11 +938,11 @@ function cleanInputs() {
     margin: 0;
   }
 }
+/* MEDIA QUERY PARA TABLET ENTRE 481px y 1024px END */
 
 
 
-
-/* Móvil: hasta 480px */
+/* MEDIA QUERY PARA MOVILES START 480px */
 @media (max-width: 480px) {
   /* 1) Centrar dentro de ion-content */
   :deep(ion-content) {
@@ -982,7 +976,6 @@ function cleanInputs() {
   :deep(.custom-button) {
     font-size: 1rem !important;
     padding: 6px 0 !important;
-    /* quita gap para que quepa mejor */
     gap: 4px !important;
   }
 
@@ -991,7 +984,6 @@ function cleanInputs() {
     font-size: 1.2rem !important;
     margin-bottom:  0.85rem !important;
     margin-top: 0;
-    
   }
 
   /* Links pequeños */
@@ -1005,9 +997,11 @@ function cleanInputs() {
     margin-bottom: 0.3rem !important;
   }
 } 
+/* MEDIA QUERY PARA MOVILES END 480px */
 
 
-/* Ultra-móvil (≤320px) */
+
+/* MEDIA QUERY PARA MOVILES START (≤320px) */
 @media (max-width: 320px) {
   /* 1) Evita scroll horizontal */
   :deep(ion-content.login-page) {
@@ -1063,6 +1057,7 @@ function cleanInputs() {
     margin-top: 0.2rem !important;
   }
 }
+/* MEDIA QUERY PARA MOVILES END */
 
 
 
@@ -1073,13 +1068,24 @@ function cleanInputs() {
 
 ion-modal::part(content) {
   border-radius: 16px;
-  max-width: 410px;
+  max-width: 500px;
   margin: auto;
   background-color: #ffffff;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  align-items: center;
+}
 
-   /* 👇 Ajusta la altura al contenido */
-  height: 350px;
+ion-modal.forgot-password-modal::part(content) {
+  /* 👇 Ajusta la altura al contenido */
+  height: 280px;
+  max-height: fit-content;
+  display: inline-block;
+}
+
+ion-modal.reset-password-modal::part(content) {
+  /* 👇 Ajusta la altura al contenido */
+  height: 360px;
   max-height: fit-content;
   display: inline-block;
 }
@@ -1094,13 +1100,13 @@ ion-toolbar {
   --min-height: 56px;
   --background:var(--blue-primary-color);
   --color: var(--text-color-secundary);
-  
   font-weight: bold;
 }
 
 ion-title {
   font-size: 1.5rem;
   text-align: center;
+  margin-left: 1%;
 }
 
 .modal-body {
@@ -1111,7 +1117,6 @@ ion-title {
 }
 
 .custom-input {
-  margin-top: 3%;
   font-size: 1.2rem;
 }
 
