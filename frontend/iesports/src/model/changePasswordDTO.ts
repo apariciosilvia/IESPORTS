@@ -1,6 +1,6 @@
 export interface ChangePasswordDTO {
   personId: number;
   currentPassword: string;
-  password1: string;
-  password2: string;
+  password1ChangePassword: string;
+  password2ChangePassword: string;
 }
