@@ -46,11 +46,13 @@
             />
 
           <!-- Mensaje si no hay resultados -->
-          <!-- <ion-item
-            v-if="filteredTournaments.length === 0"
+          <ion-item
+            v-if="Object.keys(groupedMatches).length === 0"
             lines="none"
             class="no-results"
-          >No hay torneos que coincidan con los filtros.</ion-item> -->
+          >
+            No hay torneos que coincidan con los filtros.
+          </ion-item>
         </IonList>
 
         <Footer />
