@@ -1,7 +1,6 @@
 package com.iesports.dao.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class MailService {
             		"          Hemos generado una <b>contraseña temporal</b> para ti:\n" +
             		"        </p>\n" +
             		"        <div style=\"background-color: #fcebea; padding: 15px; border-left: 5px solid #ff0800; margin: 20px 0; border-radius: 5px;\">\n" +
-            		"          <p style=\"font-size: 18px; color: #ff0800; font-weight: bold; margin: 0;\">Tu nueva contraseña temporal es: <span style=\"text-transform: uppercase;\">"+code+"</span></p>\n" +
+            		"          <p style=\"font-size: 18px; color: #ff0800; font-weight: bold; margin: 0;\">Tu nueva contraseña temporal es: <span>"+code+"</span></p>\n" +
             		"        </div>\n" +
             		"        <p style=\"font-size: 16px; color: #333;\">\n" +
             		"          Te recomendamos cambiar esta contraseña lo antes posible por una de tu preferencia. Podrás hacerlo mediante la solicitud de cambio de contraseña que te saltará iniciando sesión con esta contraseña temporal.\n" +
@@ -124,4 +123,4 @@ public class MailService {
         }
     }
 
-} 
+}

@@ -1,0 +1,33 @@
+/* DISEÑO ERRORES START */
+.error-credenciales{
+  color: var(--text-error-color);
+  font-weight: 600;
+  font-size: 1.2rem;
+  background-color: var(--background-div-error-color);
+  border: var(--border-error-color);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.error-msg {
+  color: var(--text-error-color);
+  font-size: 0.9rem;
+  margin-left: 2%;
+  display: block;
+  text-align: left;
+  
+}
+
+.error-border {
+  --highlight-color-focused: var(--border-error-color);
+  --border-color: var(--border-error-color);
+  --box-shadow: 0 0 0 1px var(--border-error-color);
+}
+
+.error-border:hover{
+  --background: var(--background-error-color-hover);
+  --border-color: var(--border-error-color);
+  --box-shadow: 0 0 0 6px var(--border-error-color);
+}
+/* DISEÑO ERRORES END */
