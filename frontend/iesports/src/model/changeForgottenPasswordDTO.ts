@@ -1,5 +1,5 @@
 export interface ChangeForgottenPasswordDTO {
   personId: number;
-  password1: string;
-  password2: string;
+  password1TempPaswword: string;
+  password2TempPaswword: string;
 }

@@ -262,7 +262,7 @@
       </ion-header>
 
       <ion-content class="ion-padding">
-        <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
+        <span v-if="errores.emailForgotPassword" class="error-msg">{{ errores.emailForgotPassword }}</span>
         <ion-input
           v-model="forgotEmail"
           type="email"
@@ -289,13 +289,14 @@
           <ion-title>Recuperar contraseña</ion-title>
           <ion-buttons slot="end">
             <ion-button fill="clear" @click="showResetPassword = false">
-              <ion-icon name="close-outline"></ion-icon>
+              <span class="material-symbols-outlined">close</span>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
 
       <ion-content class="ion-padding">
+        <span v-if="errores.password1TempPaswword" class="error-msg">{{ errores.password1TempPaswword }}</span>
         <ion-input
           v-model="newPassword"
           type="password"
@@ -303,7 +304,7 @@
           fill="outline"
           class="custom-input"
         />
-        <span v-if="errores.password2" class="error-msg">{{ errores.password2 }}</span>
+        <span v-if="errores.password2TempPaswword" class="error-msg">{{ errores.password2TempPaswword }}</span>
         <ion-input
           v-model="confirmPassword"
           type="password"
@@ -444,8 +445,9 @@ const forgotEmail = ref(''); // almacena el email introducido
 
 async function sendEmailRecovery() {
   
+  const email: ForgotPasswordRequestDTO = { emailForgotPassword: forgotEmail.value.trim() };
 
-  const email: ForgotPasswordRequestDTO = { email: forgotEmail.value.trim() };
+  console.log(email);
 
   try {
     await forgotPassword(email); 
@@ -479,13 +481,12 @@ async function changeTemporalPassword(){
   try {
     const changePasswordDto: ChangeForgottenPasswordDTO = {
       personId: person.id,
-      password1: newPassword.value.trim(),
-      password2: confirmPassword.value.trim()
+      password1TempPaswword: newPassword.value.trim(),
+      password2TempPaswword: confirmPassword.value.trim()
     };
 
     await changeTempPassword(changePasswordDto);
     alert('Contraseña restablecida con exito');
-    // window.location.reload(); // recarga la página
 
     // 1️⃣ Cerrar el popup
     showResetPassword.value = false;
@@ -1099,7 +1100,6 @@ ion-toolbar {
   --min-height: 56px;
   --background:var(--blue-primary-color);
   --color: var(--text-color-secundary);
-  
   font-weight: bold;
 }
 
@@ -1117,7 +1117,6 @@ ion-title {
 }
 
 .custom-input {
-  
   font-size: 1.2rem;
 }
 
