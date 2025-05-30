@@ -48,6 +48,7 @@
                 v-model="user.name"
                 :disabled="!isEditingUser"
                 placeholder="Escribe tu nombre..."
+                class="inputs"
               />
             </div>
             <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
@@ -58,6 +59,7 @@
                 v-model="user.email"
                 :disabled="!isEditingUser"
                 placeholder="Escribe tu correo..."
+                class="inputs"
               />
             </div>
           </div>
@@ -80,6 +82,7 @@
           </div>
           <div class="card-body">
             <!-- 5) Inputs de contraseña según flag -->
+            <span v-if="errores.currentPassword" class="error-msg">{{ errores.currentPassword }}</span>
             <div class="input-group">
               <span class="material-symbols-outlined">key</span>
               <input
@@ -87,6 +90,7 @@
                 placeholder="Contraseña actual"
                 v-model="currentPassword"
                 :disabled="!isEditingPassword"
+                class="inputs"
               />
             </div>
 
@@ -98,6 +102,7 @@
                 placeholder="Contraseña nueva"
                 v-model="newPassword"
                 :disabled="!isEditingPassword"
+                class="inputs"
               />
             </div>
 
@@ -109,6 +114,7 @@
                 placeholder="Confirmar contraseña"
                 v-model="confirmPassword"
                 :disabled="!isEditingPassword"
+                class="inputs"
               />
             </div>
           </div>
@@ -356,7 +362,7 @@ onMounted(() => {
 .card-body {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.20rem;
 }
 
 /* Cada fila: icono + input */
@@ -376,6 +382,7 @@ onMounted(() => {
   border-radius: 6px;
   background: #f9f9f9;
   font-size: 1.1rem;
+  margin-bottom: 2px;
 }
 
 /* Ajustes responsive */
@@ -402,5 +409,12 @@ ion-title {
   transform: translate(-50%, -50%);
   margin: 0;
 }
+
+/* AJUSTE EN ESTILO ERRORES START*/
+.error-msg {
+  margin-top: 1px;
+  margin-left: 10% !important;
+}
+/* AJUSTE EN ESTILO ERRORES END*/
 
 </style>
