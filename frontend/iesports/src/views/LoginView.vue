@@ -269,6 +269,7 @@
           placeholder="Introduce tu correo"
           fill="outline"
           class="custom-input"
+          :class="{ 'error-border': errores.emailForgotPassword }"
         />
 
         <ion-button class="enviar" expand="block" @click="sendEmailRecovery">
@@ -303,6 +304,7 @@
           placeholder="Nueva contraseña"
           fill="outline"
           class="custom-input"
+          :class="{ 'error-border': errores.password1TempPaswword }"
         />
         <span v-if="errores.password2TempPaswword" class="error-msg">{{ errores.password2TempPaswword }}</span>
         <ion-input
@@ -311,6 +313,7 @@
           placeholder="Confirmar contraseña"
           fill="outline"
           class="custom-input"
+          :class="{ 'error-border': errores.password2TempPaswword }"
         />
 
         <ion-button class="enviar" expand="block" @click="changeTemporalPassword">
@@ -1098,6 +1101,41 @@ ion-title {
 }
 /* OLVIDASTE TU CONTRASEÑA END */
 
+
+
+/* DISEÑO ERRORES START */
+.error-credenciales{
+  color: var(--text-error-color);
+  font-weight: 600;
+  font-size: 1.2rem;
+  background-color: var(--background-div-error-color);
+  border: var(--border-error-color);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.error-msg {
+  color: var(--text-error-color);
+  font-size: 0.9rem;
+  margin-left: 2%;
+  display: block;
+  text-align: left;
+  
+}
+
+.error-border {
+  --highlight-color-focused: var(--border-error-color);
+  --border-color: var(--border-error-color);
+  --box-shadow: 0 0 0 1px var(--border-error-color);
+}
+
+.error-border:hover{
+  --background: var(--background-error-color-hover);
+  --border-color: var(--border-error-color);
+  --box-shadow: 0 0 0 6px var(--border-error-color);
+}
+/* DISEÑO ERRORES END */
 </style>
  
  
