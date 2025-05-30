@@ -1,7 +1,9 @@
 package com.iesports.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,8 +41,15 @@ public class TeamController {
 	}
 	
 	@GetMapping("/getTeams")
-	public ResponseEntity<List<Team>> getTeams(){
+	public ResponseEntity<?> getTeams(){
 		List<Team> teams = tr.getTeams();
+		
+		if(teams == null || teams.isEmpty())
+		{
+			Map<String, String> error = new HashMap<>();
+			error.put("error", "La lista de equipos está vacía");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+		}
 		return ResponseEntity.status(HttpStatus.OK).body(teams);
 	}
 }

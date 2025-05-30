@@ -20,6 +20,7 @@ import com.iesports.dao.service.impl.MatchServiceImpl;
 import com.iesports.dao.service.impl.SportServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
 import com.iesports.dao.service.impl.TournamentServiceImpl;
+import com.iesports.dto.MatchDTO;
 import com.iesports.dto.TournamentAddDTO;
 import com.iesports.dto.TournamentAdminDTO;
 import com.iesports.dto.TournamentFilterDTO;
@@ -31,6 +32,7 @@ import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/tournament")
@@ -138,6 +140,13 @@ public class TournamentController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
 		}
 		
+		if (tournamentDTO.getNumTeams() != 4 && tournamentDTO.getNumTeams() != 8 && tournamentDTO.getNumTeams() != 16)
+		{
+			errores.put("error", "El número de equipos es incorrecto");
+			System.err.println("El número de equipos es incorrecto");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
+		}
+		
 		//EN CASO DE ESTAR EN EL RANGO DE SEPTIEMBRE-DICIEMBRE, EL AÑO QUE SE GENERA
 		//SEGUIRÁ LA SIGUIENTE ESTRUCTURA --> año actual/año siguiente
 		if(LocalDate.now().getMonthValue() >= 9 && LocalDate.now().getMonthValue() <= 12)
@@ -163,13 +172,6 @@ public class TournamentController {
 		//Calculamos el número de partidos
 		int numMatches = tournamentDTO.getNumTeams() / 2;
 		
-		if (tournamentDTO.getNumTeams() != 4 && tournamentDTO.getNumTeams() == 8 && tournamentDTO.getNumTeams() == 16)
-		{
-			errores.put("error", "No se ha encontrado el deporte");
-			System.err.println("No se ha encontrado el deporte");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
-		}
-		
 		if(tournamentDTO.getNumTeams() == 4)
 			currentRoundState = RoundMatchEnum.SEMIFINAL;
 		if(tournamentDTO.getNumTeams() == 8)
@@ -184,11 +186,50 @@ public class TournamentController {
 			
 			Match currentMatch = new Match(null, tournamentDTO.getMatches().get(i).getMatchDate(), currentRoundState, currentTournament, currentTeam1,currentTeam2 , 0, 0 ,null);
 			
-			matchS.saveMatch(currentMatch);
+			currentMatch = matchS.saveMatch(currentMatch);
 			System.out.println("SE HA GUARDADO EL PARTIDO" + currentMatch);
 		}
 		
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(currentTournament);
 	}
+	
+	@GetMapping("/getTournamentById")
+	public ResponseEntity<?> getTournamentById(@Valid @RequestBody Long tournamentId){
+		
+		/*private String name;
+		private Long sportId;
+		private int numTeams;
+		private List<MatchDTO> matches;*/
+		
+		Tournament currentTournament = tournamentS.getTournamentById(tournamentId);
+		
+		
+		//Reciclamos el DTO de torneoAdd (preguntar si esto es correcto)
+		TournamentAddDTO tournamentInfo = new TournamentAddDTO();
+		
+		tournamentInfo.setName(currentTournament.getName());
+		tournamentInfo.setSportId(currentTournament.getId());
+		
+		int contTeams = 0;
+		
+		List<Match> currentMatches = new ArrayList<>();
+		//currentMatches = matchS.get
+		
+		
+		
+		
+		
+		return null;
+	}
+	
+	
+//	@PostMapping("/modifyTournament")
+//	public ResponseEntity<?> modifyTournament(@Valid @RequestBody TournamentModifyDTO tournamentDTO ){
+//		
+//		
+//		
+//		return null;
+//	}
+	
 }
