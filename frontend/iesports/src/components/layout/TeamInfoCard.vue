@@ -5,6 +5,7 @@
       <p class="text-title">{{ teamInfo.team.name }}</p>
 
       <!-- Cuerpo: mostramos el ID y la lista de deportes -->
+      <p class="text-body">ID: {{ teamInfo.team.id }}</p>
       <p class="text-body">
         Deportes:
         <span v-for="(sport, idx) in teamInfo.sports" :key="sport.id">
