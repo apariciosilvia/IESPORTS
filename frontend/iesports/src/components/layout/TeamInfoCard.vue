@@ -5,7 +5,6 @@
       <p class="text-title">{{ teamInfo.team.name }}</p>
 
       <!-- Cuerpo: mostramos el ID y la lista de deportes -->
-      <p class="text-body">ID: {{ teamInfo.team.id }}</p>
       <p class="text-body">
         Deportes:
         <span v-for="(sport, idx) in teamInfo.sports" :key="sport.id">
@@ -140,7 +139,7 @@ function cerrarModal() {
 
 .card-button:hover {
   /* Al pasar el cursor, el botón se ilumina ligeramente */
-  background-color: #ff7a00; /* naranja más vivo */
+  background-color: rgb(223, 97, 66); /* naranja más vivo */
   transform: translate(-50%, 45%) scale(1.02);
 }
 
