@@ -1,122 +1,199 @@
+<template>
+  <div class="card">
+    <div class="card-details">
+      
+      <p class="text-title">{{ teamInfo.team.name }}</p>
+
+      <!-- Cuerpo: mostramos el ID y la lista de deportes -->
+      <p class="text-body">
+        Deportes:
+        <span v-for="(sport, idx) in teamInfo.sports" :key="sport.id">
+          {{ sport.name }}<span v-if="idx < teamInfo.sports.length - 1">, </span>
+        </span>
+      </p>
+    </div>
+
+    <!-- Botón que aparece al hacer hover -->
+    <button class="card-button" @click="abrirModal">Ver integrantes</button>
+
+    <!-- Modal de Ionic que muestra la lista de jugadores -->
+    <!-- Modal con clase player-modal -->
+    <IonModal :is-open="showModal" @didDismiss="cerrarModal" cssClass="player-modal">
+        <IonHeader class="modal-header">
+          <IonToolbar>
+            <IonTitle class="tittle">Integrantes de <b class="nameTeam">{{ teamInfo.team.name }}</b></IonTitle>
+            <IonButtons slot="end">
+              <IonButton @click="cerrarModal">
+                <IonIcon :icon="close" />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
+
+        <IonContent class="modal-content ion-padding">
+          <IonList>
+            <IonItem v-for="player in teamInfo.team.players" :key="player.id" class="player-item">
+              <IonLabel>{{ player.name }}</IonLabel>
+            </IonItem>
+            <IonItem v-if="teamInfo.team.players?.length === 0" class="player-item">
+              <IonLabel>No hay jugadores registrados</IonLabel>
+            </IonItem>
+          </IonList>
+        </IonContent>
+    </IonModal>
+  </div>
+</template>
+
+
 <script setup lang="ts">
+import { ref } from 'vue';
+import {
+  IonModal,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonButtons,
+  IonButton,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonIcon
+} from '@ionic/vue';
+import { close } from 'ionicons/icons';
 
 import type { TeamInfoDTO } from '@/model/teamInfoDTO';
 
-// Desestructuramos la prop para obtener directamente `team`
-const { teamInfo } = defineProps<{ 
-  teamInfo: TeamInfoDTO 
+// Desestructuramos la prop para obtener directamente `teamInfo`
+const { teamInfo } = defineProps<{
+  teamInfo: TeamInfoDTO;
 }>();
 
+// Estado reactivo para controlar la visibilidad del modal
+const showModal = ref(false);
+
+// Función que abre el modal
+function abrirModal() {
+  showModal.value = true;
+}
+
+// Función que cierra el modal
+function cerrarModal() {
+  showModal.value = false;
+}
 </script>
-<template>
-  <div class="card">
-    <div class="card-inner">
-      <!-- Cara frontal -->
-      <div class="card-front">
-        <h3>{{ teamInfo.team.name }} </h3> 
-        <br>
-        <p> Id:{{ teamInfo.team.id }}</p>
-        <ul>
-          <li v-for="sport in teamInfo.sports" :key="sport.id">
-            {{ sport.name }}
-          </li>
-        </ul>
-      </div>
-      <!-- Cara trasera -->
-      <div class="card-back">
-        <b>INTEGRANTES DEL EQUIPO:</b>
-        <ul>
-          <li v-for="person in teamInfo.team.players" :key="person.id">
-            {{ person.name }} 
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</template>
+
 <style scoped>
+/* Contenedor principal de la tarjeta */
 .card {
-  width: 17rem;
-  height: 20rem;
-  perspective: 1000px;
-  position: relative;
-  overflow: hidden;
- padding: 1rem;
+  width: 290px;              /* Ancho fijo de la tarjeta */
+  height: 254px;             /* Alto fijo de la tarjeta */
+  border-radius: 20px;       /* Bordes redondeados */
+  background: #f5f5f5;       /* Fondo gris claro */
+  position: relative;        /* Para posicionar el botón dentro */
+  padding: 1.8rem;           /* Espacio interno alrededor del contenido */
+  border: 2px solid #c3c6ce; /* Borde gris tenue */
+  transition: 0.5s ease-out; /* Transición suave al cambiar estilos (hover) */
+  overflow: visible;         /* Permite que el botón sobresalga si fuera necesario */
 }
 
-.card-inner {
-  width: 100%;                 
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d; 
-  transition: transform 1s 0.3s;    
+/* Contenedor de texto dentro de la tarjeta */
+.card-details {
+  color: black;              /* Color de texto negro */
+  height: 100%;              /* Ocupa todo el alto disponible */
+  display: grid;             /* Usamos grid para centrar fácilmente */
+  place-content: center;     /* Centra vertical y horizontalmente */
+  gap: 0.5em;                /* Separación entre líneas (título, ID, deportes) */
 }
 
-/* Flip por hover */
-.card:hover .card-inner {
-  transform: rotateY(180deg);
+/* Estilo del título (nombre del equipo) */
+.text-title {
+  font-size: 1.5em;          /* Tamaño de fuente mayor */
+  font-weight: bold;         /* Negrita */
+  margin: 0;                 /* Sin margen externo */
+  color: var(--blue-primary-color);
 }
 
-/* caras front/back */
-.card-front,
-.card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  box-sizing: border-box;
-  border-radius: 10px;
-  display: flex;
-  padding: 1rem;
-  font-size: 1.25rem;
+/* Estilo del texto secundario (ID y deportes) */
+.text-body {
+  color: rgb(134, 134, 134); /* Gris medio para diferenciar del título */
+  margin: 0;                 /* Sin margen externo */
+  font-size: 1rem;           /* Tamaño de fuente normal */
 }
 
-.card-front {
-  background-color: #17385a;
-  color: #fff;
-  border: 10px solid #0a2540;
-  transform: rotateY(0deg);
+/* Botón que aparece al hacer hover */
+.card-button {
+  position: absolute;        /* Para colocar en la parte inferior centrado */
+  left: 50%;                 /* Centra horizontalmente (punto de referencia) */
+  bottom: 0;                 /* Pega al borde inferior de la tarjeta */
+  transform: translate(-50%, 125%); /* Inicial: fuera y abajo, oculto */
+  width: 60%;                /* Ancho del botón relativo a la tarjeta */
+  border-radius: 1rem;       /* Botón con bordes redondeados */
+  border: none;              /* Sin borde extra */
+  background-color: var(--orange-secundary-color);  /* Color azul vivo */
+  color: #fff;               /* Texto blanco */
+  font-size: 1rem;           /* Tamaño de fuente legible */
+  padding: 0.5rem 1rem;      /* Espacio interno en el botón */
+  opacity: 0;                /* Invisible inicialmente */
+  transition: 0.3s ease-out; /* Transición suave al hacer hover */
 }
 
-.card-back {
-  background-color: #90a5bb;
-  color: #fff;
-  border: 10px solid #384450;
-  transform: rotateY(180deg);
+/* Al pasar el cursor sobre la tarjeta (.card:hover), se aplica: */
+.card:hover {
+  border-color:var(--orange-secundary-color);     /* Cambia el borde a azul vivo */
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25); /* Sombra más intensa */
+}
+
+/* Y al hacer hover, transformamos y mostramos el botón */
+.card:hover .card-button {
+  transform: translate(-50%, 50%); /* Mueve el botón hacia arriba dentro de la tarjeta */
+  opacity: 1;                       /* Lo hace visible */
 }
 
 
-.card-back {
-  background-color: #90a5bb;
-  color: #fff;
-  border: 10px solid #384450;
-  transform: rotateY(180deg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;       /* centra el título y la lista */
-  padding: 1rem;
-  font-size: 1rem;           /* texto un poco más pequeño */
-  overflow: hidden;           /* sin scroll externo */
+
+
+
+.card-button:hover {
+  /* Al pasar el cursor, el botón se ilumina ligeramente */
+  background-color: #ff7a00; /* naranja más vivo */
+  transform: translate(-50%, 45%) scale(1.02);
 }
 
-.card-back b {
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-  text-align: center;
+
+
+
+/* 1) Permitir que el header crezca si el título ocupa más de una línea */
+::v-deep .modal-header {
+  height: auto !important;        /* Quitamos altura rígida */
+  padding-top: 1rem;              /* Dejamos algo de “respiro” arriba */
+  padding-bottom: 0.75rem;        /* Espacio abajo para que no quede cortado */
 }
 
-.card-back ul {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  columns: 2;            /* 2 columnas */
-  column-gap: 1rem;
-  list-style: none;
-  text-align: center;    /* centra el texto dentro de cada columna */
+/* 2) El título puede hacer wrap y ocupar varias líneas */
+.tittle {
+  white-space: normal;             /* Permitir salto de línea */
+  word-break: break-word;          /* Romper palabra si es necesario */
+  display: block;                  /* Asegura que ocupe todo el ancho disponible */
+  padding-left: 1rem;              /* Un poco de padding en lugar de margin */
+  padding-right: 1rem;             /* Evita que el texto quede pegado al borde */
+  font-size: 1.1rem;               /* Reducimos ligeramente para que quepa mejor */
+  line-height: 1.3;                /* Altura de línea un poco más compacta */
+  color: var(--text-color-primary);
+  font-weight: 600;
 }
 
-.card-back li {
-  margin-bottom: 0.5rem;
-         /* alinea nombres a la izquierda */
+/* 3) Ajustar el nombre del equipo (en negrita) para que no herede margen */
+.nameTeam {
+  color: var(--orange-secundary-color);
+  margin-left: 0;                  /* Quitamos el margen fijo */
+  display: inline;                 /* Para que quede junto al texto previo */
 }
+
+/* 4) (Opcional) Si quieres que el IonTitle ocupe todo el espacio y tenga margen interno */
+/*    Podemos apuntar directamente al part que Ionic usa internamente para el título */
+::v-deep .modal-header ion-title {
+  width: 100%;                     /* Que ocupe todo el ancho posible */
+}
+
 </style>

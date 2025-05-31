@@ -161,7 +161,7 @@ async function loadTeamsInfo() {
 
 .teams-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, auto)); 
+  grid-template-columns: repeat(auto-fill, minmax(300px, auto)); 
   gap: 3rem;       
   padding: 1rem;
   justify-content: center; 
