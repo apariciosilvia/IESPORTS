@@ -35,11 +35,8 @@
           :teamInfo="info"
         />
       </IonList>
-
+      <Footer />
     </ion-content>
-    <Footer />
-
-    
   </ion-page>
 </template>
 

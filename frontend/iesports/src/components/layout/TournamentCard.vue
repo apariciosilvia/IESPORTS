@@ -65,7 +65,7 @@
         v-for="m in roundsGroups['FINAL'] || []"
         :key="m.id"
         class="final-winner"
-      > Ganador: {{ m.winnerTeam.name }}</div>
+      > Ganador: {{ m.winnerTeam?.name }}</div>
       
       <p class="match-empty" v-if="!(roundsGroups['FINAL'] && roundsGroups['FINAL'].length)">
         Todavía no hay un ganador.
@@ -223,7 +223,8 @@ const sportClass = computed(() => {
   gap: 20px;
   padding: 60px;
   flex-wrap: wrap;
-  margin-top: 5%;
+  margin-top: 1%;
+  
   border-radius: 12px;
 }
 
