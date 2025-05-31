@@ -19,22 +19,17 @@
 
     <!-- Modal de Ionic que muestra la lista de jugadores -->
     <!-- Modal con clase player-modal -->
-    <IonModal :is-open="showModal" @didDismiss="cerrarModal" cssClass="player-modal">
+    <IonModal :is-open="showModal" @didDismiss="cerrarModal" class="player-modal">
         <IonHeader class="modal-header">
           <IonToolbar>
             <IonTitle class="tittle">Integrantes de <b class="nameTeam">{{ teamInfo.team.name }}</b></IonTitle>
-            <IonButtons slot="end">
-              <IonButton @click="cerrarModal">
-                <IonIcon :icon="close" />
-              </IonButton>
-            </IonButtons>
           </IonToolbar>
         </IonHeader>
 
         <IonContent class="modal-content ion-padding">
-          <IonList>
+          <IonList class="player-item">
             <IonItem v-for="player in teamInfo.team.players" :key="player.id" class="player-item">
-              <IonLabel>{{ player.name }}</IonLabel>
+              <IonLabel>{{ player.name }} - {{ player.course.initials }}</IonLabel>
             </IonItem>
             <IonItem v-if="teamInfo.team.players?.length === 0" class="player-item">
               <IonLabel>No hay jugadores registrados</IonLabel>
@@ -48,20 +43,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import {
-  IonModal,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButtons,
-  IonButton,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonIcon
-} from '@ionic/vue';
-import { close } from 'ionicons/icons';
+import { IonModal, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel } from '@ionic/vue';
+
 
 import type { TeamInfoDTO } from '@/model/teamInfoDTO';
 
@@ -197,4 +180,28 @@ function cerrarModal() {
   width: 100%;                     /* Que ocupe todo el ancho posible */
 }
 
+.player-modal{
+  --border-radius: 10px;
+   --width: auto;
+  /* Opcional: puedes limitar también el ancho máximo si hace falta */
+  --max-width: 100vw;
+}
+
+::v-deep .player-modal .modal-wrapper {
+  display: inline-block;        /* Hace que el contenedor “shrink-to-fit” */
+  width: auto !important;       /* Anula cualquier ancho impuesto */
+  max-width: 100vw;              /* Evita que se sobredimensione más allá del 90% de la pantalla */
+}
+
+/* 3) Aseguramos que la página interna del modal también use ancho automático */
+::v-deep .player-modal .modal-page {
+  width: auto !important;
+}
+
+.player-item {
+  /* IonItem es un contenedor flex; esto centra horizontalmente su contenido */
+  justify-content: center;
+  /* Asegura que el texto dentro del IonLabel quede centrado */
+  text-align: center;
+}
 </style>
