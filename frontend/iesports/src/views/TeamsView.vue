@@ -192,13 +192,63 @@ watch(selectedSport, async () => {
 }
 
 
+
 .teams-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 2rem;
-  padding: 1rem 1.5rem;
-  justify-content: center;
-  margin-bottom: 2rem;
+  max-width: 1800px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  margin-bottom: 3%;
+}
+
+@media (max-width: 1100px) {
+  .teams-container {
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 4%;
+  }
+}
+
+@media (max-width: 800px) {
+  .teams-container {
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 6%;
+  }
+}
+
+@media (max-width: 500px) {
+  .teams-container {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
+   .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 15% 1rem 2rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .teams-container {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+    margin-bottom: 9%;
+  }
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 25% 1rem 2rem;
+  }
+}
+
+/* Evita que cualquier tarjeta o contenido se salga */
+.teams-container > * {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
 }
 
 .error {
