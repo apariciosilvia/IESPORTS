@@ -81,31 +81,22 @@
         </div>
 
         <!-- Columna Derecha (60%) -->
-          <div class="column-right">
-            <div class="tournament-state">
-              <h2>ESTADO DEL TORNEO:  <b>{{ tournamentState }}</b></h2>
-             
+        <div class="column-right">
+          <div class="tournament-state">
+            <h2>ESTADO DEL TORNEO:  <b>{{ tournamentState }}</b></h2>
+          </div>
+          <div class="team-selector">
+            <div class="header">
+              <h2>PARTIDOS JUGADOS</h2>
             </div>
-            <div class="team-selector">
-              <div class="header">
-                <h2>PARTIDOS JUGADOS</h2>
-              </div>
-              <div class="round-list">
-                <div class="round-item">
-                  <span>CUARTOS</span>
-                  <span class="badge">3/4</span>
-                </div>
-                <div class="round-item">
-                  <span>SEMIFINALES</span>
-                  <span class="badge">0/2</span>
-                </div>
-                <div class="round-item">
-                  <span>FINAL</span>
-                  <span class="badge">0/1</span>
-                </div>
+            <div class="round-list">
+              <div class="round-item" v-for="r in roundsInfo" :key="r.label">
+                <span>{{ r.label }}</span>
+                <span class="badge">{{ r.played }}/{{ r.total }}</span>
               </div>
             </div>
           </div>
+        </div>
       </div>
 
       <!-- Tabla de emparejamientos -->
@@ -207,24 +198,24 @@
       </div>
     </div>
   </ion-content>
- <ion-footer class="row">
-      <div class="colum-down2">
-        <ion-button
-          expand="block"
-          class="btn-clean"
-          @click="resetForm"
-        ><span class="material-symbols-outlined">mop</span>Limpiar</ion-button>
-        <ion-button
-          expand="block"
-          class="btn-save"
-          @click="editTournament"
-        ><span class="material-symbols-outlined">save</span>GUARDAR CAMBIOS</ion-button>
-      </div>
-    </ion-footer>
+  <ion-footer class="row">
+    <div class="colum-down2">
+      <ion-button
+        expand="block"
+        class="btn-clean"
+        @click="resetForm"
+      ><span class="material-symbols-outlined">mop</span>Limpiar</ion-button>
+      <ion-button
+        expand="block"
+        class="btn-save"
+        @click="editTournament"
+      ><span class="material-symbols-outlined">save</span>GUARDAR CAMBIOS</ion-button>
+    </div>
+  </ion-footer>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import {
   IonSelect,
   IonSelectOption,
@@ -270,7 +261,7 @@ function getRoundLabel(round: string): string {
     case RoundMatchEnum.CUARTOS_FINAL:
       return 'CUARTOS';
     case RoundMatchEnum.SEMIFINAL:
-      return 'SEMIFINAL';
+      return 'SEMIFINALES';
     case RoundMatchEnum.FINAL:
       return 'FINAL';
     default:
@@ -285,7 +276,7 @@ function formatDate(d: Date | null): string {
   const yy = dt.getFullYear();
   const mm = String(dt.getMonth() + 1).padStart(2, '0');
   const dd = String(dt.getDate()).padStart(2, '0');
-  return `${yy}-${mm}-${dd}`;
+  return `${dd}/${mm}/${yy}`;
 }
 
 function onDateChange(match: Match, value: string) {
@@ -334,7 +325,33 @@ function editTournament() {
 onMounted(() => {
   loadData();
 });
+
+const roundsInfo = computed(() => {
+  const totalTeams = selectedNumberTeams.value;
+  if (!totalTeams) return [];
+  const levels = Math.log2(totalTeams);
+  const info: { label: string; played: number; total: number }[] = [];
+  for (let i = 1; i <= levels; i++) {
+    const offset = levels - i;
+    let roundKey = '';
+    if (offset === 3) roundKey = RoundMatchEnum.OCTAVOS;
+    else if (offset === 2) roundKey = RoundMatchEnum.CUARTOS_FINAL;
+    else if (offset === 1) roundKey = RoundMatchEnum.SEMIFINAL;
+    else if (offset === 0) roundKey = RoundMatchEnum.FINAL;
+    else continue;
+
+    const totalMatches = totalTeams / Math.pow(2, i);
+    const playedMatches = matchesTournament.value.filter(
+      m => m.round === roundKey && m.winnerTeam !== null
+    ).length;
+    const label = getRoundLabel(roundKey);
+    info.push({ label, played: playedMatches, total: totalMatches });
+  }
+  return info;
+});
 </script>
+
+
 
 <style scoped>
 .white-header {

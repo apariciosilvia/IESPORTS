@@ -129,7 +129,11 @@ function closeModal() {
   background-color: #ffffff;
   border-radius: 10px;
   border: solid 1px #D9D8D8;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 7rem);
 }
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -162,6 +166,8 @@ function closeModal() {
   color: white;
 }
 .table {
+  flex: 1;
+  overflow-y: auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }

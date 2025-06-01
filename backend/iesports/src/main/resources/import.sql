@@ -119,11 +119,11 @@ INSERT INTO teams (name) VALUES ('Hakuren Phoenix');
 -- PARTIDOS PARA TORNEO PRUEBA EDITAR
 
 -- Cuartos de final
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-06-23', 'CUARTOS_FINAL', 1, 1, 4, 65, 75, 4);
-INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-06-28', 'CUARTOS_FINAL', 1, 5, 8, 23, 64, 8);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-06-01', 'CUARTOS_FINAL', 1, 1, 4, 2, 3, 4);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-06-28', 'CUARTOS_FINAL', 1, 5, 8, 0, 0, null);
+--INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-06-28', 'CUARTOS_FINAL', 1, 5, 8, 2, 4, 8);
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES (null, 'CUARTOS_FINAL', 1, 9, 12, 0, 0, null);
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-07-01', 'CUARTOS_FINAL', 1, 13, 16, 0, 0, null);
-
 
 -- Octavos
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-01', 'OCTAVOS', 5, 1, 2, 64, 58, 1);
