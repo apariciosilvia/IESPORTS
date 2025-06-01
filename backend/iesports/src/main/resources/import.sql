@@ -81,10 +81,10 @@ INSERT INTO `sports` (`id`, `name`) VALUES (3, 'PingPong');
 INSERT INTO `sports` (`id`, `name`) VALUES (4, 'Ajedrez');
 
 -- TORNEO PRUEBA EDITAR
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Torneo prueba editar', 'PROCESO');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Torneo prueba PROCESO editar', 'PROCESO');
 
 -- Fútbol Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'PROCESO');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Torneo prueba PENDIENTE editar', 'PENDIENTE');
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2021/22', 'Liga Juvenil Fútbol', 'PROCESO');
 -- Baloncesto Tournaments
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2021/22', 'Torneo Escolar Baloncesto', 'PENDIENTE');
@@ -116,14 +116,22 @@ INSERT INTO teams (name) VALUES ('Musashi Middle School');
 INSERT INTO teams (name) VALUES ('Hakuren Phoenix');
 
 
--- PARTIDOS PARA TORNEO PRUEBA EDITAR
+-- PARTIDOS PARA TORNEO PRUEBA EDITAR PROCESO
 
--- Cuartos de final
+-- Cuartos de final 
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-06-01', 'CUARTOS_FINAL', 1, 1, 4, 2, 3, 4);
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-06-28', 'CUARTOS_FINAL', 1, 5, 8, 0, 0, null);
 --INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-06-28', 'CUARTOS_FINAL', 1, 5, 8, 2, 4, 8);
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES (null, 'CUARTOS_FINAL', 1, 9, 12, 0, 0, null);
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-07-01', 'CUARTOS_FINAL', 1, 13, 16, 0, 0, null);
+
+
+-- PARTIDOS PARA TORNEO PRUEBA EDITAR PROCESO
+-- Semifinal
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES (null, 'SEMIFINAL', 2, 9, 12, 0, 0, null);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-07-01', 'SEMIFINAL', 2, 13, 16, 0, 0, null);
+
+
 
 -- Octavos
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-01', 'OCTAVOS', 5, 1, 2, 64, 58, 1);

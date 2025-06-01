@@ -149,7 +149,7 @@
                   <div class="date-btn">
                     <input
                       type="date"
-                      :value="formatDate(match.date)"
+                      :value="formatForInput(match.date)"
                       @input="onDateChange(match, ($event.target as HTMLInputElement).value)"
                       class="date-input"
                       :readonly="match.winnerTeam !== null"
@@ -171,7 +171,7 @@
                 <input
                   class="inputPoints"
                   type="number"
-                  :value="match.pointsTeam1"
+                  v-model.number="match.pointsTeam1"
                   :readonly="match.winnerTeam !== null"
                 />
               </div>
@@ -188,7 +188,7 @@
                 <input
                   class="inputPoints"
                   type="number"
-                  :value="match.pointsTeam2"
+                  v-model.number="match.pointsTeam2"
                   :readonly="match.winnerTeam !== null"
                 />
               </div>
@@ -216,8 +216,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import {
-  IonSelect,
+import { IonSelect,
   IonSelectOption,
   IonContent,
   IonList,
@@ -235,6 +234,8 @@ import type { Match } from '@/model/match';
 import { getMatchesByTournamentId } from '@/services/matchService';
 import { StateTournamentEnum } from '@/model/enum/StateTournamentEnum';
 import { RoundMatchEnum } from '@/model/enum/RoundMatchEnum';
+import type { EditTournamentAndMatchDTO } from '@/model/dto/editTournamentAndMatchDTO';
+import type { MatchEditDTO } from '@/model/matchEditDTO';
 
 const readOnlyTournament = ref(true);
 const error = ref<string | null>(null);
@@ -269,14 +270,22 @@ function getRoundLabel(round: string): string {
   }
 }
 
-// Convierte un Date a "YYYY-MM-DD"
 function formatDate(d: Date | null): string {
-  if (!d) return '';
-  const dt = new Date(d);
-  const yy = dt.getFullYear();
-  const mm = String(dt.getMonth() + 1).padStart(2, '0');
-  const dd = String(dt.getDate()).padStart(2, '0');
-  return `${dd}/${mm}/${yy}`;
+  if (!d) return ''
+  const dt = new Date(d)
+  const yy = String(dt.getFullYear() % 100).padStart(2, '0')
+  const mm = String(dt.getMonth() + 1).padStart(2, '0')
+  const dd = String(dt.getDate()).padStart(2, '0')
+  return `${dd}/${mm}/${yy}`
+}
+
+function formatForInput(d: Date | null): string {
+  if (!d) return ''
+  const dt = new Date(d)
+  const yyyy = dt.getFullYear()
+  const mm = String(dt.getMonth() + 1).padStart(2, '0')
+  const dd = String(dt.getDate()).padStart(2, '0')
+  return `${yyyy}-${mm}-${dd}`
 }
 
 function onDateChange(match: Match, value: string) {
@@ -319,7 +328,24 @@ function resetForm() {
 }
 
 function editTournament() {
-  // Lógica para guardar cambios
+  const payload: EditTournamentAndMatchDTO = {
+    tournamentId: props.tournamentId,
+    nameTournament: tournamentName.value,
+    sportId: selectedSportId.value!,
+    matchesEditDTO: matchesTournament.value.map((m) => {
+      const dto: MatchEditDTO = {
+        matchId: m.id,
+        matchDate: m.date,
+        scoreTeam1: m.pointsTeam1,
+        scoreTeam2: m.pointsTeam2,
+      };
+      return dto;
+    }),
+  };
+
+  console.log('Payload EditTournamentAndMatchDTO:', payload);
+  // Aquí puedes enviar 'payload' al servicio correspondiente o emitir un evento:
+  // $emit('save', payload);
 }
 
 onMounted(() => {
@@ -350,7 +376,6 @@ const roundsInfo = computed(() => {
   return info;
 });
 </script>
-
 
 
 <style scoped>
