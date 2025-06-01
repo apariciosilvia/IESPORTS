@@ -81,7 +81,7 @@ INSERT INTO `sports` (`id`, `name`) VALUES (3, 'PingPong');
 INSERT INTO `sports` (`id`, `name`) VALUES (4, 'Ajedrez');
 
 -- TORNEO PRUEBA EDITAR
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Torneo prueba editar', 'PENDIENTE');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Torneo prueba editar', 'PROCESO');
 
 -- Fútbol Tournaments
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022/23', 'Copa Nacional de Fútbol', 'PROCESO');

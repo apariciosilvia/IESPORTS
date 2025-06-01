@@ -81,13 +81,31 @@
         </div>
 
         <!-- Columna Derecha (60%) -->
-        <div class="column-right">
-          <div class="team-selector">
-            <div class="header">
-              <h2>PARTIDOS JUGADOS</h2>
+          <div class="column-right">
+            <div class="tournament-state">
+              <h2>ESTADO DEL TORNEO:  <b>{{ tournamentState }}</b></h2>
+             
+            </div>
+            <div class="team-selector">
+              <div class="header">
+                <h2>PARTIDOS JUGADOS</h2>
+              </div>
+              <div class="round-list">
+                <div class="round-item">
+                  <span>CUARTOS</span>
+                  <span class="badge">3/4</span>
+                </div>
+                <div class="round-item">
+                  <span>SEMIFINALES</span>
+                  <span class="badge">0/2</span>
+                </div>
+                <div class="round-item">
+                  <span>FINAL</span>
+                  <span class="badge">0/1</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
       </div>
 
       <!-- Tabla de emparejamientos -->
@@ -237,6 +255,7 @@ const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
 const selectedNumberTeams = ref<number>(0);
 const selectedTeams = ref<string[]>([]);
+const tournamentState = ref<StateTournamentEnum | null>(null);
 
 function preventSelect(e: Event) {
   if (readOnlyTournament.value) {
@@ -283,6 +302,7 @@ async function loadData() {
     }
     tournamentName.value = matchesTournament.value[0]?.tournament?.name || 'Sin nombre del torneo';
     selectedSportId.value = matchesTournament.value[0]?.tournament?.sport.id || null;
+    tournamentState.value = matchesTournament.value[0]?.tournament?.state as unknown as StateTournamentEnum || null;
 
     selectedNumberTeams.value = countTeams();
   } catch (e: any) {
@@ -356,15 +376,19 @@ onMounted(() => {
   padding-top: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: rem;
   max-width: 40%;
 }
 
 .column-right {
-  max-width: 60%;
-  background-color: #ededed;
+  max-width: 50%;
+  background-color: #ffffff;
   border-radius: 10px;
-  padding: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap: 5%;
 }
 
 .colum-down {
@@ -457,6 +481,10 @@ ion-select::part(placeholder) {
   width: max-content;
 }
 
+.glass-radio-group input:checked + label {
+  color: #ffffff;
+}
+
 .glass-radio-group input {
   display: none;
 }
@@ -497,20 +525,21 @@ ion-select::part(placeholder) {
 }
 
 .team-selector {
-  padding: 1rem;
   border-radius: 12px;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  
   margin-bottom: 0.5rem;
 }
 
 .header h2 {
   font-size: 1.2rem;
   margin: 0;
+  
 }
 
 .counter {
@@ -534,6 +563,22 @@ ion-select::part(placeholder) {
   padding: 0;
   margin: 0 0 1rem 0;
 }
+
+
+.btn-clean, .btn-save {
+  --background: #0a2540;
+  --border-radius: 8px;
+  --color: white;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  font-weight: bold;
+}
+
+.btn-clean .material-symbols-outlined,
+.btn-save .material-symbols-outlined {
+  margin-right: 5px;
+}
+
 
 .match-header {
   display: flex;
@@ -683,5 +728,87 @@ ion-select::part(placeholder) {
 .loser-border {
   border: 2px solid #F03726;
   border-radius: 8px;
+}
+
+
+.team-selector {
+  background-color: #ededed;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.header {
+  width: 100%;
+  background-color: #e22f28;
+  text-align: center;
+}
+
+.header h2 {
+  color: #ffffff;
+  margin: 0;
+  padding: 0.75rem 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.round-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.round-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 40%;
+  margin-bottom: 0.5rem;
+}
+
+.round-item:last-child {
+  margin-bottom: 0;
+}
+
+.round-item span:first-child {
+  color: #e22f28;
+  font-weight: 600;
+}
+
+.badge {
+  background-color: #e22f28;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+
+.tournament-state {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  background-color: #ededed;
+  padding: 0.75rem;
+  border-radius: 10px;
+}
+
+.tournament-state h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--text-color-primary);
+}
+.tournament-state b {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--orange-secundary-color);
 }
 </style>

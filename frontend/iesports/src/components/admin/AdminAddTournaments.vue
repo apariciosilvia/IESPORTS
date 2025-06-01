@@ -148,7 +148,6 @@
           @click="createTournament"
         ><span class="material-symbols-outlined">save</span>Crear Torneo</ion-button>
       </div>
-
     </ion-footer>
 </template>
 
