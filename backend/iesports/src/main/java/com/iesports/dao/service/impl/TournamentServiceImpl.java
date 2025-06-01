@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.iesports.dao.repository.TournamentRepository;
 import com.iesports.dao.service.ITournamentService;
+import com.iesports.model.Match;
 import com.iesports.model.Tournament;
 
 @Service
@@ -59,6 +60,11 @@ public class TournamentServiceImpl implements ITournamentService{
 	@Override
 	public List findTournamentsDates() {
 		return tr.getTournamentsDates();
+	}
+
+	@Override
+	public List<Match> getMatchesByTournamentId(Long id) {
+		return tr.getMatchesByTournamentId(id);
 	}
 
 }

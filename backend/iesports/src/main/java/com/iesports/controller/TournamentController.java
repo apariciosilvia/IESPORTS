@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iesports.dao.service.impl.MatchServiceImpl;
@@ -195,32 +196,21 @@ public class TournamentController {
 	}
 	
 	@GetMapping("/getTournamentById")
-	public ResponseEntity<?> getTournamentById(@Valid @RequestBody Long tournamentId){
+	public ResponseEntity<?> getTournamentById(@RequestParam Long tournamentId){
+		Map<String, String> errores = new HashMap<>();
+		List<Match> results = new ArrayList<>();
 		
-		/*private String name;
-		private Long sportId;
-		private int numTeams;
-		private List<MatchDTO> matches;*/
+		results = tournamentS.getMatchesByTournamentId(tournamentId);
 		
-		Tournament currentTournament = tournamentS.getTournamentById(tournamentId);
-		
-		
-		//Reciclamos el DTO de torneoAdd (preguntar si esto es correcto)
-		TournamentAddDTO tournamentInfo = new TournamentAddDTO();
-		
-		tournamentInfo.setName(currentTournament.getName());
-		tournamentInfo.setSportId(currentTournament.getId());
-		
-		int contTeams = 0;
-		
-		List<Match> currentMatches = new ArrayList<>();
-		//currentMatches = matchS.get
+		if(results == null || results.size() == 0)
+		{
+			errores.put("error", "no se ha encontrado partidos con esta clave id de torneo");
+			System.err.println("no se ha encontrado partidos con esta clave id de torneo");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+		}
 		
 		
-		
-		
-		
-		return null;
+		return ResponseEntity.status(HttpStatus.OK).body(results);
 	}
 	
 	
