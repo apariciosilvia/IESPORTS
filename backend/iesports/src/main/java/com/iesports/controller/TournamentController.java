@@ -1,7 +1,10 @@
 package com.iesports.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +24,11 @@ import com.iesports.dao.service.impl.MatchServiceImpl;
 import com.iesports.dao.service.impl.SportServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
 import com.iesports.dao.service.impl.TournamentServiceImpl;
+import com.iesports.dto.MatchModifyTournamentDTO;
 import com.iesports.dto.TournamentAddDTO;
 import com.iesports.dto.TournamentAdminDTO;
 import com.iesports.dto.TournamentFilterDTO;
+import com.iesports.dto.TournamentModifyDTO;
 import com.iesports.enums.RoundMatchEnum;
 import com.iesports.enums.StateTournamentEnum;
 import com.iesports.model.Match;
@@ -211,12 +216,103 @@ public class TournamentController {
 	}
 	
 	
-//	@PostMapping("/modifyTournament")
-//	public ResponseEntity<?> modifyTournament(@Valid @RequestBody TournamentModifyDTO tournamentDTO ){
-//		
-//		
-//		
-//		return null;
-//	}
+	@PostMapping("/modifyTournament")
+	public ResponseEntity<?> modifyTournament(@Valid @RequestBody TournamentModifyDTO tournamentDTO ){
+		//primero recogemos el torneo  mediante el ID
+		Tournament currentTournament = new Tournament();
+		currentTournament = tournamentS.getTournamentById(tournamentDTO.getTournamentId());
+		
+		//EN CASO DE SER PENDIENTE, SE PODRÁ MODIFICAR EL NOMBRE DEL TORNEO Y EL DEPORTE
+		if(currentTournament.getState() == StateTournamentEnum.PENDIENTE)
+		{
+			boolean tournamentIsModified = false;
+	
+			if(!currentTournament.getName().equals(tournamentDTO.getTournamentNameModified()) && currentTournament.getName() != null)
+			{
+				currentTournament.setName(tournamentDTO.getTournamentNameModified());
+				tournamentIsModified = true;
+			}
+				
+			if(currentTournament.getSport().getId() != tournamentDTO.getSportModifiedId())
+			{
+				Sport currentSport = sportS.getSportById(tournamentDTO.getSportModifiedId());
+				
+				if(currentSport != null)
+				{
+					tournamentIsModified = true;
+					currentTournament.setSport(currentSport);
+				}
+				else
+				{
+					System.err.println("No se encontro el deporte con el id " + tournamentDTO.getSportModifiedId());
+					return ResponseEntity.status(HttpStatus.NOT_FOUND).body(currentSport);
+				}
+			}
+			
+			
+			//Finalmente en caso de que haya modificación, se actualizarán los datos del torneo
+			if(tournamentIsModified == true) {
+				currentTournament = tournamentS.updateTournament(currentTournament);
+			}
+			
+		}
+		
+		if(currentTournament.getState() != StateTournamentEnum.FINALIZADO)
+		{
+			for (MatchModifyTournamentDTO currentModifiedMatch : tournamentDTO.getMatches())
+			{
+				//DECLARAMOS LAS VARIABLES NECESARIAS PARA LA ACTUALIZACIÓN
+				boolean matchIsModified = false;
+				Match currentMatch = matchS.getMatchById(currentModifiedMatch.getMatchId());
+				
+				//COMPROBAMOS SI SE HA MODIFICADO LA FECHA, EN CASO DE SER INFERIOR A LA FECHA ACTUAL, NO SE CAMBIARÁ
+				if(currentModifiedMatch.getMatchDate() != null 
+				&& currentMatch.getDate().compareTo(currentModifiedMatch.getMatchDate()) != 0)
+				{
+					// Convertir Date a LocalDateTime
+					LocalDateTime matchDateTime = currentModifiedMatch.getMatchDate().toInstant()
+					        .atZone(ZoneId.systemDefault())
+					        .toLocalDateTime();
+
+					// Comparar con la fecha y hora actual
+					if (matchDateTime.compareTo(LocalDateTime.now()) > 0)
+					{
+						currentMatch.setDate(currentModifiedMatch.getMatchDate());
+						matchIsModified = true;
+					}
+				}
+				
+				//SE COMPRUEBA SI SE HAN MODIFICADO LOS PUNTOS DE ALGUNOS DE LOS EQUIPOS Y QUE LOS PUNTOS NO SEAN IGUALES (QUE NO SEA EMPATE)
+				if( ( currentModifiedMatch.getScoreTeam1() != currentMatch.getPointsTeam1() ||
+					currentModifiedMatch.getScoreTeam2() != currentMatch.getPointsTeam2() ) && 
+					currentModifiedMatch.getScoreTeam1() != currentModifiedMatch.getScoreTeam2() )
+				{
+					//SI ALGUNO DE LOS DOS ES MAYOR A 0, SE DECIDIRÁ AUTOMÁTICAMENTE EL GANADOR
+					if(currentModifiedMatch.getScoreTeam1() > 0 || 
+						currentModifiedMatch.getScoreTeam2() > 0)
+					{	
+						currentMatch.setPointsTeam1(currentModifiedMatch.getScoreTeam1());
+						currentMatch.setPointsTeam2(currentModifiedMatch.getScoreTeam2());
+						
+						//EN CASO QUE HAYA EMPATE (COSA QUE NO DEBERÍA PASAR), NO MODIFICO NINGÚN GANADOR DE ESTOS
+						
+						
+						if(currentModifiedMatch.getScoreTeam1() > currentModifiedMatch.getScoreTeam2())
+							currentMatch.setWinnerTeam(currentMatch.getTeam1());
+						else
+							currentMatch.setWinnerTeam(currentMatch.getTeam2());
+						
+						matchIsModified = true;
+					}
+				}
+				
+				if(matchIsModified){
+					currentMatch = matchS.updateMatch(currentMatch);
+				}
+			}
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body(currentTournament);
+	}
 	
 }
