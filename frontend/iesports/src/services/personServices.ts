@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
 import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO';
 import type { ChangeForgottenPasswordDTO } from '@/model/changeForgottenPasswordDTO';
-import type { ChangeNameAndEmailDTO } from '@/model/DTO/changeNameAndEmailDTO';
+import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
 
 function getPersonas() {
 

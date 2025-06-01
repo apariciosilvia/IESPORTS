@@ -137,5 +137,4 @@ public class Match {
 				+ ", winnerTeam=" + winnerTeam + "]";
 	}
 	
-	
 }

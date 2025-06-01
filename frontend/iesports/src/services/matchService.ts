@@ -1,3 +1,4 @@
+import type { Match } from '@/model/match';
 import axios from 'axios';
 
 function getMatches(): Promise<any[]> {
@@ -16,4 +17,20 @@ function getMatches(): Promise<any[]> {
   });
 }
 
-export { getMatches };
+function getMatchesByTournamentId(tournamentId: number): Promise<Match[]> {
+
+  const url = `${import.meta.env.VITE_URL_API}/match/getMatchesByTournamentId`;
+
+  return new Promise((resolve, reject) => {
+    axios.get(url, { params: { tournamentId } })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.error('Error cargando partidos del torneo:', error);
+        reject(error);
+      });
+  });
+}
+
+export { getMatches, getMatchesByTournamentId };
