@@ -123,7 +123,7 @@
         <ion-button
           expand="block"
           class="btn-save"
-          @click="createTournament"
+         
         ><span class="material-symbols-outlined">save</span>Crear Torneo</ion-button>
       </div>
 
@@ -131,9 +131,9 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+// const emit = defineEmits<{
+//   (e: 'close'): void;
+// }>();
 
 import { ref, onMounted, computed, watch  } from 'vue';
 
@@ -141,20 +141,17 @@ import { IonSelect, IonSelectOption, IonContent, IonList, IonItem, IonInput, Ion
 
 import { getSports } from '@/services/sportService';
 
-import type { Team } from '@/model/team';
+import type { Match } from '@/model/match';
 
-import { addTournament } from '@/services/tournamentService';
-import { getTeams } from '@/services/teamService';
+import { getMatches } from '@/services/matchService';
 
-import type { TournamentAddDTO } from '@/model/TournamentAddDTO';
-import type { MatchDTO } from '@/model/matchDTO';
 
 const error = ref<string | null>(null);
 
-const props = defineProps<{ tournamentId: number }>()
+const props = defineProps<{ tournamentId: number }>();
 
 const sports = ref<any[]>([]);
-const teams = ref<Team[]>([]);
+const matchesTournament = ref<Match[]>([]);
 
 const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
@@ -199,9 +196,8 @@ async function loadData () {
     sports.value = await getSports();
     console.log('Lista de deportes :', sports.value);
 
-    teams.value = await getTeams();
-    // teams.value = teamsList.value;
-    console.log('Lista de equipos :', teams.value);
+    matchesTournament.value = await getMatches();
+    console.log('Lista de partidos :', matchesTournament.value);
 
   } catch (e: any) {
     error.value = 'No se pudieron cargar los datos';
@@ -209,63 +205,63 @@ async function loadData () {
   } 
 }
 
-async function createTournament() {
+// async function createTournament() {
 
-  console.log('FECHAS', matchDates.value);
-  const matches: MatchDTO[] = [];
+//   console.log('FECHAS', matchDates.value);
+//   const matches: MatchDTO[] = [];
 
-  const teamsTournament: Team[] = [];
+//   const teamsTournament: Team[] = [];
 
-  for (let i = 0; i < selectedTeams.value.length; i += 2) {
+//   for (let i = 0; i < selectedTeams.value.length; i += 2) {
     
-    const team1 = teams.value.find(t => t.name === selectedTeams.value[i]);
-    teamsTournament.push(team1!); 
+//     const team1 = teams.value.find(t => t.name === selectedTeams.value[i]);
+//     teamsTournament.push(team1!); 
 
-    const team2 = teams.value.find(t => t.name === selectedTeams.value[i + 1]);
-    teamsTournament.push(team2!);
+//     const team2 = teams.value.find(t => t.name === selectedTeams.value[i + 1]);
+//     teamsTournament.push(team2!);
 
-  }
+//   }
 
-  console.log('Equipos seleccionados para el torneo:', teamsTournament);
+//   console.log('Equipos seleccionados para el torneo:', teamsTournament);
 
-  const numberMatches = selectedNumberTeams.value / 2;
+//   const numberMatches = selectedNumberTeams.value / 2;
 
-  for (let i = 0; i < numberMatches; i++) {
-    const idx1 = 2 * i;
-    const idx2 = 2 * i + 1;
-    matches.push({
-      team1Id: teamsTournament[idx1]?.id ?? null,
-      team2Id: teamsTournament[idx2]?.id ?? null,
-      matchDate: matchDates.value?.[i] ?? null
-    });
-  }
+//   for (let i = 0; i < numberMatches; i++) {
+//     const idx1 = 2 * i;
+//     const idx2 = 2 * i + 1;
+//     matches.push({
+//       team1Id: teamsTournament[idx1]?.id ?? null,
+//       team2Id: teamsTournament[idx2]?.id ?? null,
+//       matchDate: matchDates.value?.[i] ?? null
+//     });
+//   }
 
-  const tournamentData: TournamentAddDTO = {
-    name: tournamentName.value,
-    sportId: selectedSportId.value!,
-    numTeams: selectedNumberTeams.value,
-    matches : matches
-  };
+//   const tournamentData: TournamentAddDTO = {
+//     name: tournamentName.value,
+//     sportId: selectedSportId.value!,
+//     numTeams: selectedNumberTeams.value,
+//     matches : matches
+//   };
 
-  try {
-    console.log('Datos del torneo a crear:', tournamentData);
-    await addTournament(tournamentData);
-    alert('Torneo creado correctamente');
+//   try {
+//     console.log('Datos del torneo a crear:', tournamentData);
+//     await addTournament(tournamentData);
+//     alert('Torneo creado correctamente');
 
-    //Se limpian los campos del formulario
-    resetForm();
+//     //Se limpian los campos del formulario
+//     resetForm();
 
-    // Cerramos el modal
-    emit('close');
+//     // Cerramos el modal
+//     emit('close');
 
-    // Refrescamos la página
-    window.location.reload();
+//     // Refrescamos la página
+//     window.location.reload();
     
-  } catch (error) {
-    console.error(error);
-    alert('Error al crear el torneo');
-  }
-}
+//   } catch (error) {
+//     console.error(error);
+//     alert('Error al crear el torneo');
+//   }
+// }
 
 
 function resetForm() {
