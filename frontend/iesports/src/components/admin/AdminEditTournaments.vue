@@ -106,14 +106,26 @@
               :key="match.id"
             >
               <!-- Equipo 1 -->
-              <div class="team-box">
+              <div
+                class="team-box"
+                :class="{
+                  'winner-border': match.winnerTeam?.id === match.team1.id,
+                  'loser-border': match.winnerTeam !== null && match.winnerTeam?.id !== match.team1.id
+                }"
+              >
                 <span>{{ match.team1.name }}</span>
               </div>
               
               <span class="vs-text">VS</span>
 
               <!-- Equipo 2 -->
-              <div class="team-box">
+              <div
+                class="team-box"
+                :class="{
+                  'winner-border': match.winnerTeam?.id === match.team2.id,
+                  'loser-border': match.winnerTeam !== null && match.winnerTeam?.id !== match.team2.id
+                }"
+              >
                 <span>{{ match.team2.name }}</span>
               </div>
               
@@ -140,7 +152,13 @@
               <!-- Ronda -->
               <span class="round-label">{{ getRoundLabel(match.round) }}</span>
               
-              <div class="points-wrapper">
+              <div
+                class="points-wrapper"
+                :class="{
+                  'winner-border': match.winnerTeam?.id === match.team1.id,
+                  'loser-border': match.winnerTeam !== null && match.winnerTeam?.id !== match.team1.id
+                }"
+              >
                 <input
                   class="inputPoints"
                   type="number"
@@ -148,8 +166,16 @@
                   :readonly="match.winnerTeam !== null"
                 />
               </div>
-              <span class="vs-text">Puntos</span>
-              <div class="points-wrapper">
+              <span class="vs-text">
+                {{ match.tournament.sport.name === 'Fútbol' ? 'Goles' : 'Puntos' }}
+              </span>              
+              <div
+                class="points-wrapper"
+                :class="{
+                  'winner-border': match.winnerTeam?.id === match.team2.id,
+                  'loser-border': match.winnerTeam !== null && match.winnerTeam?.id !== match.team2.id
+                }"
+              >
                 <input
                   class="inputPoints"
                   type="number"
@@ -259,7 +285,6 @@ async function loadData() {
     selectedSportId.value = matchesTournament.value[0]?.tournament?.sport.id || null;
 
     selectedNumberTeams.value = countTeams();
-
   } catch (e: any) {
     error.value = 'No se pudieron cargar los datos';
     console.error(e);
@@ -283,7 +308,7 @@ function resetForm() {
 }
 
 function editTournament() {
-  
+  // Lógica para guardar cambios
 }
 
 onMounted(() => {
@@ -432,10 +457,6 @@ ion-select::part(placeholder) {
   width: max-content;
 }
 
-.glass-radio-group input:checked + label {
-  color: #ffffff;
-}
-
 .glass-radio-group input {
   display: none;
 }
@@ -547,12 +568,6 @@ ion-select::part(placeholder) {
   border-radius: 8px;
 }
 
-.team-cell {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
 .team-box {
   position: relative;
   background: white;
@@ -570,79 +585,6 @@ ion-select::part(placeholder) {
   overflow: hidden;
   text-overflow: ellipsis;
   align-items: left;
-}
-
-.delete-btn {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  color: #ff3c2f;
-  cursor: pointer;
-  padding: 0;
-  font-size: 18px;
-}
-
-.vs-text {
-  font-weight: bold;
-  color: #0b2c3e;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.95rem;
-}
-
-.date-btn {
-  margin: 0;
-  padding: 0;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.4rem;
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.date-input {
-  background-color: #ff3c2f;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem;
-  font-size: 0.8rem;
-}
-
-.date-text{
-  background-color: #ff3c2f;
-  color: white;
-  border: none;
-  
-  border-radius: 8px;
-  padding:  0.5rem 1.3rem;
-  font-size: 1rem;
-}
-
-.date-input:focus {
-  outline: none;
-}
-
-.round-label {
-  font-weight: bold;
-  color: #0b2c3e;
-  text-align: center;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.readonly-select {
-  pointer-events: none;
-  background: var(--ion-background-color);
-  color: var(--text-color-secundary);
 }
 
 .points-wrapper {
@@ -670,5 +612,76 @@ ion-select::part(placeholder) {
   padding: 0;
   font-size: 0.85rem;
   width: 50px;
+}
+
+.date-btn {
+  margin: 0;
+  padding: 0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-input {
+  background-color: #ff3c2f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.date-input:focus {
+  outline: none;
+}
+
+.date-text{
+  background-color: #ff3c2f;
+  color: white;
+  border: none;
+  
+  border-radius: 8px;
+  padding:  0.5rem 1.3rem;
+  font-size: 1rem;
+}
+
+
+.round-label {
+  font-weight: bold;
+  color: #0b2c3e;
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.readonly-select {
+  pointer-events: none;
+  background: var(--ion-background-color);
+  color: var(--text-color-secundary);
+}
+
+.vs-text {
+  font-weight: bold;
+  color: #0b2c3e;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.winner-border {
+  border: 2px solid #26F033;
+  border-radius: 8px;
+}
+
+.loser-border {
+  border: 2px solid #F03726;
+  border-radius: 8px;
 }
 </style>
