@@ -21,7 +21,6 @@ import com.iesports.dao.service.impl.MatchServiceImpl;
 import com.iesports.dao.service.impl.SportServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
 import com.iesports.dao.service.impl.TournamentServiceImpl;
-import com.iesports.dto.MatchDTO;
 import com.iesports.dto.TournamentAddDTO;
 import com.iesports.dto.TournamentAdminDTO;
 import com.iesports.dto.TournamentFilterDTO;
@@ -33,7 +32,6 @@ import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/tournament")
@@ -197,20 +195,18 @@ public class TournamentController {
 	
 	@GetMapping("/getTournamentById")
 	public ResponseEntity<?> getTournamentById(@RequestParam Long tournamentId){
+		
 		Map<String, String> errores = new HashMap<>();
-		List<Match> results = new ArrayList<>();
+
+		Tournament tournament = tournamentS.getTournamentById(tournamentId);
 		
-		results = tournamentS.getMatchesByTournamentId(tournamentId);
-		
-		if(results == null || results.size() == 0)
-		{
-			errores.put("error", "no se ha encontrado partidos con esta clave id de torneo");
-			System.err.println("no se ha encontrado partidos con esta clave id de torneo");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+		if (tournament == null) {
+			errores.put("tournamentId", "El número de equipos es incorrecto");
+			System.err.println("El número de equipos es incorrecto");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errores);
 		}
 		
-		
-		return ResponseEntity.status(HttpStatus.OK).body(results);
+		return ResponseEntity.status(HttpStatus.OK).body(tournament);
 	}
 	
 	

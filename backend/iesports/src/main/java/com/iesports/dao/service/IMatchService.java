@@ -16,4 +16,7 @@ public interface IMatchService {
 	public Match updateMatch(Match match);
 
 	public void deleteMatch(Match match);
+	
+	List<Match> getMatchesByTournamentId(Long matchId);
+
 }

@@ -40,6 +40,11 @@ public class MatchServiceImpl implements IMatchService{
 	public void deleteMatch(Match match) {
 		mr.delete(match);
 	}
+
+	@Override
+	public List<Match> getMatchesByTournamentId(Long matchId) {
+		return mr.getMatchesByTournamentId(matchId);
+	}
 	
 
 }

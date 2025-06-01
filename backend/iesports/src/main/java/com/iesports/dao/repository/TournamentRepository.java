@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.iesports.model.Match;
 import com.iesports.model.Tournament;
 
 public interface TournamentRepository extends JpaRepository<Tournament, Long>{
@@ -21,8 +20,5 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long>{
 	
 	@Query(value = "SELECT DISTINCT date FROM tournaments ORDER by date DESC", nativeQuery = true)
 	List<String> getTournamentsDates();
-	
-	@Query(value = "SELECT * FROM matches WHERE matches.tournament_id = ?1", nativeQuery = true)
-	List<Match> getMatchesByTournamentId(Long id);
 	
 }
