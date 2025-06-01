@@ -20,6 +20,10 @@ public class TournamentAddDTO {
 	@NotNull(message = "Debes asignar todos los partidos")
 	private List<MatchDTO> matches;
 	
+	public TournamentAddDTO() {
+		super();
+	}
+
 	public String getName() {
 		return name;
 	}
