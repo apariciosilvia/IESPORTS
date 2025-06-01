@@ -1,4 +1,4 @@
-	package com.iesports.enums;
+package com.iesports.enums;
 
 public enum StateTournamentEnum {
 	PENDIENTE,PROCESO,FINALIZADO

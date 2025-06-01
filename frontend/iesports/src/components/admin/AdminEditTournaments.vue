@@ -1,119 +1,144 @@
 <template>
- <!-- Cabecera del modal -->
-        <ion-header>
-          <ion-toolbar class="white-header">
-            <ion-title>EDITAR TORNEO</ion-title>
-            <ion-buttons slot="end">
-              <ion-button @click="$emit('close')">
-                Cerrar
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-    <ion-content class="modal-body">
-      <div class="modal-grid">
-        <div class="row">
-          <!-- Columna Izquierda (40%) -->
-          <div class="column-left">
-            <ion-input
-              label="Nombre"
-              label-placement="floating"
-              fill="outline"
-              placeholder="Escribe un nombre"
-              class="input-name"
-              v-model="tournamentName"
-            />
-            <ion-list class="sports">
-              <ion-item class="clean-select" lines="none">
-                <ion-select
-                  interface="popover"
-                  placeholder="Selecciona un deporte"
-                  class="list-sports"
-                  v-model="selectedSportId"
-                >
-                  <ion-select-option  v-for="s in sports"
-                  :key="s.id"
-                  :value="s.id">
-                    {{ s.name }}
-                  </ion-select-option>
-                 
-                </ion-select>
-              </ion-item>
-            </ion-list>
-
-            <div class="radio-item">
-              <h5>Número de equipos</h5>
-              <div class="glass-radio-group">
-                <input type="radio" disabled name="teams" id="glass-silver" value="4" v-model="selectedNumberTeams" />
-                <label for="glass-silver">4</label>
-                <input type="radio" disabled name="teams" id="glass-gold" value="8" checked v-model="selectedNumberTeams" />
-                <label for="glass-gold">8</label>
-                <input type="radio" disabled name="teams" id="glass-platinum" value="16" v-model="selectedNumberTeams" />
-                <label for="glass-platinum">16</label>
-                <div class="glass-glider"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Columna Derecha (60%) -->
-          <div class="column-right">
-            <div class="team-selector">
-              <div class="header">
-                <h2>PARTIDOS JUGADOS</h2>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- Tabla de emparejamientos -->
-        <div class="row">
-          <div class="colum-down">
-            <div class="match-header">
-              <span>Equipo 1</span>
-              <span>Equipo 2</span>
-              <span>Fecha partido (opcional)</span>
-              <span>Ronda</span>
-            </div>
-            <div class="match-rows">
-              <div
-                class="match-row"
-                v-for="n in matchesToRender"
-                :key="n"
+  <!-- Cabecera del modal -->
+  <ion-header>
+    <ion-toolbar class="white-header">
+      <ion-title>EDITAR TORNEO</ion-title>
+      <ion-buttons slot="end">
+        <ion-button @click="$emit('close')">
+          Cerrar
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="modal-body">
+    <div class="modal-grid">
+      <div class="row">
+        <!-- Columna Izquierda (40%) -->
+        <div class="column-left">
+          <ion-input
+            label="Nombre"
+            label-placement="floating"
+            fill="outline"
+            placeholder="Escribe un nombre"
+            class="input-name"
+            v-model="tournamentName"
+            :readonly="readOnlyTournament"
+          />
+          <ion-list class="sports">
+            <ion-item class="clean-select" lines="none">
+              <ion-select
+                interface="popover"
+                placeholder="Selecciona un deporte"
+                class="list-sports"
+                v-model="selectedSportId"
+                @click="preventSelect"
+                :class="{ 'readonly-select': readOnlyTournament }"
               >
-                <!-- Equipo 1 -->
-                <div class="team-box">
-                  <span>{{ selectedTeams[(n - 1) * 2] || ' sin equipo '  }}</span>
-                  <button class="delete-btn" @click="removeTeam((n - 1) * 2)">
-                    <span class="material-symbols-outlined">delete</span>
-                  </button>
-                </div>
+                <ion-select-option
+                  v-for="s in sports"
+                  :key="s.id"
+                  :value="s.id"
+                >
+                  {{ s.name }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
 
-                <span class="vs-text">VS</span>
-
-                <!-- Equipo 2 -->
-                <div class="team-box">
-                  <span>{{ selectedTeams[(n - 1) * 2 + 1] || ' sin equipo ' }}</span>
-                  <button class="delete-btn" @click="removeTeam((n - 1) * 2 + 1)">
-                    <span class="material-symbols-outlined">delete</span>
-                  </button>
-                </div>
-
-                <!-- Fecha -->
-                <div class="date-btn">
-                  <input type="date" v-model="matchDates[n - 1]" name="" id="" class="date-input" />
-                </div>
-
-                <!-- Ronda -->
-                <span class="round-label">{{ selectedNumberTeams == 4 ? 'Semis' : selectedNumberTeams == 8 ? 'Cuartos' : selectedNumberTeams == 16 ? 'Octavos' : '' }}</span>
-              </div>
+          <div class="radio-item">
+            <h5>Número de equipos</h5>
+            <div class="glass-radio-group">
+              <input
+                type="radio"
+                :disabled="true"
+                name="teams"
+                id="glass-silver"
+                value="4"
+                v-model="selectedNumberTeams"
+              />
+              <label for="glass-silver">4</label>
+              <input
+                type="radio"
+                :disabled="true"
+                name="teams"
+                id="glass-gold"
+                value="8"
+                v-model="selectedNumberTeams"
+              />
+              <label for="glass-gold">8</label>
+              <input
+                type="radio"
+                :disabled="true"
+                name="teams"
+                id="glass-platinum"
+                value="16"
+                v-model="selectedNumberTeams"
+              />
+              <label for="glass-platinum">16</label>
+              <div class="glass-glider"></div>
             </div>
+          </div>
+        </div>
 
+        <!-- Columna Derecha (60%) -->
+        <div class="column-right">
+          <div class="team-selector">
+            <div class="header">
+              <h2>PARTIDOS JUGADOS</h2>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Tabla de emparejamientos -->
+      <div class="row">
+        <div class="colum-down">
+          <div class="match-header">
+            <span>Equipo 1</span>
+            <span>Equipo 2</span>
+            <span>Fecha partido (opcional)</span>
+            <span>Ronda</span>
+          </div>
+          <div class="match-rows">
+            <div
+              class="match-row"
+              v-for="n in matchesTournament"
+              :key="n.id"
+            >
+              <!-- Equipo 1 -->
+              <div class="team-box">
+                <!-- <span>{{ selectedTeams[(n - 1) * 2] || ' sin equipo '  }}</span> -->
+              </div>
+
+              <span class="vs-text">VS</span>
+
+              <!-- Equipo 2 -->
+              <div class="team-box">
+                <!-- <span>{{ selectedTeams[(n - 1) * 2 + 1] || ' sin equipo ' }}</span> -->
+              </div>
+
+              <!-- Fecha -->
+              <div class="date-btn">
+                <!-- <input type="date" v-model="matchDates[n - 1]" name="" id="" class="date-input" /> -->
+              </div>
+
+              <!-- Ronda -->
+              <span class="round-label">
+                {{ selectedNumberTeams == 4
+                  ? 'Semis'
+                  : selectedNumberTeams == 8
+                  ? 'Cuartos'
+                  : selectedNumberTeams == 16
+                  ? 'Octavos'
+                  : '' }}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-    </ion-content>
-    <ion-footer class="row">
+    </div>
+  </ion-content>
+ <ion-footer class="row">
       <div class="colum-down2">
         <ion-button
           expand="block"
@@ -123,7 +148,7 @@
         <ion-button
           expand="block"
           class="btn-save"
-         
+          @click="editTournament"
         ><span class="material-symbols-outlined">save</span>Crear Torneo</ion-button>
       </div>
 
@@ -131,162 +156,93 @@
 </template>
 
 <script setup lang="ts">
-// const emit = defineEmits<{
-//   (e: 'close'): void;
-// }>();
-
-import { ref, onMounted, computed, watch  } from 'vue';
-
-import { IonSelect, IonSelectOption, IonContent, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
-
+import { ref, onMounted } from 'vue';
+import {
+  IonSelect,
+  IonSelectOption,
+  IonContent,
+  IonList,
+  IonItem,
+  IonInput,
+  IonHeader,
+  IonToolbar,
+  IonButton,
+  IonTitle,
+  IonButtons,
+  IonFooter,
+} from '@ionic/vue';
 import { getSports } from '@/services/sportService';
-
 import type { Match } from '@/model/match';
+import { getMatchesByTournamentId } from '@/services/matchService';
+import { StateTournamentEnum } from '@/model/ENUM/StateTournamentEnum';
 
-import { getMatches } from '@/services/matchService';
-
-
+const readOnlyTournament = ref(true);
 const error = ref<string | null>(null);
-
 const props = defineProps<{ tournamentId: number }>();
 
 const sports = ref<any[]>([]);
 const matchesTournament = ref<Match[]>([]);
-
 const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
-const selectedNumberTeams = ref<number>(8); // valor por defecto
+const selectedNumberTeams = ref<number>(0);
 const selectedTeams = ref<string[]>([]);
 const matchDates = ref<(Date | null)[]>([]);
 
-
-// function addTeam(teamName: string) {
-//   if (
-//     selectedTeams.value.length < matchesToRender.value * 2 &&
-//     !selectedTeams.value.includes(teamName)
-//   ) {
-//     selectedTeams.value.push(teamName);
-//   }
-// }
-
-function removeTeam(index: number) {
-  selectedTeams.value.splice(index, 1);
+function preventSelect(e: Event) {
+  if (readOnlyTournament.value) {
+    e.stopImmediatePropagation();
+  }
 }
 
-const matchesToRender = computed(() => selectedNumberTeams.value / 2);
-
-
-// Cada vez que cambia el número de equipos seleccionados, actualizamos el array de fechas para que tenga un campo por cada partido
-watch(selectedNumberTeams, (newVal) => {
-  matchDates.value = Array(newVal / 2).fill(null);
-});
-
-
-const searchText = ref('');
-// const filteredTeams = computed(() =>
-//   teams.value.filter(team =>
-//     team.name.toLowerCase().includes(searchText.value.toLowerCase()) &&
-//     !selectedTeams.value.includes(team.name)
-//   )
-// );
-
-async function loadData () {
+async function loadData() {
   error.value = null;
   try {
     sports.value = await getSports();
-    console.log('Lista de deportes :', sports.value);
+    matchesTournament.value = await getMatchesByTournamentId(props.tournamentId);
+    if (matchesTournament.value[0]?.tournament.state.toString() === StateTournamentEnum.PENDIENTE) {
+      readOnlyTournament.value = false;
+    }
+    tournamentName.value = matchesTournament.value[0]?.tournament?.name || 'Sin nombre del torneo';
+    selectedSportId.value = matchesTournament.value[0]?.tournament?.sport.id || null;
 
-    matchesTournament.value = await getMatches();
-    console.log('Lista de partidos :', matchesTournament.value);
+    selectedNumberTeams.value = countTeams();
 
   } catch (e: any) {
     error.value = 'No se pudieron cargar los datos';
     console.error(e);
-  } 
+  }
 }
 
-// async function createTournament() {
-
-//   console.log('FECHAS', matchDates.value);
-//   const matches: MatchDTO[] = [];
-
-//   const teamsTournament: Team[] = [];
-
-//   for (let i = 0; i < selectedTeams.value.length; i += 2) {
-    
-//     const team1 = teams.value.find(t => t.name === selectedTeams.value[i]);
-//     teamsTournament.push(team1!); 
-
-//     const team2 = teams.value.find(t => t.name === selectedTeams.value[i + 1]);
-//     teamsTournament.push(team2!);
-
-//   }
-
-//   console.log('Equipos seleccionados para el torneo:', teamsTournament);
-
-//   const numberMatches = selectedNumberTeams.value / 2;
-
-//   for (let i = 0; i < numberMatches; i++) {
-//     const idx1 = 2 * i;
-//     const idx2 = 2 * i + 1;
-//     matches.push({
-//       team1Id: teamsTournament[idx1]?.id ?? null,
-//       team2Id: teamsTournament[idx2]?.id ?? null,
-//       matchDate: matchDates.value?.[i] ?? null
-//     });
-//   }
-
-//   const tournamentData: TournamentAddDTO = {
-//     name: tournamentName.value,
-//     sportId: selectedSportId.value!,
-//     numTeams: selectedNumberTeams.value,
-//     matches : matches
-//   };
-
-//   try {
-//     console.log('Datos del torneo a crear:', tournamentData);
-//     await addTournament(tournamentData);
-//     alert('Torneo creado correctamente');
-
-//     //Se limpian los campos del formulario
-//     resetForm();
-
-//     // Cerramos el modal
-//     emit('close');
-
-//     // Refrescamos la página
-//     window.location.reload();
-    
-//   } catch (error) {
-//     console.error(error);
-//     alert('Error al crear el torneo');
-//   }
-// }
-
+function countTeams() {
+  const teamIds = new Set<number>();
+  for (const match of matchesTournament.value) {
+    teamIds.add(match.team1.id);
+    teamIds.add(match.team2.id);
+  }
+  return teamIds.size;
+}
 
 function resetForm() {
-  tournamentName.value = ''; //resetea el nombre del torneo
-  selectedSportId.value = null; //resetea el deporte seleccionado 
-  selectedTeams.value = []; //resetea los equipos seleccionados
-  searchText.value = '';  //resetea el texto de búsqueda
-  selectedNumberTeams.value = 8; // resetea el numero de equipos a 8
-  matchDates.value = Array(matchesToRender.value).fill(null); //resetea la fecha
+  tournamentName.value = '';
+  selectedSportId.value = null;
+  selectedTeams.value = [];
+  selectedNumberTeams.value = 8;
+}
+
+function editTournament() {
+  
 }
 
 onMounted(() => {
   loadData();
-  console.log('ID TORNEO SELECCIONADO', props.tournamentId)
 });
-
-
-
 </script>
 
 <style scoped>
 .white-header {
   --color: #ffffff;
   --background: #e22f28;
-  display: flex;           
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -311,7 +267,8 @@ onMounted(() => {
   margin-right: 6%;
 }
 
-.column-left, .column-right {
+.column-left,
+.column-right {
   flex: 0 0 50%;
   box-sizing: border-box;
   padding: 0 0.5rem;
@@ -327,7 +284,7 @@ onMounted(() => {
 
 .column-right {
   max-width: 60%;
-  background-color: #EDEDED;
+  background-color: #ededed;
   border-radius: 10px;
   padding: 2%;
 }
@@ -352,26 +309,22 @@ onMounted(() => {
   margin-left: auto;
 }
 
-
-
 .input-name {
   --border-color: #022029;
   --border-style: solid;
   --border-width: 1px;
   --color: #022029;
   --placeholder-color: #999999;
-  text-align: left ;
+  text-align: left;
 }
-/* Estilos para ion-input forzados */
+
 .sc-ion-input-md-h {
-    --placeholder-color: var(--text-color-primary);
-    --highlight-color-focused: var(--ion-color-primary, #0054e9);
-    --highlight-color-valid: var(--ion-color-success, #2dd55b);
-    --highlight-color-invalid: var(--ion-color-danger, #c5000f);
-    --highlight-color: var(--border-color-blue);
+  --placeholder-color: var(--text-color-primary);
+  --highlight-color-focused: var(--ion-color-primary, #0054e9);
+  --highlight-color-valid: var(--ion-color-success, #2dd55b);
+  --highlight-color-invalid: var(--ion-color-danger, #c5000f);
+  --highlight-color: var(--border-color-blue);
 }
-
-
 
 .sports {
   padding: 0;
@@ -387,13 +340,16 @@ onMounted(() => {
   --padding-start: 1rem;
   --padding-end: 1rem;
 }
+
 .list-sports::part(icon) {
   color: #f2acaa;
 }
+
 ion-select::part(placeholder) {
   color: white;
   font-weight: bold;
 }
+
 .clean-select {
   margin: 0;
   padding: 0;
@@ -406,6 +362,7 @@ ion-select::part(placeholder) {
 .radio-item {
   margin-top: 1rem;
 }
+
 .radio-item h5 {
   margin: 0 0 0.5rem;
   font-weight: 600;
@@ -414,16 +371,18 @@ ion-select::part(placeholder) {
 }
 
 .glass-radio-group {
-  position: relative;         
+  position: relative;
   display: flex;
   background: #ececec;
   border-radius: 22px;
   overflow: hidden;
   width: max-content;
 }
+
 .glass-radio-group input {
   display: none;
 }
+
 .glass-radio-group label {
   flex: 1;
   text-align: center;
@@ -432,9 +391,11 @@ ion-select::part(placeholder) {
   font-weight: 600;
   z-index: 2;
 }
+
 .glass-glider {
   position: absolute;
-  top: 0; bottom: 0;
+  top: 0;
+  bottom: 0;
   width: 33.333%;
   background: #979797;
   border-radius: 22px;
@@ -446,10 +407,12 @@ ion-select::part(placeholder) {
   transform: translateX(0%);
   background: linear-gradient(135deg, #ffd70055, #ffcc00);
 }
+
 #glass-gold:checked ~ .glass-glider {
   transform: translateX(100%);
   background: linear-gradient(135deg, #e2632865, #e22f28);
 }
+
 #glass-platinum:checked ~ .glass-glider {
   transform: translateX(200%);
   background: linear-gradient(135deg, #d0e7ff55, #0a2540);
@@ -489,91 +452,17 @@ ion-select::part(placeholder) {
   -webkit-padding-start: 0;
   padding-inline-start: 0;
   -webkit-padding-end: 0;
-  padding-inline-end: 0 ;
+  padding-inline-end: 0;
   padding: 0;
   margin: 0 0 1rem 0;
 }
 
-.team-selector {
-  padding: 1rem;
-  border-radius: 12px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.counter {
-  font-weight: bold;
-  color: #ff3c2f;
-}
-
-.team-list {
-  max-height: 140px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  gap: 0.5rem;
-}
-
-.team-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem; /* aumenta este valor para más separación */
-  background: #f1f1f1;
-}
-
-.team-card {
-  background: white;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  flex: 1;
-}
-
-.team-name {
-  font-weight: 500;
-  color: #0b2c3e;
-}
-
-.add-button {
-  background-color: #ff3c2f;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  flex-shrink: 0;
-  margin-right: 0.5rem;
-}
-
-.btn-clean, .btn-save {
-  --background: #0a2540;
-  --border-radius: 8px;
-  --color: white;
-  --padding-start: 1rem;
-  --padding-end: 1rem;
-  font-weight: bold;
-}
-
-.btn-clean .material-symbols-outlined,
-.btn-save .material-symbols-outlined {
-  margin-right: 5px;
-}
-
-.match-header{
+.match-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  background-color: #EDEDED;
+  background-color: #ededed;
   color: #042935;
   font-weight: bold;
   border-radius: 8px;
@@ -583,27 +472,7 @@ ion-select::part(placeholder) {
 .match-header span {
   flex: 1;
   text-align: center;
-} 
-
-
-
-
-/* .match-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-} */
-
-/* .match-row {
-  display: flex;
-  justify-content: space-between;
-  background-color: #EDEDED;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  color: #0b2c3e;
-  margin-top: 0.65rem;
-} */
+}
 
 .match-rows {
   display: flex;
@@ -625,11 +494,11 @@ ion-select::part(placeholder) {
   position: relative;
   background: white;
   border-radius: 8px;
-  padding: 0.4rem; /* más espacio a la derecha */
+  padding: 0.4rem;
   display: flex;
   font-size: 0.85rem;
   color: #0b2c3e;
-  align-items: center; /* centra verticalmente */
+  align-items: center;
 }
 
 .team-box span {
@@ -638,7 +507,6 @@ ion-select::part(placeholder) {
   overflow: hidden;
   text-overflow: ellipsis;
   align-items: left;
-
 }
 
 .delete-btn {
@@ -651,20 +519,19 @@ ion-select::part(placeholder) {
   color: #ff3c2f;
   cursor: pointer;
   padding: 0;
-  font-size: 18px; /* más pequeño */
+  font-size: 18px;
 }
+
 .vs-text {
   font-weight: bold;
   color: #0b2c3e;
   text-align: center;
   align-items: center;
   justify-content: center;
-
 }
 
-
 .date-btn {
-  margin: 0;  
+  margin: 0;
   padding: 0;
   color: white;
   border: none;
@@ -673,11 +540,10 @@ ion-select::part(placeholder) {
   font-size: 0.8rem;
   display: flex;
   align-items: center;
-  align-items: center;
   justify-content: center;
 }
 
-.date-input{
+.date-input {
   background-color: #ff3c2f;
   color: white;
   border: none;
@@ -693,6 +559,48 @@ ion-select::part(placeholder) {
   font-size: 0.85rem;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+}
+
+.readonly-select {
+  pointer-events: none;
+  background: var(--ion-background-color);
+  color: var(--text-color-secundary);
+}
+
+
+
+
+.modal-grid .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10%;
+  margin-top: 5%;
+  margin-left: 6%;
+  margin-right: 6%;
+}
+.colum-down2 {
+  flex: 0 0 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 1rem 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.btn-clean, .btn-save {
+  --background: #0a2540;
+  --border-radius: 8px;
+  --color: white;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  font-weight: bold;
+}
+
+.btn-clean .material-symbols-outlined,
+.btn-save .material-symbols-outlined {
+  margin-right: 5px;
 }
 
 </style>
