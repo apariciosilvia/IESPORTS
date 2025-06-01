@@ -21,7 +21,6 @@ import com.iesports.dao.service.impl.MatchServiceImpl;
 import com.iesports.dao.service.impl.SportServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
 import com.iesports.dao.service.impl.TournamentServiceImpl;
-import com.iesports.dto.MatchDTO;
 import com.iesports.dto.TournamentAddDTO;
 import com.iesports.dto.TournamentAdminDTO;
 import com.iesports.dto.TournamentFilterDTO;
@@ -32,8 +31,8 @@ import com.iesports.model.Sport;
 import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/tournament")
@@ -196,21 +195,19 @@ public class TournamentController {
 	}
 	
 	@GetMapping("/getTournamentById")
-	public ResponseEntity<?> getTournamentById(@RequestParam Long tournamentId){
-		Map<String, String> errores = new HashMap<>();
-		List<Match> results = new ArrayList<>();
-		
-		results = tournamentS.getMatchesByTournamentId(tournamentId);
-		
-		if(results == null || results.size() == 0)
-		{
-			errores.put("error", "no se ha encontrado partidos con esta clave id de torneo");
-			System.err.println("no se ha encontrado partidos con esta clave id de torneo");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
-		}
-		
-		
-		return ResponseEntity.status(HttpStatus.OK).body(results);
+	@Operation(
+	    summary = "Obtener torneo por ID",
+	    description = "Devuelve el torneo correspondiente al ID proporcionado"
+	)
+	public ResponseEntity<Tournament> getTournamentById(@RequestParam Long tournamentId) {
+	    Tournament tournament = tournamentS.getTournamentById(tournamentId);
+
+	    if (tournament == null) {
+	        System.err.println("No se encontro el torneo con el id " + tournamentId);
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(tournament);
+	    }
+
+	    return ResponseEntity.status(HttpStatus.OK).body(tournament);
 	}
 	
 	

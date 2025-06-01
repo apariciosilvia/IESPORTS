@@ -272,13 +272,6 @@ INSERT INTO players_team (player_id, team_id) VALUES (29, 11);
 INSERT INTO players_team (player_id, team_id) VALUES (30, 11);
 INSERT INTO players_team (player_id, team_id) VALUES (31, 11);
 
-INSERT INTO players_team (player_id, team_id) VALUES (73, 12);
-INSERT INTO players_team (player_id, team_id) VALUES (74, 12);
-INSERT INTO players_team (player_id, team_id) VALUES (75, 12);
-INSERT INTO players_team (player_id, team_id) VALUES (76, 12);
-INSERT INTO players_team (player_id, team_id) VALUES (77, 12);
-INSERT INTO players_team (player_id, team_id) VALUES (78, 12);
-INSERT INTO players_team (player_id, team_id) VALUES (79, 12);
-INSERT INTO players_team (player_id, team_id) VALUES (80, 12);
+
 
 

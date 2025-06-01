@@ -230,7 +230,7 @@
                   :key="course.id"
                   :value="course.id"
                 >
-                  {{ course.nombre }}
+                  {{ course.name }}
                 </ion-select-option>
               </ion-select>
             </div>

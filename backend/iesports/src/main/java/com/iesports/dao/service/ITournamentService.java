@@ -2,7 +2,6 @@ package com.iesports.dao.service;
 
 import java.util.List;
 
-import com.iesports.model.Match;
 import com.iesports.model.Tournament;
 
 public interface ITournamentService {
@@ -24,7 +23,5 @@ public interface ITournamentService {
 	public List<Tournament> findTournamentsBySportIdAndDate(Integer sport_id, String date);
 	
 	public List<Tournament> findTournamentsDates();
-	
-	public List<Match> getMatchesByTournamentId(Long id);
-	
+		
 }
