@@ -1,0 +1,6 @@
+export enum RoundMatchEnum {
+  OCTAVOS = 'OCTAVOS',
+  CUARTOS_FINAL = 'CUARTOS_FINAL',
+  SEMIFINAL = 'SEMIFINAL',
+  FINAL = 'FINAL'
+}

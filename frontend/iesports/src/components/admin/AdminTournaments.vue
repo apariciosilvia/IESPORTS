@@ -129,7 +129,11 @@ function closeModal() {
   background-color: #ffffff;
   border-radius: 10px;
   border: solid 1px #D9D8D8;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 7rem);
 }
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -157,10 +161,13 @@ function closeModal() {
   --padding-start: 1rem;
   --padding-end: 1rem;
 }
+
 .list-teams::part(icon) {
   color: white;
 }
 .table {
+  flex: 1;
+  overflow-y: auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -215,6 +222,11 @@ function closeModal() {
 .action-btn .material-symbols-outlined {
   font-weight: 700;
 }
+
+.action-btn:focus {
+  outline: none;
+}
+
 .actions button:last-child {
   border-left: 1px solid rgba(255, 255, 255, 0.466);
   padding-left: 15%;
