@@ -444,9 +444,15 @@ ion-select::part(placeholder) {
   overflow: hidden;
   width: max-content;
 }
+
+.glass-radio-group input:checked + label {
+  color: #ffffff;
+}
+
 .glass-radio-group input {
   display: none;
 }
+
 .glass-radio-group label {
   flex: 1;
   text-align: center;
@@ -455,6 +461,7 @@ ion-select::part(placeholder) {
   font-weight: 600;
   z-index: 2;
 }
+
 .glass-glider {
   position: absolute;
   top: 0; bottom: 0;
@@ -481,6 +488,7 @@ ion-select::part(placeholder) {
 .team-selector {
   padding: 1rem;
   border-radius: 12px;
+  
 }
 
 .header {
@@ -575,6 +583,10 @@ ion-select::part(placeholder) {
   padding: 0;
   flex-shrink: 0;
   margin-right: 0.5rem;
+}
+
+.add-button:focus {
+  outline: none;
 }
 
 .btn-clean, .btn-save {
@@ -676,6 +688,11 @@ ion-select::part(placeholder) {
   padding: 0;
   font-size: 18px; /* más pequeño */
 }
+
+.delete-btn:focus {
+  outline: none;
+}
+
 .vs-text {
   font-weight: bold;
   color: #0b2c3e;
@@ -707,6 +724,10 @@ ion-select::part(placeholder) {
   border-radius: 8px;
   padding: 0.5rem;
   font-size: 0.8rem;
+}
+
+.date-input:focus {
+  outline: none;
 }
 
 .round-label {

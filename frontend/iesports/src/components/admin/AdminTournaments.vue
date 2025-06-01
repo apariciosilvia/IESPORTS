@@ -157,6 +157,7 @@ function closeModal() {
   --padding-start: 1rem;
   --padding-end: 1rem;
 }
+
 .list-teams::part(icon) {
   color: white;
 }
@@ -215,6 +216,11 @@ function closeModal() {
 .action-btn .material-symbols-outlined {
   font-weight: 700;
 }
+
+.action-btn:focus {
+  outline: none;
+}
+
 .actions button:last-child {
   border-left: 1px solid rgba(255, 255, 255, 0.466);
   padding-left: 15%;

@@ -109,26 +109,54 @@
               <div class="team-box">
                 <span>{{ match.team1.name }}</span>
               </div>
-
+              
               <span class="vs-text">VS</span>
 
               <!-- Equipo 2 -->
               <div class="team-box">
                 <span>{{ match.team2.name }}</span>
               </div>
-
+              
               <!-- Fecha -->
               <div class="date-btn">
-                <input
-                  type="date"
-                  :value="formatDate(match.date)"
-                  @input="onDateChange(match, ($event.target as HTMLInputElement).value)"
-                  class="date-input"
-                />
+                <template v-if="match.winnerTeam !== null">
+                  <div class="date-text">
+                    {{ formatDate(match.date) }}
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="date-btn">
+                    <input
+                      type="date"
+                      :value="formatDate(match.date)"
+                      @input="onDateChange(match, ($event.target as HTMLInputElement).value)"
+                      class="date-input"
+                      :readonly="match.winnerTeam !== null"
+                    />
+                  </div>
+                </template>
               </div>
 
               <!-- Ronda -->
               <span class="round-label">{{ getRoundLabel(match.round) }}</span>
+              
+              <div class="points-wrapper">
+                <input
+                  class="inputPoints"
+                  type="number"
+                  :value="match.pointsTeam1"
+                  :readonly="match.winnerTeam !== null"
+                />
+              </div>
+              <span class="vs-text">Puntos</span>
+              <div class="points-wrapper">
+                <input
+                  class="inputPoints"
+                  type="number"
+                  :value="match.pointsTeam2"
+                  :readonly="match.winnerTeam !== null"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -146,9 +174,8 @@
           expand="block"
           class="btn-save"
           @click="editTournament"
-        ><span class="material-symbols-outlined">save</span>Crear Torneo</ion-button>
+        ><span class="material-symbols-outlined">save</span>GUARDAR CAMBIOS</ion-button>
       </div>
-
     </ion-footer>
 </template>
 
@@ -166,7 +193,7 @@ import {
   IonButton,
   IonTitle,
   IonButtons,
-  IonFooter,
+  IonFooter
 } from '@ionic/vue';
 import { getSports } from '@/services/sportService';
 import type { Match } from '@/model/match';
@@ -184,7 +211,6 @@ const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
 const selectedNumberTeams = ref<number>(0);
 const selectedTeams = ref<string[]>([]);
-
 
 function preventSelect(e: Event) {
   if (readOnlyTournament.value) {
@@ -220,8 +246,6 @@ function formatDate(d: Date | null): string {
 function onDateChange(match: Match, value: string) {
   match.date = value ? new Date(value) : null;
 }
-
-
 
 async function loadData() {
   error.value = null;
@@ -408,6 +432,10 @@ ion-select::part(placeholder) {
   width: max-content;
 }
 
+.glass-radio-group input:checked + label {
+  color: #ffffff;
+}
+
 .glass-radio-group input {
   display: none;
 }
@@ -519,6 +547,12 @@ ion-select::part(placeholder) {
   border-radius: 8px;
 }
 
+.team-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .team-box {
   position: relative;
   background: white;
@@ -557,6 +591,7 @@ ion-select::part(placeholder) {
   text-align: center;
   align-items: center;
   justify-content: center;
+  font-size: 0.95rem;
 }
 
 .date-btn {
@@ -581,6 +616,20 @@ ion-select::part(placeholder) {
   font-size: 0.8rem;
 }
 
+.date-text{
+  background-color: #ff3c2f;
+  color: white;
+  border: none;
+  
+  border-radius: 8px;
+  padding:  0.5rem 1.3rem;
+  font-size: 1rem;
+}
+
+.date-input:focus {
+  outline: none;
+}
+
 .round-label {
   font-weight: bold;
   color: #0b2c3e;
@@ -596,40 +645,30 @@ ion-select::part(placeholder) {
   color: var(--text-color-secundary);
 }
 
-
-
-
-.modal-grid .row {
+.points-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 8px;
+  padding: 0.4rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10%;
-  margin-top: 5%;
-  margin-left: 6%;
-  margin-right: 6%;
-}
-.colum-down2 {
-  flex: 0 0 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  padding: 1rem 0.5rem;
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-left: auto;
+  font-size: 2rem;
+  color: #0b2c3e;
+  align-items: center;
 }
 
-.btn-clean, .btn-save {
-  --background: #0a2540;
-  --border-radius: 8px;
-  --color: white;
-  --padding-start: 1rem;
-  --padding-end: 1rem;
-  font-weight: bold;
+.inputPoints:focus {
+  outline: none;
 }
 
-.btn-clean .material-symbols-outlined,
-.btn-save .material-symbols-outlined {
-  margin-right: 5px;
+.inputPoints {
+  background-color: #ffffff;
+  outline: none;
+  border: none;
+  text-align: center;
+  padding: 0;
+  font-size: 0.85rem;
+  width: 50px;
 }
-
 </style>
