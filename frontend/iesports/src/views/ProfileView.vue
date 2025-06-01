@@ -131,7 +131,7 @@ import { IonHeader, IonContent, IonToolbar, IonTitle, IonButton } from '@ionic/v
 import { useUserMenu } from '@/composables/useUserMenu';
 
 // CLASES
-import type { ChangeNameAndEmailDTO } from '@/model/DTO/changeNameAndEmailDTO';
+import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
 import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
 
 // SERVICIOS

@@ -127,7 +127,7 @@
                 </div>
 
                 <!-- Ronda -->
-                <span class="round-label">{{ selectedNumberTeams == 4 ? 'Semis' : selectedNumberTeams == 8 ? 'Cuartos' : selectedNumberTeams == 16 ? 'Octavos' : '' }}</span>
+                <span class="round-label">{{ selectedNumberTeams == 4 ? 'SEMIFINAL' : selectedNumberTeams == 8 ? 'CUARTOS' : selectedNumberTeams == 16 ? 'OCTAVOS' : '' }}</span>
               </div>
             </div>
 
@@ -168,7 +168,7 @@ import type { Team } from '@/model/team';
 import { addTournament } from '@/services/tournamentService';
 import { getTeams } from '@/services/teamService';
 
-import type { TournamentAddDTO } from '@/model/TournamentAddDTO';
+import type { TournamentAddDTO } from '@/model/tournamentAddDTO';
 import type { MatchDTO } from '@/model/matchDTO';
 
 const error = ref<string | null>(null);

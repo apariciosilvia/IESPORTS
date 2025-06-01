@@ -3,7 +3,7 @@ import type { Team } from '@/model/team';
 
 export interface Match {
   id: number;  
-  date: Date;
+  date: Date | null;
   round: string;    
   tournament: Tournament;
   team1: Team;

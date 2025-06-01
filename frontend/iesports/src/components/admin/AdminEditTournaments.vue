@@ -102,36 +102,33 @@
           <div class="match-rows">
             <div
               class="match-row"
-              v-for="n in matchesTournament"
-              :key="n.id"
+              v-for="match in matchesTournament"
+              :key="match.id"
             >
               <!-- Equipo 1 -->
               <div class="team-box">
-                <!-- <span>{{ selectedTeams[(n - 1) * 2] || ' sin equipo '  }}</span> -->
+                <span>{{ match.team1.name }}</span>
               </div>
 
               <span class="vs-text">VS</span>
 
               <!-- Equipo 2 -->
               <div class="team-box">
-                <!-- <span>{{ selectedTeams[(n - 1) * 2 + 1] || ' sin equipo ' }}</span> -->
+                <span>{{ match.team2.name }}</span>
               </div>
 
               <!-- Fecha -->
               <div class="date-btn">
-                <!-- <input type="date" v-model="matchDates[n - 1]" name="" id="" class="date-input" /> -->
+                <input
+                  type="date"
+                  :value="formatDate(match.date)"
+                  @input="onDateChange(match, ($event.target as HTMLInputElement).value)"
+                  class="date-input"
+                />
               </div>
 
               <!-- Ronda -->
-              <span class="round-label">
-                {{ selectedNumberTeams == 4
-                  ? 'Semis'
-                  : selectedNumberTeams == 8
-                  ? 'Cuartos'
-                  : selectedNumberTeams == 16
-                  ? 'Octavos'
-                  : '' }}
-              </span>
+              <span class="round-label">{{ getRoundLabel(match.round) }}</span>
             </div>
           </div>
         </div>
@@ -174,7 +171,8 @@ import {
 import { getSports } from '@/services/sportService';
 import type { Match } from '@/model/match';
 import { getMatchesByTournamentId } from '@/services/matchService';
-import { StateTournamentEnum } from '@/model/ENUM/StateTournamentEnum';
+import { StateTournamentEnum } from '@/model/enum/StateTournamentEnum';
+import { RoundMatchEnum } from '@/model/enum/RoundMatchEnum';
 
 const readOnlyTournament = ref(true);
 const error = ref<string | null>(null);
@@ -186,13 +184,44 @@ const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
 const selectedNumberTeams = ref<number>(0);
 const selectedTeams = ref<string[]>([]);
-const matchDates = ref<(Date | null)[]>([]);
+
 
 function preventSelect(e: Event) {
   if (readOnlyTournament.value) {
     e.stopImmediatePropagation();
   }
 }
+
+function getRoundLabel(round: string): string {
+  switch (round) {
+    case RoundMatchEnum.OCTAVOS:
+      return 'OCTAVOS';
+    case RoundMatchEnum.CUARTOS_FINAL:
+      return 'CUARTOS';
+    case RoundMatchEnum.SEMIFINAL:
+      return 'SEMIFINAL';
+    case RoundMatchEnum.FINAL:
+      return 'FINAL';
+    default:
+      return '';
+  }
+}
+
+// Convierte un Date a "YYYY-MM-DD"
+function formatDate(d: Date | null): string {
+  if (!d) return '';
+  const dt = new Date(d);
+  const yy = dt.getFullYear();
+  const mm = String(dt.getMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getDate()).padStart(2, '0');
+  return `${yy}-${mm}-${dd}`;
+}
+
+function onDateChange(match: Match, value: string) {
+  match.date = value ? new Date(value) : null;
+}
+
+
 
 async function loadData() {
   error.value = null;
