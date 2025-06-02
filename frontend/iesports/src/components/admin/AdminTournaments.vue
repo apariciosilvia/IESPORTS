@@ -13,19 +13,19 @@
         <table class="tournaments-table">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Año</th>
-              <th>Estado</th>
+              <th class="col-nombre">Nombre</th>
+              <th class="col-anio">Año</th>
+              <th class="col-estado">Estado</th>
               <th>Equipos</th>
-              <th>Deporte</th>
+              <th class="col-sports">Deporte</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="t in tournamentsAdminDTO" :key="t.tournament.id">
-              <td>{{ t.tournament.name }}</td>
-              <td>{{ t.tournament.date }}</td>
-              <td>{{ t.tournament.state }}</td>
+              <td  class="col-nombre">{{ t.tournament.name }}</td>
+              <td class="col-anio">{{ t.tournament.date }}</td>
+              <td class="col-estado">{{ t.tournament.state }}</td>
               <td>
                 <p v-if="t.teams.length === 0">Sin equipos</p>
                 <ion-select
@@ -45,7 +45,7 @@
                   </ion-select-option>
                 </ion-select>
               </td>
-              <td>{{ t.tournament.sport.name }}</td>
+              <td class="col-sports">{{ t.tournament.sport.name }}</td>
               <td>
                 <div class="actions">
                   <!-- Botón de editar, que enviará solo el ID del torneo -->
@@ -202,6 +202,23 @@ function closeModal() {
 .tournaments-table thead {
   border: 1px solid #ddd;
 }
+
+.col-nombre {
+  min-width: 360px;
+  width: 25%;
+}
+
+.col-anio,
+.col-estado,
+.col-sports {
+  width: 100px;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 .actions {
   display: flex;
   justify-content: center;

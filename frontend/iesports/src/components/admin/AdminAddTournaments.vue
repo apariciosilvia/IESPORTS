@@ -685,7 +685,7 @@ ion-select::part(placeholder) {
   color: #ff3c2f;
   cursor: pointer;
   padding: 0;
-  font-size: 18px; /* más pequeño */
+  font-size: 10%; /* más pequeño */
 }
 
 .delete-btn:focus {
@@ -737,5 +737,68 @@ ion-select::part(placeholder) {
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
+
+@media screen and (max-width: 600px) {
+  .colum-down {
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .match-header{
+    min-width: 600px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.3fr 1fr ;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #ededed;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #042935;
+  }
+  .match-row {
+    min-width: 600px;
+    display: grid;
+    grid-template-columns: 0.9fr 0.1fr 0.9fr 1fr 1fr;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #ededed;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #042935;
+  }
+
+  .column-left,
+  .column-right {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .column-left {
+    order: -1;
+    padding-top: 1rem;
+  }
+
+  .column-right {
+    margin-top: 1.5rem;
+  }
+
+  .delete-btn {
+    position: absolute;
+    right: 2px;
+    top: 48%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #ff3c2f;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1%; /* más pequeño */
+  }
+}
+
+
 
 </style>
