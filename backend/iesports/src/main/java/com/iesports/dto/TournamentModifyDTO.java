@@ -6,7 +6,7 @@ import com.iesports.model.Sport;
 
 public class TournamentModifyDTO {
 
-	private long tournamentId; 
+	private Long tournamentId; 
 	private String tournamentNameModified;
 	private Long sportModifiedId;
 	private List<MatchModifyTournamentDTO> matches;

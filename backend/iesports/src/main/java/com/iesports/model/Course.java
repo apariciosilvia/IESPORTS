@@ -17,8 +17,6 @@ public class Course {
 	private int year;
 	private String initials;
 	
-	//TODO PREGUNTAR A SILVIA POR QUÉ AÑO
-	
 	public Course() {
 		
 	}
