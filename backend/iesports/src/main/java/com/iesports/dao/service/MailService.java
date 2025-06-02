@@ -1,12 +1,14 @@
 package com.iesports.dao.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.io.File;
 
 @Service
 public class MailService {
@@ -71,56 +73,63 @@ public class MailService {
             helper.setTo(toEmail);
             helper.setSubject("¡Bienvenido a nuestra plataforma!");
 
-            String htmlContent = "<!DOCTYPE html>\n" +
-            		"<html lang=\"es\">\n" +
-            		"<head>\n" +
-            		"    <meta charset=\"UTF-8\">\n" +
-            		"    <title>Bienvenido a IESPORTS</title>\n" +
-            		"</head>\n" +
-            		"<body style=\"margin: 0; padding: 0; background-color: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\">\n" +
-            		"    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color: #f4f4f4; padding: 40px 0;\">\n" +
-            		"        <tr>\n" +
-            		"            <td align=\"center\">\n" +
-            		"                <table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);\">\n" +
-            		"                    <tr>\n" +
-            		"                        <td style=\"background-color: #002f3d; padding: 30px; text-align: center;\">\n" +
-            		"                            <h1 style=\"color: #ffffff; margin: 0; font-size: 26px;\">Bienvenido a <span style=\"color: #ff0800;\">IESPORTS</span></h1>\n" +
-            		"                        </td>\n" +
-            		"                    </tr>\n" +
-            		"                    <tr>\n" +
-            		"                        <td style=\"text-align: center; padding: 20px;\">\n" +
-            		"                            <img src=\"URL_DEL_LOGO\" alt=\"Logo IESPORTS\" style=\"max-width: 100px;\">\n" +
-            		"                        </td>\n" +
-            		"                    </tr>\n" +
-            		"                    <tr>\n" +
-            		"                        <td style=\"padding: 0 40px 30px 40px; text-align: left;\">\n" +
-            		"                            <h2 style=\"color: #002f3d;\">¡Hola <b style=\"color: #ff0800;\">"+userName+"</b>!</h2>\n" +
-            		"                            <p style=\"font-size: 16px; color: #333;\">Gracias por unirte a nuestra plataforma. Tu cuenta ha sido creada correctamente y ya puedes comenzar a explorar todo lo que IESPORTS tiene para ofrecerte.</p>\n" +
-            		"                            <p style=\"font-size: 16px; color: #333;\">Si tienes dudas o necesitas ayuda, nuestro equipo está disponible para asistirte.</p>\n" +
-            		"                            <div style=\"text-align: center; margin: 30px 0;\">\n" +
-            		"                                <a href=\"https://tusitio.com/login\" style=\"background-color: #ff0800; color: #ffffff; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block;\">Acceder a la plataforma</a>\n" +
-            		"                            </div>\n" +
-            		"                        </td>\n" +
-            		"                    </tr>\n" +
-            		"                    <tr>\n" +
-            		"                        <td style=\"background-color: #f0f0f0; padding: 20px; text-align: center;\">\n" +
-            		"                            <p style=\"font-size: 12px; color: #888;\">Este mensaje fue enviado automáticamente. No respondas a este correo.</p>\n" +
-            		"                            <p style=\"font-size: 12px; color: #aaa;\">&copy; 2025 IESPORTS. Todos los derechos reservados.</p>\n" +
-            		"                        </td>\n" +
-            		"                    </tr>\n" +
-            		"                </table>\n" +
-            		"            </td>\n" +
-            		"        </tr>\n" +
-            		"    </table>\n" +
-            		"</body>\n" +
-            		"</html>";
+            // Your image path (adjust if needed)
+            FileSystemResource image = new FileSystemResource(
+                new File("src/main/resources/static/images/logo.png")
+            );
 
+            String htmlContent = "<!DOCTYPE html>\n" +
+                "<html lang=\"es\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>Bienvenido a IESPORTS</title>\n" +
+                "</head>\n" +
+                "<body style=\"margin: 0; padding: 0; background-color: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\">\n" +
+                "    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color: #f4f4f4; padding: 40px 0;\">\n" +
+                "        <tr>\n" +
+                "            <td align=\"center\">\n" +
+                "                <table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);\">\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"background-color: #002f3d; padding: 30px; text-align: center;\">\n" +
+                "                            <h1 style=\"color: #ffffff; margin: 0; font-size: 26px;\">Bienvenido a <span style=\"color: #ff0800;\">IESPORTS</span></h1>\n" +
+                "                        </td>\n" +
+                "                    </tr>\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"text-align: center; padding: 20px;\">\n" +
+                "                            <img src=\"cid:logoImage\" alt=\"Logo IESPORTS\" style=\"max-width: 100px;\">\n" + // Reference by CID
+                "                        </td>\n" +
+                "                    </tr>\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"padding: 0 40px 30px 40px; text-align: left;\">\n" +
+                "                            <h2 style=\"color: #002f3d;\">¡Hola <b style=\"color: #ff0800;\">" + userName + "</b>!</h2>\n" +
+                "                            <p style=\"font-size: 16px; color: #333;\">Gracias por unirte a nuestra plataforma. Tu cuenta ha sido creada correctamente y ya puedes comenzar a explorar todo lo que IESPORTS tiene para ofrecerte.</p>\n" +
+                "                            <p style=\"font-size: 16px; color: #333;\">Si tienes dudas o necesitas ayuda, nuestro equipo está disponible para asistirte.</p>\n" +
+                "                            <div style=\"text-align: center; margin: 30px 0;\">\n" +
+                "                                <a href=\"https://tusitio.com/login\" style=\"background-color: #ff0800; color: #ffffff; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block;\">Acceder a la plataforma</a>\n" +
+                "                            </div>\n" +
+                "                        </td>\n" +
+                "                    </tr>\n" +
+                "                    <tr>\n" +
+                "                        <td style=\"background-color: #f0f0f0; padding: 20px; text-align: center;\">\n" +
+                "                            <p style=\"font-size: 12px; color: #888;\">Este mensaje fue enviado automáticamente. No respondas a este correo.</p>\n" +
+                "                            <p style=\"font-size: 12px; color: #aaa;\">&copy; 2025 IESPORTS. Todos los derechos reservados.</p>\n" +
+                "                        </td>\n" +
+                "                    </tr>\n" +
+                "                </table>\n" +
+                "            </td>\n" +
+                "        </tr>\n" +
+                "    </table>\n" +
+                "</body>\n" +
+                "</html>";
 
             helper.setText(htmlContent, true);
+            helper.addInline("logoImage", image); // CID must match src="cid:logoImage"
+
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            e.printStackTrace(); // Manejo de errores (log, throw, etc.)
+            e.printStackTrace(); // Manejo de errores
         }
     }
+
 
 }
