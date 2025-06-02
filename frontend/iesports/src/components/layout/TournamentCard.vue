@@ -43,6 +43,10 @@
     <!-- FINAL -->
     <div class="center">
       <h1>{{ tournamentName }}</h1>
+      <p class="tournament-info">
+        Fecha: {{ props.matches[0]?.tournament?.date || 'Sin fecha' }}<br />
+        Estado: {{ props.matches[0]?.tournament?.state || 'Sin estado' }}
+      </p>
       <div class="trophy">
         <img src="../../../src/assets/copa-trofeo.png" width="100px" />
       </div>
@@ -356,5 +360,10 @@ const sportClass = computed(() => {
   font-weight: bold;
 }
 
+.tournament-info {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
 
 </style>
