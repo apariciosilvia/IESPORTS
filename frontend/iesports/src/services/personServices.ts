@@ -4,7 +4,7 @@ import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequest
 import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
 import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
 
-function getPersonas() {
+function getPersons() {
 
   return new Promise<any[]>((resolve, reject) => {
 
@@ -89,4 +89,4 @@ function changeTempPassword(ChangeForgottenPasswordDTO: ChangeForgottenPasswordD
 };
 
 
-export { getPersonas, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};
+export { getPersons, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};
