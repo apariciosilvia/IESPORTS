@@ -45,7 +45,7 @@ import { ref } from 'vue';
 import { IonModal, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel } from '@ionic/vue';
 
 
-import type { TeamInfoDTO } from '@/model/teamInfoDTO';
+import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
 
 // Desestructuramos la prop para obtener directamente `teamInfo`
 const { teamInfo } = defineProps<{

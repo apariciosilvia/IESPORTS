@@ -215,6 +215,10 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits<{
+  (e: 'close'): void;
+}>();
+
 import { ref, onMounted, computed } from 'vue';
 import { IonSelect,
   IonSelectOption,
@@ -234,8 +238,9 @@ import type { Match } from '@/model/match';
 import { getMatchesByTournamentId } from '@/services/matchService';
 import { StateTournamentEnum } from '@/model/enum/StateTournamentEnum';
 import { RoundMatchEnum } from '@/model/enum/RoundMatchEnum';
-import type { EditTournamentAndMatchDTO } from '@/model/dto/editTournamentAndMatchDTO';
-import type { MatchEditDTO } from '@/model/matchEditDTO';
+import type { TournamentModifyDTO } from '@/model/dto/tournamentModifyDTO';
+import type { MatchModifyTournamentDTO } from '@/model/dto/matchModifyTournamentDTO';
+import { modifyTournament } from '@/services/tournamentService';
 
 const readOnlyTournament = ref(true);
 const error = ref<string | null>(null);
@@ -327,13 +332,13 @@ function resetForm() {
   selectedNumberTeams.value = 8;
 }
 
-function editTournament() {
-  const payload: EditTournamentAndMatchDTO = {
+async function editTournament() {
+  const payload: TournamentModifyDTO = {
     tournamentId: props.tournamentId,
-    nameTournament: tournamentName.value,
-    sportId: selectedSportId.value!,
-    matchesEditDTO: matchesTournament.value.map((m) => {
-      const dto: MatchEditDTO = {
+    tournamentNameModified: tournamentName.value,
+    sportModifiedId: selectedSportId.value!,
+    matches: matchesTournament.value.map((m) => {
+      const dto: MatchModifyTournamentDTO = {
         matchId: m.id,
         matchDate: m.date,
         scoreTeam1: m.pointsTeam1,
@@ -343,7 +348,26 @@ function editTournament() {
     }),
   };
 
-  console.log('Payload EditTournamentAndMatchDTO:', payload);
+  try {
+    console.log('Datos del torneo a modificar:', payload);
+    await modifyTournament(payload);
+    alert('Torneo modificado correctamente');
+
+    //Se limpian los campos del formulario
+    resetForm();
+
+    // Cerramos el modal
+    emit('close');
+
+    // Refrescamos la página
+    window.location.reload();
+    
+  } catch (error) {
+    console.error(error);
+    alert('Error al crear el torneo');
+  }
+
+  // console.log('Payload TournamentModifyDTO:', payload);
   // Aquí puedes enviar 'payload' al servicio correspondiente o emitir un evento:
   // $emit('save', payload);
 }

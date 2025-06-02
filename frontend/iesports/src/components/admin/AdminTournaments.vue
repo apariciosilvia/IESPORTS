@@ -1,6 +1,5 @@
 <!-- src/components/CreateTournaments.vue --> 
 <template>
-  <ion-content fullscreen :scroll-events="true" style="--background: #F5F5F5;">
     <section class="tournaments">
       <div class="header">
         <h2 class="tittle">Torneos</h2>
@@ -71,16 +70,15 @@
         />
       </ion-modal>
     </section>
-  </ion-content>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { IonSelect, IonSelectOption, IonContent, IonModal, IonButton } from '@ionic/vue';
+import { IonSelect, IonSelectOption, IonModal, IonButton } from '@ionic/vue';
 import AdminAddTournaments from '@/components/admin/AdminAddTournaments.vue';
 import AdminEditTournaments from '@/components/admin/AdminEditTournaments.vue';
 
-import type { TournamentAdminDTO } from '@/model/tournamentAdminDTO';
+import type { TournamentAdminDTO } from '@/model/dto/tournamentAdminDTO';
 
 import { getTeamsByTournamentId } from '@/services/tournamentService';
 
@@ -123,7 +121,7 @@ function closeModal() {
 
 <style scoped>
 .tournaments {
-  margin: 4.5rem;
+  margin: 4rem 2rem;
   padding: 2.5rem;
   margin-top: 8%;
   background-color: #ffffff;
@@ -316,6 +314,7 @@ ion-modal::part(backdrop) {
   }
   
 }
+
 
 </style>
 
