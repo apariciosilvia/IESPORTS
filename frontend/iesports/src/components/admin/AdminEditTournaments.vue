@@ -235,7 +235,7 @@ import { getMatchesByTournamentId } from '@/services/matchService';
 import { StateTournamentEnum } from '@/model/enum/StateTournamentEnum';
 import { RoundMatchEnum } from '@/model/enum/RoundMatchEnum';
 import type { EditTournamentAndMatchDTO } from '@/model/dto/editTournamentAndMatchDTO';
-import type { MatchEditDTO } from '@/model/matchEditDTO';
+import type { MatchEditDTO } from '@/model/dto/matchEditDTO';
 
 const readOnlyTournament = ref(true);
 const error = ref<string | null>(null);

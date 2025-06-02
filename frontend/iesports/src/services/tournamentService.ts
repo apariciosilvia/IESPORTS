@@ -1,8 +1,8 @@
 // services/tournamentService.ts
 import axios from 'axios';
 
-import type { TournamentAdminDTO } from '@/model/tournamentAdminDTO';
-import type { TournamentAddDTO } from '@/model/tournamentAddDTO';
+import type { TournamentAdminDTO } from '@/model/dto/tournamentAdminDTO';
+import type { TournamentAddDTO } from '@/model/dto/tournamentAddDTO';
 
 // // 1. getSports(): devuelve una promesa con el array de deportes
 // function getSports(): Promise<{ id: number; name: string }[]> {
