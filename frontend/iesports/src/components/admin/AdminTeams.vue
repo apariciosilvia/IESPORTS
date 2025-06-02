@@ -140,7 +140,7 @@ function closeModal() {
   border: solid 1px #D9D8D8;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 7rem);
+  height: calc(100vh - 9rem);
 }
 
 .header {
@@ -275,13 +275,13 @@ function closeModal() {
 ion-modal {
   --width: 95vw;
   --max-width: 1200px;
-  --height: auto;
-  --max-height: 400vh;
+  --height: 95vw;
+  --max-height: 300vh;
 }
 
 ion-modal::part(content) {
   height: 95vh !important;
-  max-height: 95vh !important;
+  max-height: 75vh !important;
   width: 95vw;
   max-width: 1200px;
   overflow: hidden;
