@@ -6,19 +6,17 @@ import com.iesports.model.Sport;
 
 public class TournamentModifyDTO {
 
-	private long tournamentId;
+	private long tournamentId; 
 	private String tournamentNameModified;
-	private Sport sportModified;
+	private Long sportModifiedId;
 	private List<MatchModifyTournamentDTO> matches;
 	
-	
-	
-	public TournamentModifyDTO(long tournamentId, String tournamentNameModified, Sport sportModified,
+	public TournamentModifyDTO(long tournamentId, String tournamentNameModified, Long sportModifiedId,
 			List<MatchModifyTournamentDTO> matches) {
 		super();
 		this.tournamentId = tournamentId;
 		this.tournamentNameModified = tournamentNameModified;
-		this.sportModified = sportModified;
+		this.sportModifiedId = sportModifiedId;
 		this.matches = matches;
 	}
 	
@@ -34,11 +32,11 @@ public class TournamentModifyDTO {
 	public void setTournamentNameModified(String tournamentNameModified) {
 		this.tournamentNameModified = tournamentNameModified;
 	}
-	public Sport getSportModified() {
-		return sportModified;
+	public Long getSportModifiedId() {
+		return sportModifiedId;
 	}
-	public void setSportModified(Sport sportModified) {
-		this.sportModified = sportModified;
+	public void setSportModifiedId(Long sportModifiedId) {
+		this.sportModifiedId = sportModifiedId;
 	}
 	public List<MatchModifyTournamentDTO> getMatches() {
 		return matches;
@@ -46,6 +44,10 @@ public class TournamentModifyDTO {
 	public void setMatches(List<MatchModifyTournamentDTO> matches) {
 		this.matches = matches;
 	}
+	
+	
+	
+	
 	
 	
 	
