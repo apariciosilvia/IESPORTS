@@ -209,7 +209,7 @@
         expand="block"
         class="btn-save"
         @click="editTournament"
-      ><span class="material-symbols-outlined">save</span>GUARDAR CAMBIOS</ion-button>
+      ><span class="material-symbols-outlined">save</span>GUARDAR</ion-button>
     </div>
   </ion-footer>
 </template>
@@ -853,4 +853,49 @@ ion-select::part(placeholder) {
   font-weight: bold;
   color: var(--orange-secundary-color);
 }
+
+@media screen and (max-width: 768px) {
+  .modal-grid .row {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 0 1rem;
+  }
+
+  .column-left,
+  .column-right {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .colum-down {
+    overflow-x: auto;
+  }
+
+  .match-header,
+  .match-row {
+    min-width: 700px;
+  }
+
+  .modal-grid .row {
+    margin-top: 6%;
+   
+  }
+  .vs-text {
+    font-weight: bold;
+    color: #0b2c3e;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+  .round-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 55%;
+  margin-bottom: 0.5rem;
+}
+}
+
 </style>
