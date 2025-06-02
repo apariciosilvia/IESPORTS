@@ -78,20 +78,22 @@
         </tbody>
       </table>
     </div>
-    <!-- Modal principal -->
-    <!-- <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
+    <!-- Modal principal --> 
+    <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
       <component
-        :is="modalMode === 'add' ? AdminAddteams : AdminEditteams"
+        :is="modalMode === 'add' ? AdminAddTeams : AdminEditTeams"
         @close="closeModal"
-        :tournamentId="tournamentToEdit"
+        :tournamentId="teamToEdit"
       />
-    </ion-modal> -->
+    </ion-modal>
   </section>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { IonSelect, IonSelectOption, IonButton } from '@ionic/vue';
+import AdminAddTeams from '@/components/admin/AdminAddTeams.vue';
+import AdminEditTeams from '@/components/admin/AdminEditTeams.vue';
 import { getTeamsInfo } from '@/services/teamService';
 import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
 
@@ -102,11 +104,11 @@ function openAddModal() {
   isModalOpen.value = true;
 }
 
-const tournamentToEdit = ref<number | null>(null);
+const teamToEdit = ref<number | null>(null);
 
 function openEditModal(tournamentId: number) {
   modalMode.value = 'edit';
-  tournamentToEdit.value = tournamentId;
+  teamToEdit.value = tournamentId;
   isModalOpen.value = true;
 }
 
@@ -121,6 +123,11 @@ onMounted(async () => {
     console.error('Error al cargar equipos:', e);
   }
 });
+
+function closeModal() {
+  document.activeElement instanceof HTMLElement && document.activeElement.blur();
+  isModalOpen.value = false;
+}
 </script>
 
 <style scoped>
