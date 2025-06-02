@@ -3,7 +3,7 @@ package com.iesports.dto;
 import java.util.Date;
 
 public class MatchModifyTournamentDTO {
-	private long matchId;
+	private Long matchId;
 	private Date matchDate;
 	private int scoreTeam1;
 	private int scoreTeam2;

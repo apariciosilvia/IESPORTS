@@ -218,15 +218,24 @@ public class TournamentController {
 	
 	@PostMapping("/modifyTournament")
 	public ResponseEntity<?> modifyTournament(@Valid @RequestBody TournamentModifyDTO tournamentDTO ){
-		//primero recogemos el torneo  mediante el ID
+		//-----------VARIABLES PARA UTILIZAR EN TORNEO-----------//
+		//PRIMERO RECOGEMOS EL TORNEO MEDIANTE EL ID
 		Tournament currentTournament = new Tournament();
 		currentTournament = tournamentS.getTournamentById(tournamentDTO.getTournamentId());
+		//-------------------------------------------------------//
+		
+		//-----------VARIABLES PARA UTILIZAR EN PARTIDOS-----------//
+		List<Match> matchesWinnersEnded = new ArrayList<>();
+		int contTeamPerMatch = 0;
+		Match newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
+		//-------------------------------------------------------//
 		
 		//EN CASO DE SER PENDIENTE, SE PODRÁ MODIFICAR EL NOMBRE DEL TORNEO Y EL DEPORTE
 		if(currentTournament.getState() == StateTournamentEnum.PENDIENTE)
 		{
 			boolean tournamentIsModified = false;
 	
+			//TODO CORREGIR currentTournament.getName()
 			if(!currentTournament.getName().equals(tournamentDTO.getTournamentNameModified()) && currentTournament.getName() != null)
 			{
 				currentTournament.setName(tournamentDTO.getTournamentNameModified());
@@ -239,8 +248,8 @@ public class TournamentController {
 				
 				if(currentSport != null)
 				{
-					tournamentIsModified = true;
 					currentTournament.setSport(currentSport);
+					tournamentIsModified = true;
 				}
 				else
 				{
@@ -249,14 +258,14 @@ public class TournamentController {
 				}
 			}
 			
-			
-			//Finalmente en caso de que haya modificación, se actualizarán los datos del torneo
+			//FINALMENTE EN CASO DE QUE HAYA MODIFICACIÓN, SE ACTUALIZARÁN LOS DATOS DEL TORNEO
 			if(tournamentIsModified == true) {
 				currentTournament = tournamentS.updateTournament(currentTournament);
 			}
 			
 		}
 		
+		//MIENTRAS EL TORNEO NO HAYA FINALIZADO, SE PODRÁN ACTUALIZAR LAS FECHAS/PUNTOS DEL PARTIDO + AÑADIR POSIBLE GANADOR
 		if(currentTournament.getState() != StateTournamentEnum.FINALIZADO)
 		{
 			for (MatchModifyTournamentDTO currentModifiedMatch : tournamentDTO.getMatches())
@@ -275,44 +284,181 @@ public class TournamentController {
 					        .toLocalDateTime();
 
 					// Comparar con la fecha y hora actual
-					if (matchDateTime.compareTo(LocalDateTime.now()) > 0)
+					if (matchDateTime.compareTo(LocalDateTime.now()) >= 0)
 					{
 						currentMatch.setDate(currentModifiedMatch.getMatchDate());
 						matchIsModified = true;
 					}
 				}
 				
-				//SE COMPRUEBA SI SE HAN MODIFICADO LOS PUNTOS DE ALGUNOS DE LOS EQUIPOS Y QUE LOS PUNTOS NO SEAN IGUALES (QUE NO SEA EMPATE)
-				if( ( currentModifiedMatch.getScoreTeam1() != currentMatch.getPointsTeam1() ||
-					currentModifiedMatch.getScoreTeam2() != currentMatch.getPointsTeam2() ) && 
-					currentModifiedMatch.getScoreTeam1() != currentModifiedMatch.getScoreTeam2() )
+				LocalDateTime matchDateTime = currentModifiedMatch.getMatchDate().toInstant()
+				        .atZone(ZoneId.systemDefault())
+				        .toLocalDateTime();
+				
+				//EN CASO DE QUE HAYA PASADO YA EL PARTIDO, MODIFICARÁ LOS PUNTOS DE LOS EQUIPOS + GANADOR
+				if (matchDateTime.compareTo(LocalDateTime.now()) <= 0)
 				{
-					//SI ALGUNO DE LOS DOS ES MAYOR A 0, SE DECIDIRÁ AUTOMÁTICAMENTE EL GANADOR
-					if(currentModifiedMatch.getScoreTeam1() > 0 || 
-						currentModifiedMatch.getScoreTeam2() > 0)
-					{	
-						currentMatch.setPointsTeam1(currentModifiedMatch.getScoreTeam1());
-						currentMatch.setPointsTeam2(currentModifiedMatch.getScoreTeam2());
-						
-						//EN CASO QUE HAYA EMPATE (COSA QUE NO DEBERÍA PASAR), NO MODIFICO NINGÚN GANADOR DE ESTOS
-						
-						
-						if(currentModifiedMatch.getScoreTeam1() > currentModifiedMatch.getScoreTeam2())
-							currentMatch.setWinnerTeam(currentMatch.getTeam1());
-						else
-							currentMatch.setWinnerTeam(currentMatch.getTeam2());
-						
-						matchIsModified = true;
+					//SE COMPRUEBA SI SE HAN MODIFICADO LOS PUNTOS DE ALGUNOS DE LOS EQUIPOS Y QUE LOS PUNTOS NO SEAN IGUALES (QUE NO SEA EMPATE)
+					if( ( currentModifiedMatch.getScoreTeam1() != currentMatch.getPointsTeam1() ||
+						currentModifiedMatch.getScoreTeam2() != currentMatch.getPointsTeam2() ) && 
+						currentModifiedMatch.getScoreTeam1() != currentModifiedMatch.getScoreTeam2() )
+					{
+						//SI ALGUNO DE LOS DOS ES MAYOR A 0, SE DECIDIRÁ AUTOMÁTICAMENTE EL GANADOR
+						if(currentModifiedMatch.getScoreTeam1() > 0 || 
+							currentModifiedMatch.getScoreTeam2() > 0)
+						{	
+							currentMatch.setPointsTeam1(currentModifiedMatch.getScoreTeam1());
+							currentMatch.setPointsTeam2(currentModifiedMatch.getScoreTeam2());
+							
+							if(currentModifiedMatch.getScoreTeam1() > currentModifiedMatch.getScoreTeam2())
+								currentMatch.setWinnerTeam(currentMatch.getTeam1());
+							else
+								currentMatch.setWinnerTeam(currentMatch.getTeam2());
+							
+							matchIsModified = true;
+						}
 					}
 				}
 				
+				//EN CASO DE HABER MODIFICACIONES, SE ACTUALIZARÁ EL PARTIDO
 				if(matchIsModified){
 					currentMatch = matchS.updateMatch(currentMatch);
+				}
+				
+				//PREPARAMOS UN LISTADO NUEVO DE PARTIDOS EN LOS QUE HAYAN FINALIZADO Y TENGAN GANADOR
+				if(currentMatch.getWinnerTeam() != null)
+				{
+					matchesWinnersEnded.add(currentMatch);
 				}
 			}
 		}
 		
+//		//RECORREMOS LA LISTA DE PARTIDOS CON UN GANADOR
+//		for (Match currentMatch : matchesWinnersEnded)
+//		{
+//			Team currentWinnerTeam = currentMatch.getWinnerTeam();
+//			//TODO COMPROBAR EN CASO DE QUE SOLO HAYA UNA FINAL
+//			
+//			//PILLAMOS EL ROUND ACTUAL Y LO CAMBIAREMOS AL QUE SEA CORRESPONDIENTE
+//			RoundMatchEnum nextRoundMatch = currentMatch.getRound();
+//			
+//			if(nextRoundMatch == RoundMatchEnum.OCTAVOS)
+//				nextRoundMatch = RoundMatchEnum.CUARTOS_FINAL;
+//			
+//			else if(nextRoundMatch == RoundMatchEnum.CUARTOS_FINAL)
+//				nextRoundMatch = RoundMatchEnum.SEMIFINAL;
+//			
+//			else if(nextRoundMatch == RoundMatchEnum.SEMIFINAL)
+//				nextRoundMatch = RoundMatchEnum.FINAL;
+//			
+//			//DEVUELVE NULO SI NO EXISTE ESE PARTIDO CON EL ID DEL EQUIPO Y LA RONDA SELECCIONADA
+//			if(matchS.getMatchByTeamIdAndStateRound(currentWinnerTeam.getId(), nextRoundMatch) == null)
+//			{
+//				if (contTeamPerMatch == 1) 
+//				{
+//					if(nextRoundMatch == newMatchNextRound.getRound())
+//					{
+//						newMatchNextRound.setTeam2(currentWinnerTeam);
+//						newMatchNextRound = matchS.saveMatch(newMatchNextRound);
+//						newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
+//						contTeamPerMatch = 0;
+//					}
+//				}
+//				
+//				if(contTeamPerMatch == 0)
+//				{
+//					newMatchNextRound.setTeam1(currentWinnerTeam);
+//					newMatchNextRound.setRound(nextRoundMatch);
+//					contTeamPerMatch++;
+//				}
+//			}
+//			
+//			if(matchS.getMatchByTeamIdAndStateRound(currentWinnerTeam.getId(), nextRoundMatch) == null)
+//			{
+//				if (contTeamPerMatch == 1) 
+//				{
+//					if(nextRoundMatch == newMatchNextRound.getRound())
+//					{
+//						newMatchNextRound.setTeam2(currentWinnerTeam);
+//						newMatchNextRound = matchS.saveMatch(newMatchNextRound);
+//						
+//						
+//						
+//						newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
+//						contTeamPerMatch = 0;
+//						matchesWinnersEnded.remove(currentMatch);
+//						//TODO RELANZAR EL BUCLE DE MATCHESWINNERSENDED
+//					}
+//				}else if(contTeamPerMatch == 0)
+//				{
+//					newMatchNextRound.setTeam1(currentWinnerTeam);
+//					matchesWinnersEnded.remove(currentMatch);
+//					
+//					newMatchNextRound.setRound(nextRoundMatch);
+//					contTeamPerMatch++;
+//				}
+//			}
+//			
+//		}
+		//TODO COMPROBAR EL NUMERO DE PARTIDOS QUE TENGAN GANADORES, Y LUEGO CLASIFICARLOS
+		createNewMatchTournament(matchesWinnersEnded, currentTournament);
 		return ResponseEntity.status(HttpStatus.OK).body(currentTournament);
+	}
+	
+	
+	private void createNewMatchTournament(List<Match> matchesWinnersEnded, Tournament currentTournament)
+	{
+		int contTeamPerMatch = 0;
+		Match newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
+		
+		
+		for (Match currentMatch : matchesWinnersEnded)
+		{
+			Team currentWinnerTeam = currentMatch.getWinnerTeam();
+			//TODO COMPROBAR EN CASO DE QUE SOLO HAYA UNA FINAL
+			
+			//PILLAMOS EL ROUND ACTUAL Y LO CAMBIAREMOS AL QUE SEA CORRESPONDIENTE
+			RoundMatchEnum nextRoundMatch = currentMatch.getRound();
+			
+			if(nextRoundMatch == RoundMatchEnum.OCTAVOS)
+				nextRoundMatch = RoundMatchEnum.CUARTOS_FINAL;
+			
+			else if(nextRoundMatch == RoundMatchEnum.CUARTOS_FINAL)
+				nextRoundMatch = RoundMatchEnum.SEMIFINAL;
+			
+			else if(nextRoundMatch == RoundMatchEnum.SEMIFINAL)
+				nextRoundMatch = RoundMatchEnum.FINAL;
+			
+			//DEVUELVE NULO SI NO EXISTE ESE PARTIDO CON EL ID DEL EQUIPO Y LA RONDA SELECCIONADA
+			if(matchS.countMatchByTeamIdTournamentIdAndStateRound(currentWinnerTeam.getId(),currentTournament.getId(),nextRoundMatch) == 0)
+			{
+				if (contTeamPerMatch == 1) 
+				{
+					if(nextRoundMatch == newMatchNextRound.getRound())
+					{
+						newMatchNextRound.setTeam2(currentWinnerTeam);
+						newMatchNextRound = matchS.saveMatch(newMatchNextRound);
+						
+						newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
+						contTeamPerMatch = 0;
+						matchesWinnersEnded.remove(currentMatch);
+						//TODO RELANZAR EL BUCLE DE MATCHESWINNERSENDED
+						createNewMatchTournament(matchesWinnersEnded, currentTournament);
+						
+						//TODO SI EL ESTADO DEL TORNEO PENDIENTE, SE PASA A EN PROCESO CUANDO SE JUEGUE EL PRIMER PARTIDO
+						//TODO SI EL ESTADO DEL TORNEO PROCESO Y SE HACE EL PARTIDO FINAL, SE PASA A FINALIZADO
+					}
+				}else if(contTeamPerMatch == 0)
+				{
+					newMatchNextRound.setTeam1(currentWinnerTeam);
+					matchesWinnersEnded.remove(currentMatch);
+					
+					newMatchNextRound.setRound(nextRoundMatch);
+					contTeamPerMatch++;
+				}
+			}
+			
+		}
 	}
 	
 }
