@@ -208,7 +208,7 @@ function closeModal() {
   align-items: center;
   background-color: #0a2540;
   border-radius: 5px;
-  padding: 10px 2px;
+  padding: 10px 15px;
   max-width: 110px;
   gap: 20%;
 }
@@ -237,15 +237,68 @@ function closeModal() {
 .delete-icon {
   color: #e22f28;
 }
+
 ion-modal {
-  --border-radius: 10px;
-  --backdrop-opacity: 0.6;
-  --width: 100%;
-  --max-width: 1300px;
-  --height: 700px;
+  --width: 95vw;
+  --max-width: 1200px;
+  --height: auto;
+  --max-height: 400vh;
 }
+
+ion-modal::part(content) {
+  height: 95vh !important;
+  max-height: 95vh !important;
+  width: 95vw;
+  max-width: 1200px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
 ion-modal::part(backdrop) {
   backdrop-filter: blur(1px);
   background-color: rgba(0, 0, 0, 0.3);
 }
+
+
+@media screen and (max-width: 1024px) {
+  ion-modal {
+    --width: 95vw;
+    --height: 90vh;
+    --max-width: 95vw;
+    --max-height: 90vh;
+  }
+
+  .tournaments {
+    margin: 1rem;
+    padding: 1rem;
+    margin-top: 5rem;
+    height: auto;
+  }
+
+  .tournaments-table th,
+  .tournaments-table td {
+    padding: 0.5rem 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .new-btn {
+    align-self: flex-end;
+    width: 100%;
+    text-align: right;
+  }
+
+  .table {
+    overflow-x: auto;
+  }
+  
+}
+
 </style>
+
