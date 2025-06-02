@@ -1,86 +1,99 @@
-<!-- src/components/CreateTournaments.vue --> 
 <template>
-    <section class="tournaments">
-      <div class="header">
-        <h2 class="tittle">Equipos</h2>
-        <ion-button class="new-btn" @click="openAddModal">
-          <span class="material-symbols-outlined">add_circle</span>
-          Nuevo Equipo
-        </ion-button>
-      </div>
-      <div class="table">
-        <table class="tournaments-table">
-          <thead>
-            <tr>
-              <th class="col-nombre">Nombre</th>
-              <th class="col-anio">Año</th>
-              <th class="col-estado">Estado</th>
-              <th>Equipos</th>
-              <th class="col-sports">Deporte</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="t in tournamentsAdminDTO" :key="t.tournament.id">
-              <td  class="col-nombre">{{ t.tournament.name }}</td>
-              <td class="col-anio">{{ t.tournament.date }}</td>
-              <td class="col-estado">{{ t.tournament.state }}</td>
-              <td>
-                <p v-if="t.teams.length === 0">Sin equipos</p>
-                <ion-select
-                  v-else
-                  interface="popover"
-                  :interface-options="{ cssClass: 'no-border-popover' }"
-                  ok-text="Cerrar"
-                  :selectedText="t.teams[0].name"
-                  class="list-teams"
+  <section class="teams">
+    <div class="header">
+      <h2 class="tittle">Equipos</h2>
+      <ion-button class="new-btn" @click="openAddModal">
+        <span class="material-symbols-outlined">add_circle</span>
+        Nuevo Equipo
+      </ion-button>
+    </div>
+    <div class="table">
+      <table class="teams-table">
+        <thead>
+          <tr>
+            <th class="col-name">name</th>
+            <th class="col-members">Miembros</th>
+            <th class="col-sports">Deportes</th>
+            <th class="col-actions">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="info in teamsInfo" :key="info.team.id">
+            <td class="col-name">{{ info.team.name }}</td>
+
+            <!-- Miembros -->
+            <td class="col-members">
+              <div v-if="info.team.players?.length === 0">Sin miembros</div>
+              <ion-select
+                v-else
+                interface="popover"
+                :selectedText="info.team.players && info.team.players.length > 0 ? info.team.players[0].name : ''"
+                class="list-teams"
+              >
+                <ion-select-option
+                  v-for="p in info.team.players"
+                  :key="p.id"
+                  :value="p.id"
                 >
-                  <ion-select-option
-                    v-for="team in t.teams"
-                    :key="team.id"
-                    :value="team.id"
-                  >
-                    {{ team.name }}
-                  </ion-select-option>
-                </ion-select>
-              </td>
-              <td class="col-sports">{{ t.tournament.sport.name }}</td>
-              <td>
-                <div class="actions">
-                  <!-- Botón de editar, que enviará solo el ID del torneo -->
-                  <button type="button" class="action-btn edit-btn" @click="openEditModal(t.tournament.id)">
-                    <span class="material-symbols-outlined edit-icon">edit_square</span>
-                  </button>
-                  <!-- Botón de eliminar -->
-                  <button type="button" class="action-btn delete-btn">
-                    <span class="material-symbols-outlined delete-icon">delete</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- Modal principal -->
-      <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
-        <component
-          :is="modalMode === 'add' ? AdminAddTournaments : AdminEditTournaments"
-          @close="closeModal"
-          :tournamentId="tournamentToEdit"
-        />
-      </ion-modal>
-    </section>
+                  {{ p.name }}
+                </ion-select-option>
+              </ion-select>
+            </td>
+
+            <!-- Deportes -->
+            <td class="col-sports">
+              <div v-if="info.sports.length === 0">Sin deportes</div>
+              <ion-select
+                v-else
+                interface="popover"
+                :selectedText="info.sports[0].name"
+                class="list-teams"
+              >
+                <ion-select-option
+                  v-for="s in info.sports"
+                  :key="s.id"
+                  :value="s.id"
+                >
+                  {{ s.name }}
+                </ion-select-option>
+              </ion-select>
+            </td>
+
+            <!-- Acciones -->
+            <td class="col-actions">
+              <div class="actions">
+                <button
+                  type="button"
+                  class="action-btn edit-btn"
+                  @click="openEditModal(info.team.id)"
+                >
+                  <span class="material-symbols-outlined edit-icon">edit_square</span>
+                </button>
+                <button type="button" class="action-btn delete-btn">
+                  <span class="material-symbols-outlined delete-icon">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Modal principal -->
+    <!-- <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
+      <component
+        :is="modalMode === 'add' ? AdminAddteams : AdminEditteams"
+        @close="closeModal"
+        :tournamentId="tournamentToEdit"
+      />
+    </ion-modal> -->
+  </section>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { IonSelect, IonSelectOption, IonModal, IonButton } from '@ionic/vue';
-import AdminAddTournaments from '@/components/admin/AdminAddTournaments.vue';
-import AdminEditTournaments from '@/components/admin/AdminEditTournaments.vue';
-
-import type { TournamentAdminDTO } from '@/model/dto/tournamentAdminDTO';
-
-import { getTeamsByTournamentId } from '@/services/tournamentService';
+import { IonSelect, IonSelectOption, IonButton } from '@ionic/vue';
+import { getTeamsInfo } from '@/services/teamService';
+import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
 
 const modalMode = ref<'add' | 'edit'>('add');
 
@@ -89,7 +102,7 @@ function openAddModal() {
   isModalOpen.value = true;
 }
 
-const tournamentToEdit = ref<number | null>(null); 
+const tournamentToEdit = ref<number | null>(null);
 
 function openEditModal(tournamentId: number) {
   modalMode.value = 'edit';
@@ -97,30 +110,21 @@ function openEditModal(tournamentId: number) {
   isModalOpen.value = true;
 }
 
-const isModalOpen = ref(false); // controla visibilidad del popup
+const isModalOpen = ref(false);
 
-// 1) Array reactivo que usa tu DTO
-const tournamentsAdminDTO = ref<TournamentAdminDTO[]>([]);
+const teamsInfo = ref<TeamInfoDTO[]>([]);
 
-// 2) Al montar el componente, pedimos los datos
 onMounted(async () => {
   try {
-    const data = await getTeamsByTournamentId();
-    tournamentsAdminDTO.value = data;
-    console.log('ADMIN TORNEOS', tournamentsAdminDTO.value);
-  } catch (error) {
-    console.error('Error cargando torneos:', error);
+    teamsInfo.value = await getTeamsInfo();
+  } catch (e) {
+    console.error('Error al cargar equipos:', e);
   }
 });
-
-function closeModal() {
-  document.activeElement instanceof HTMLElement && document.activeElement.blur();
-  isModalOpen.value = false;
-}
 </script>
 
 <style scoped>
-.tournaments {
+.teams {
   margin: 4rem 2rem;
   padding: 2.5rem;
   margin-top: 8%;
@@ -169,63 +173,71 @@ function closeModal() {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
-.table .tournaments-table {
+.table .teams-table {
   width: 100%;
   min-width: 600px;
 }
-.tournaments-table {
+.teams-table {
   border-collapse: collapse;
   width: 100%;
 }
-.tournaments-table th,
-.tournaments-table td {
-  padding: 1rem 3rem;
+.teams-table th,
+.teams-table td {
+  padding: 1rem 4rem;
   vertical-align: left;
 }
-.tournaments-table tbody {
+.teams-table tbody {
   border: 1px solid #ddd;
 }
-.tournaments-table tbody tr {
+.teams-table tbody tr {
   border-bottom: 1px solid #ddd;
 }
-.tournaments-table tbody tr:hover {
+.teams-table tbody tr:hover {
   background-color: #fafafa;
 }
-.tournaments-table tbody tr:first-child td {
+.teams-table tbody tr:first-child td {
   border-top: 1px solid #ddd;
 }
-.tournaments-table thead {
+.teams-table thead {
   background-color: #f5f5f5;
 }
-.tournaments-table thead {
+.teams-table thead {
   border: 1px solid #ddd;
 }
 
-.col-nombre {
+.col-name {
   min-width: 360px;
-  width: 25%;
+  width: 30%;
 }
 
-.col-anio,
-.col-estado,
-.col-sports {
-  width: 100px;
-  max-width: 200px;
+.col-members {
+  width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.col-sports {
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-actions {
+  width: 150px;
+  text-align: center;
+}
 
 .actions {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   background-color: #0a2540;
   border-radius: 5px;
   padding: 10px 15px;
-  max-width: 110px;
   gap: 20%;
+  width: 110px;
 }
 .action-btn {
   background: none;
@@ -270,12 +282,10 @@ ion-modal::part(content) {
   flex-direction: column;
 }
 
-
 ion-modal::part(backdrop) {
   backdrop-filter: blur(1px);
   background-color: rgba(0, 0, 0, 0.3);
 }
-
 
 @media screen and (max-width: 1024px) {
   ion-modal {
@@ -285,15 +295,15 @@ ion-modal::part(backdrop) {
     --max-height: 90vh;
   }
 
-  .tournaments {
+  .teams {
     margin: 1rem;
     padding: 1rem;
     margin-top: 5rem;
     height: auto;
   }
 
-  .tournaments-table th,
-  .tournaments-table td {
+  .teams-table th,
+  .teams-table td {
     padding: 0.5rem 1rem;
   }
 
@@ -312,9 +322,5 @@ ion-modal::part(backdrop) {
   .table {
     overflow-x: auto;
   }
-  
 }
-
-
 </style>
-

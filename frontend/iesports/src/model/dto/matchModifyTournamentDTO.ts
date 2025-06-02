@@ -1,4 +1,4 @@
-export interface MatchEditDTO {
+export interface MatchModifyTournamentDTO {
   matchId: number;  
   matchDate: Date | null;
   scoreTeam1:  number;
