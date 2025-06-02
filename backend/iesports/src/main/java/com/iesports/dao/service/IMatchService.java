@@ -2,6 +2,7 @@ package com.iesports.dao.service;
 
 import java.util.List;
 
+import com.iesports.enums.RoundMatchEnum;
 import com.iesports.model.Match;
 
 
@@ -18,5 +19,7 @@ public interface IMatchService {
 	public void deleteMatch(Match match);
 	
 	List<Match> getMatchesByTournamentId(Long matchId);
+	
+	int countMatchByTeamIdTournamentIdAndStateRound(Long matchId,Long tournamentId ,RoundMatchEnum round);
 
 }
