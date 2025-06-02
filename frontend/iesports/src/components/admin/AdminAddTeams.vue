@@ -11,7 +11,7 @@
 
   <ion-content class="content">
     <div class="form-container">
-      <!-- Input Nombre (reemplazado por el que pediste) -->
+      <!-- Input Nombre -->
       <ion-input
         label="Nombre"
         label-placement="floating"
@@ -111,6 +111,9 @@ import {
   IonSearchbar,
 } from '@ionic/vue';
 import { getPersons } from '@/services/personServices';
+import { addTeam } from '@/services/teamService';
+import type { TeamAddDTO } from '@/model/dto/teamAddDTO';
+import type { Person } from '@/model/person';
 
 interface User {
   id: number;
@@ -176,9 +179,35 @@ async function createTeam() {
     alert('Debes agregar al menos un miembro');
     return;
   }
-  alert('Equipo creado correctamente');
-  resetForm();
-  emit('close');
+
+  const payload: TeamAddDTO = {
+    name: teamName.value,
+    players: selectedMembers.value.map((m) => ({ id: m.id } as Person)),
+  };
+
+  try {
+    await addTeam(payload);
+    alert('Equipo creado correctamente');
+    resetForm();
+    emit('close');
+
+     // Refrescamos la página
+    window.location.reload();
+  } catch (error: any) {
+    if (error.response?.status === 409) {
+      alert('El nombre del equipo ya existe');
+    } else if (error.response?.status === 400) {
+      const errors = error.response.data;
+      let msg = '';
+      for (const key in errors) {
+        msg += `${errors[key]}\n`;
+      }
+      alert(msg);
+    } else {
+      console.error(error);
+      alert('Error al crear el equipo');
+    }
+  }
 }
 </script>
 
@@ -186,7 +215,7 @@ async function createTeam() {
 .header-red {
   --color: #ffffff;
   --background: #e22f28;
-  display: flex;           
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -197,6 +226,7 @@ async function createTeam() {
   font-weight: bolder;
   font-size: 1.5rem;
 }
+
 .content {
   --padding-bottom: 0;
 }
@@ -218,16 +248,13 @@ async function createTeam() {
   margin-top: 1rem;
 }
 
-
-/* Estilos para ion-input forzados */
 .sc-ion-input-md-h {
-    --placeholder-color: var(--text-color-primary);
-    --highlight-color-focused: var(--ion-color-primary, #0054e9);
-    --highlight-color-valid: var(--ion-color-success, #2dd55b);
-    --highlight-color-invalid: var(--ion-color-danger, #c5000f);
-    --highlight-color: var(--border-color-blue);
+  --placeholder-color: var(--text-color-primary);
+  --highlight-color-focused: var(--ion-color-primary, #0054e9);
+  --highlight-color-valid: var(--ion-color-success, #5f7465);
+  --highlight-color-invalid: var(--ion-color-danger, #c5000f);
+  --highlight-color: var(--border-color-blue);
 }
-
 
 .panels {
   display: flex;
@@ -271,11 +298,10 @@ async function createTeam() {
   -webkit-padding-start: 0;
   padding-inline-start: 0;
   -webkit-padding-end: 0;
-  padding-inline-end: 0 ;
+  padding-inline-end: 0;
   padding: 0;
   margin: 0 0 1rem 0;
 }
-
 
 .members-list {
   flex: 1;

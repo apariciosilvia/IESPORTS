@@ -99,6 +99,7 @@ import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
 
 const modalMode = ref<'add' | 'edit'>('add');
 
+
 function openAddModal() {
   modalMode.value = 'add';
   isModalOpen.value = true;
