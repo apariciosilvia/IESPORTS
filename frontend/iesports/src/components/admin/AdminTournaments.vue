@@ -13,19 +13,19 @@
         <table class="tournaments-table">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Año</th>
-              <th>Estado</th>
+              <th class="col-nombre">Nombre</th>
+              <th class="col-anio">Año</th>
+              <th class="col-estado">Estado</th>
               <th>Equipos</th>
-              <th>Deporte</th>
+              <th class="col-sports">Deporte</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="t in tournamentsAdminDTO" :key="t.tournament.id">
-              <td>{{ t.tournament.name }}</td>
-              <td>{{ t.tournament.date }}</td>
-              <td>{{ t.tournament.state }}</td>
+              <td  class="col-nombre">{{ t.tournament.name }}</td>
+              <td class="col-anio">{{ t.tournament.date }}</td>
+              <td class="col-estado">{{ t.tournament.state }}</td>
               <td>
                 <p v-if="t.teams.length === 0">Sin equipos</p>
                 <ion-select
@@ -45,7 +45,7 @@
                   </ion-select-option>
                 </ion-select>
               </td>
-              <td>{{ t.tournament.sport.name }}</td>
+              <td class="col-sports">{{ t.tournament.sport.name }}</td>
               <td>
                 <div class="actions">
                   <!-- Botón de editar, que enviará solo el ID del torneo -->
@@ -202,13 +202,30 @@ function closeModal() {
 .tournaments-table thead {
   border: 1px solid #ddd;
 }
+
+.col-nombre {
+  min-width: 360px;
+  width: 25%;
+}
+
+.col-anio,
+.col-estado,
+.col-sports {
+  width: 100px;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 .actions {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #0a2540;
   border-radius: 5px;
-  padding: 10px 2px;
+  padding: 10px 15px;
   max-width: 110px;
   gap: 20%;
 }
@@ -237,15 +254,68 @@ function closeModal() {
 .delete-icon {
   color: #e22f28;
 }
+
 ion-modal {
-  --border-radius: 10px;
-  --backdrop-opacity: 0.6;
-  --width: 100%;
-  --max-width: 1300px;
-  --height: 700px;
+  --width: 95vw;
+  --max-width: 1200px;
+  --height: auto;
+  --max-height: 400vh;
 }
+
+ion-modal::part(content) {
+  height: 95vh !important;
+  max-height: 95vh !important;
+  width: 95vw;
+  max-width: 1200px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
 ion-modal::part(backdrop) {
   backdrop-filter: blur(1px);
   background-color: rgba(0, 0, 0, 0.3);
 }
+
+
+@media screen and (max-width: 1024px) {
+  ion-modal {
+    --width: 95vw;
+    --height: 90vh;
+    --max-width: 95vw;
+    --max-height: 90vh;
+  }
+
+  .tournaments {
+    margin: 1rem;
+    padding: 1rem;
+    margin-top: 5rem;
+    height: auto;
+  }
+
+  .tournaments-table th,
+  .tournaments-table td {
+    padding: 0.5rem 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .new-btn {
+    align-self: flex-end;
+    width: 100%;
+    text-align: right;
+  }
+
+  .table {
+    overflow-x: auto;
+  }
+  
+}
+
 </style>
+

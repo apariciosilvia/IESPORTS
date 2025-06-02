@@ -37,7 +37,6 @@ const navItems = computed(() => {
     { name: 'Torneos', href: '/tournaments' },
     { name: 'Equipos', href: '/teams' },
     { name: 'Calendario', href: '/calendar' },
-    { name: 'Noticias', href: '#noticias' },
     { name: 'Perfil', href: '/profile' }
   ]
 })

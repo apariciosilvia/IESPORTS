@@ -416,4 +416,107 @@ ion-title {
 }
 /* AJUSTE EN ESTILO ERRORES END*/
 
+
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin: 1rem 0;
+  }
+
+  .left-column,
+  .right-column {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .card-section {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .input-group input {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .card-header h4 {
+    font-size: 1.1rem;
+  }
+
+  .logout-button{
+    width: 60%;
+    justify-content: center;
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .buttons {
+    width: 20%;
+  }
+
+  .buttons .material-symbols-outlined {
+    font-size: 1.1rem;
+  }
+
+  .error-msg {
+    margin-left: 0 !important;
+  }
+}
+
+
+@media (max-width: 480px) {
+ .profile-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin: 1rem 0;
+  }
+
+  .left-column,
+  .right-column {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .card-section {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .input-group input {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .card-header h4 {
+    font-size: 1.1rem;
+  }
+
+  .logout-button{
+    width: 60%;
+    justify-content: center;
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .buttons {
+    width: 30%;
+  }
+
+  .buttons .material-symbols-outlined {
+    font-size: 1.1rem;
+  }
+
+  .error-msg {
+    margin-left: 0 !important;
+  }
+}
+
+
 </style>
