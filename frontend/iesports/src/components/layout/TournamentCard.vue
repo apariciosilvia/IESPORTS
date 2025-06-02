@@ -365,5 +365,4 @@ const sportClass = computed(() => {
   margin-bottom: 1rem;
   color: #444;
 }
-
 </style>

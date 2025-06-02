@@ -2,10 +2,10 @@
 <template>
     <section class="tournaments">
       <div class="header">
-        <h2 class="tittle">Torneos</h2>
+        <h2 class="tittle">Equipos</h2>
         <ion-button class="new-btn" @click="openAddModal">
           <span class="material-symbols-outlined">add_circle</span>
-          Nuevo Torneo
+          Nuevo Equipo
         </ion-button>
       </div>
       <div class="table">

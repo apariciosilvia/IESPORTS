@@ -132,7 +132,7 @@ import { useUserMenu } from '@/composables/useUserMenu';
 
 // CLASES
 import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
-import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
+import type { ChangePasswordDTO } from '@/model/dto/changePasswordDTO';
 
 // SERVICIOS
 import { changeNameAndEmail, changePassword } from '@/services/personServices';

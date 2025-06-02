@@ -167,8 +167,8 @@ import type { Team } from '@/model/team';
 import { addTournament } from '@/services/tournamentService';
 import { getTeams } from '@/services/teamService';
 
-import type { TournamentAddDTO } from '@/model/tournamentAddDTO';
-import type { MatchDTO } from '@/model/matchAddDTO';
+import type { TournamentAddDTO } from '@/model/dto/tournamentAddDTO';
+import type { MatchDTO } from '@/model/dto/matchAddDTO';
 
 const error = ref<string | null>(null);
 

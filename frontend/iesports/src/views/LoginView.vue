@@ -342,8 +342,8 @@ import type { Person } from '@/model/person';
 //SERVICIOS
 import { getCourses } from "@/services/courseService";
 import { login, register, forgotPassword, changeTempPassword } from '@/services/personServices';
-import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO';
-import type { ChangeForgottenPasswordDTO } from '@/model/changeForgottenPasswordDTO';
+import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequestDTO';
+import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
 
 
 /* FONDO ANIMADO START */

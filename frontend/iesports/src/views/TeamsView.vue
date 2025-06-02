@@ -71,7 +71,7 @@ import { getTeamsInfo } from '@/services/teamService';
 import { getSports } from '@/services/sportService';
 
 import type { Sport } from '@/model/sport';
-import type { TeamInfoDTO } from '@/model/teamInfoDTO';
+import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
 
 const { showNav, handleScroll } = useNavbarVisibility();
 
