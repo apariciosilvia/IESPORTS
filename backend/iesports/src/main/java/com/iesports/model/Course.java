@@ -15,17 +15,21 @@ public class Course {
 	private Long id;
 	private String name;
 	private int year;
-	
-	//TODO PREGUNTAR A SILVIA POR QUÉ AÑO
+	private String initials;
 	
 	public Course() {
 		
 	}
-	
-	public Course(Long id, String nombre){
+
+	public Course(Long id, String name, int year, String initials) {
+		super();
 		this.id = id;
-		this.name = nombre;
+		this.name = name;
+		this.year = year;
+		this.initials = initials;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -35,12 +39,12 @@ public class Course {
 		this.id = id;
 	}
 
-	public String getNombre() {
+	public String getName() {
 		return name;
 	}
 
-	public void setNombre(String nombre) {
-		this.name = nombre;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getYear() {
@@ -51,10 +55,20 @@ public class Course {
 		this.year = year;
 	}
 
+	public String getInitials() {
+		return initials;
+	}
+
+	public void setInitials(String initials) {
+		this.initials = initials;
+	}
+
 	@Override
 	public String toString() {
-		return "Course [id=" + id + ", name=" + name + ", year=" + year + "]";
+		return "Course [id=" + id + ", name=" + name + ", year=" + year + ", initials=" + initials + "]";
 	}
+	
+	
 	
 	
 }

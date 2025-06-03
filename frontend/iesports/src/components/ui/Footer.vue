@@ -61,21 +61,21 @@ import { logoTwitter, logoFacebook, logoInstagram } from 'ionicons/icons';
 <style scoped>
 .app-footer {
   position: relative;
-  --background: #0a2540;
+  --background: var(--blue-primary-color);
   color: white;
   overflow: visible;
   --min-height: 120px;
 }
 .footer-wave {
   position: absolute; top: -40px; left: 0; right: 0; height: 40px;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 C360,60 1080,0 1440,20 L1440,40 L0,40 Z' fill='%230a2540'/%3E%3C/svg%3E") no-repeat;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 C360,60 1080,0 1440,20 L1440,40 L0,40 Z' fill='%23002f3d'/%3E%3C/svg%3E") no-repeat;
   background-size: cover;
 }
 .footer-toolbar {
   --min-height: 120px; 
   flex-direction: column;
   justify-content: center;
-  --background: #0a2540;
+  --background: var(--blue-primary-color);  
   padding: 0 1rem;
 }
 .footer-top {

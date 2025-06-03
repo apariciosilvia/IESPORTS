@@ -1,8 +1,9 @@
 // services/tournamentService.ts
 import axios from 'axios';
 
-import type { TournamentAdminDTO } from '@/model/tournamentAdminDTO';
-import type { TournamentAddDTO } from '@/model/TournamentAddDTO';
+import type { TournamentAdminDTO } from '@/model/dto/tournamentAdminDTO';
+import type { TournamentAddDTO } from '@/model/dto/tournamentAddDTO';
+import type { TournamentModifyDTO } from '@/model/dto/tournamentModifyDTO';
 
 // // 1. getSports(): devuelve una promesa con el array de deportes
 // function getSports(): Promise<{ id: number; name: string }[]> {
@@ -88,4 +89,20 @@ function addTournament(TournamentAddDTO: TournamentAddDTO) {
   });
 }
 
-export { getYears, getTournaments, getTeamsByTournamentId, addTournament};
+function modifyTournament(TournamentModifyDTO: TournamentModifyDTO) {
+  
+  const url = `${import.meta.env.VITE_URL_API}/tournament/modifyTournament`;
+
+  return new Promise((resolve, reject) => {
+    axios.post(url, TournamentModifyDTO)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        console.error('Error al añadir un editar torneo:', error);
+        reject(error);
+      });
+  });
+}
+
+export { getYears, getTournaments, getTeamsByTournamentId, addTournament, modifyTournament };

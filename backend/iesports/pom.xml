@@ -6,6 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<!-- 3.1.5 Swagger - 3.4.4 No Swagger -->
+		<!-- URL Swagger - http://localhost:8080/swagger-ui/index.html -->
 		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
@@ -90,10 +91,15 @@
 		
 		<!-- Genera automaticamente el swagger-->
 		<dependency>
-		  <groupId>org.springdoc</groupId>
-		  <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-		  <version>2.5.0</version>
+  			<groupId>org.springdoc</groupId>
+  			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+  			<version>2.7.0</version>
 		</dependency>
+		<!--<dependency>
+			<groupId>com.example</groupId>
+			<artifactId>basededatos</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>-->
 	</dependencies>
 
 	<build>

@@ -1,4 +1,4 @@
-import type { MatchDTO } from '@/model/matchDTO';
+import type { MatchDTO } from '@/model/dto/matchAddDTO';
 
 export interface TournamentAddDTO {
   name: string;

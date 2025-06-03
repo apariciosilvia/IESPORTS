@@ -46,11 +46,13 @@
             />
 
           <!-- Mensaje si no hay resultados -->
-          <!-- <ion-item
-            v-if="filteredTournaments.length === 0"
+          <ion-item
+            v-if="Object.keys(groupedMatches).length === 0"
             lines="none"
             class="no-results"
-          >No hay torneos que coincidan con los filtros.</ion-item> -->
+          >
+            No hay torneos que coincidan con los filtros.
+          </ion-item>
         </IonList>
 
         <Footer />
@@ -167,7 +169,7 @@ const filteredMatches = computed(() => {
   align-items: center;
   gap: 3rem;
   padding: 0.75rem 1rem;
-  margin: 6rem 6rem 0.5rem; 
+  margin: 6rem 6rem 0; 
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -215,8 +217,7 @@ const filteredMatches = computed(() => {
 }
 
 .tournament-list {
-  margin: 1.5rem;
-  margin-bottom: 6rem;
+  margin: 0 1.5rem 6rem;
   padding: 1rem;
   background: #ffffff;
 }
@@ -231,6 +232,22 @@ const filteredMatches = computed(() => {
   text-align: center;
   font-style: italic;
   margin: 1rem;
+}
+
+@media (max-width: 991px) {
+  .filters-container {
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 6.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .filter-item {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
 }
 
 </style>

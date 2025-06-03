@@ -43,6 +43,10 @@
     <!-- FINAL -->
     <div class="center">
       <h1>{{ tournamentName }}</h1>
+      <p class="tournament-info">
+        Fecha: {{ props.matches[0]?.tournament?.date || 'Sin fecha' }}<br />
+        Estado: {{ props.matches[0]?.tournament?.state || 'Sin estado' }}
+      </p>
       <div class="trophy">
         <img src="../../../src/assets/copa-trofeo.png" width="100px" />
       </div>
@@ -65,7 +69,7 @@
         v-for="m in roundsGroups['FINAL'] || []"
         :key="m.id"
         class="final-winner"
-      > Ganador: {{ m.winnerTeam.name }}</div>
+      > Ganador: {{ m.winnerTeam?.name }}</div>
       
       <p class="match-empty" v-if="!(roundsGroups['FINAL'] && roundsGroups['FINAL'].length)">
         Todavía no hay un ganador.
@@ -219,12 +223,15 @@ const sportClass = computed(() => {
 
 .tournament-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   gap: 20px;
   padding: 60px;
-  flex-wrap: wrap;
-  margin-top: 5%;
-  border-radius: 12px;
+  flex-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 3%;
+    border-radius: 12px ;
 }
 
 .pingpong-bg {
@@ -252,14 +259,14 @@ const sportClass = computed(() => {
               url('@/assets/fondos/fondo-default.png') center center;
 }
 
-
 .group-left,
 .group-right,
 .center {
-  flex: 0 0 30%;
+  width: 100%;
   background-color: rgba(255, 255, 255, 0.938);
   padding: 20px;
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 .group-right,
@@ -353,6 +360,32 @@ const sportClass = computed(() => {
   color: #e0b403;
   text-transform: uppercase;
   font-weight: bold;
+}
+
+.tournament-info {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+
+@media (max-width: 991px) {
+  .tournament-container {
+    display: block !important;
+    padding: 20px !important;
+    margin-bottom: 8% !important;
+    border-radius: 12px !important;
+  }
+
+  .group-left,
+  .center,
+  .group-right {
+    width: 100% !important;
+    display: block !important;
+    float: none !important;
+    margin-bottom: 20px !important;
+    box-sizing: border-box !important;
+  }
 }
 
 

@@ -3,7 +3,10 @@
   <!-- Navbar visible siempre -->
   <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
   
-  <AdminTournaments />
+  <AdminTournaments/>
+
+  <AdminTeams/>
+
  
 </ion-content>
 </template>
@@ -13,9 +16,13 @@ import { IonContent } from '@ionic/vue';
 
 import Navbar from '@/components/layout/Navbar.vue';
 import AdminTournaments from '@/components/admin/AdminTournaments.vue';
+import AdminTeams from '@/components/admin/AdminTeams.vue';
 
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 
 // 3. Extraemos el control de la navbar
 const { showNav, handleScroll } = useNavbarVisibility();
 </script>
+<style>
+
+</style>

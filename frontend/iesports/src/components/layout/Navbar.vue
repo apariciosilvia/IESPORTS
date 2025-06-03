@@ -37,7 +37,6 @@ const navItems = computed(() => {
     { name: 'Torneos', href: '/tournaments' },
     { name: 'Equipos', href: '/teams' },
     { name: 'Calendario', href: '/calendar' },
-    { name: 'Noticias', href: '#noticias' },
     { name: 'Perfil', href: '/profile' }
   ]
 })
@@ -121,7 +120,7 @@ onUnmounted(() => {
   transform: translateY(-100%);
   transition: transform 0.3s ease;
   z-index: 999;
-  background-color: #0a2540;
+  background-color: #002f3d;
 }
 
 .navbar-visible {
@@ -129,7 +128,7 @@ onUnmounted(() => {
 }
 
 .custom-toolbar {
-  --background: #002F3D;
+  --background: #002f3d;
   --color: white;
   --min-height: 60px;
 }

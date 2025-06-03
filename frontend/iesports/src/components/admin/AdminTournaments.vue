@@ -1,86 +1,84 @@
-<!-- src/components/CreateTournaments.vue -->
+<!-- src/components/CreateTournaments.vue --> 
 <template>
-  <ion-content fullscreen :scroll-events="true" style="--background: #F5F5F5;">
-  <section class="tournaments">
-    <div class="header">
-      <h2 class="tittle">Torneos</h2>
-      <ion-button class="new-btn" @click="openAddModal">
-        <span class="material-symbols-outlined">add_circle</span>
-        Nuevo Torneo
-      </ion-button>
-    </div>
-    <div class="table">
-    <table class="tournaments-table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Año</th>
-          <th>Estado</th>
-          <th>Equipos</th>
-          <th>Deporte</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="t in tournamentsAdminDTO" :key="t.tournament.id">
-          <td>{{ t.tournament.name }}</td>
-          <td>{{ t.tournament.date }}</td>
-          <td>{{ t.tournament.state }}</td>
-          <td>
-            <p v-if="t.teams.length === 0">Sin equipos</p>
-            <ion-select
-              v-else
-              interface="popover"
-              :interface-options="{ cssClass: 'no-border-popover' }"
-              ok-text="Cerrar"
-              :selectedText="t.teams[0].name"
-              class="list-teams"
-            >
-              <ion-select-option
-                v-for="team in t.teams"
-                :key="team.id"
-                :value="team.id"
-              >
-                {{ team.name }}
-              </ion-select-option>
-            </ion-select>
-          </td>
-          <td>{{ t.tournament.sport.name }}</td>
-          <td>
-            <div class="actions">
-              <!-- Botón de editar, que abrirá el popup -->
-              <button type="button" class="action-btn edit-btn" @click="openEditModal(t.tournament)">
-                <span class="material-symbols-outlined edit-icon">edit_square</span>
-              </button>
-              <!-- Botón de eliminar -->
-              <button type="button" class="action-btn delete-btn">
-                <span class="material-symbols-outlined delete-icon">delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-    <!-- Modal principal -->
-    <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
-      <component
-        :is="modalMode === 'add' ? AdminAddTournaments : AdminEditTournaments"
-        @close="closeModal"
-        :tournament="tournamentToEdit"
-      />
-    </ion-modal>
-  </section>
-  </ion-content>
+    <section class="tournaments">
+      <div class="header">
+        <h2 class="tittle">Torneos</h2>
+        <ion-button class="new-btn" @click="openAddModal">
+          <span class="material-symbols-outlined">add_circle</span>
+          Nuevo Torneo
+        </ion-button>
+      </div>
+      <div class="table">
+        <table class="tournaments-table">
+          <thead>
+            <tr>
+              <th class="col-nombre">Nombre</th>
+              <th class="col-anio">Año</th>
+              <th class="col-estado">Estado</th>
+              <th>Equipos</th>
+              <th class="col-sports">Deporte</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="t in tournamentsAdminDTO" :key="t.tournament.id">
+              <td  class="col-nombre">{{ t.tournament.name }}</td>
+              <td class="col-anio">{{ t.tournament.date }}</td>
+              <td class="col-estado">{{ t.tournament.state }}</td>
+              <td>
+                <p v-if="t.teams.length === 0">Sin equipos</p>
+                <ion-select
+                  v-else
+                  interface="popover"
+                  :interface-options="{ cssClass: 'no-border-popover' }"
+                  ok-text="Cerrar"
+                  :selectedText="t.teams[0].name"
+                  class="list-teams"
+                >
+                  <ion-select-option
+                    v-for="team in t.teams"
+                    :key="team.id"
+                    :value="team.id"
+                  >
+                    {{ team.name }}
+                  </ion-select-option>
+                </ion-select>
+              </td>
+              <td class="col-sports">{{ t.tournament.sport.name }}</td>
+              <td>
+                <div class="actions">
+                  <!-- Botón de editar, que enviará solo el ID del torneo -->
+                  <button type="button" class="action-btn edit-btn" @click="openEditModal(t.tournament.id)">
+                    <span class="material-symbols-outlined edit-icon">edit_square</span>
+                  </button>
+                  <!-- Botón de eliminar -->
+                  <button type="button" class="action-btn delete-btn">
+                    <span class="material-symbols-outlined delete-icon">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Modal principal -->
+      <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
+        <component
+          :is="modalMode === 'add' ? AdminAddTournaments : AdminEditTournaments"
+          @close="closeModal"
+          :tournamentId="tournamentToEdit"
+        />
+      </ion-modal>
+    </section>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { IonSelect, IonSelectOption, IonContent, IonModal, IonButton} from '@ionic/vue';
+import { IonSelect, IonSelectOption, IonModal, IonButton } from '@ionic/vue';
 import AdminAddTournaments from '@/components/admin/AdminAddTournaments.vue';
 import AdminEditTournaments from '@/components/admin/AdminEditTournaments.vue';
 
-import type { TournamentAdminDTO } from '@/model/tournamentAdminDTO';
+import type { TournamentAdminDTO } from '@/model/dto/tournamentAdminDTO';
 
 import { getTeamsByTournamentId } from '@/services/tournamentService';
 
@@ -91,11 +89,11 @@ function openAddModal() {
   isModalOpen.value = true;
 }
 
-const tournamentToEdit = ref(null); // opcional, si necesitas pasar datos
+const tournamentToEdit = ref<number | null>(null); 
 
-function openEditModal(tournament: any) {
+function openEditModal(tournamentId: number) {
   modalMode.value = 'edit';
-  tournamentToEdit.value = tournament; // si luego lo quieres pasar como prop
+  tournamentToEdit.value = tournamentId;
   isModalOpen.value = true;
 }
 
@@ -109,7 +107,7 @@ onMounted(async () => {
   try {
     const data = await getTeamsByTournamentId();
     tournamentsAdminDTO.value = data;
-    console.log('ADMIN TORNEOS',tournamentsAdminDTO.value);
+    console.log('ADMIN TORNEOS', tournamentsAdminDTO.value);
   } catch (error) {
     console.error('Error cargando torneos:', error);
   }
@@ -123,94 +121,101 @@ function closeModal() {
 
 <style scoped>
 .tournaments {
-  margin: 4.5rem;
+  margin: 4rem 2rem;
   padding: 2.5rem;
   margin-top: 8%;
   background-color: #ffffff;
   border-radius: 10px;
   border: solid 1px #D9D8D8;
-
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 7rem);
 }
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
-
 .header h2 {
   font-size: 2rem;
   font-weight: bolder;
   color: #0a2540;
 }
-
 .new-btn {
   --background: #e22f28;
   color: #fff;
   font-weight: bolder;
 }
-
-.new-btn .material-symbols-outlined{
+.new-btn .material-symbols-outlined {
   margin-right: 5px;
 }
-
-.list-teams{
+.list-teams {
   --background: #e22f28;
   --border-radius: 5px;
   color: white;
   font-weight: bolder;
-  --padding-start: 1rem;  
+  --padding-start: 1rem;
   --padding-end: 1rem;
 }
+
 .list-teams::part(icon) {
   color: white;
 }
-
 .table {
+  flex: 1;
+  overflow-y: auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
-
 .table .tournaments-table {
   width: 100%;
   min-width: 600px;
 }
-
 .tournaments-table {
-  border-collapse: collapse; 
+  border-collapse: collapse;
   width: 100%;
 }
-
 .tournaments-table th,
 .tournaments-table td {
   padding: 1rem 3rem;
   vertical-align: left;
 }
-
-.tournaments-table tbody  {
+.tournaments-table tbody {
   border: 1px solid #ddd;
 }
-
 .tournaments-table tbody tr {
- 
   border-bottom: 1px solid #ddd;
 }
-
 .tournaments-table tbody tr:hover {
   background-color: #fafafa;
 }
-
 .tournaments-table tbody tr:first-child td {
   border-top: 1px solid #ddd;
 }
-
 .tournaments-table thead {
   background-color: #f5f5f5;
 }
-
-.tournaments-table thead  {
+.tournaments-table thead {
   border: 1px solid #ddd;
 }
+
+.col-nombre {
+  min-width: 360px;
+  width: 25%;
+}
+
+.col-anio,
+.col-estado,
+.col-sports {
+  width: 100px;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 .actions {
   display: flex;
@@ -218,11 +223,10 @@ function closeModal() {
   align-items: center;
   background-color: #0a2540;
   border-radius: 5px;
-  padding: 10px 2px;
+  padding: 10px 15px;
   max-width: 110px;
   gap: 20%;
 }
-
 .action-btn {
   background: none;
   border: none;
@@ -230,33 +234,87 @@ function closeModal() {
   margin: 0;
   cursor: pointer;
 }
-
 .action-btn .material-symbols-outlined {
   font-weight: 700;
+}
+
+.action-btn:focus {
+  outline: none;
 }
 
 .actions button:last-child {
   border-left: 1px solid rgba(255, 255, 255, 0.466);
   padding-left: 15%;
 }
-
-.edit-icon{
+.edit-icon {
   color: white;
 }
-
-.delete-icon{
+.delete-icon {
   color: #e22f28;
 }
 
 ion-modal {
-  --border-radius: 10px;
-  --backdrop-opacity: 0.6;/* opacidad del fondo para que no quede tan oscuro */
-  --width: 100%;
-  --max-width: 1300px;
-  --height: 700px;
+  --width: 95vw;
+  --max-width: 1200px;
+  --height: auto;
+  --max-height: 400vh;
 }
+
+ion-modal::part(content) {
+  height: 95vh !important;
+  max-height: 95vh !important;
+  width: 95vw;
+  max-width: 1200px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
 ion-modal::part(backdrop) {
-  backdrop-filter: blur(1px); /* desenfoque */
-  background-color: rgba(0, 0, 0, 0.3); /* semitransparente */
+  backdrop-filter: blur(1px);
+  background-color: rgba(0, 0, 0, 0.3);
 }
+
+
+@media screen and (max-width: 1024px) {
+  ion-modal {
+    --width: 95vw;
+    --height: 90vh;
+    --max-width: 95vw;
+    --max-height: 90vh;
+  }
+
+  .tournaments {
+    margin: 1rem;
+    padding: 1rem;
+    margin-top: 5rem;
+    height: auto;
+  }
+
+  .tournaments-table th,
+  .tournaments-table td {
+    padding: 0.5rem 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .new-btn {
+    align-self: flex-end;
+    width: 100%;
+    text-align: right;
+  }
+
+  .table {
+    overflow-x: auto;
+  }
+  
+}
+
+
 </style>
+

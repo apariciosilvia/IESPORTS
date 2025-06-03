@@ -1,10 +1,10 @@
 import axios from 'axios';
-import type { ChangePasswordDTO } from '@/model/changePasswordDTO';
-import type { ForgotPasswordRequestDTO } from '@/model/forgotPasswordRequestDTO';
-import type { ChangeForgottenPasswordDTO } from '@/model/changeForgottenPasswordDTO';
-import type { ChangeNameAndEmailDTO } from '@/model/DTO/changeNameAndEmailDTO';
+import type { ChangePasswordDTO } from '@/model/dto/changePasswordDTO';
+import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequestDTO';
+import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
+import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
 
-function getPersonas() {
+function getPersons() {
 
   return new Promise<any[]>((resolve, reject) => {
 
@@ -89,4 +89,4 @@ function changeTempPassword(ChangeForgottenPasswordDTO: ChangeForgottenPasswordD
 };
 
 
-export { getPersonas, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};
+export { getPersons, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};

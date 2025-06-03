@@ -23,5 +23,5 @@ public interface ITournamentService {
 	public List<Tournament> findTournamentsBySportIdAndDate(Integer sport_id, String date);
 	
 	public List<Tournament> findTournamentsDates();
-	
+		
 }

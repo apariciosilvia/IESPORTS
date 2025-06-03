@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.iesports.dao.repository.MatchRepository;
 import com.iesports.dao.service.IMatchService;
+import com.iesports.enums.RoundMatchEnum;
 import com.iesports.model.Match;
 
 @Service
@@ -40,6 +41,17 @@ public class MatchServiceImpl implements IMatchService{
 	public void deleteMatch(Match match) {
 		mr.delete(match);
 	}
+
+	@Override
+	public List<Match> getMatchesByTournamentId(Long matchId) {
+		return mr.getMatchesByTournamentId(matchId);
+	}
+
+	@Override
+	public int countMatchByTeamIdTournamentIdAndStateRound(Long matchId, Long tournamentId, RoundMatchEnum round) {
+		return mr.countMatchByTeamIdTournamentIdAndStateRound(matchId, tournamentId, round);
+	}
+	
 	
 
 }
