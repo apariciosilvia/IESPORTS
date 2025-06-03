@@ -96,7 +96,8 @@
     <div v-if="showConfirm" class="confirm-overlay">
       <div class="card">
         <div class="card-content">
-          <p class="card-heading">¿Eliminar torneo?<p class="card-description">Esta acción no se puede deshacer.</p></p>
+          <p class="card-heading">¿Eliminar torneo?</p>
+          <p class="card-description">Esta acción no se puede deshacer.</p>
           
         </div>
         <div class="card-button-wrapper">

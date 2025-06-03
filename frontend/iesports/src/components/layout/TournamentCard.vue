@@ -162,7 +162,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import type { Match } from '@/model/match';
 
 const props = defineProps<{ matches: Match[] }>();

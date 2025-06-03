@@ -147,7 +147,7 @@ function cerrarModal() {
 
 
 /* 1) Permitir que el header crezca si el título ocupa más de una línea */
-::v-deep .modal-header {
+:deep(.modal-header) {
   height: auto !important;        /* Quitamos altura rígida */
   padding-top: 1rem;              /* Dejamos algo de “respiro” arriba */
   padding-bottom: 0.75rem;        /* Espacio abajo para que no quede cortado */
@@ -175,7 +175,7 @@ function cerrarModal() {
 
 /* 4) (Opcional) Si quieres que el IonTitle ocupe todo el espacio y tenga margen interno */
 /*    Podemos apuntar directamente al part que Ionic usa internamente para el título */
-::v-deep .modal-header ion-title {
+:deep(.modal-header ion-title) {
   width: 100%;                     /* Que ocupe todo el ancho posible */
 }
 
@@ -186,14 +186,14 @@ function cerrarModal() {
   --max-width: 100vw;
 }
 
-::v-deep .player-modal .modal-wrapper {
+:deep(.player-modal .modal-wrapper) {
   display: inline-block;        /* Hace que el contenedor “shrink-to-fit” */
   width: auto !important;       /* Anula cualquier ancho impuesto */
   max-width: 100vw;              /* Evita que se sobredimensione más allá del 90% de la pantalla */
 }
 
 /* 3) Aseguramos que la página interna del modal también use ancho automático */
-::v-deep .player-modal .modal-page {
+:deep(.player-modal .modal-page) {
   width: auto !important;
 }
 
