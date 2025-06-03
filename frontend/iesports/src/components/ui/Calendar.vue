@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, watch, h } from 'vue'
+import { computed, watch, h } from 'vue'
 import { createCalendar, createViewMonthGrid, type CalendarEvent } from '@schedule-x/calendar'
 import { ScheduleXCalendar } from '@schedule-x/vue'
 import type { Match } from '@/model/match'
