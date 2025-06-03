@@ -15,5 +15,5 @@ public interface MatchRepository extends JpaRepository<Match, Long>{
 	
 
 	@Query(value = "SELECT COUNT(*) FROM matches WHERE (team1_id = ?1 OR team2_id = ?1) AND tournament_id = ?2 AND round = ?3", nativeQuery = true)
-	int countMatchByTeamIdTournamentIdAndStateRound(Long teamId, Long tournamentId, RoundMatchEnum round);
+	int countMatchByTeamIdTournamentIdAndStateRound(Long teamId, Long tournamentId, String round);
 }
