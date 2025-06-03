@@ -26,10 +26,10 @@ const matches = ref<Match[]>([]);
 onMounted(async () => {
   try {
     const data = await getMatches();
-    console.log('📥 Data recibida de getMatches():', data);
+    console.log('Data recibida de getMatches():', data);
     matches.value = data;
   } catch (err) {
-    console.error('❌ Error al obtener matches:', err);
+    console.error('Error al obtener matches:', err);
   }
 });
 

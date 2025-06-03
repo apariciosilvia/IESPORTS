@@ -55,7 +55,12 @@ defineProps<{ nombre: string }>()
 const slides = [
   { img: new URL('@/assets/img/1.jpg', import.meta.url).href, title: 'Organiza torneos fácilmente' },
   { img: new URL('@/assets/img/2.jpg', import.meta.url).href, title: 'Consulta equipos y jugadores' },
-  { img: new URL('@/assets/img/3.jpg', import.meta.url).href, title: 'Mantente al día con los partidos' }
+  { img: new URL('@/assets/img/3.jpg', import.meta.url).href, title: 'Mantente al día con los partidos' },
+  { img: new URL('@/assets/img/4.jpg', import.meta.url).href, title: 'Organiza torneos fácilmente' },
+  { img: new URL('@/assets/img/5.jpg', import.meta.url).href, title: 'Consulta equipos y jugadores' },
+  { img: new URL('@/assets/img/6.jpg', import.meta.url).href, title: 'Mantente al día con los partidos' },
+    { img: new URL('@/assets/img/7.jpg', import.meta.url).href, title: 'Organiza torneos fácilmente' }
+
 ]
 const currentSlide = ref(0)
 let intervalId: any = null
