@@ -48,7 +48,7 @@ public class MatchServiceImpl implements IMatchService{
 	}
 
 	@Override
-	public int countMatchByTeamIdTournamentIdAndStateRound(Long matchId, Long tournamentId, RoundMatchEnum round) {
+	public int countMatchByTeamIdTournamentIdAndStateRound(Long matchId, Long tournamentId, String round) {
 		return mr.countMatchByTeamIdTournamentIdAndStateRound(matchId, tournamentId, round);
 	}
 	
