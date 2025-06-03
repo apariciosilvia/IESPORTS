@@ -264,10 +264,7 @@ const filteredUsers = computed(() => {
 });
 
 function addMember(user: User) {
-  if (
-    selectedMembers.value.length < maxMembers &&
-    !selectedMembers.value.some((m) => m.id === user.id)
-  ) {
+  if (selectedMembers.value.length < maxMembers && !selectedMembers.value.some((m) => m.id === user.id)) {
     selectedMembers.value.push(user);
   }
 }
