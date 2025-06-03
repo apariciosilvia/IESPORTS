@@ -238,7 +238,7 @@ function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string
     setTimeout(() => {
       showPopup.value = false;
       popupMessage.value = '';
-    }, 1000);
+    }, 3000);
   }
 }
 function closePopup() {
@@ -264,10 +264,7 @@ const filteredUsers = computed(() => {
 });
 
 function addMember(user: User) {
-  if (
-    selectedMembers.value.length < maxMembers &&
-    !selectedMembers.value.some((m) => m.id === user.id)
-  ) {
+  if (selectedMembers.value.length < maxMembers && !selectedMembers.value.some((m) => m.id === user.id)) {
     selectedMembers.value.push(user);
   }
 }
