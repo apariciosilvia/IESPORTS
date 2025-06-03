@@ -465,6 +465,13 @@ ion-title {
   .error-msg {
     margin-left: 0 !important;
   }
+  .profile-logo {
+    width: 100%;
+    max-width: 190px;
+    height: auto;
+    margin-bottom: 0;
+  }
+
 }
 
 
@@ -515,6 +522,20 @@ ion-title {
 
   .error-msg {
     margin-left: 0 !important;
+  }
+
+  .profile-logo {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+    margin-bottom: 0;
+  }
+
+  .logout-button{
+    width: 100%;
+    justify-content: center;
+    font-size: 1rem;
+    padding: 0.2rem;
   }
 }
 
