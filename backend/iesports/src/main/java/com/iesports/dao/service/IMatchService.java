@@ -20,6 +20,6 @@ public interface IMatchService {
 	
 	List<Match> getMatchesByTournamentId(Long matchId);
 	
-	int countMatchByTeamIdTournamentIdAndStateRound(Long matchId,Long tournamentId ,RoundMatchEnum round);
+	int countMatchByTeamIdTournamentIdAndStateRound(Long matchId,Long tournamentId ,String round);
 
 }

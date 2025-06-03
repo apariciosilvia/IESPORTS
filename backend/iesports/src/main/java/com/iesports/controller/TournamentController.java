@@ -333,6 +333,19 @@ public class TournamentController {
 		            System.err.println("Actualizando match" + currentMatch.toString());
 				}
 				
+				//PILLAMOS EL ROUND ACTUAL Y LO CAMBIAREMOS AL QUE SEA CORRESPONDIENTE
+//				RoundMatchEnum nextRoundMatch = currentMatch.getRound();
+//				
+//				if(nextRoundMatch == RoundMatchEnum.OCTAVOS)
+//					nextRoundMatch = RoundMatchEnum.CUARTOS_FINAL;
+//				
+//				else if(nextRoundMatch == RoundMatchEnum.CUARTOS_FINAL)
+//					nextRoundMatch = RoundMatchEnum.SEMIFINAL;
+//				
+//				else if(nextRoundMatch == RoundMatchEnum.SEMIFINAL)
+//					nextRoundMatch = RoundMatchEnum.FINAL;
+				
+				
 				//PREPARAMOS UN LISTADO NUEVO DE PARTIDOS EN LOS QUE HAYAN FINALIZADO Y TENGAN GANADOR
 				if(currentMatch.getWinnerTeam() != null)
 				{
@@ -342,73 +355,6 @@ public class TournamentController {
 			}
 		}
 		
-//		//RECORREMOS LA LISTA DE PARTIDOS CON UN GANADOR
-//		for (Match currentMatch : matchesWinnersEnded)
-//		{
-//			Team currentWinnerTeam = currentMatch.getWinnerTeam();
-//			//TODO COMPROBAR EN CASO DE QUE SOLO HAYA UNA FINAL
-//			
-//			//PILLAMOS EL ROUND ACTUAL Y LO CAMBIAREMOS AL QUE SEA CORRESPONDIENTE
-//			RoundMatchEnum nextRoundMatch = currentMatch.getRound();
-//			
-//			if(nextRoundMatch == RoundMatchEnum.OCTAVOS)
-//				nextRoundMatch = RoundMatchEnum.CUARTOS_FINAL;
-//			
-//			else if(nextRoundMatch == RoundMatchEnum.CUARTOS_FINAL)
-//				nextRoundMatch = RoundMatchEnum.SEMIFINAL;
-//			
-//			else if(nextRoundMatch == RoundMatchEnum.SEMIFINAL)
-//				nextRoundMatch = RoundMatchEnum.FINAL;
-//			
-//			//DEVUELVE NULO SI NO EXISTE ESE PARTIDO CON EL ID DEL EQUIPO Y LA RONDA SELECCIONADA
-//			if(matchS.getMatchByTeamIdAndStateRound(currentWinnerTeam.getId(), nextRoundMatch) == null)
-//			{
-//				if (contTeamPerMatch == 1) 
-//				{
-//					if(nextRoundMatch == newMatchNextRound.getRound())
-//					{
-//						newMatchNextRound.setTeam2(currentWinnerTeam);
-//						newMatchNextRound = matchS.saveMatch(newMatchNextRound);
-//						newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
-//						contTeamPerMatch = 0;
-//					}
-//				}
-//				
-//				if(contTeamPerMatch == 0)
-//				{
-//					newMatchNextRound.setTeam1(currentWinnerTeam);
-//					newMatchNextRound.setRound(nextRoundMatch);
-//					contTeamPerMatch++;
-//				}
-//			}
-//			
-//			if(matchS.getMatchByTeamIdAndStateRound(currentWinnerTeam.getId(), nextRoundMatch) == null)
-//			{
-//				if (contTeamPerMatch == 1) 
-//				{
-//					if(nextRoundMatch == newMatchNextRound.getRound())
-//					{
-//						newMatchNextRound.setTeam2(currentWinnerTeam);
-//						newMatchNextRound = matchS.saveMatch(newMatchNextRound);
-//						
-//						
-//						
-//						newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
-//						contTeamPerMatch = 0;
-//						matchesWinnersEnded.remove(currentMatch);
-//						//TODO RELANZAR EL BUCLE DE MATCHESWINNERSENDED
-//					}
-//				}else if(contTeamPerMatch == 0)
-//				{
-//					newMatchNextRound.setTeam1(currentWinnerTeam);
-//					matchesWinnersEnded.remove(currentMatch);
-//					
-//					newMatchNextRound.setRound(nextRoundMatch);
-//					contTeamPerMatch++;
-//				}
-//			}
-//			
-//		}
 		//TODO COMPROBAR EL NUMERO DE PARTIDOS QUE TENGAN GANADORES, Y LUEGO CLASIFICARLOS
 		createNewMatchTournament(matchesWinnersEnded, currentTournament);
 		return ResponseEntity.status(HttpStatus.OK).body(currentTournament);
@@ -418,7 +364,12 @@ public class TournamentController {
 	private void createNewMatchTournament(List<Match> matchesWinnersEnded, Tournament currentTournament)
 	{
 		int contTeamPerMatch = 0;
-		Match newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
+		Match newMatchNextRound = new Match(null,null,null,currentTournament,null,null,0,0,null);
+		
+		List<Match> auxMatchesWinnerEnded = new ArrayList<>(matchesWinnersEnded);
+		//auxMatchesWinnerEnded = ;
+		
+		
 		
 		
 		for (Match currentMatch : matchesWinnersEnded)
@@ -439,35 +390,45 @@ public class TournamentController {
 				nextRoundMatch = RoundMatchEnum.FINAL;
 			
 			//DEVUELVE NULO SI NO EXISTE ESE PARTIDO CON EL ID DEL EQUIPO Y LA RONDA SELECCIONADA
-			if(matchS.countMatchByTeamIdTournamentIdAndStateRound(currentWinnerTeam.getId(),currentTournament.getId(),nextRoundMatch) == 0)
+			System.out.println("id del equipo ganador->"+currentWinnerTeam.getId());
+			System.out.println("id del torneo->"+currentTournament.getId());
+			System.out.println("ronda->"+nextRoundMatch);
+			
+			int isValid = matchS.countMatchByTeamIdTournamentIdAndStateRound(currentWinnerTeam.getId(),currentTournament.getId(),nextRoundMatch.name());
+			
+			if(isValid == 0)
 			{
 				if (contTeamPerMatch == 1) 
 				{
 					if(nextRoundMatch == newMatchNextRound.getRound())
 					{
 						newMatchNextRound.setTeam2(currentWinnerTeam);
-						newMatchNextRound = matchS.saveMatch(newMatchNextRound);
+						matchS.saveMatch(newMatchNextRound);
 						
-						newMatchNextRound = new Match(0L,null,null,currentTournament,null,null,0,0,null);
+						newMatchNextRound = new Match(null,null,null,currentTournament,null,null,0,0,null);
 						contTeamPerMatch = 0;
-						matchesWinnersEnded.remove(currentMatch);
-						//TODO RELANZAR EL BUCLE DE MATCHESWINNERSENDED
-						createNewMatchTournament(matchesWinnersEnded, currentTournament);
+						auxMatchesWinnerEnded.remove(currentMatch);
 						
+						//TODO RELANZAR EL BUCLE DE MATCHESWINNERSENDED
+						createNewMatchTournament(auxMatchesWinnerEnded, currentTournament);
+						break;
 						//TODO SI EL ESTADO DEL TORNEO PENDIENTE, SE PASA A EN PROCESO CUANDO SE JUEGUE EL PRIMER PARTIDO
 						//TODO SI EL ESTADO DEL TORNEO PROCESO Y SE HACE EL PARTIDO FINAL, SE PASA A FINALIZADO
 					}
 				} else if(contTeamPerMatch == 0)
 				{
 					newMatchNextRound.setTeam1(currentWinnerTeam);
-					matchesWinnersEnded.remove(currentMatch);
-					
 					newMatchNextRound.setRound(nextRoundMatch);
+					
+					auxMatchesWinnerEnded.remove(currentMatch);
+					
 					contTeamPerMatch++;
 				}
 			}
 			
 		}
+		
+		auxMatchesWinnerEnded.clear();
 	}
 	
 //	private void createNewMatchTournament(List<Match> matchesWinnersEnded, Tournament currentTournament) {
