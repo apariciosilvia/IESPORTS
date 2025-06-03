@@ -75,17 +75,16 @@ import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
 
 const { showNav, handleScroll } = useNavbarVisibility();
 
-// 1) Estados reactivos para deportes, equipos, carga, error, filtro deporte y búsqueda
+//Estados reactivos para deportes, equipos, carga, error, filtro deporte y búsqueda
 const sports = ref<Sport[]>([]);
 const selectedSport = ref<number | null>(null);
 const teamInfo = ref<TeamInfoDTO[]>([]);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
 
-// Nuevo: término de búsqueda para filtrar por nombre
 const searchTerm = ref('');
 
-// 2) Cargar deportes y equipos al montar
+//Cargar deportes y equipos al montar
 async function loadSports() {
   isLoading.value = true;
   error.value = null;
@@ -117,18 +116,18 @@ onMounted(async () => {
   await loadTeamsInfo();
 });
 
-// 3) Computed que combina filtro por deporte + búsqueda por nombre
+//Computed que combina filtro por deporte + búsqueda por nombre
 const filteredTeams = computed(() => {
   // Convertimos el término de búsqueda a minúsculas para comparar
   const term = searchTerm.value.trim().toLowerCase();
 
   return teamInfo.value.filter((info) => {
-    // 3.1) Si hay deporte seleccionado, comprobamos que el equipo participe en él
+    // Si hay deporte seleccionado, comprobamos que el equipo participe en él
     if (selectedSport.value !== null) {
       const participa = info.sports.some((s) => s.id === selectedSport.value);
       if (!participa) return false;
     }
-    // 3.2) Si hay término de búsqueda, filtramos por nombre de equipo
+    //Si hay término de búsqueda, filtramos por nombre de equipo
     if (term !== '') {
       return info.team.name.toLowerCase().includes(term);
     }
@@ -137,8 +136,7 @@ const filteredTeams = computed(() => {
   });
 });
 
-// 4) Cuando cambie el deporte, se recarga la lista original
-//    (para no acumular varios filtros sucesivos)
+// Cuando cambie el deporte, se recarga la lista original (para no acumular varios filtros sucesivos)
 watch(selectedSport, async () => {
   isLoading.value = true;
   error.value = null;
@@ -163,10 +161,9 @@ watch(selectedSport, async () => {
   background: #f2f3f3;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  gap: 1rem; /* separa cada filtro */
+  gap: 1rem;
 }
 
-/* Adaptación para pantallas pequeñas */
 @media (max-width: 600px) {
   .filters-container {
     flex-direction: column;
@@ -243,7 +240,6 @@ watch(selectedSport, async () => {
   }
 }
 
-/* Evita que cualquier tarjeta o contenido se salga */
 .teams-container > * {
   width: 100%;
   max-width: 100%;
