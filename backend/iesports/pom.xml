@@ -6,6 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<!-- 3.1.5 Swagger - 3.4.4 No Swagger -->
+		<!-- URL Swagger - http://localhost:8080/swagger-ui/index.html -->
 		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
