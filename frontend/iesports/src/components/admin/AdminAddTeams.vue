@@ -238,7 +238,7 @@ function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string
     setTimeout(() => {
       showPopup.value = false;
       popupMessage.value = '';
-    }, 1000);
+    }, 3000);
   }
 }
 function closePopup() {

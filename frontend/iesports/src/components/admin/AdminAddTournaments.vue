@@ -419,7 +419,7 @@ async function createTournament() {
     await addTournament(tournamentData);
     resetForm();
     emit('close');
-    setTimeout(() => window.location.reload(), 1000);
+    setTimeout(() => window.location.reload(), 3000);
     
   } catch (error) {
     // Narrow error to any to access properties safely
