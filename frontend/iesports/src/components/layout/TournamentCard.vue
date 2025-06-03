@@ -369,7 +369,7 @@ const sportClass = computed(() => {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .tournament-container {
     display: block !important;
     padding: 20px !important;
