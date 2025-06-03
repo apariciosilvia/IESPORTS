@@ -223,13 +223,15 @@ const sportClass = computed(() => {
 
 .tournament-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   gap: 20px;
   padding: 60px;
-  flex-wrap: wrap;
-  margin-top: 1%;
-  
-  border-radius: 12px;
+  flex-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 3%;
+    border-radius: 12px ;
 }
 
 .pingpong-bg {
@@ -257,14 +259,14 @@ const sportClass = computed(() => {
               url('@/assets/fondos/fondo-default.png') center center;
 }
 
-
 .group-left,
 .group-right,
 .center {
-  flex: 0 0 30%;
+  width: 100%;
   background-color: rgba(255, 255, 255, 0.938);
   padding: 20px;
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 .group-right,
@@ -365,4 +367,26 @@ const sportClass = computed(() => {
   margin-bottom: 1rem;
   color: #444;
 }
+
+
+@media (max-width: 991px) {
+  .tournament-container {
+    display: block !important;
+    padding: 20px !important;
+    margin-bottom: 8% !important;
+    border-radius: 12px !important;
+  }
+
+  .group-left,
+  .center,
+  .group-right {
+    width: 100% !important;
+    display: block !important;
+    float: none !important;
+    margin-bottom: 20px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+
 </style>

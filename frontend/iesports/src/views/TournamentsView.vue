@@ -234,4 +234,20 @@ const filteredMatches = computed(() => {
   margin: 1rem;
 }
 
+@media (max-width: 991px) {
+  .filters-container {
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 6.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .filter-item {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+}
+
 </style>

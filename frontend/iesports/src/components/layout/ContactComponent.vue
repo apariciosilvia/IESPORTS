@@ -1,117 +1,204 @@
 <template>
-  <div class="contact-container">
-    <!-- Columna de texto -->
-    <div class="contact-text">
-      <h2>Contáctanos</h2>
-      <p>Si tienes alguna pregunta o comentario, estaremos encantados de ayudarte.</p>
-      <p>Puedes contactar con nosotros através de este correo: <b>equipo.iesports@gmail.com</b> o con este formulario.</p>
-
+  <div class="page-wrapper">
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <h2>Contacto</h2>
+        <p>¿Tienes alguna pregunta, duda o sugerencia? Nuestro equipo está siempre dispuesto a ayudarte en lo que necesites, estaremos encantados de leerte.</p>
+        <p>Puedes contactar con nosotros a través de este formulario. Tu opinión nos ayuda a mejorar cada día.</p>
+        <p>¡Gracias por confiar en nosotros!</p>
+      </div>
+      <div class="form-container">
+        <form class="form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input name="email" id="email" type="text" />
+          </div>
+          <div class="form-group">
+            <label for="textarea">¿Podemos ayudarte en algo?</label>
+            <textarea cols="50" rows="10" id="textarea" name="textarea"></textarea>
+          </div>
+          <button class="button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="currentColor"
+            >
+              <path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+            <span>Enviar</span>
+          </button>
+        </form>
+      </div>
     </div>
-
-    <!-- Columna de formulario -->
-    <form @submit.prevent="handleSubmit" class="contact-form">
-      <IonItem class="form-item">
-        <IonLabel position="floating">Nombre</IonLabel>
-        <IonInput v-model="name" required />
-      </IonItem>
-      <IonItem class="form-item">
-        <IonLabel position="floating">Email</IonLabel>
-        <IonInput type="email" v-model="email" required />
-      </IonItem>
-      <IonItem class="form-item">
-        <IonLabel position="floating">Mensaje</IonLabel>
-        <IonTextarea v-model="message" required />
-      </IonItem>
-      <IonButton expand="block" class="submit-button" type="submit">
-        Enviar mensaje
-      </IonButton>
-    </form>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import {
-  IonItem, IonLabel, IonInput, IonTextarea, IonButton
-} from '@ionic/vue';
-
-const name    = ref('');
-const email   = ref('');
-const message = ref('');
-
-function handleSubmit() {
-  console.log('Enviando formulario:', { name: name.value, email: email.value, message: message.value });
-  // Limpieza y feedback
-  name.value = '';
-  email.value = '';
-  message.value = '';
-  alert('¡Mensaje enviado! Te responderemos pronto.');
-}
-</script>
-
 <style scoped>
-.contact-container {
+.page-wrapper {
+  min-height: 70vh;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.contact-wrapper {
+  display: flex;
+  gap: 130px;
+  justify-content: center;
   align-items: flex-start;
-  gap: 2rem;
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 1rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  padding: 40px;
+  flex-wrap: wrap;
+  background-color: white;
+  border-radius: 10px;
+  max-width: 1600px;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+@media (max-width: 1024px) {
+  .contact-wrapper {
+    gap: 40px;
+  }
 }
 
-/* Columna de texto */
-.contact-text {
+.contact-info {
   flex: 1;
-  padding-right: 1rem;
+  max-width: 300px;
+  color: var(--orange-secundary-color);
+  font-family: inherit;
 }
 
-.contact-text h2 {
-  margin-bottom: 0.5rem;
-  color: #333;
+.contact-info h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
 }
 
-.contact-text p {
-  color: #666;
-  line-height: 1.5;
+.contact-info p {
+  margin-bottom: 8px;
+  font-size: 14px;
 }
 
-/* Columna de formulario */
-.contact-form {
+.form-container {
   flex: 1;
+  min-width: 340px;
+  max-width: 580px;
+  background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)) padding-box,
+              linear-gradient(145deg, #ff3e1c, #6693d6, #ff3e1c) border-box;
+  border: 4px solid transparent;
+  padding: 32px 24px;
+  font-size: 14px;
+  font-family: inherit;
+  color: white;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-size: 200% 100%;
+  animation: animated-border 5s ease infinite;
 }
 
-.form-item {
-  margin-bottom: 1rem;
-  --border-radius: 8px;
-  --background: #f7f7f7;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* Botón */
-.submit-button {
-  --background: #42b983;
-  --color: white;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ff3e1c;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #000;
+  background-color: transparent;
+  border: 1px solid #fc5757;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: none;
+  height: 96px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #ff1c1c;
+}
+
+.button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.8em 1.1em;
+  gap: 0.4rem;
+  border: none;
   font-weight: bold;
-  margin-top: 0.5rem;
+  border-radius: 30px;
+  cursor: pointer;
+  text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
+  background: linear-gradient(
+      15deg,
+      #af6403,
+      #aa4720,
+      #cc3f47,
+      #de6f3d,
+      #f09f33,
+      #de6f3d,
+      #cc3f47,
+      #aa4720,
+      #af6403
+    )
+    no-repeat;
+  background-size: 300%;
+  background-position: left center;
+  transition: background 0.3s ease;
+  color: #fff;
+  text-align: center;
 }
 
-.submit-button:hover {
-  --background: #369e6f;
+.button:hover {
+  background-size: 320%;
+  background-position: right center;
 }
 
-/* Mobile: apila en una sola columna */
-@media (max-width: 768px) {
-  .contact-container {
-    flex-direction: column;
-    padding: 0.5rem;
+.button:hover svg {
+  fill: #fff;
+}
+
+.button svg {
+  width: 20px;
+  fill: #ffffff;
+  transition: 0.3s ease;
+}
+
+@keyframes animated-border {
+  0% {
+    background-position: 0% 50%;
   }
-  .contact-text {
-    padding-right: 0;
-    margin-bottom: 1rem;
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 </style>

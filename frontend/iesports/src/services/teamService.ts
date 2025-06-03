@@ -12,7 +12,7 @@ function getTeamsInfo(): Promise<any[]> {
         resolve(response.data);
       })
       .catch(error => {
-        console.error('Error cargando información deequipos:', error);
+        console.error('Error cargando información de equipos:', error);
         reject(error);
       });
   });
