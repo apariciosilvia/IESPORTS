@@ -53,4 +53,9 @@ public class TeamServiceImpl implements ITeamService{
 		return tr.getTeamsByTournamentId(tournamentId);
 	}
 
+	@Override
+	public Team getTeamByIdAndName(Long id, String name) {
+		return tr.getTeamByIdAndName(id, name);
+	}
+
 }

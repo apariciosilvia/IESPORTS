@@ -223,4 +223,20 @@ public class TeamController {
 
         return ResponseEntity.ok(updatedTeam);
     }
+    
+    
+    @GetMapping("/getTeamByIdAndName")
+    public ResponseEntity<?> getTeamByIdAndName(@RequestParam Long id, @RequestParam String name)
+    {
+    	Map<String, String> errores = new HashMap<>();
+    	Team currentTeam = tr.getTeamByIdAndName(id, name);
+    	
+    	if(currentTeam == null) {
+    		errores.put("equipo", "El equipo no existe");
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+    	}
+    	
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(currentTeam);
+    }
 }
