@@ -99,10 +99,19 @@ function modifyTournament(TournamentModifyDTO: TournamentModifyDTO) {
         resolve(response.data);
       })
       .catch(error => {
-        console.error('Error al añadir un editar torneo:', error);
+        console.error('Error al editar torneo:', error);
         reject(error);
       });
   });
 }
 
-export { getYears, getTournaments, getTeamsByTournamentId, addTournament, modifyTournament };
+function deleteTournament(tournamentId: number) {
+  const url = `${import.meta.env.VITE_URL_API}/tournament/deleteTournament`;
+  return axios.post(url, null, {
+    params: { 
+      tournamentId 
+    } 
+  });
+}
+
+export { getYears, getTournaments, getTeamsByTournamentId, addTournament, modifyTournament, deleteTournament };
