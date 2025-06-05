@@ -202,7 +202,7 @@ import {
   IonInput,
   IonSearchbar,
 } from '@ionic/vue';
-import { getPersons } from '@/services/personServices';
+import { getPersonsRoleStudent } from '@/services/personServices';
 import { addTeam } from '@/services/teamService';
 import type { TeamAddDTO } from '@/model/dto/teamAddDTO';
 import type { Person } from '@/model/person';
@@ -248,7 +248,7 @@ function closePopup() {
 
 onMounted(async () => {
   try {
-    allUsers.value = await getPersons();
+    allUsers.value = await getPersonsRoleStudent();
   } catch (e) {
     console.error('Error cargando usuarios:', e);
   }
