@@ -49,13 +49,7 @@ public class TeamServiceImpl implements ITeamService{
 
 	@Override
 	public List<Team> getTeamsByTournamentId(Long tournamentId) {
-		// TODO Auto-generated method stub
 		return tr.getTeamsByTournamentId(tournamentId);
-	}
-
-	@Override
-	public Team getTeamByIdAndName(Long id, String name) {
-		return tr.getTeamByIdAndName(id, name);
 	}
 
 }
