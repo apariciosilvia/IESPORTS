@@ -37,10 +37,8 @@ public class MatchController {
 	        responseCode = "200",
 	        description = "Partidos obtenidos correctamente",
 	        content = @Content(mediaType = "application/json",
-	            schema = @Schema(implementation = Match.class),
-	            examples = {
-	                @ExampleObject(value = "[{\"id\":1,\"teamA\":\"Equipo A\",\"teamB\":\"Equipo B\",\"date\":\"2024-10-01T18:00:00\"}]")
-	            }
+	            schema = @Schema(implementation = Match.class)
+	           
 	        )
 	    ),
 	    @ApiResponse(
