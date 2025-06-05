@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +38,12 @@ import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tournament")
+@Tag(name = "Gestión de torneos", description = "Endpoints para la gestión de torneos")
 public class TournamentController {
 
 	RoundMatchEnum currentRoundState = null;
@@ -117,6 +120,11 @@ public class TournamentController {
 		List<TournamentAdminDTO> result = new ArrayList<TournamentAdminDTO>();
 		
 		List<Tournament> tournaments = tournamentS.getTournaments();
+		
+	    tournaments.sort(
+	            Comparator.comparing(Tournament::getDate, Comparator.nullsLast(Comparator.reverseOrder()))
+	                      .thenComparing(Tournament::getName, Comparator.nullsLast(String::compareToIgnoreCase))
+	        );
 		
 		for (Tournament currentTournament : tournaments)
 		{

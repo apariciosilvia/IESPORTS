@@ -20,5 +20,4 @@ public class SportRegisterDTO {
 		return "SportRegisterDTO [name=" + name + "]";
 	}
 
-
 }
