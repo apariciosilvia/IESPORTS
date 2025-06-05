@@ -78,7 +78,7 @@ public class TeamController {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = Map.class),
                 examples = {
-                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"equipo\":\"Equipo borrado con éxito\"}")
+                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"team\":\"Equipo borrado con éxito\"}")
                 }
             )
         ),
@@ -88,7 +88,7 @@ public class TeamController {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = Map.class),
                 examples = {
-                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"equipo\":\"El equipo no existe\"}")
+                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"team\":\"El equipo no existe\"}")
                 }
             )
         )
@@ -101,10 +101,10 @@ public class TeamController {
 
         if (teamToDelete.isPresent()) {
             tr.deleteTeam(teamToDelete.get());
-            return ResponseEntity.ok(Map.of("equipo", "Equipo borrado con éxito"));
+            return ResponseEntity.ok(Map.of("team", "Equipo borrado con éxito"));
         }
 
-        Map<String, String> errores = Map.of("equipo", "El equipo no existe");
+        Map<String, String> errores = Map.of("team", "El equipo no existe");
         return ResponseEntity.badRequest().body(errores);
     }
 
@@ -132,7 +132,7 @@ public class TeamController {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = Map.class),
                 examples = {
-                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"nombre\":\"El nombre del equipo ya existe\"}")
+                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"team\":\"El nombre del equipo ya existe\"}")
                 }
             )
         )
@@ -145,7 +145,7 @@ public class TeamController {
             .anyMatch(team -> team.getName().equals(teamDTO.getName()));
 
         if (exists) {
-            errores.put("nombre", "El nombre del equipo ya existe");
+            errores.put("team", "El nombre del equipo ya existe");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errores);
         }
 
@@ -185,7 +185,7 @@ public class TeamController {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = Map.class),
                 examples = {
-                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"equipo\":\"El equipo no existe\", \"jugador_7\":\"El jugador con código 7 no existe\"}")
+                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"team\":\"El equipo no existe\", \"jugador_7\":\"El jugador con código 7 no existe\"}")
                 }
             )
         )
@@ -199,7 +199,7 @@ public class TeamController {
             .findFirst();
 
         if (existingTeamOpt.isEmpty()) {
-            errores.put("equipo", "El equipo no existe");
+            errores.put("team", "El equipo no existe");
             return ResponseEntity.badRequest().body(errores);
         }
 
@@ -222,5 +222,45 @@ public class TeamController {
         Team updatedTeam = tr.saveTeam(existingTeam);
 
         return ResponseEntity.ok(updatedTeam);
+    }
+    
+    @Operation(summary = "Obtener un equipo por ID y nombre")
+    @ApiResponses({
+        @ApiResponse(
+            responseCode = "200",
+            description = "Equipo encontrado correctamente",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = Team.class),
+                examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+                    value = "{\"id\":1,\"name\":\"Equipo A\",\"players\":[{\"id\":1,\"name\":\"Jugador 1\"}]}"
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "El equipo no fue encontrado",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = Map.class),
+                examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+                    value = "{\"equipo\":\"El equipo no existe\"}"
+                )
+            )
+        )
+    })
+    @GetMapping("/getTeamByIdAndName")
+    public ResponseEntity<?> getTeamByIdAndName(@RequestParam Long id, @RequestParam String name)
+    {
+    	Map<String, String> errores = new HashMap<>();
+    	Team currentTeam = tr.getTeamByIdAndName(id, name);
+    	
+    	if(currentTeam == null) {
+    		errores.put("equipo", "El equipo no existe");
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+    	}
+    	
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(currentTeam);
     }
 }

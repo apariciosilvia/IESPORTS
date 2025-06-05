@@ -3,6 +3,7 @@ package com.iesports.model;
 import java.util.Date;
 import com.iesports.enums.RoundMatchEnum;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,28 +17,38 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table (name = "matches")
+@Schema(description = "Entidad que representa un partido entre dos equipos en un torneo")
 public class Match {
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID único del partido", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
 	private Long id;
+	 @Schema(description = "Fecha y hora del partido", example = "2025-06-01T00:00:00.000Z")
 	private Date date;
 	@Enumerated(EnumType.STRING)
+	 @Schema(description = "Ronda del partido", example = "CUARTOS_FINAL")
 	private RoundMatchEnum round;
 	@ManyToOne
 	@JoinColumn (name = "tournament_id", referencedColumnName = "id")
+	@Schema(description = "Torneo al que pertenece el partido")
 	private Tournament tournament;
 	@ManyToOne
 	@JoinColumn (name = "team1_id", referencedColumnName = "id")
+	 @Schema(description = "Equipo 1 participante en el partido")
 	private Team team1;
 	@ManyToOne
 	@JoinColumn (name = "team2_id", referencedColumnName = "id")
+	@Schema(description = "Equipo 2 participante en el partido")
 	private Team team2;
 	@Column(name = "points_team1")
+	@Schema(description = "Puntos anotados por el equipo 1", example = "2")
 	private int pointsTeam1;
 	@Column(name = "points_team2")
+	@Schema(description = "Puntos anotados por el equipo 2", example = "3")
 	private int pointsTeam2;
 	@ManyToOne
 	@JoinColumn (name = "winner_team_id", referencedColumnName = "id")
+	@Schema(description = "Equipo ganador del partido")
 	private Team winnerTeam;
 	
 	public Match(Long id, Date date, RoundMatchEnum round, Tournament tournament, Team team1, Team team2,
