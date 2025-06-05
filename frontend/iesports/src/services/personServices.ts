@@ -3,12 +3,31 @@ import type { ChangePasswordDTO } from '@/model/dto/changePasswordDTO';
 import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequestDTO';
 import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
 import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
+import type { Person } from '@/model/person';
 
 function getPersons() {
 
   return new Promise<any[]>((resolve, reject) => {
 
     const url = `${import.meta.env.VITE_URL_API}/person/getPersons`;
+
+     axios.get(url)
+       .then(response => {
+        console.log('Respuesta completa:', response.data); 
+         resolve(response.data);
+       })
+       .catch(error => {
+        console.error('Error en la petición:', error);
+        reject(error);
+       });
+   });
+};
+
+function getPersonsRoleStudent() {
+
+  return new Promise<Person[]>((resolve, reject) => {
+
+    const url = `${import.meta.env.VITE_URL_API}/person/getPersonsRoleStudent`;
 
      axios.get(url)
        .then(response => {
@@ -89,4 +108,4 @@ function changeTempPassword(ChangeForgottenPasswordDTO: ChangeForgottenPasswordD
 };
 
 
-export { getPersons, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};
+export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};
