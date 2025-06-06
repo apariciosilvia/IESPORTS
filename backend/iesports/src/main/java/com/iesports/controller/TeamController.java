@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.iesports.dao.service.impl.PersonServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
@@ -25,8 +25,14 @@ import com.iesports.dto.TeamUpdateDTO;
 import com.iesports.model.Person;
 import com.iesports.model.Team;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.*;
 
 @RestController
 @RequestMapping("/team")
@@ -140,6 +146,8 @@ public class TeamController {
     @PostMapping("/addTeam")
     public ResponseEntity<?> addTeam(@Valid @RequestBody TeamAddDTO teamDTO) {
         Map<String, String> errores = new HashMap<>();
+        
+        System.err.println(teamDTO.toString());
 
         boolean exists = tr.getTeams().stream()
             .anyMatch(team -> team.getName().equals(teamDTO.getName()));
@@ -171,7 +179,7 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTeam);
     }
 
-    @Operation(summary = "Actualizar los jugadores de un equipo existente")
+    @Operation(summary = "Actualizar equipo y sus participantes")
     @ApiResponses({
         @ApiResponse(
             responseCode = "200",
@@ -181,47 +189,28 @@ public class TeamController {
         ),
         @ApiResponse(
             responseCode = "400",
-            description = "Errores de validación o equipo no encontrado",
+            description = "Errores de validación",
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = Map.class),
                 examples = {
-                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"team\":\"El equipo no existe\", \"jugador_7\":\"El jugador con código 7 no existe\"}")
+                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"nameTeam\":\"El nombre Inazuma Eleven ya esta asignado a un equipo.\"}")
                 }
             )
         )
     })
     @PostMapping("/updateTeam")
-    public ResponseEntity<?> updateTeam(@Valid @RequestBody TeamUpdateDTO teamDTO) {
-        Map<String, String> errores = new HashMap<>();
+    public ResponseEntity<?> updateTeam(@Valid @RequestBody TeamUpdateDTO teamUpdateDTO) {
 
-        Optional<Team> existingTeamOpt = tr.getTeams().stream()
-            .filter(team -> team.getName().equals(teamDTO.getName()))
-            .findFirst();
-
-        if (existingTeamOpt.isEmpty()) {
-            errores.put("team", "El equipo no existe");
-            return ResponseEntity.badRequest().body(errores);
+        if (tr.existsNameTeam(teamUpdateDTO.getNameTeam(), teamUpdateDTO.getIdTeam())) {
+            System.out.println("El nombre " + teamUpdateDTO.getNameTeam() + " ya esta asignado a un equipo.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("nameTeam", "El nombre " + teamUpdateDTO.getNameTeam() + " ya esta asignado a un equipo."));
         }
+        
+        Team teamUpdate = new Team(teamUpdateDTO.getIdTeam(), teamUpdateDTO.getNameTeam(), teamUpdateDTO.getPlayers());
+        
+        tr.updateTeam(teamUpdate);
 
-        List<Person> fullPlayers = new ArrayList<>();
-        for (Person player : teamDTO.getPlayers()) {
-            Person fullPlayer = ps.getPersonById(player.getId());
-            if (fullPlayer == null) {
-                errores.put("jugador_" + player.getId(), "El jugador con código " + player.getId() + " no existe en la base de datos");
-            } else {
-                fullPlayers.add(fullPlayer);
-            }
-        }
-
-        if (!errores.isEmpty()) {
-            return ResponseEntity.badRequest().body(errores);
-        }
-
-        Team existingTeam = existingTeamOpt.get();
-        existingTeam.setPlayers(fullPlayers);
-        Team updatedTeam = tr.saveTeam(existingTeam);
-
-        return ResponseEntity.ok(updatedTeam);
+        return ResponseEntity.status(HttpStatus.OK).body(teamUpdate);
     }
     
     @Operation(summary = "Obtener un equipo por ID")

@@ -83,7 +83,7 @@
       <component
         :is="modalMode === 'add' ? AdminAddTeams : AdminEditTeams"
         @close="closeModal"
-        :teamId="teamToEdit"
+        :idTeam="teamToEdit"
       />
     </ion-modal>
   </section>

@@ -94,9 +94,9 @@
   <!-- Main View -->
   <ion-header>
     <ion-toolbar class="header-red">
-      <ion-title>NUEVO EQUIPO</ion-title>
+      <ion-title>EDITAR EQUIPO</ion-title>
       <ion-buttons slot="end">
-        <ion-button @click="$emit('close')">Cerrar</ion-button>
+        <ion-button @click="resetForm(); $emit('close')">Cerrar</ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -118,7 +118,7 @@
         <div class="panel-left">
           <div class="panel-header">
             <span>Miembros</span>
-            <span class="counter">{{ filteredUsers.length }}/∞</span>
+            <span class="counter">{{ filteredpersons.length }}/∞</span>
           </div>
 
           <ion-searchbar
@@ -130,14 +130,14 @@
           <div class="members-list">
             <div
               class="member-row"
-              v-for="user in filteredUsers"
-              :key="user.id"
+              v-for="person in filteredpersons"
+              :key="person.id"
             >
-              <span class="member-name">{{ user.name }}</span>
+              <span class="member-name">{{ person.name }}</span>
               <button
                 class="btn-add"
-                @click="addMember(user)"
-                :disabled="isInTeam(user)"
+                @click="addMember(person)"
+                :disabled="isInTeam(person)"
               >
                 <span class="material-symbols-outlined">add_circle</span>
               </button>
@@ -181,9 +181,9 @@
       <ion-button
         expand="block"
         class="btn-save"
-        @click="createTeam"
+        @click="editTeam"
       >
-        <span class="material-symbols-outlined">save</span>Crear Equipo
+        <span class="material-symbols-outlined">save</span>Editar Equipo
       </ion-button>
     </div>
   </ion-footer>
@@ -191,31 +191,34 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonFooter, IonInput, IonSearchbar } from '@ionic/vue';
+import { IonHeader, IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonButton,
+  IonContent,
+  IonFooter,
+  IonInput,
+  IonSearchbar } from '@ionic/vue';
 import { getPersonsRoleStudent } from '@/services/personServices';
-import { addTeam, getTeamById } from '@/services/teamService';
-import type { TeamAddDTO } from '@/model/dto/teamAddDTO';
+import { getTeamById, updateTeam } from '@/services/teamService';
 import type { Person } from '@/model/person';
 import type { Team } from '@/model/team';
-
-const props = defineProps<{ teamId: number }>();
-
-interface User {
-  id: number;
-  name: string;
-}
+import type { TeamUpdateDTO } from '@/model/dto/TeamUpdateDTO';
 
 const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'created', message: string): void;
 }>();
 
-const teamName = ref<string>('');
-const allUsers = ref<User[]>([]);
-const searchText = ref<string>('');
-const selectedMembers = ref<User[]>([]);
-const maxMembers = 15;
+const props = defineProps<{ idTeam: number }>();
+
 const teamEdit = ref<Team>();
+const teamName = ref<string>('');
+const allStudents = ref<Person[]>([]);
+const searchText = ref<string>('');
+
+const selectedMembers = ref<Person[]>([]);
+const maxMembers = 15;
 
 // Popup state
 const showPopup = ref<boolean>(false);
@@ -242,26 +245,30 @@ function closePopup() {
 
 onMounted(async () => {
   try {
-    allUsers.value = await getPersonsRoleStudent();
-    console.log('holacarocla');
-    console.log(props.teamId);
-    teamEdit.value = await getTeamById(props.teamId);
-    console.log('datos del equipo', teamEdit);
+    allStudents.value = await getPersonsRoleStudent();
+
+    teamEdit.value = await getTeamById(props.idTeam);
+    teamName.value = teamEdit.value.name;
+    selectedMembers.value = teamEdit.value.players ?? [];
+
+
   } catch (e) {
     console.error('Error cargando usuarios:', e);
   }
 });
 
-const filteredUsers = computed(() => {
-  return allUsers.value.filter((u) => {
-    const matchesSearch = u.name.toLowerCase().includes(searchText.value.toLowerCase());
+const filteredpersons = computed(() => {
+  return allStudents.value.filter((u) => {
+    const matchesSearch = u.name
+      .toLowerCase()
+      .includes(searchText.value.toLowerCase());
     return matchesSearch && !selectedMembers.value.some((m) => m.id === u.id);
   });
 });
 
-function addMember(user: User) {
-  if (selectedMembers.value.length < maxMembers && !selectedMembers.value.some((m) => m.id === user.id)) {
-    selectedMembers.value.push(user);
+function addMember(person: Person) {
+  if (selectedMembers.value.length < maxMembers && !selectedMembers.value.some((m) => m.id === person.id)) {
+    selectedMembers.value.push(person);
   }
 }
 
@@ -269,17 +276,17 @@ function removeMember(index: number) {
   selectedMembers.value.splice(index, 1);
 }
 
-function isInTeam(user: User) {
-  return selectedMembers.value.some((m) => m.id === user.id);
+function isInTeam(person: Person) {
+  return selectedMembers.value.some((m) => m.id === person.id);
 }
 
 function resetForm() {
-  teamName.value = '';
+  teamName.value = teamEdit.value?.name ?? '';
   searchText.value = '';
-  selectedMembers.value = [];
+  selectedMembers.value = teamEdit.value?.players || [];
 }
 
-async function createTeam() {
+async function editTeam() {
   if (!teamName.value.trim()) {
     openPopup('alert', 'El nombre del equipo es obligatorio');
     return;
@@ -289,14 +296,18 @@ async function createTeam() {
     return;
   }
 
-  const payload: TeamAddDTO = {
-    name: teamName.value,
-    players: selectedMembers.value.map((m) => ({ id: m.id } as Person)),
+  const teamUpdateDTO: TeamUpdateDTO = {
+    idTeam: props.idTeam,
+    nameTeam: teamName.value,
+    players: selectedMembers.value
   };
 
   try {
-    await addTeam(payload);
-    emit('created', 'Equipo creado correctamente');
+    console.log('teamUpdateDTO', teamUpdateDTO);
+    await updateTeam(teamUpdateDTO);
+
+    emit('created', 'Equipo actualizado correctamente');
+
     resetForm();
     emit('close');
     window.location.reload();
