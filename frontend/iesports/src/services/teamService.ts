@@ -18,20 +18,15 @@ function getTeamsInfo(): Promise<any[]> {
   });
 }
 
-function getTeamById(teamId: number): Promise<Team[]> {
-
+function getTeamById(idTeam: number): Promise<Team> {
   const url = `${import.meta.env.VITE_URL_API}/team/getTeamById`;
-
-  return new Promise((resolve, reject) => {
-    axios.get(url, teamId ? { params: { teamId } } : {})
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => {
-        console.error('Error cargando información del equipo:', error);
-        reject(error);
-      });
-  });
+  return axios
+    .get<Team>(url, { params: { idTeam } })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error cargando información del equipo:', error);
+      return Promise.reject(error);
+    });
 }
 
 function getTeams(): Promise<Team[]> {

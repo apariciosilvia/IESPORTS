@@ -198,7 +198,7 @@ import type { TeamAddDTO } from '@/model/dto/teamAddDTO';
 import type { Person } from '@/model/person';
 import type { Team } from '@/model/team';
 
-const props =defineProps<{ teamId: number }>();
+const props = defineProps<{ teamId: number }>();
 
 interface User {
   id: number;
@@ -215,7 +215,7 @@ const allUsers = ref<User[]>([]);
 const searchText = ref<string>('');
 const selectedMembers = ref<User[]>([]);
 const maxMembers = 15;
-const teamList = ref<Team[]>([]);
+const teamEdit = ref<Team>();
 
 // Popup state
 const showPopup = ref<boolean>(false);
@@ -243,7 +243,10 @@ function closePopup() {
 onMounted(async () => {
   try {
     allUsers.value = await getPersonsRoleStudent();
-    teamList.value = await getTeamById(props.teamId);
+    console.log('holacarocla');
+    console.log(props.teamId);
+    teamEdit.value = await getTeamById(props.teamId);
+    console.log('datos del equipo', teamEdit);
   } catch (e) {
     console.error('Error cargando usuarios:', e);
   }
@@ -251,9 +254,7 @@ onMounted(async () => {
 
 const filteredUsers = computed(() => {
   return allUsers.value.filter((u) => {
-    const matchesSearch = u.name
-      .toLowerCase()
-      .includes(searchText.value.toLowerCase());
+    const matchesSearch = u.name.toLowerCase().includes(searchText.value.toLowerCase());
     return matchesSearch && !selectedMembers.value.some((m) => m.id === u.id);
   });
 });
