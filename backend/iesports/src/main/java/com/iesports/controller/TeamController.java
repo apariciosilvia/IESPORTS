@@ -224,7 +224,7 @@ public class TeamController {
         return ResponseEntity.ok(updatedTeam);
     }
     
-    @Operation(summary = "Obtener un equipo por ID y nombre")
+    @Operation(summary = "Obtener un equipo por ID")
     @ApiResponses({
         @ApiResponse(
             responseCode = "200",
@@ -249,11 +249,11 @@ public class TeamController {
             )
         )
     })
-    @GetMapping("/getTeamByIdAndName")
-    public ResponseEntity<?> getTeamByIdAndName(@RequestParam Long id, @RequestParam String name)
+    @GetMapping("/getTeamById")
+    public ResponseEntity<?> getTeamById(@RequestParam Long idTeam)
     {
     	Map<String, String> errores = new HashMap<>();
-    	Team currentTeam = tr.getTeamByIdAndName(id, name);
+    	Team currentTeam = tr.getTeam(idTeam);
     	
     	if(currentTeam == null) {
     		errores.put("equipo", "El equipo no existe");

@@ -30,8 +30,4 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 			WHERE tournaments.id = ?1;
 			""", nativeQuery = true)
 	public List<Team> getTeamsByTournamentId(Long tournamentId);
-	
-	
-	@Query(value = "SELECT * FROM TEAM WHERE id=?1 AND name=?2", nativeQuery = true)
-	public Team getTeamByIdAndName(Long id, String name);
 }

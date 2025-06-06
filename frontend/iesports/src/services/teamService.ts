@@ -18,6 +18,17 @@ function getTeamsInfo(): Promise<any[]> {
   });
 }
 
+function getTeamById(idTeam: number): Promise<Team> {
+  const url = `${import.meta.env.VITE_URL_API}/team/getTeamById`;
+  return axios
+    .get<Team>(url, { params: { idTeam } })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error cargando información del equipo:', error);
+      return Promise.reject(error);
+    });
+}
+
 function getTeams(): Promise<Team[]> {
 
   const url = `${import.meta.env.VITE_URL_API}/team/getTeams`;
@@ -53,4 +64,4 @@ function addTeam(TeamAddDTO: TeamAddDTO) {
 
 
 
-export { getTeamsInfo, getTeams, addTeam };
+export { getTeamsInfo, getTeamById, getTeams, addTeam };

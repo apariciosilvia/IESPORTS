@@ -23,7 +23,7 @@
 
             <!-- Miembros -->
             <td class="col-members">
-              <div v-if="info.team.players?.length === 0">Sin miembros</div>
+              <div v-if="info.team.players?.length === 0">Sin miembros </div>
               <ion-select
                 v-else
                 interface="popover"
@@ -83,7 +83,7 @@
       <component
         :is="modalMode === 'add' ? AdminAddTeams : AdminEditTeams"
         @close="closeModal"
-        :tournamentId="teamToEdit"
+        :teamId="teamToEdit"
       />
     </ion-modal>
   </section>
