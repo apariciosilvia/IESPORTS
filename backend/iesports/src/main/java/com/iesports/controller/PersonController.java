@@ -70,10 +70,7 @@ public class PersonController {
 	        description = "Lista de personas obtenida correctamente",
 	        content = @Content(
 	            mediaType = "application/json",
-	            array = @ArraySchema(schema = @Schema(implementation = Person.class)),
-	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
-	                value = "[{\"id\":1,\"name\":\"Juan\"}, {\"id\":2,\"name\":\"María\"}]"
-	            )
+	            array = @ArraySchema(schema = @Schema(implementation = Person.class))
 	        )
 	    )
 	})
@@ -89,10 +86,7 @@ public class PersonController {
 	        description = "Lista de personas con rol alumno obtenida correctamente",
 	        content = @Content(
 	            mediaType = "application/json",
-	            array = @ArraySchema(schema = @Schema(implementation = Person.class)),
-	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
-	                value = "[{\"id\":3,\"name\":\"Carlos\",\"role\":{\"id\":5,\"name\":\"alumno\"}}, {\"id\":7,\"name\":\"Ana\",\"role\":{\"id\":5,\"name\":\"alumno\"}}]"
-	            )
+	            array = @ArraySchema(schema = @Schema(implementation = Person.class))
 	        )
 	    )
 	})

@@ -200,17 +200,11 @@ import {
   IonContent,
   IonFooter,
   IonInput,
-  IonSearchbar,
-} from '@ionic/vue';
+  IonSearchbar } from '@ionic/vue';
 import { getPersonsRoleStudent } from '@/services/personServices';
 import { addTeam } from '@/services/teamService';
 import type { TeamAddDTO } from '@/model/dto/teamAddDTO';
 import type { Person } from '@/model/person';
-
-interface User {
-  id: number;
-  name: string;
-}
 
 const emit = defineEmits<{
   (e: 'close'): void;
@@ -218,9 +212,9 @@ const emit = defineEmits<{
 }>();
 
 const teamName = ref<string>('');
-const allUsers = ref<User[]>([]);
+const allStudents = ref<Person[]>([]);
 const searchText = ref<string>('');
-const selectedMembers = ref<User[]>([]);
+const selectedMembers = ref<Person[]>([]);
 const maxMembers = 15;
 
 // Popup state
@@ -248,14 +242,15 @@ function closePopup() {
 
 onMounted(async () => {
   try {
-    allUsers.value = await getPersonsRoleStudent();
+    allStudents.value = await getPersonsRoleStudent();
+    console.log('estudiantes', allStudents);
   } catch (e) {
     console.error('Error cargando usuarios:', e);
   }
 });
 
 const filteredUsers = computed(() => {
-  return allUsers.value.filter((u) => {
+  return allStudents.value.filter((u) => {
     const matchesSearch = u.name
       .toLowerCase()
       .includes(searchText.value.toLowerCase());
@@ -263,9 +258,9 @@ const filteredUsers = computed(() => {
   });
 });
 
-function addMember(user: User) {
-  if (selectedMembers.value.length < maxMembers && !selectedMembers.value.some((m) => m.id === user.id)) {
-    selectedMembers.value.push(user);
+function addMember(person: Person) {
+  if (selectedMembers.value.length < maxMembers && !selectedMembers.value.some((m) => m.id === person.id)) {
+    selectedMembers.value.push(person);
   }
 }
 
@@ -273,8 +268,8 @@ function removeMember(index: number) {
   selectedMembers.value.splice(index, 1);
 }
 
-function isInTeam(user: User) {
-  return selectedMembers.value.some((m) => m.id === user.id);
+function isInTeam(person: Person) {
+  return selectedMembers.value.some((m) => m.id === person.id);
 }
 
 function resetForm() {
@@ -293,13 +288,14 @@ async function createTeam() {
     return;
   }
 
-  const payload: TeamAddDTO = {
+  const teamAddDTO: TeamAddDTO = {
     name: teamName.value,
-    players: selectedMembers.value.map((m) => ({ id: m.id } as Person)),
+    players: selectedMembers.value
   };
 
   try {
-    await addTeam(payload);
+    console.log('teamAddDTO',teamAddDTO);
+    await addTeam(teamAddDTO);
     emit('created', 'Equipo creado correctamente');
     resetForm();
     emit('close');

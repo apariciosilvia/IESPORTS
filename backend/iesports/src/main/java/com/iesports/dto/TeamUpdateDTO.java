@@ -9,38 +9,56 @@ import jakarta.validation.constraints.Size;
 
 public class TeamUpdateDTO {
 
-    @NotNull(message = "El nombre no debe estar vacío")
-    private String name;
+	@NotNull(message = "El idTeam es obligatorio")
+	private Long idTeam;
 
-    @NotNull(message = "Debes asignar mínimo un usuario")
-    @Size(min = 1, max = 15, message = "El equipo debe tener entre 1 y 15 jugadores")
-    private List<Person> players;
+	@NotNull(message = "El nombre es obligatorio")
+	private String nameTeam;
 
-    public String getName() {
-        return name;
-    }
+	@NotNull(message = "Debes asignar mínimo un usuario")
+	@Size(min = 1, max = 15, message = "El equipo debe tener entre 1 y 15 jugadores")
+	private List<Person> players;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public TeamUpdateDTO() {
+		super();
+	}
 
-    public List<Person> getPlayers() {
-        return players;
-    }
+	public Long getIdTeam() {
+		return idTeam;
+	}
 
-    public void setPlayers(List<Person> players) {
-        this.players = players;
-    }
-    
+	public void setIdTeam(Long idTeam) {
+		this.idTeam = idTeam;
+	}
 
-	public TeamUpdateDTO(String name, List<Person> players) {
-		this.name = name;
+	public TeamUpdateDTO(@NotNull(message = "El idTeam es obligatorio") Long idTeam,
+			@NotNull(message = "El nombre es obligatorio") String nameTeam,
+			@NotNull(message = "Debes asignar mínimo un usuario") @Size(min = 1, max = 15, message = "El equipo debe tener entre 1 y 15 jugadores") List<Person> players) {
+		super();
+		this.idTeam = idTeam;
+		this.nameTeam = nameTeam;
+		this.players = players;
+	}
+
+	public String getNameTeam() {
+		return nameTeam;
+	}
+
+	public void setNameTeam(String nameTeam) {
+		this.nameTeam = nameTeam;
+	}
+
+	public List<Person> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<Person> players) {
 		this.players = players;
 	}
 
 	@Override
 	public String toString() {
-		return "TeamAddDTO [name=" + name + ", players=" + players + "]";
+		return "TeamUpdateDTO [idTeam=" + idTeam + ", nameTeam=" + nameTeam + ", players=" + players + "]";
 	}
-}
 
+}
