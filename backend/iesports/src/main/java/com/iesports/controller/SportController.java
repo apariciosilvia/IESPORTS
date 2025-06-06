@@ -175,20 +175,42 @@ public class SportController {
          return ResponseEntity.ok(Map.of("sport", "Deporte borrado con éxito"));
 	 }
 	 
-	    @GetMapping("/getSportById")
-	    public ResponseEntity<?> getSportById(@RequestParam Long id)
-	    {
-	    	Map<String, String> errores = new HashMap<>();
-	    	Sport currentSport = ss.getSportById(id);
-	    	
-	    	if(currentSport == null) {
-	    		errores.put("sport", "El deporte no existe");
-	    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
-	    	}
-	    	
-	    	
-	    	return ResponseEntity.status(HttpStatus.OK).body(currentSport);
-	    }
+	 @Operation(summary = "Obtener un deporte por ID")
+	 @ApiResponses({
+	     @ApiResponse(
+	         responseCode = "200",
+	         description = "Deporte obtenido correctamente",
+	         content = @Content(mediaType = "application/json",
+	             schema = @Schema(implementation = Sport.class),
+	             examples = {
+	                 @ExampleObject(value = "{\"id\":1,\"name\":\"Fútbol\"}")
+	             }
+	         )
+	     ),
+	     @ApiResponse(
+	         responseCode = "400",
+	         description = "El deporte no fue encontrado",
+	         content = @Content(mediaType = "application/json",
+	             schema = @Schema(implementation = Map.class),
+	             examples = {
+	                 @ExampleObject(value = "{\"sport\":\"El deporte no existe\"}")
+	             }
+	         )
+	     )
+	 })
+	@GetMapping("/getSportById")
+	public ResponseEntity<?> getSportById(@RequestParam Long id){
+		Map<String, String> errores = new HashMap<>();
+		Sport currentSport = ss.getSportById(id);
+		
+		if(currentSport == null) {
+			errores.put("sport", "El deporte no existe");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+		}
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).body(currentSport);
+	}
 	 
 	 
 
