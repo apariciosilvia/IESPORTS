@@ -162,20 +162,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import type { Match } from '@/model/match';
 
 const props = defineProps<{ matches: Match[] }>();
 
-// 1) Orden de las fases que queremos mostrar
+// Orden de las fases que queremos mostrar
 const roundOrder = ['OCTAVOS', 'CUARTOS_FINAL', 'SEMIFINAL', 'FINAL'] as const;
 
-// 2) Nombre de la copa (del primer partido)
+// Nombre de la copa (del primer partido)
 const tournamentName = computed(() =>
   props.matches.length ? props.matches[0].tournament.name : ''
 );
 
-// 3) Función para convertir clave de ronda en texto legible
+// Función para convertir clave de ronda en texto legible
 function formatRoundName(key: typeof roundOrder[number]): string {
   switch (key) {
     case 'OCTAVOS': return 'Octavos';
@@ -185,7 +185,7 @@ function formatRoundName(key: typeof roundOrder[number]): string {
   }
 }
 
-// 4) Agrupar partidos por ronda
+// Agrupar partidos por ronda
 const roundsGroups = computed<Record<string, Match[]>>(() =>
   props.matches.reduce((acc, m) => {
     (acc[m.round] = acc[m.round] || []).push(m);
@@ -314,7 +314,7 @@ const sportClass = computed(() => {
   font-weight: bold;
 } 
 
-/* Cabecera de cada partido: fecha y torneo */
+/* Cabecera de cada partido: fecha y  */
 .match-header {
   font-size: 0.9rem;
   font-weight: bold;
@@ -387,6 +387,4 @@ const sportClass = computed(() => {
     box-sizing: border-box !important;
   }
 }
-
-
 </style>

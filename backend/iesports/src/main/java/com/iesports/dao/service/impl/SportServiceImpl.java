@@ -22,6 +22,7 @@ public class SportServiceImpl implements ISportService{
 	@Override
 	public Sport getSportById(Long idSport) {
 		return sr.findById(idSport).orElse(null);
+		
 	}
 
 	@Override

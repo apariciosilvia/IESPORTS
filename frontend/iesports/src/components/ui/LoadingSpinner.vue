@@ -15,7 +15,6 @@
 </template>
 
 <style scoped>
-/* From Uiverse.io by Chriskoziol */ 
 .spinnerContainer {
   position: fixed;
   inset: 0;

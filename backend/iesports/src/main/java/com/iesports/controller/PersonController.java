@@ -23,15 +23,25 @@ import com.iesports.dao.service.impl.RoleServiceImpl;
 import com.iesports.dto.ChangeForgottenPasswordDTO;
 import com.iesports.dto.ChangeNameAndEmailDTO;
 import com.iesports.dto.ChangePasswordDTO;
+import com.iesports.dto.ChangeRoleDTO;
 import com.iesports.dto.ForgotPasswordRequestDTO;
 import com.iesports.dto.PersonLoginDTO;
 import com.iesports.dto.PersonRegisterDTO;
 import com.iesports.model.Person;
+import com.iesports.model.Role;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/person")
+@Tag(name = "Gestión de personas", description = "Endpoints para la gestión de personas")
 public class PersonController {
 
 	@Autowired
@@ -48,13 +58,79 @@ public class PersonController {
 	
 	@Autowired
 	private GenerateTempPasswordService gtps;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	/* Método que devuelve todos los datos de la BBDD */
+	@Operation(summary = "Obtener la lista de todas las personas")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Lista de personas obtenida correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            array = @ArraySchema(schema = @Schema(implementation = Person.class))
+	        )
+	    )
+	})
 	@GetMapping("/getPersons")
 	public List<Person> getPersons() {
 		return ps.getPersons();
 	}
+	
+	@Operation(summary = "Obtener la lista de personas con el rol de alumno")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Lista de personas con rol alumno obtenida correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            array = @ArraySchema(schema = @Schema(implementation = Person.class))
+	        )
+	    )
+	})
+	@GetMapping("/getPersonsRoleStudent")
+	public List<Person> getPersonsRoleStudent() {
+	    Long studentRoleId = rs.getRoles().stream()
+	        .filter(role -> role.getName().equalsIgnoreCase("alumno"))
+	        .map(Role::getId)
+	        .findFirst()
+	        .orElse(null);
 
+	    if (studentRoleId == null) {
+	        return List.of();
+	    }
+
+	    return ps.getPersons().stream()
+	        .filter(person -> person.getRole() != null && person.getRole().getId().equals(studentRoleId))
+	        .toList();
+	}
+	
+	@Operation(summary = "Iniciar sesión con email y contraseña")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Inicio de sesión exitoso, devuelve la información del usuario",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":1,\"name\":\"Juan\",\"email\":\"juan@mail.com\"}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Credenciales inválidas (email o contraseña incorrectos)",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"error\":\"Las credenciales introducidas no son válidas\"}"
+	            )
+	        )
+	    )
+	})
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody PersonLoginDTO person)
 	{	
@@ -75,12 +151,33 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.OK).body(foundPerson);
 	}
 	
-		
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
 
 	// La ? en el tipo de respuesta es que puedes devolver cualquier tipo de dato
 	// OPCION 1: BODY DE LOS DATOS REQUERIDOS DEL USUARIO
+	@Operation(summary = "Registrar una nueva persona")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "201",
+	        description = "Persona registrada correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":10,\"name\":\"Laura\",\"email\":\"laura@mail.com\",\"role\":{\"id\":4,\"name\":\"estudiante\"}}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Error en la validación de datos de entrada",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"email\":\"El email laura@mail.com ya existe\",\"password2\":\"Las contraseñas no coinciden\"}"
+	            )
+	        )
+	    )
+	})
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody PersonRegisterDTO person) {
 		
@@ -122,6 +219,40 @@ public class PersonController {
 
 		}
 
+	@Operation(summary = "Solicitar contraseña temporal para recuperación de cuenta")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Contraseña temporal enviada correctamente, devuelve la persona actualizada",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":5,\"name\":\"Luis\",\"email\":\"luis@mail.com\",\"tempPassword\":1}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "El correo no pertenece a ningún usuario registrado",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"emailForgotPassword\":\"No existe un usuario registrado con el correo luis@mail.com\"}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "500",
+	        description = "Error interno al enviar el correo con la contraseña temporal",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"correo\":\"No se pudo enviar el correo con la contraseña temporal. Por favor intentelo de nuevo\"}"
+	            )
+	        )
+	    )
+	})
 	@PostMapping("/forgotPassword")
 	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDTO emailDTO){
 		
@@ -155,6 +286,30 @@ public class PersonController {
 		
 	}
 	
+	@Operation(summary = "Cambiar la contraseña temporal por una nueva contraseña definitiva")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Contraseña cambiada correctamente, devuelve la persona actualizada",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":5,\"name\":\"Luis\",\"email\":\"luis@mail.com\",\"tempPassword\":0}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Error en la validación de datos de entrada",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"personId\":\"Usuario no encontrado\", \"password2TempPaswword\":\"Las contraseñas no coinciden\"}"
+	            )
+	        )
+	    )
+	})
 	@PostMapping("/changeTempPassword")
 	public ResponseEntity<?> changeTempPassword(@Valid @RequestBody ChangeForgottenPasswordDTO changePassDTO){
 		
@@ -188,7 +343,30 @@ public class PersonController {
 	}
 	
 	
-	
+	@Operation(summary = "Cambiar el nombre y correo electrónico de un usuario")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Datos actualizados correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":3,\"name\":\"Ana\",\"email\":\"ana@mail.com\"}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Errores en la solicitud, como usuario no encontrado, email duplicado o sin cambios",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"personId\":\"Usuario no encontrado\",\"email\":\"El correo electronico ya pertenece a un usuario\"}"
+	            )
+	        )
+	    )
+	})
 	@PostMapping("/changeNameAndEmail")
 	public ResponseEntity<?> changeNameAndEmail(@Valid @RequestBody ChangeNameAndEmailDTO changeNameEmailDTO){
 		
@@ -224,6 +402,30 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}	
 	
+	@Operation(summary = "Cambiar la contraseña de un usuario")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Contraseña cambiada correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":3,\"name\":\"Ana\",\"email\":\"ana@mail.com\"}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Errores en la solicitud, como usuario no encontrado, credenciales incorrectas o contraseñas no coinciden",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"personId\":\"Usuario no encontrado\",\"currentPassword\":\"Credenciales no validas\",\"password2ChangePassword\":\"Las contraseñas no coinciden\"}"
+	            )
+	        )
+	    )
+	})
 	@PostMapping("/changePassword")
 	public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePassDTO){
 		
@@ -257,10 +459,81 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
 	
+	@Operation(summary = "Cambiar el rol de un usuario")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Rol cambiado correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":3,\"name\":\"Ana\",\"role\":{\"id\":2,\"name\":\"admin\"}}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Errores en la solicitud, como usuario o rol no encontrados",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"personId\":\"Usuario no encontrado\",\"roleId\":\"Rol no encontrado\"}"
+	            )
+	        )
+	    )
+	})
+	@PostMapping("/changeRole")
+	public ResponseEntity<?> changeUserRole(@Valid @RequestBody ChangeRoleDTO dto) {
+	    Map<String, String> errors = new HashMap<>();
 
+	    Person person = ps.getPersonById(dto.getPersonId());
+	    if (person == null) {
+	        errors.put("personId", "Usuario no encontrado");
+	    }
+
+	    Role role = rs.getRole(dto.getRoleId());
+	    if (role == null) {
+	        errors.put("roleId", "Rol no encontrado");
+	    }
+
+	    if (!errors.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+	    }
+
+	    person.setRole(role);
+	    ps.updatePerson(person);
+
+	    return ResponseEntity.ok(person);
+	}
+	
 	//SIRVE DE RELLENO PARA LA DOCUMENTACIÓN
 
 	// OPCION 2: BODY DEL USUARIO COMPLETO
+	@Operation(summary = "Registrar una nueva persona (opción con objeto Person completo)")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "201",
+	        description = "Persona registrada correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":15,\"name\":\"Carlos\",\"email\":\"carlos@mail.com\",\"role\":{\"id\":4,\"name\":\"estudiante\"}}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Email ya existente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"error\":\"El email carlos@mail.com ya existe\"}"
+	            )
+	        )
+	    )
+	})
 	@PostMapping("/register2")
 	public ResponseEntity<?> register(@Valid @RequestBody Person person) {
 
@@ -282,9 +555,31 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
 	}
 
-	
-	
 	// OPCION 3: PARAMETROS DE LOS DATOS REQUERIDOS DEL USUARIO
+	@Operation(summary = "Registrar una nueva persona (opción con parámetros)")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "201",
+	        description = "Persona registrada correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                value = "{\"id\":16,\"name\":\"Sara\",\"email\":\"sara@mail.com\",\"role\":{\"id\":4,\"name\":\"estudiante\"}}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Error en los datos recibidos (campos obligatorios, contraseñas, email duplicado)",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\"error\":\"Todos los campos son obligatorios\"}"
+	            )
+	        )
+	    )
+	})
 	@PostMapping("/register3")
 	public ResponseEntity<?> register(@RequestParam String name, @RequestParam String email, @RequestParam String password1, @RequestParam String password2, @RequestParam Long cursoId) {
 

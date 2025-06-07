@@ -12,7 +12,6 @@ public class TeamDeleteDTO {
     @NotNull(message = "El nombre no debe estar vacío")
     private Long id;
 
-
     public Long getId() {
         return id;
     }
@@ -20,8 +19,6 @@ public class TeamDeleteDTO {
     public void setId(Long id) {
         this.id = id;
     }
-
-    
 
 	public TeamDeleteDTO(Long id) {
 		this.id = id;

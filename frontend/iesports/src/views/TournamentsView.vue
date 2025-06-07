@@ -67,10 +67,9 @@ import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 import Footer from '@/components/ui/Footer.vue';
 import TournamentCard from '@/components/layout/TournamentCard.vue'
 
-// 1. Importamos los helpers de Vue
 import { ref, onMounted, computed } from 'vue';
 
-// 2. Importamos nuestros métodos del servicio
+// Importamos nuestros métodos del servicio
 // import { getTournament } from '@/services/tournamentService';
 import { getSports } from '@/services/sportService';
 import { getYears } from '@/services/tournamentService';
@@ -82,10 +81,10 @@ import type { Match } from '@/model/match';
 import type { Sport } from '@/model/sport';
 
 
-// 3. Extraemos el control de la navbar
+//Extraemos el control de la navbar
 const { showNav, handleScroll } = useNavbarVisibility();
 
-// 4. Definimos refs reactivas para filtros y datos
+//Definimos refs reactivas para filtros y datos
 const sports = ref<Sport[]>([]);
 const years = ref<String[]>([]);
 const matches = ref<Match[]>([]);
@@ -110,7 +109,7 @@ const groupedMatches = computed<Record<number, Match[]>>(() =>
   }, {} as Record<number, Match[]>)
 );
 
-// 5. Función loadFilters(): carga deportes y años al iniciar
+// Función loadFilters(): carga deportes y años al iniciar
 async function loadFilters() {
   isLoadingFilters.value = true;
   error.value = null;
@@ -130,12 +129,12 @@ async function loadFilters() {
   }
 }
 
-// 6. onMounted(): al montar el componente, ejecuta loadFilters()
+// onMounted(): al montar el componente, ejecuta loadFilters()
 onMounted(() => {
   loadFilters();
 });
 
-// 7. watch(): observa cambios en los selects y trae el torneo
+// watch(): observa cambios en los selects y trae el torneo
 // watch(
 //   [selectedSport, selectedYear],
 //   async ([sport, year]) => {
@@ -154,7 +153,7 @@ onMounted(() => {
 //   }
 // );
 
-// 8. Computed para filtrar la lista de torneos
+// Computed para filtrar la lista de torneos
 const filteredMatches = computed(() => {
   return matches.value.filter(m =>
     (!selectedSport.value || m.tournament.sport.id === selectedSport.value) &&

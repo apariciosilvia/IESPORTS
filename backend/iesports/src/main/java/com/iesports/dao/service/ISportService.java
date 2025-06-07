@@ -3,6 +3,7 @@ package com.iesports.dao.service;
 import java.util.List;
 
 import com.iesports.model.Sport;
+import com.iesports.model.Team;
 
 public interface ISportService {
 

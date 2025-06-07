@@ -33,7 +33,6 @@ public class TeamServiceImpl implements ITeamService{
 
 	@Override
 	public Team updateTeam(Team team) {
-		// TODO Auto-generated method stub
 		return tr.save(team);
 	}
 
@@ -49,8 +48,12 @@ public class TeamServiceImpl implements ITeamService{
 
 	@Override
 	public List<Team> getTeamsByTournamentId(Long tournamentId) {
-		// TODO Auto-generated method stub
 		return tr.getTeamsByTournamentId(tournamentId);
+	}
+
+	@Override
+	public boolean existsNameTeam(String nameTeam, Long idTeam) {
+		return tr.existsNameTeam(nameTeam, idTeam) != 0;
 	}
 
 }

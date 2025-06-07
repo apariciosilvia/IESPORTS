@@ -1,16 +1,106 @@
 <template>
+  <!-- Popup Container -->
+  <div class="popup-container" v-if="showPopup">
+    <!-- SUCCESS -->
+    <div class="popup success-popup" v-if="popupType === 'success'">
+      <div class="popup-icon success-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="success-svg">
+          <path
+            fill-rule="evenodd"
+            d="m12 1c-6.075 0-11 4.925-11 11s4.925 11 11 11 11-4.925 11-11-4.925-11-11-11zm4.768 9.14c.0878-.1004.1546-.21726.1966-.34383.0419-.12657.0581-.26026.0477-.39319-.0105-.13293-.0475-.26242-.1087-.38085-.0613-.11844-.1456-.22342-.2481-.30879-.1024-.08536-.2209-.14938-.3484-.18828s-.2616-.0519-.3942-.03823c-.1327.01366-.2612.05372-.3782.1178-.1169.06409-.2198.15091-.3027.25537l-4.3 5.159-2.225-2.226c-.1886-.1822-.4412-.283-.7034-.2807s-.51301.1075-.69842.2929-.29058.4362-.29285.6984c-.00228.2622.09851.5148.28067.7034l3 3c.0983.0982.2159.1748.3454.2251.1295.0502.2681.0729.4069.0665.1387-.0063.2747-.0414.3991-.1032.1244-.0617.2347-.1487.3236-.2554z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </div>
+      <div class="success-message" v-html="popupMessage"></div>
+      <div class="popup-icon close-icon" @click="closePopup">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" class="close-svg">
+          <path
+            d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z"
+            class="close-path"
+          ></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ALERT -->
+    <div class="popup alert-popup" v-if="popupType === 'alert'">
+      <div class="popup-icon alert-icon">
+        <svg class="alert-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </div>
+      <div class="alert-message" v-html="popupMessage"></div>
+      <div class="popup-icon close-icon" @click="closePopup">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="close-svg">
+          <path
+            d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z"
+            class="close-path"
+          ></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ERROR -->
+    <div class="popup error-popup" v-if="popupType === 'error'">
+      <div class="popup-icon error-icon">
+        <svg class="error-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </div>
+      <div class="error-message" v-html="popupMessage"></div>
+      <div class="popup-icon close-icon" @click="closePopup">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="close-svg">
+          <path
+            d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z"
+            class="close-path"
+          ></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="popup info-popup" v-if="popupType === 'info'">
+      <div class="popup-icon info-icon">
+        <svg aria-hidden="true" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="info-svg">
+          <path
+            clip-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+            fill-rule="evenodd"
+          ></path>
+        </svg>
+      </div>
+      <div class="info-message" v-html="popupMessage"></div>
+      <div class="popup-icon close-icon" @click="closePopup">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="close-svg">
+          <path
+            d="m15.8333 5.34166-1.175-1.175-4.6583 4.65834-4.65833-4.65834-1.175 1.175 4.65833 4.65834-4.65833 4.6583 1.175 1.175 4.65833-4.6583 4.6583 4.6583 1.175-1.175-4.6583-4.6583z"
+            class="close-path"
+          ></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
   <!-- Cabecera del modal -->
   <ion-header>
     <ion-toolbar class="white-header">
       <ion-title>EDITAR TORNEO</ion-title>
       <ion-buttons slot="end">
-        <ion-button @click="$emit('close')">
-          Cerrar
-        </ion-button>
+        <ion-button @click="$emit('close')">Cerrar</ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
   <ion-content class="modal-body">
+    <div v-if="error" class="error-message-api">{{ error }}</div>
     <div class="modal-grid">
       <div class="row">
         <!-- Columna Izquierda (40%) -->
@@ -34,11 +124,7 @@
                 @click="preventSelect"
                 :class="{ 'readonly-select': readOnlyTournament }"
               >
-                <ion-select-option
-                  v-for="s in sports"
-                  :key="s.id"
-                  :value="s.id"
-                >
+                <ion-select-option v-for="s in sports" :key="s.id" :value="s.id">
                   {{ s.name }}
                 </ion-select-option>
               </ion-select>
@@ -109,11 +195,7 @@
             <span>Ronda</span>
           </div>
           <div class="match-rows">
-            <div
-              class="match-row"
-              v-for="match in matchesTournament"
-              :key="match.id"
-            >
+            <div class="match-row" v-for="match in matchesTournament" :key="match.id">
               <!-- Equipo 1 -->
               <div
                 class="team-box"
@@ -124,7 +206,7 @@
               >
                 <span>{{ match.team1.name }}</span>
               </div>
-              
+
               <span class="vs-text">VS</span>
 
               <!-- Equipo 2 -->
@@ -137,7 +219,7 @@
               >
                 <span>{{ match.team2.name }}</span>
               </div>
-              
+
               <!-- Fecha -->
               <div class="date-btn">
                 <template v-if="match.winnerTeam !== null">
@@ -160,7 +242,7 @@
 
               <!-- Ronda -->
               <span class="round-label">{{ getRoundLabel(match.round) }}</span>
-              
+
               <div
                 class="points-wrapper"
                 :class="{
@@ -177,7 +259,7 @@
               </div>
               <span class="vs-text">
                 {{ match.tournament.sport.name === 'Fútbol' ? 'Goles' : 'Puntos' }}
-              </span>              
+              </span>
               <div
                 class="points-wrapper"
                 :class="{
@@ -200,47 +282,35 @@
   </ion-content>
   <ion-footer class="row">
     <div class="colum-down2">
-      <ion-button
-        expand="block"
-        class="btn-clean"
-        @click="resetForm"
-      ><span class="material-symbols-outlined">mop</span>Limpiar</ion-button>
-      <ion-button
-        expand="block"
-        class="btn-save"
-        @click="editTournament"
-      ><span class="material-symbols-outlined">save</span>GUARDAR</ion-button>
+      <ion-button expand="block" class="btn-clean" @click="resetForm">
+        <span class="material-symbols-outlined">mop</span>Limpiar
+      </ion-button>
+      <ion-button expand="block" class="btn-save" @click="editTournament">
+        <span class="material-symbols-outlined">save</span>GUARDAR
+      </ion-button>
     </div>
   </ion-footer>
 </template>
 
 <script setup lang="ts">
+
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
 import { ref, onMounted, computed } from 'vue';
-import { IonSelect,
-  IonSelectOption,
-  IonContent,
-  IonList,
-  IonItem,
-  IonInput,
-  IonHeader,
-  IonToolbar,
-  IonButton,
-  IonTitle,
-  IonButtons,
-  IonFooter
-} from '@ionic/vue';
-import { getSports } from '@/services/sportService';
+import { IonSelect, IonSelectOption, IonContent, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
+
+//Classes
 import type { Match } from '@/model/match';
-import { getMatchesByTournamentId } from '@/services/matchService';
 import { StateTournamentEnum } from '@/model/enum/StateTournamentEnum';
 import { RoundMatchEnum } from '@/model/enum/RoundMatchEnum';
 import type { TournamentModifyDTO } from '@/model/dto/tournamentModifyDTO';
 import type { MatchModifyTournamentDTO } from '@/model/dto/matchModifyTournamentDTO';
+//Services
 import { modifyTournament } from '@/services/tournamentService';
+import { getSports } from '@/services/sportService';
+import { getMatchesByTournamentId } from '@/services/matchService';
 
 const readOnlyTournament = ref(true);
 const error = ref<string | null>(null);
@@ -251,8 +321,29 @@ const matchesTournament = ref<Match[]>([]);
 const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
 const selectedNumberTeams = ref<number>(0);
-const selectedTeams = ref<string[]>([]);
 const tournamentState = ref<StateTournamentEnum | null>(null);
+
+// Popup state
+const showPopup = ref(false);
+const popupType = ref<'success' | 'alert' | 'error' | 'info'>('info');
+const popupMessage = ref('');
+
+function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string) {
+  popupType.value = type;
+  popupMessage.value = message.replace(/\n/g, '<br>');
+  showPopup.value = true;
+  if (type !== 'success') {
+    setTimeout(() => {
+      showPopup.value = false;
+      popupMessage.value = '';
+    }, 3000);
+  }
+}
+
+function closePopup() {
+  showPopup.value = false;
+  popupMessage.value = '';
+}
 
 function preventSelect(e: Event) {
   if (readOnlyTournament.value) {
@@ -276,21 +367,21 @@ function getRoundLabel(round: string): string {
 }
 
 function formatDate(d: Date | null): string {
-  if (!d) return ''
-  const dt = new Date(d)
-  const yy = String(dt.getFullYear() % 100).padStart(2, '0')
-  const mm = String(dt.getMonth() + 1).padStart(2, '0')
-  const dd = String(dt.getDate()).padStart(2, '0')
-  return `${dd}/${mm}/${yy}`
+  if (!d) return '';
+  const dt = new Date(d);
+  const yy = String(dt.getFullYear() % 100).padStart(2, '0');
+  const mm = String(dt.getMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getDate()).padStart(2, '0');
+  return `${dd}/${mm}/${yy}`;
 }
 
 function formatForInput(d: Date | null): string {
-  if (!d) return ''
-  const dt = new Date(d)
-  const yyyy = dt.getFullYear()
-  const mm = String(dt.getMonth() + 1).padStart(2, '0')
-  const dd = String(dt.getDate()).padStart(2, '0')
-  return `${yyyy}-${mm}-${dd}`
+  if (!d) return '';
+  const dt = new Date(d);
+  const yyyy = dt.getFullYear();
+  const mm = String(dt.getMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
 }
 
 function onDateChange(match: Match, value: string) {
@@ -302,16 +393,22 @@ async function loadData() {
   try {
     sports.value = await getSports();
     matchesTournament.value = await getMatchesByTournamentId(props.tournamentId);
+
     if (matchesTournament.value[0]?.tournament.state.toString() === StateTournamentEnum.PENDIENTE) {
       readOnlyTournament.value = false;
     }
-    tournamentName.value = matchesTournament.value[0]?.tournament?.name || 'Sin nombre del torneo';
-    selectedSportId.value = matchesTournament.value[0]?.tournament?.sport.id || null;
-    tournamentState.value = matchesTournament.value[0]?.tournament?.state as unknown as StateTournamentEnum || null;
+    tournamentName.value =
+      matchesTournament.value[0]?.tournament?.name || 'Sin nombre del torneo';
+    selectedSportId.value =
+      matchesTournament.value[0]?.tournament?.sport.id || null;
+    tournamentState.value =
+      (matchesTournament.value[0]?.tournament?.state as unknown) as StateTournamentEnum ||
+      null;
 
     selectedNumberTeams.value = countTeams();
   } catch (e: any) {
     error.value = 'No se pudieron cargar los datos';
+    openPopup('error', 'No se pudieron cargar los datos');
     console.error(e);
   }
 }
@@ -325,11 +422,9 @@ function countTeams() {
   return teamIds.size;
 }
 
-function resetForm() {
-  tournamentName.value = '';
-  selectedSportId.value = null;
-  selectedTeams.value = [];
-  selectedNumberTeams.value = 8;
+async function resetForm() {
+  await loadData(); // Vuelve a cargar los valores iniciales 
+
 }
 
 async function editTournament() {
@@ -349,32 +444,33 @@ async function editTournament() {
   };
 
   try {
-    console.log('Datos del torneo a modificar:', payload);
     await modifyTournament(payload);
-    alert('Torneo modificado correctamente');
-
-    //Se limpian los campos del formulario
     resetForm();
-
-    // Cerramos el modal
     emit('close');
-
-    // Refrescamos la página
     window.location.reload();
-    
-  } catch (error) {
-    console.error(error);
-    alert('Error al crear el torneo');
+
+  } catch (err: any) {
+    if (err.response?.status === 404) {
+      openPopup('alert', 'El torneo no existe');
+
+    } else if (err.response?.status === 400) {
+      const errors = err.response.data;
+      let msg = '';
+
+      for (const key in errors) {
+        msg += `${errors[key]}\n`;
+      }
+
+      openPopup('error', msg);
+
+    } else {
+      openPopup('error', 'Error al actualizar el torneo');
+
+    }
+
+    console.error(err);
   }
-
-  // console.log('Payload TournamentModifyDTO:', payload);
-  // Aquí puedes enviar 'payload' al servicio correspondiente o emitir un evento:
-  // $emit('save', payload);
 }
-
-onMounted(() => {
-  loadData();
-});
 
 const roundsInfo = computed(() => {
   const totalTeams = selectedNumberTeams.value;
@@ -392,17 +488,116 @@ const roundsInfo = computed(() => {
 
     const totalMatches = totalTeams / Math.pow(2, i);
     const playedMatches = matchesTournament.value.filter(
-      m => m.round === roundKey && m.winnerTeam !== null
+      (m) => m.round === roundKey && m.winnerTeam !== null
     ).length;
     const label = getRoundLabel(roundKey);
     info.push({ label, played: playedMatches, total: totalMatches });
   }
   return info;
 });
+
+onMounted(() => {
+  loadData();
+  console.log("Editar torneo ", props.tournamentId)
+});
 </script>
 
-
 <style scoped>
+.popup-container {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popup {
+  margin: 0.5rem 0;
+  box-shadow: 4px 4px 10px -10px rgba(0, 0, 0, 1);
+  width: 340px;
+  justify-content: space-around;
+  align-items: center;
+  display: flex;
+  border-radius: 4px;
+  padding: 5px 0;
+  font-weight: 300;
+}
+.popup svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.popup-icon svg {
+  margin: 5px;
+  display: flex;
+  align-items: center;
+}
+.close-icon {
+  margin-left: auto;
+}
+.close-svg {
+  cursor: pointer;
+}
+.close-path {
+  fill: #ffffff;
+}
+
+/* SUCCESS */
+.success-popup {
+  background-color: #01e226;
+  border: solid 1px #01e226;
+  font-weight: bolder;
+  font-size: 1rem;
+}
+.success-icon path {
+  fill: #ffffff;
+}
+.success-message {
+  color: #ffffff;
+}
+
+/* ALERT */
+.alert-popup {
+  background-color: #ebae08;
+  border: solid 1px #ebae08;
+  font-weight: bolder;
+  font-size: 1rem;
+}
+.alert-icon path {
+  fill: #ffffff;
+}
+.alert-message {
+  color: #ffffff;
+}
+
+/* ERROR */
+.error-popup {
+  background-color: #d11313;
+  border: solid 1px #d11313;
+  font-weight: bolder;
+  font-size: 1rem;
+}
+.error-icon path {
+ 	fill: #ffffff;
+}
+.error-message {
+  color: #ffffff;
+}
+
+/* INFO */
+.info-popup {
+  background-color: #3563e4;
+  border: solid 1px #1e3a8a;
+}
+.info-icon path {
+  fill: #ffffff;
+}
+.info-message {
+  color: #ffffff;
+}
+
 .white-header {
   --color: #ffffff;
   --background: #e22f28;
