@@ -96,7 +96,7 @@
     <ion-toolbar class="header-red">
       <ion-title>NUEVO EQUIPO</ion-title>
       <ion-buttons slot="end">
-        <ion-button @click="$emit('close')">Cerrar</ion-button>
+        <ion-button @click=" $emit('close')">Cerrar</ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -110,7 +110,7 @@
         fill="outline"
         placeholder="Escribe un nombre"
         class="input-name"
-        v-model="teamName"
+        v-model="teamNameAdd"
       />
 
       <div class="panels">
@@ -122,7 +122,7 @@
           </div>
 
           <ion-searchbar
-            v-model="searchText"
+            v-model="searchTextAdd"
             placeholder="Buscar usuarios..."
             class="searchbar"
           />
@@ -149,13 +149,13 @@
         <div class="panel-right">
           <div class="panel-header">
             <span>Miembros en el Equipo</span>
-            <span class="counter">{{ selectedMembers.length }}/{{ maxMembers }}</span>
+            <span class="counter">{{ selectedMembersAdd.length }}/{{ maxMembersAdd }}</span>
           </div>
 
           <div class="selected-list">
             <div
               class="selected-row"
-              v-for="(member, idx) in selectedMembers"
+              v-for="(member, idx) in selectedMembersAdd"
               :key="member.id"
             >
               <span class="selected-name">{{ member.name }}</span>
@@ -211,11 +211,11 @@ const emit = defineEmits<{
   (e: 'created', message: string): void;
 }>();
 
-const teamName = ref<string>('');
-const allStudents = ref<Person[]>([]);
-const searchText = ref<string>('');
-const selectedMembers = ref<Person[]>([]);
-const maxMembers = 15;
+const teamNameAdd = ref<string>('');
+const allStudentsAdd = ref<Person[]>([]);
+const searchTextAdd = ref<string>('');
+const selectedMembersAdd = ref<Person[]>([]);
+const maxMembersAdd = 15;
 
 // Popup state
 const showPopup = ref<boolean>(false);
@@ -242,55 +242,56 @@ function closePopup() {
 
 onMounted(async () => {
   try {
-    allStudents.value = await getPersonsRoleStudent();
-    console.log('estudiantes', allStudents);
+    allStudentsAdd.value = await getPersonsRoleStudent();
+     console.log('abriendo añadir');
+    console.log('estudiantes', allStudentsAdd);
   } catch (e) {
     console.error('Error cargando usuarios:', e);
   }
 });
 
 const filteredUsers = computed(() => {
-  return allStudents.value.filter((u) => {
+  return allStudentsAdd.value.filter((u) => {
     const matchesSearch = u.name
       .toLowerCase()
-      .includes(searchText.value.toLowerCase());
-    return matchesSearch && !selectedMembers.value.some((m) => m.id === u.id);
+      .includes(searchTextAdd.value.toLowerCase());
+    return matchesSearch && !selectedMembersAdd.value.some((m) => m.id === u.id);
   });
 });
 
 function addMember(person: Person) {
-  if (selectedMembers.value.length < maxMembers && !selectedMembers.value.some((m) => m.id === person.id)) {
-    selectedMembers.value.push(person);
+  if (selectedMembersAdd.value.length < maxMembersAdd && !selectedMembersAdd.value.some((m) => m.id === person.id)) {
+    selectedMembersAdd.value.push(person);
   }
 }
 
 function removeMember(index: number) {
-  selectedMembers.value.splice(index, 1);
+  selectedMembersAdd.value.splice(index, 1);
 }
 
 function isInTeam(person: Person) {
-  return selectedMembers.value.some((m) => m.id === person.id);
+  return selectedMembersAdd.value.some((m) => m.id === person.id);
 }
 
 function resetForm() {
-  teamName.value = '';
-  searchText.value = '';
-  selectedMembers.value = [];
+  teamNameAdd.value = '';
+  searchTextAdd.value = '';
+  selectedMembersAdd.value = [];
 }
 
 async function createTeam() {
-  if (!teamName.value.trim()) {
+  if (!teamNameAdd.value.trim()) {
     openPopup('alert', 'El nombre del equipo es obligatorio');
     return;
   }
-  if (selectedMembers.value.length === 0) {
+  if (selectedMembersAdd.value.length === 0) {
     openPopup('alert', 'Debes agregar al menos un miembro');
     return;
   }
 
   const teamAddDTO: TeamAddDTO = {
-    name: teamName.value,
-    players: selectedMembers.value
+    name: teamNameAdd.value,
+    players: selectedMembersAdd.value
   };
 
   try {

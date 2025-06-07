@@ -20,18 +20,16 @@
         <tbody>
           <tr v-for="info in teamsInfo" :key="info.team.id">
             <td class="col-name">{{ info.team.name }}</td>
-
-            <!-- Miembros -->
             <td class="col-members">
-              <div v-if="info.team.players?.length === 0">Sin miembros </div>
+              <div v-if="(info.team.players ?? []).length === 0">Sin miembros</div>
               <ion-select
                 v-else
                 interface="popover"
-                :selectedText="info.team.players && info.team.players.length > 0 ? info.team.players[0].name : ''"
+                :selectedText="info.team.players?.[0]?.name || ''"
                 class="list-teams"
               >
                 <ion-select-option
-                  v-for="p in info.team.players"
+                  v-for="p in info.team.players ?? []"
                   :key="p.id"
                   :value="p.id"
                 >
@@ -39,14 +37,12 @@
                 </ion-select-option>
               </ion-select>
             </td>
-
-            <!-- Deportes -->
             <td class="col-sports">
               <div v-if="info.sports.length === 0">Sin deportes</div>
               <ion-select
                 v-else
                 interface="popover"
-                :selectedText="info.sports[0].name"
+                :selectedText="info.sports[0]?.name || ''"
                 class="list-teams"
               >
                 <ion-select-option
@@ -58,8 +54,6 @@
                 </ion-select-option>
               </ion-select>
             </td>
-
-            <!-- Acciones -->
             <td class="col-actions">
               <div class="actions">
                 <button
@@ -79,13 +73,19 @@
       </table>
     </div>
     <!-- Modal principal --> 
-    <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
+    <ion-modal
+      :is-open="isModalOpen"
+      :key="`${modalMode}-${teamToEdit ?? 'new'}-${isModalOpen}`"
+      backdrop-dismiss="false"
+      swipe-to-close="false"
+    >
       <component
         :is="modalMode === 'add' ? AdminAddTeams : AdminEditTeams"
         @close="closeModal"
         :idTeam="teamToEdit"
       />
     </ion-modal>
+
   </section>
 </template>
 
@@ -98,24 +98,26 @@ import { getTeamsInfo } from '@/services/teamService';
 import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
 
 const modalMode = ref<'add' | 'edit'>('add');
-
+const teamToEdit = ref<number | null>(null);
+const isModalOpen = ref(false);
+const teamsInfo = ref<TeamInfoDTO[]>([]);
 
 function openAddModal() {
   modalMode.value = 'add';
+  teamToEdit.value = null;
   isModalOpen.value = true;
 }
 
-const teamToEdit = ref<number | null>(null);
-
-function openEditModal(tournamentId: number) {
+function openEditModal(teamId: number) {
   modalMode.value = 'edit';
-  teamToEdit.value = tournamentId;
+  teamToEdit.value = teamId;
   isModalOpen.value = true;
 }
 
-const isModalOpen = ref(false);
-
-const teamsInfo = ref<TeamInfoDTO[]>([]);
+function closeModal() {
+  document.activeElement instanceof HTMLElement && document.activeElement.blur();
+  isModalOpen.value = false;
+}
 
 onMounted(async () => {
   try {
@@ -124,12 +126,8 @@ onMounted(async () => {
     console.error('Error al cargar equipos:', e);
   }
 });
-
-function closeModal() {
-  document.activeElement instanceof HTMLElement && document.activeElement.blur();
-  isModalOpen.value = false;
-}
 </script>
+
 
 <style scoped>
 .teams {

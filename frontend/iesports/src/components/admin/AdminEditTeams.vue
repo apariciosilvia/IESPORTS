@@ -96,7 +96,7 @@
     <ion-toolbar class="header-red">
       <ion-title>EDITAR EQUIPO</ion-title>
       <ion-buttons slot="end">
-        <ion-button @click="resetForm(); $emit('close')">Cerrar</ion-button>
+        <ion-button @click="$emit('close')">Cerrar</ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -190,15 +190,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { IonHeader, IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonButton,
-  IonContent,
-  IonFooter,
-  IonInput,
-  IonSearchbar } from '@ionic/vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import {
+  IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
+  IonContent, IonFooter, IonInput, IonSearchbar
+} from '@ionic/vue';
 import { getPersonsRoleStudent } from '@/services/personServices';
 import { getTeamById, updateTeam } from '@/services/teamService';
 import type { Person } from '@/model/person';
@@ -209,33 +205,26 @@ const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'created', message: string): void;
 }>();
-
 const props = defineProps<{ idTeam: number }>();
 
 const teamEdit = ref<Team>();
 const teamName = ref<string>('');
 const allStudents = ref<Person[]>([]);
 const searchText = ref<string>('');
-
 const selectedMembers = ref<Person[]>([]);
 const maxMembers = 15;
 
-// Popup state
-const showPopup = ref<boolean>(false);
-const popupType = ref<'success' | 'alert' | 'error' | 'info'>('info');
-const popupMessage = ref<string>('');
+// Popup
+const showPopup = ref(false);
+const popupType = ref<'success'|'alert'|'error'|'info'>('info');
+const popupMessage = ref('');
 
-function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string) {
+function openPopup(type: typeof popupType.value, message: string) {
   popupType.value = type;
-  popupMessage.value = message.replace(/\n/g, '<br>');
+  popupMessage.value = message.replace(/\n/g,'<br>');
   showPopup.value = true;
-
-  // Cerrar automáticamente los tipos distintos a 'success'
   if (type !== 'success') {
-    setTimeout(() => {
-      showPopup.value = false;
-      popupMessage.value = '';
-    }, 3000);
+    setTimeout(() => { showPopup.value = false; popupMessage.value = '' }, 3000);
   }
 }
 function closePopup() {
@@ -243,31 +232,34 @@ function closePopup() {
   popupMessage.value = '';
 }
 
+async function loadTeam(id: number) {
+  allStudents.value = await getPersonsRoleStudent();
+  teamEdit.value = await getTeamById(id);
+  teamName.value = teamEdit.value.name;
+  selectedMembers.value = teamEdit.value.players ?? [];
+}
+
 onMounted(async () => {
-  try {
-    allStudents.value = await getPersonsRoleStudent();
+  if (props.idTeam != null) await loadTeam(props.idTeam);
+});
 
-    teamEdit.value = await getTeamById(props.idTeam);
-    teamName.value = teamEdit.value.name;
-    selectedMembers.value = teamEdit.value.players ?? [];
-
-
-  } catch (e) {
-    console.error('Error cargando usuarios:', e);
+watch(
+  () => props.idTeam,
+  async newId => {
+    if (newId != null) await loadTeam(newId);
   }
-});
+);
 
-const filteredpersons = computed(() => {
-  return allStudents.value.filter((u) => {
-    const matchesSearch = u.name
-      .toLowerCase()
-      .includes(searchText.value.toLowerCase());
-    return matchesSearch && !selectedMembers.value.some((m) => m.id === u.id);
-  });
-});
+const filteredpersons = computed(() =>
+  allStudents.value.filter(u =>
+    u.name.toLowerCase().includes(searchText.value.toLowerCase()) &&
+    !selectedMembers.value.some(m => m.id === u.id)
+  )
+);
 
 function addMember(person: Person) {
-  if (selectedMembers.value.length < maxMembers && !selectedMembers.value.some((m) => m.id === person.id)) {
+  if (selectedMembers.value.length < maxMembers &&
+      !selectedMembers.value.some(m => m.id === person.id)) {
     selectedMembers.value.push(person);
   }
 }
@@ -277,58 +269,54 @@ function removeMember(index: number) {
 }
 
 function isInTeam(person: Person) {
-  return selectedMembers.value.some((m) => m.id === person.id);
+  return selectedMembers.value.some(m => m.id === person.id);
 }
 
 function resetForm() {
-  teamName.value = teamEdit.value?.name ?? '';
-  searchText.value = '';
-  selectedMembers.value = teamEdit.value?.players || [];
+  if (props.idTeam != null) {
+    loadTeam(props.idTeam);
+    searchText.value = '';
+  } else {
+    teamName.value = '';
+    selectedMembers.value = [];
+    searchText.value = '';
+  }
 }
 
 async function editTeam() {
   if (!teamName.value.trim()) {
-    openPopup('alert', 'El nombre del equipo es obligatorio');
+    openPopup('alert','El nombre del equipo es obligatorio');
     return;
   }
   if (selectedMembers.value.length === 0) {
-    openPopup('alert', 'Debes agregar al menos un miembro');
+    openPopup('alert','Debes agregar al menos un miembro');
     return;
   }
-
-  const teamUpdateDTO: TeamUpdateDTO = {
+  const dto: TeamUpdateDTO = {
     idTeam: props.idTeam,
     nameTeam: teamName.value,
     players: selectedMembers.value
   };
-
   try {
-    console.log('teamUpdateDTO', teamUpdateDTO);
-    await updateTeam(teamUpdateDTO);
-
-    emit('created', 'Equipo actualizado correctamente');
-
+    await updateTeam(dto);
+    emit('created','Equipo actualizado correctamente');
     resetForm();
     emit('close');
     window.location.reload();
-
-  } catch (error: any) {
-    if (error.response?.status === 409) {
-      openPopup('info', 'El nombre del equipo ya existe');
-    } else if (error.response?.status === 400) {
-      const errors = error.response.data;
+  } catch (err: any) {
+    if (err.response?.status === 409) openPopup('info','El nombre del equipo ya existe');
+    else if (err.response?.status === 400) {
       let msg = '';
-      for (const key in errors) {
-        msg += `${errors[key]}\n`;
-      }
-      openPopup('error', msg);
+      Object.values(err.response.data).forEach(v => { msg += v + '\\n'; });
+      openPopup('error',msg);
     } else {
-      console.error(error);
-      openPopup('error', 'Error al crear el equipo');
+      console.error(err);
+      openPopup('error','Error al actualizar el equipo');
     }
   }
 }
 </script>
+
 
 <style scoped>
 .popup-container {
