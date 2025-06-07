@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { Team } from '@/model/team';
 import type { TeamAddDTO } from '@/model/dto/teamAddDTO';
-import type { TeamUpdateDTO } from '@/model/dto/TeamUpdateDTO';
+import type { TeamUpdateDTO } from '@/model/dto/teamUpdateDTO';
 
 function getTeamsInfo(): Promise<any[]> {
 
@@ -84,5 +84,19 @@ function updateTeam(teamUpdateDTO: TeamUpdateDTO) {
   });
 }
 
+function deleteTeam(idTeam: number) {
 
-export { getTeamsInfo, getTeamById, getTeams, addTeam, updateTeam };
+  const url = `${import.meta.env.VITE_URL_API}/team/deleteTeam`;
+  
+  // 1. Creamos el objeto person
+  const teamDTO = { id: idTeam };
+
+  // 3. Llamamos al endpoint Spring Boot
+  return axios.post(url, teamDTO,{
+    // 2. Configuramos encabezados para JSON
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+
+export { getTeamsInfo, getTeamById, getTeams, addTeam, updateTeam, deleteTeam };

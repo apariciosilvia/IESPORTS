@@ -498,6 +498,7 @@ const roundsInfo = computed(() => {
 
 onMounted(() => {
   loadData();
+  console.log("Editar torneo ", props.tournamentId)
 });
 </script>
 

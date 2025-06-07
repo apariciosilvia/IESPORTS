@@ -267,7 +267,7 @@ const teams = ref<Team[]>([]);
 
 const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
-const selectedNumberTeams = ref<number>(8); // valor por defecto
+const selectedNumberTeams = ref<number>(8); 
 const selectedTeams = ref<string[]>([]);
 const matchDates = ref<(Date | null)[]>([]);
 
@@ -453,6 +453,7 @@ function resetForm() {
 
 onMounted(() => {
   loadData();
+  console.log("Añadir torneo")
 });
 
 
