@@ -199,7 +199,7 @@ import { getPersonsRoleStudent } from '@/services/personServices';
 import { getTeamById, updateTeam } from '@/services/teamService';
 import type { Person } from '@/model/person';
 import type { Team } from '@/model/team';
-import type { TeamUpdateDTO } from '@/model/dto/TeamUpdateDTO';
+import type { TeamUpdateDTO } from '@/model/dto/teamUpdateDTO';
 
 const emit = defineEmits<{
   (e: 'close'): void;
