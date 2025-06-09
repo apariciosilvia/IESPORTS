@@ -7,7 +7,7 @@
       <div class="filters-container">
         <!-- Filtro por deporte -->
         <ion-item class="filter-item">
-          <ion-label>Deporte</ion-label>
+          <ion-label>Filtra por deporte</ion-label>
           <ion-select v-model="selectedSport" placeholder="Selecciona deporte">
             <ion-select-option :value="null">Todos</ion-select-option>
             <ion-select-option
