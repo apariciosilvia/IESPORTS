@@ -1,5 +1,5 @@
 <template>
-  <section class="teams">
+  <section class="sports">
      <!-- Alerts -->
     <div class="popup-container" v-if="showPopup">
       <!-- SUCCESS -->
@@ -96,7 +96,7 @@
     <div v-if="showConfirm" class="confirm-overlay">
       <div class="card">
         <div class="card-content">
-          <p class="card-heading">¿Eliminar torneo?</p>
+          <p class="card-heading">¿Eliminar deporte?</p>
           <p class="card-description">Esta acción no se puede deshacer.</p>
           
         </div>
@@ -115,72 +115,36 @@
     </div>
 
     <div class="header">
-      <h2 class="tittle">Equipos</h2>
+      <h2 class="tittle">Deportes</h2>
       <ion-button class="new-btn" @click="openAddModal">
         <span class="material-symbols-outlined">add_circle</span>
-        Nuevo Equipo
+        Nuevo Deporte
       </ion-button>
     </div>
     <div class="table">
-      <table class="teams-table">
+      <table class="sports-table">
         <thead>
           <tr>
             <th class="col-name">Nombre</th>
-            <th class="col-members">Miembros</th>
-            <th class="col-sports">Deportes</th>
             <th class="col-actions">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="info in teamsInfo" :key="info.team.id">
-            <td class="col-name">{{ info.team.name }}</td>
-            <td class="col-members">
-              <div v-if="(info.team.players ?? []).length === 0">Sin miembros</div>
-              <ion-select
-                v-else
-                interface="popover"
-                :selectedText="info.team.players?.[0]?.name || ''"
-                class="list-teams"
-              >
-                <ion-select-option
-                  v-for="p in info.team.players ?? []"
-                  :key="p.id"
-                  :value="p.id"
-                >
-                  {{ p.name }}
-                </ion-select-option>
-              </ion-select>
-            </td>
-            <td class="col-sports">
-              <div v-if="info.sports.length === 0">Sin deportes</div>
-              <ion-select
-                v-else
-                interface="popover"
-                :selectedText="info.sports[0]?.name || ''"
-                class="list-teams"
-              >
-                <ion-select-option
-                  v-for="s in info.sports"
-                  :key="s.id"
-                  :value="s.id"
-                >
-                  {{ s.name }}
-                </ion-select-option>
-              </ion-select>
-            </td>
+          <tr v-for="s in sports" :key="s.id">
+            <td class="col-name">{{ s.name }}</td>
             <td class="col-actions">
               <div class="actions">
                 <button
                   type="button"
                   class="action-btn edit-btn"
-                  @click="openEditModal(info.team.id)"
+                  @click="openEditModal(s.id)"
                 >
                   <span class="material-symbols-outlined edit-icon">edit_square</span>
                 </button>
                 <button 
                   type="button" 
                   class="action-btn delete-btn"
-                  @click="requestDelete(info.team.id)">
+                  @click="requestDelete(s.id)">
                   <span class="material-symbols-outlined delete-icon">delete</span>
                 </button>
               </div>
@@ -192,14 +156,14 @@
     <!-- Modal principal --> 
     <ion-modal
       :is-open="isModalOpen"
-      :key="`${modalMode}-${teamToEdit ?? 'new'}-${isModalOpen}`"
+      :key="`${modalMode}-${sportToEdit ?? 'new'}-${isModalOpen}`"
       backdrop-dismiss="false"
       swipe-to-close="false"
     >
       <component
-        :is="modalMode === 'add' ? AdminAddTeams : AdminEditTeams"
+        :is="modalMode === 'add' ? AdminAddSports : AdminEditSports"
         @close="closeModal"
-        :idTeam="teamToEdit"
+        :id="sportToEdit"
       />
     </ion-modal>
 
@@ -208,16 +172,16 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { IonSelect, IonSelectOption, IonButton } from '@ionic/vue';
-import AdminAddTeams from '@/components/admin/AdminAddTeams.vue';
-import AdminEditTeams from '@/components/admin/AdminEditTeams.vue';
-import { deleteTeam, getTeamsInfo } from '@/services/teamService';
-import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
+import { IonButton } from '@ionic/vue';
+import { deleteSport, getSports } from '@/services/sportService';
+import type { Sport } from '@/model/sport';
+import AdminAddSports from '@/components/admin/AdminAddSports.vue';
+import AdminEditSports from '@/components/admin/AdminEditSports.vue';
 
 const modalMode = ref<'add' | 'edit'>('add');
-const teamToEdit = ref<number | null>(null);
+const sportToEdit = ref<number | null>(null);
 const isModalOpen = ref(false);
-const teamsInfo = ref<TeamInfoDTO[]>([]);
+const sports = ref<Sport[]>([]);
 
 const showConfirm = ref(false);
 const pendingDeleteId = ref<number | null>(null);
@@ -239,13 +203,13 @@ function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string
 
 function openAddModal() {
   modalMode.value = 'add';
-  teamToEdit.value = null;
+  sportToEdit.value = null;
   isModalOpen.value = true;
 }
 
-function openEditModal(teamId: number) {
+function openEditModal(id: number) {
   modalMode.value = 'edit';
-  teamToEdit.value = teamId;
+  sportToEdit.value = id;
   isModalOpen.value = true;
 }
 
@@ -254,21 +218,21 @@ function closeModal() {
   isModalOpen.value = false;
 }
 
-function requestDelete(teamId: number){
-  pendingDeleteId.value = teamId;
+function requestDelete(id: number){
+  pendingDeleteId.value = id;
   showConfirm.value = true;
 }
 
 async function confirmDelete() {
   if (pendingDeleteId.value !== null) {
     try {
-      await deleteTeam(pendingDeleteId.value);
-      teamsInfo.value = teamsInfo.value.filter(
-        (t) => t.team.id !== pendingDeleteId.value
+      await deleteSport(pendingDeleteId.value);
+      sports.value = sports.value.filter(
+        (s) => s.id !== pendingDeleteId.value
       );
-      openPopup('success', 'Equipo eliminado correctamente');
+      openPopup('success', 'Deporte eliminado correctamente');
     } catch (error: any) {
-      console.error('Error al eliminar equipo:', error);
+      console.error('Error al eliminar deporte:', error);
     }
   }
   showConfirm.value = false;
@@ -287,15 +251,15 @@ function closePopup() {
 
 onMounted(async () => {
   try {
-    teamsInfo.value = await getTeamsInfo();
+    sports.value = await getSports();
+    console.log('Deportes cargados:', sports.value);
   } catch (e) {
-    console.error('Error al cargar equipos:', e);
+    console.error('Error al cargar deportes:', e);
   }
 });
 
 
 </script>
-
 
 <style scoped>
 .confirm-overlay {
@@ -487,7 +451,7 @@ onMounted(async () => {
   color: #ffffff;
 }
 
-.teams {
+.sports {
   margin: 4rem 2rem;
   padding: 2.5rem;
   margin-top: 8%;
@@ -496,7 +460,7 @@ onMounted(async () => {
   border: solid 1px #D9D8D8;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 9rem);
+  height: calc(100vh - 33rem);
 }
 
 .header {
@@ -518,7 +482,7 @@ onMounted(async () => {
 .new-btn .material-symbols-outlined {
   margin-right: 5px;
 }
-.list-teams {
+.list-sports {
   --background: #e22f28;
   --border-radius: 5px;
   color: white;
@@ -527,7 +491,7 @@ onMounted(async () => {
   --padding-end: 1rem;
 }
 
-.list-teams::part(icon) {
+.list-sports::part(icon) {
   color: white;
 }
 .table {
@@ -536,35 +500,35 @@ onMounted(async () => {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
-.table .teams-table {
+.table .sports-table {
   width: 100%;
   min-width: 600px;
 }
-.teams-table {
+.sports-table {
   border-collapse: collapse;
   width: 100%;
 }
-.teams-table th,
-.teams-table td {
+.sports-table th,
+.sports-table td {
   padding: 1rem 4rem;
   vertical-align: left;
 }
-.teams-table tbody {
+.sports-table tbody {
   border: 1px solid #ddd;
 }
-.teams-table tbody tr {
+.sports-table tbody tr {
   border-bottom: 1px solid #ddd;
 }
-.teams-table tbody tr:hover {
+.sports-table tbody tr:hover {
   background-color: #fafafa;
 }
-.teams-table tbody tr:first-child td {
+.sports-table tbody tr:first-child td {
   border-top: 1px solid #ddd;
 }
-.teams-table thead {
+.sports-table thead {
   background-color: #f5f5f5;
 }
-.teams-table thead {
+.sports-table thead {
   border: 1px solid #ddd;
 }
 
@@ -631,12 +595,12 @@ onMounted(async () => {
 ion-modal {
   --width: 95vw;
   --max-width: 1200px;
-  --height: 95vw;
+  --height: 20vw;
   --max-height: 300vh;
 }
 
 ion-modal::part(content) {
-  height: 95vh !important;
+  height: 25vh !important;
   max-height: 75vh !important;
   width: 95vw;
   max-width: 1200px;
@@ -658,15 +622,15 @@ ion-modal::part(backdrop) {
     --max-height: 90vh;
   }
 
-  .teams {
+  .sports {
     margin: 1rem;
     padding: 1rem;
     margin-top: 5rem;
     height: auto;
   }
 
-  .teams-table th,
-  .teams-table td {
+  .sports-table th,
+  .sports-table td {
     padding: 0.5rem 1rem;
   }
 
