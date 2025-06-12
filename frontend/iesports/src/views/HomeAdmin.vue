@@ -7,6 +7,8 @@
 
   <AdminTeams/>
 
+  <AdminSports/>
+
  
 </ion-content>
 </template>
@@ -17,6 +19,7 @@ import { IonContent } from '@ionic/vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import AdminTournaments from '@/components/admin/AdminTournaments.vue';
 import AdminTeams from '@/components/admin/AdminTeams.vue';
+import AdminSports from '@/components/admin/AdminSports.vue';
 
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 
