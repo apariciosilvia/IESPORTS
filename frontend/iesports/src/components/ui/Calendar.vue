@@ -1,3 +1,4 @@
+```vue
 <template>
   <div class="calendar-container">
     <FullCalendar :options="calendarOptions" />
@@ -38,6 +39,7 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
@@ -60,10 +62,8 @@ const events = computed(() =>
   props.matches
     .filter(m => m.date)
     .map(m => {
-      // formatea la fecha en YYYY-MM-DD en zona local para evitar desfase UTC
       const isoDate = new Date(m.date as any).toLocaleDateString('en-CA')
       return {
-        title: `${m.team1.name} vs ${m.team2.name}`,
         start: isoDate,
         allDay: true,
         color: '#FF6D43',
@@ -86,13 +86,46 @@ const calendarOptions = ref({
   dayMaxEvents: true,
   showNonCurrentDates: false,
   events: events.value,
+
+  eventContent: (arg: any) => {
+    const { team1, team2 } = arg.event.extendedProps
+    const truncate = (str: string, max = 6) =>
+      str.length > max ? str.slice(0, max) + '...' : str
+    const wrap = document.createElement('div')
+    wrap.style.display = 'inline-flex'
+    wrap.style.alignItems = 'center'
+    wrap.style.whiteSpace = 'nowrap'
+
+    const makeSpan = (text: string) => {
+      const s = document.createElement('span')
+      s.textContent = text
+      s.style.display = 'inline-block'
+      s.style.verticalAlign = 'middle'
+      s.style.maxWidth = '3.5em'
+      s.style.whiteSpace = 'nowrap'
+      s.style.overflow = 'hidden'
+      s.style.textOverflow = 'ellipsis'
+      return s
+    }
+
+    wrap.appendChild(makeSpan(truncate(team1.name)))
+    const vs = document.createElement('span')
+    vs.textContent = ' VS '
+    vs.style.margin = '0.1rem'
+    vs.style.whiteSpace = 'nowrap'
+    wrap.appendChild(vs)
+    wrap.appendChild(makeSpan(truncate(team2.name)))
+
+    return { domNodes: [wrap] }
+  },
+
   eventClick: (info: { event: { extendedProps: any } }) => {
     selectedMatch.value = info.event.extendedProps as any
     showModal.value = true
   },
   dayCellDidMount: (arg: any) => {
     arg.el.style.backgroundColor = '#ffffff'
-    if ([0,6].includes(arg.date.getDay())) {
+    if ([0, 6].includes(arg.date.getDay())) {
       arg.el.style.backgroundColor = '#f0f0f0'
     }
   }
@@ -106,7 +139,6 @@ function closeModal() {
   showModal.value = false
 }
 </script>
-
 
 
 <style scoped>
