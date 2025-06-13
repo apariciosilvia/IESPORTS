@@ -51,6 +51,7 @@
             <p class="no-results-text">No se encontraron torneos con los filtros seleccionados.</p>
             <p class="no-results-subtext">Prueba a cambiar los filtros o restablecer la búsqueda.</p>
           </div>
+          
         </IonList>
 
         <Footer />
