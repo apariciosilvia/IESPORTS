@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iesports.dao.service.impl.MatchServiceImpl;
 import com.iesports.dao.service.impl.PersonServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
+import com.iesports.dao.service.impl.TournamentServiceImpl;
 import com.iesports.dto.TeamAddDTO;
 import com.iesports.dto.TeamDeleteDTO;
 import com.iesports.dto.TeamInfoDTO;
 import com.iesports.dto.TeamUpdateDTO;
 import com.iesports.model.Person;
 import com.iesports.model.Team;
+import com.iesports.model.Tournament;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -44,6 +48,9 @@ public class TeamController {
 
     @Autowired
     private PersonServiceImpl ps;
+    
+    @Autowired
+	private MatchServiceImpl ms;
 
     @Operation(summary = "Obtener todos los equipos con información de deportes asociados")
     @ApiResponse(
@@ -97,6 +104,16 @@ public class TeamController {
                     @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"team\":\"El equipo no existe\"}")
                 }
             )
+        ),
+        @ApiResponse(
+            responseCode = "409",
+            description = "El equipo está asociado a uno o más partidos en torneos",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Map.class),
+                examples = {
+                    @io.swagger.v3.oas.annotations.media.ExampleObject(value = "{\"team\":\"El equipo con nombre Raimon Eleven participa en un torneo y no puede ser eliminado.\"}")
+                }
+            )
         )
     })
     @PostMapping("/deleteTeam")
@@ -105,14 +122,32 @@ public class TeamController {
             .filter(team -> team.getId().equals(teamDTO.getId()))
             .findFirst();
 
-        if (teamToDelete.isPresent()) {
-            tr.deleteTeam(teamToDelete.get());
-            return ResponseEntity.ok(Map.of("team", "Equipo borrado con éxito"));
+        if (teamToDelete.isEmpty()) {
+            return ResponseEntity
+                .badRequest()
+                .body(Map.of("team", "El equipo no existe"));
         }
 
-        Map<String, String> errores = Map.of("team", "El equipo no existe");
-        return ResponseEntity.badRequest().body(errores);
+        // Verificar si participa en partidos que pertenezcan a torneos
+        boolean isInTournamentMatch = ms.getMatchs().stream()
+            .anyMatch(match ->
+                (Objects.equals(match.getTeam1().getId(), teamDTO.getId()) ||
+                 Objects.equals(match.getTeam2().getId(), teamDTO.getId())) &&
+                match.getTournament() != null
+            );
+
+        if (isInTournamentMatch) {
+            return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of("team", "El equipo con nombre " + teamToDelete.get().getName() + " participa en un torneo y no puede ser eliminado."));
+        }
+
+        tr.deleteTeam(teamToDelete.get());
+        return ResponseEntity.ok(Map.of("team", "Equipo borrado con éxito"));
     }
+
+
+
 
     @Operation(summary = "Agregar un nuevo equipo")
     @ApiResponses({
