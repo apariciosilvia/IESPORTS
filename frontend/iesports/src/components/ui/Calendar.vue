@@ -60,10 +60,12 @@ const events = computed(() =>
   props.matches
     .filter(m => m.date)
     .map(m => {
-      const isoDate = new Date(m.date as any).toISOString().split('T')[0]
+      // formatea la fecha en YYYY-MM-DD en zona local para evitar desfase UTC
+      const isoDate = new Date(m.date as any).toLocaleDateString('en-CA')
       return {
         title: `${m.team1.name} vs ${m.team2.name}`,
         start: isoDate,
+        allDay: true,
         color: '#FF6D43',
         extendedProps: m
       }
@@ -90,7 +92,7 @@ const calendarOptions = ref({
   },
   dayCellDidMount: (arg: any) => {
     arg.el.style.backgroundColor = '#ffffff'
-    if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
+    if ([0,6].includes(arg.date.getDay())) {
       arg.el.style.backgroundColor = '#f0f0f0'
     }
   }
@@ -104,6 +106,7 @@ function closeModal() {
   showModal.value = false
 }
 </script>
+
 
 
 <style scoped>
