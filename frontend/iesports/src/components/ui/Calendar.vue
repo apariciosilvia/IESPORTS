@@ -14,6 +14,7 @@
       <ion-content class="ion-padding">
         <p class="content"><strong>Partido: </strong>{{ selectedMatch?.team1.name }} vs {{ selectedMatch?.team2.name }}</p>
         <p class="content"><strong>Fecha:</strong> {{ formattedDate }}</p>
+        <p class="content"><strong>Deporte:</strong> {{ selectedMatch?.tournament.sport.name }}</p>
         <p class="content"><strong>Ronda:</strong> {{ selectedMatch?.round }}</p>
         <p class="content"><strong>Resultado:</strong> {{ selectedMatch?.pointsTeam1 }} - {{ selectedMatch?.pointsTeam2 }}</p>
         <div class="team-block team1">
