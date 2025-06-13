@@ -2,7 +2,7 @@
 <template>
   <div class="calendar-container">
     <FullCalendar :options="calendarOptions" />
-    <ion-modal :is-open="showModal" @ionModalDidDismiss="closeModal">
+    <ion-modal :is-open="showModal" :backdrop-dismiss="false" @ionModalDidDismiss="closeModal">
       <ion-header>
         <ion-toolbar>
           <ion-title>{{ selectedMatch?.tournament.name }}</ion-title>
@@ -169,7 +169,7 @@ function closeModal() {
 }
 
 /* Botones personalizados */
-::v-deep .fc-button {
+:deep(.fc-button) {
   border: none;
   border-radius: 6px;
   padding: 0.5rem 1rem;
@@ -179,26 +179,26 @@ function closeModal() {
   transition: background-color 0.2s;
 }
 
-::v-deep .fc-button:hover,
-::v-deep .fc-button:focus {
+:deep(.fc-button:hover),
+:deep(.fc-button:focus) {
   background-color: #f03726 !important;
   outline: none;
 }
 
 /* Texto de los días de la semana */
-::v-deep .fc-col-header-cell-cushion {
+:deep(.fc-col-header-cell-cushion) {
   color: #000 !important;
   font-weight: 600;
 }
 
 /* Número de días en negro para todos los días */
-::v-deep .fc-daygrid-day-number {
+:deep(.fc-daygrid-day-number) {
   font-size: 0.9rem;
   color: #000 !important;
 }
 
 /* Resaltar día actual */
-::v-deep .fc-day-today .fc-daygrid-day-number {
+:deep(.fc-day-today .fc-daygrid-day-number) {
   border: 3px solid #f03726 !important;
   border-radius: 50%;
   padding: 0.2rem;
@@ -210,7 +210,7 @@ function closeModal() {
 }
 
 /* Estilo de eventos */
-::v-deep .fc-event {
+:deep(.fc-event) {
   border: none;
   border-radius: 4px;
   padding: 4px 6px;
@@ -222,7 +222,7 @@ function closeModal() {
   transition: transform 0.1s;
 }
 
-::v-deep .fc-event:hover {
+:deep(.fc-event:hover) {
   transform: translateY(-1px);
 }
 
@@ -238,23 +238,23 @@ function closeModal() {
 
 
 /* Estilos para el modal */
-::v-deep ion-modal {
+:deep(ion-modal) {
   --width: 70%;
   --max-width: 500px;
   --border-radius: 12px;
   --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-::v-deep ion-header {
+:deep(ion-header) {
   background: #002f3d;
   color: #fff;
 }
 
-::v-deep ion-toolbar {
+:deep(ion-toolbar) {
   --background: transparent;
 }
 
-::v-deep ion-title {
+:deep(ion-title) {
   font-size: 1.25rem;
   font-weight: bold;
   text-align: center;
@@ -262,15 +262,15 @@ function closeModal() {
   margin-left: 3rem;
 }
 
-::v-deep .button-close .material-symbols-outlined {
+:deep(.button-close .material-symbols-outlined) {
   color: #fff;
 }
 
-::v-deep ion-content {
+:deep(ion-content) {
   background: #fafafa;
 }
 
-::v-deep ion-content p {
+:deep(ion-content p) {
   margin: 0.75rem 0;
   line-height: 1.4;
 }
@@ -331,14 +331,14 @@ function closeModal() {
   color: #333;
 }
 
-::v-deep ion-button {
+:deep(ion-button) {
   --background: transparent;
   --color: #fff;
   --padding-start: 0.5rem;
   --padding-end: 0.5rem;
 }
 
-::v-deep ion-button:hover {
+:deep(ion-button:hover) {
   opacity: 0.8;
 }
 </style>
