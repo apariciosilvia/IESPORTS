@@ -1,7 +1,10 @@
 <template>
   
    <ion-page>
-    <!-- Contenido principal de la página -->
+
+      <Loader v-if="isNowLoading" />
+
+      <!-- Contenido principal de la página -->
       <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
         <!-- Navbar visible siempre -->
         <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
@@ -66,6 +69,8 @@ import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 import Footer from '@/components/ui/Footer.vue';
 import TournamentCard from '@/components/layout/TournamentCard.vue'
 
+import Loader from '@/components/ui/Loader.vue';
+
 import { ref, onMounted, computed } from 'vue';
 
 // Importamos nuestros métodos del servicio
@@ -79,6 +84,9 @@ import type { Match } from '@/model/match';
 // import type { Tournament } from '@/model/tournament';
 import type { Sport } from '@/model/sport';
 
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
+
+const { isNowLoading } = useLoadingEffect();
 
 //Extraemos el control de la navbar
 const { showNav, handleScroll } = useNavbarVisibility();

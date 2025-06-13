@@ -5,7 +5,7 @@
     <!-- <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true"> -->
 
       <!-- ② Spinner mientras isLoading es true; contenido cuando termine -->
-    <LoadingSpinner v-if="isLoading" />
+    <LoadingSpinner v-if="isNowLoading" />
     <ion-content
       v-else
       fullscreen
@@ -58,7 +58,7 @@ import { useNavbarScroll } from '@/composables/useNavbarScroll'     // gestiona 
 import { onMounted, ref } from 'vue';
 
 // Llamamos al composable de carga
-const { isLoading, loadData } = useLoadingEffect();
+const { isNowLoading } = useLoadingEffect();
 
 const nombre = ref('');
 

@@ -1,7 +1,9 @@
 <template>
-  <!-- Navbar solo visible cuando se hace scroll suficiente -->
    <ion-page>
-    <!-- Contenido principal de la página -->
+
+    <Loader v-if="isNowLoading" />
+
+    <!-- Contenido principal de la página -->ç
     <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
       <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
 
@@ -15,13 +17,17 @@ import { onMounted, ref } from 'vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import Calendar from "@/components/ui/Calendar.vue";
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
+import Loader from '@/components/ui/Loader.vue';
 
 import type { Match } from '@/model/match';
 
 
 import { getMatches } from '@/services/matchService';
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
 
 const matches = ref<Match[]>([]);
+
+const { isNowLoading } = useLoadingEffect();
 
 onMounted(async () => {
   try {

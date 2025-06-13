@@ -4,14 +4,14 @@ import { ref, onMounted } from 'vue'
 // 1. Definimos el composable
 export function useLoadingEffect() {
   // 2. Estado reactivo que controla el spinner
-  const isLoading = ref(true)
+  const isNowLoading = ref(true)
 
   // 3. Función para activar el spinner y simular la carga
   function loadData() {
-    isLoading.value = true       // Activamos el spinner
+    isNowLoading.value = true       // Activamos el spinner
     setTimeout(() => {
-      isLoading.value = false    // Tras 3s, lo desactivamos
-    }, 500)
+      isNowLoading.value = false    // Tras 3s, lo desactivamos
+    }, 700)
   }
 
   // 4. Al montar el componente, llamamos a loadData() automáticamente
@@ -20,5 +20,5 @@ export function useLoadingEffect() {
   })
 
   // 5. Devolvemos todo lo que necesitamos usar
-  return { isLoading, loadData }
+  return { isNowLoading, loadData }
 }

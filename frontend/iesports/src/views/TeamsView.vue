@@ -1,5 +1,8 @@
 <template>
   <ion-page>
+
+    <Loader v-if="isNowLoading" />
+    
     <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
       <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
 
@@ -80,6 +83,12 @@ import { getSports } from '@/services/sportService';
 
 import type { Sport } from '@/model/sport';
 import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
+import Loader from '@/components/ui/Loader.vue';
+
+
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
+
+const { isNowLoading } = useLoadingEffect();
 
 const { showNav, handleScroll } = useNavbarVisibility();
 
