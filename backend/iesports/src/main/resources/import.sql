@@ -88,9 +88,9 @@ INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2022
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2021/22', 'Liga Juvenil Fútbol', 'PROCESO');
 -- Baloncesto Tournaments
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2021/22', 'Torneo Escolar Baloncesto', 'PENDIENTE');
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2023/24', 'Campeonato Nacional Basket', 'PROCESO');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (2, '2023/24', 'Campeonato Nacional Baloncesto', 'PROCESO');
 -- Ping Pong Tournaments
-INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2024/25', 'Ping Pong club', 'PROCESO');
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2024/25', 'Ping Pong club', 'PENDIENTE');
 -- Ajedrez Tournaments
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2021/22', 'Ajedrez Winter', 'FINALIZADO');
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2022/23', 'Liga Ajedrez Indoor', 'PROCESO');
