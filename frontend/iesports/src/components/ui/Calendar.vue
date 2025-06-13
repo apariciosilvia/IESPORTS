@@ -1,4 +1,4 @@
-```vue
+
 <template>
   <div class="calendar-container">
     <FullCalendar :options="calendarOptions" />
@@ -39,14 +39,27 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import esLocale from '@fullcalendar/core/locales/es'
 import type { Match } from '@/model/match'
-import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/vue'
+
+// asigna colores según deporte
+const sportColors: Record<string,string> = {
+  fútbol:      '#4CAF50',
+  baloncesto:  '#FF9800',
+  tenis:       '#f54a93',
+  ajedrez:     '#9C27B0',
+  pingpong:    '#008fba',
+  voleibol:   '#ff5722',
+  balonmano:  '#cddc39',
+  rugby:      '#995b00',
+  natación:   '#9adcfa',
+  béisbol:    '#acfa9a',
+  default:     '#5b5b5b'
+}
 
 const props = defineProps<{ matches: Match[] }>()
 
@@ -63,10 +76,13 @@ const events = computed(() =>
     .filter(m => m.date)
     .map(m => {
       const isoDate = new Date(m.date as any).toLocaleDateString('en-CA')
+      const key = m.tournament.sport.name.toLowerCase()
+      const color = sportColors[key] || sportColors.default
       return {
         start: isoDate,
         allDay: true,
-        color: '#FF6D43',
+        backgroundColor: color,
+        borderColor: color,
         extendedProps: m
       }
     })
@@ -86,48 +102,39 @@ const calendarOptions = ref({
   dayMaxEvents: true,
   showNonCurrentDates: false,
   events: events.value,
-
   eventContent: (arg: any) => {
     const { team1, team2 } = arg.event.extendedProps
-    const truncate = (str: string, max = 6) =>
-      str.length > max ? str.slice(0, max) + '...' : str
+    const truncate = (s:string, max=6) =>
+      s.length>max ? s.slice(0,max)+'...' : s
     const wrap = document.createElement('div')
     wrap.style.display = 'inline-flex'
     wrap.style.alignItems = 'center'
     wrap.style.whiteSpace = 'nowrap'
-
-    const makeSpan = (text: string) => {
+    const makeSpan = (txt:string) => {
       const s = document.createElement('span')
-      s.textContent = text
+      s.textContent = txt
       s.style.display = 'inline-block'
-      s.style.verticalAlign = 'middle'
       s.style.maxWidth = '3.5em'
-      s.style.whiteSpace = 'nowrap'
       s.style.overflow = 'hidden'
       s.style.textOverflow = 'ellipsis'
+      s.style.whiteSpace = 'nowrap'
       return s
     }
-
     wrap.appendChild(makeSpan(truncate(team1.name)))
     const vs = document.createElement('span')
-    vs.textContent = ' VS '
-    vs.style.margin = '0.1rem'
-    vs.style.whiteSpace = 'nowrap'
+    vs.textContent = ' vs '
+    vs.style.margin = '0 .2em'
     wrap.appendChild(vs)
     wrap.appendChild(makeSpan(truncate(team2.name)))
-
     return { domNodes: [wrap] }
   },
-
-  eventClick: (info: { event: { extendedProps: any } }) => {
-    selectedMatch.value = info.event.extendedProps as any
+  eventClick: (info:any) => {
+    selectedMatch.value = info.event.extendedProps
     showModal.value = true
   },
-  dayCellDidMount: (arg: any) => {
-    arg.el.style.backgroundColor = '#ffffff'
-    if ([0, 6].includes(arg.date.getDay())) {
-      arg.el.style.backgroundColor = '#f0f0f0'
-    }
+  dayCellDidMount: (arg:any) => {
+    arg.el.style.backgroundColor = '#fff'
+    if ([0,6].includes(arg.date.getDay())) arg.el.style.backgroundColor = '#f0f0f0'
   }
 })
 
@@ -139,7 +146,6 @@ function closeModal() {
   showModal.value = false
 }
 </script>
-
 
 <style scoped>
 .calendar-container {
@@ -209,7 +215,7 @@ function closeModal() {
   padding: 4px 6px;
   font-size: 0.8rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.356);
-  background-color: #f03726 !important;
+
   border-color: #f03726 !important;
   color: #fff !important;
   transition: transform 0.1s;
