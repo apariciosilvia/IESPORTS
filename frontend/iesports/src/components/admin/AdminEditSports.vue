@@ -1,4 +1,4 @@
-<!-- src/components/NewTeam.vue -->
+<!-- src/components/NewSport.vue -->
 <template>
   <!-- Popup Container -->
   <div class="popup-container" v-if="showPopup">
@@ -94,9 +94,9 @@
   <!-- Main View -->
   <ion-header>
     <ion-toolbar class="header-red">
-      <ion-title>EDITAR EQUIPO</ion-title>
+      <ion-title>EDITAR DEPORTE</ion-title>
       <ion-buttons slot="end">
-        <ion-button @click="$emit('close')">Cerrar</ion-button>
+        <ion-button @click=" $emit('close')">Cerrar</ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
@@ -105,67 +105,14 @@
     <div class="form-container">
       <!-- Input Nombre -->
       <ion-input
-        label="Nombre"
+        label="Nombre de deporte"
         label-placement="floating"
         fill="outline"
-        placeholder="Escribe un nombre"
+        placeholder="Escribe un deporte"
         class="input-name"
-        v-model="teamName"
+        v-model="sportName"
       />
 
-      <div class="panels">
-        <!-- Panel Izquierdo: Lista de Miembros -->
-        <div class="panel-left">
-          <div class="panel-header">
-            <span>Miembros</span>
-            <span class="counter">{{ filteredpersons.length }}/∞</span>
-          </div>
-
-          <ion-searchbar
-            v-model="searchText"
-            placeholder="Buscar usuarios..."
-            class="searchbar"
-          />
-
-          <div class="members-list">
-            <div
-              class="member-row"
-              v-for="person in filteredpersons"
-              :key="person.id"
-            >
-              <span class="member-name">{{ person.name }}</span>
-              <button
-                class="btn-add"
-                @click="addMember(person)"
-                :disabled="isInTeam(person)"
-              >
-                <span class="material-symbols-outlined">add_circle</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Panel Derecho: Miembros en el Equipo -->
-        <div class="panel-right">
-          <div class="panel-header">
-            <span>Miembros en el Equipo</span>
-            <span class="counter">{{ selectedMembers.length }}/{{ maxMembers }}</span>
-          </div>
-
-          <div class="selected-list">
-            <div
-              class="selected-row"
-              v-for="(member, idx) in selectedMembers"
-              :key="member.id"
-            >
-              <span class="selected-name">{{ member.name }}</span>
-              <button class="btn-remove" @click="removeMember(idx)">
-                <span class="material-symbols-outlined">delete</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </ion-content>
 
@@ -181,47 +128,47 @@
       <ion-button
         expand="block"
         class="btn-save"
-        @click="editTeam"
+        @click="editSport"
       >
-        <span class="material-symbols-outlined">save</span>Editar Equipo
+        <span class="material-symbols-outlined">save</span>Editar Deporte
       </ion-button>
     </div>
   </ion-footer>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonFooter, IonInput, IonSearchbar } from '@ionic/vue';
-import { getPersonsRoleStudent } from '@/services/personServices';
-import { getTeamById, updateTeam } from '@/services/teamService';
-import type { Person } from '@/model/person';
-import type { Team } from '@/model/team';
-import type { TeamUpdateDTO } from '@/model/dto/teamUpdateDTO';
+import { onMounted, ref, watch } from 'vue';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonFooter, IonInput } from '@ionic/vue';
+import type { SportUpdateDTO } from '@/model/dto/SportUpdateDTO';
+import { getSportById, updateSport } from '@/services/sportService';
+import type { Sport } from '@/model/sport';
 
 const emit = defineEmits<{
   (e: 'close'): void;
   (e: 'created', message: string): void;
 }>();
-const props = defineProps<{ idTeam: number }>();
 
-const teamEdit = ref<Team>();
-const teamName = ref<string>('');
-const allStudents = ref<Person[]>([]);
-const searchText = ref<string>('');
-const selectedMembers = ref<Person[]>([]);
-const maxMembers = 15;
+const props = defineProps<{ id: number }>();
 
-// Popup
-const showPopup = ref(false);
-const popupType = ref<'success'|'alert'|'error'|'info'>('info');
-const popupMessage = ref('');
+const sportName = ref<string>('');
+const sportEdit = ref<Sport>();
 
-function openPopup(type: typeof popupType.value, message: string) {
+// Popup state
+const showPopup = ref<boolean>(false);
+const popupType = ref<'success' | 'alert' | 'error' | 'info'>('info');
+const popupMessage = ref<string>('');
+
+function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string) {
   popupType.value = type;
-  popupMessage.value = message.replace(/\n/g,'<br>');
+  popupMessage.value = message.replace(/\n/g, '<br>');
   showPopup.value = true;
+
+  // Cerrar automáticamente los tipos distintos a 'success'
   if (type !== 'success') {
-    setTimeout(() => { showPopup.value = false; popupMessage.value = '' }, 3000);
+    setTimeout(() => {
+      showPopup.value = false;
+      popupMessage.value = '';
+    }, 3000);
   }
 }
 function closePopup() {
@@ -229,91 +176,56 @@ function closePopup() {
   popupMessage.value = '';
 }
 
-async function loadTeam(id: number) {
-  allStudents.value = await getPersonsRoleStudent();
-  teamEdit.value = await getTeamById(id);
-  teamName.value = teamEdit.value.name;
-  selectedMembers.value = teamEdit.value.players ?? [];
+function resetForm() {
+  loadSport(props.id);
+}
+
+
+async function loadSport(id: number) {
+  sportEdit.value = await getSportById(id);
+  sportName.value = sportEdit.value ? sportEdit.value.name : '';
 }
 
 onMounted(async () => {
-  if (props.idTeam != null) await loadTeam(props.idTeam);
+  if (props.id != null) await loadSport(props.id);
 });
 
 watch(
-  () => props.idTeam,
+  () => props.id,
   async newId => {
-    if (newId != null) await loadTeam(newId);
+    if (newId != null) await loadSport(newId);
   }
 );
 
-const filteredpersons = computed(() =>
-  allStudents.value.filter(u =>
-    u.name.toLowerCase().includes(searchText.value.toLowerCase()) &&
-    !selectedMembers.value.some(m => m.id === u.id)
-  )
-);
-
-function addMember(person: Person) {
-  if (selectedMembers.value.length < maxMembers &&
-      !selectedMembers.value.some(m => m.id === person.id)) {
-    selectedMembers.value.push(person);
-  }
-}
-
-function removeMember(index: number) {
-  selectedMembers.value.splice(index, 1);
-}
-
-function isInTeam(person: Person) {
-  return selectedMembers.value.some(m => m.id === person.id);
-}
-
-function resetForm() {
-  if (props.idTeam != null) {
-    loadTeam(props.idTeam);
-    searchText.value = '';
-  } else {
-    teamName.value = '';
-    selectedMembers.value = [];
-    searchText.value = '';
-  }
-}
-
-async function editTeam() {
-  if (!teamName.value.trim()) {
+async function editSport() {
+  if (!sportName.value.trim()) {
     openPopup('alert','El nombre del equipo es obligatorio');
     return;
   }
-  if (selectedMembers.value.length === 0) {
-    openPopup('alert','Debes agregar al menos un miembro');
-    return;
-  }
-  const dto: TeamUpdateDTO = {
-    idTeam: props.idTeam,
-    nameTeam: teamName.value,
-    players: selectedMembers.value
+  
+  const dto: SportUpdateDTO = {
+    id: props.id,
+    name: sportName.value,
   };
   try {
-    await updateTeam(dto);
-    emit('created','Equipo actualizado correctamente');
+    await updateSport(dto);
+    emit('created','Deporte actualizado correctamente');
     resetForm();
     emit('close');
     window.location.reload();
   } catch (err: any) {
-    if (err.response?.status === 409) openPopup('info','El nombre del equipo ya existe');
+    if (err.response?.status === 409) openPopup('info','El nombre del deporte ya existe');
     else if (err.response?.status === 400) {
       let msg = '';
       Object.values(err.response.data).forEach(v => { msg += v + '\\n'; });
       openPopup('error',msg);
     } else {
       console.error(err);
-      openPopup('error','Error al actualizar el equipo');
+      openPopup('error','Error al actualizar el deporte');
     }
   }
 }
 </script>
-
 
 <style scoped>
 .popup-container {

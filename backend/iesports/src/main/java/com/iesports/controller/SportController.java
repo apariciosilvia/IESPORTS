@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.iesports.dao.service.impl.SportServiceImpl;
 import com.iesports.dto.SportDeleteDTO;
-import com.iesports.dto.SportRegisterDTO;
+import com.iesports.dto.SportAddDTO;
 import com.iesports.dto.SportUpdateDTO;
 import com.iesports.model.Sport;
 import com.iesports.model.Team;
@@ -71,7 +71,7 @@ public class SportController {
 	        )
 	    })
 	@PostMapping("/addSport")
-	public ResponseEntity<?> addSports(@Valid @RequestBody SportRegisterDTO Sport){
+	public ResponseEntity<?> addSports(@Valid @RequestBody SportAddDTO Sport){
 		
 		Map<String, String> errors = new HashMap<>();
 		
