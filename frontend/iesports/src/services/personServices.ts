@@ -3,7 +3,8 @@ import type { ChangePasswordDTO } from '@/model/dto/changePasswordDTO';
 import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequestDTO';
 import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
 import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
-import type { ChangeRoleAndCourseDTO } from '@/model/dto/ChangeRoleAndCourseDTO';
+import type { ChangeRoleAndCourseDTO } from '@/model/dto/changeRoleAndCourseDTO';
+import type { ContactFormRequestDTO } from '@/model/dto/contactFormRequestDTO';
 
 import type { Person } from '@/model/person';
 
@@ -134,6 +135,13 @@ function getPersonById(id: number): Promise<Person> {
     });
 }
 
+function contactForm(ContactFormRequestDTO: ContactFormRequestDTO) {
 
+  const url = `${import.meta.env.VITE_URL_API}/person/contactForm`;
 
-export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword, changeUserRoleAndCourse, getPersonById};
+  return axios.post(url, ContactFormRequestDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword, changeUserRoleAndCourse, getPersonById, contactForm };
