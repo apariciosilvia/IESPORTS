@@ -2,11 +2,21 @@ package com.iesports.dto;
 
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class TournamentModifyDTO {
 
+	@NotNull(message = "El torneo es obligatorio")
 	private Long tournamentId;
+	
+	@NotBlank(message = "El nombre del torneo es obligatorio")
 	private String tournamentNameModified;
+	
+	@NotNull(message = "El deporte es obligatorio")
 	private Long sportModifiedId;
+	
+	@NotNull(message = "Debe haber algun partido")
 	private List<MatchModifyTournamentDTO> matches;
 
 	public TournamentModifyDTO(long tournamentId, String tournamentNameModified, Long sportModifiedId,
