@@ -197,19 +197,16 @@ async function createSport() {
     window.location.reload();
 
   } catch (error: any) {
-    if (error.response?.status === 409) {
-      openPopup('info', 'El nombre del deporte ya existe');
-    } else if (error.response?.status === 400) {
-      const errors = error.response.data;
-      let msg = '';
-      for (const key in errors) {
-        msg += `${errors[key]}\n`;
-      }
-      openPopup('error', msg);
+    const status = error.response?.status;
+    const data   = error.response?.data;
+    let msg = '';
+
+    if (status >= 400 && status <= 409) {
+      msg = Object.values(data ?? {})[0] || error.message;
     } else {
-      console.error(error);
-      openPopup('error', 'Error al crear el deporte');
+      msg = 'Error inesperado';
     }
+    openPopup('error', msg); 
   }
 }
 </script>
