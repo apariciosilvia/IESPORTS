@@ -1,4 +1,7 @@
 <template>
+
+<Loader v-if="isNowLoading" />
+
 <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
   <!-- Navbar visible siempre -->
   <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
@@ -22,6 +25,10 @@ import AdminTeams from '@/components/admin/AdminTeams.vue';
 import AdminSports from '@/components/admin/AdminSports.vue';
 
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
+
+import Loader from '@/components/ui/Loader.vue';
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
+const { isNowLoading } = useLoadingEffect();
 
 // 3. Extraemos el control de la navbar
 const { showNav, handleScroll } = useNavbarVisibility();
