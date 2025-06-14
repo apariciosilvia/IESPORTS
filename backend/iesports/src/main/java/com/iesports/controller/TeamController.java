@@ -20,14 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iesports.dao.service.impl.MatchServiceImpl;
 import com.iesports.dao.service.impl.PersonServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
-import com.iesports.dao.service.impl.TournamentServiceImpl;
 import com.iesports.dto.TeamAddDTO;
 import com.iesports.dto.TeamDeleteDTO;
 import com.iesports.dto.TeamInfoDTO;
 import com.iesports.dto.TeamUpdateDTO;
 import com.iesports.model.Person;
 import com.iesports.model.Team;
-import com.iesports.model.Tournament;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
