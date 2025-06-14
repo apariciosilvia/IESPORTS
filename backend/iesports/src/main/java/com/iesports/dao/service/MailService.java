@@ -138,24 +138,43 @@ public class MailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             // Este es el correo del TFG al que se enviará el mensaje
-            helper.setTo("equipo.iesports@gmail.com"); // ← Cambia esto por el correo real de vuestro TFG
+            helper.setTo("noreply.iesports@gmail.com"); // ← Cambia esto por el correo real de vuestro TFG
             // El usuario parecerá ser el remitente
             helper.setFrom(userEmail);
             helper.setReplyTo(userEmail); // Importante: si alguien responde al correo, le responde al usuario
             helper.setSubject("Nueva consulta desde el formulario de contacto");
 
             String htmlContent = "<html>" +
-                    "<body style='font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;'>" +
-                    "<div style='background-color: #fff; padding: 20px; border-radius: 10px; max-width: 600px; margin: auto;'>" +
-                    "<h2 style='color: #002f3d;'>Nueva consulta recibida</h2>" +
-                    "<p><strong>Correo del usuario:</strong> " + userEmail + "</p>" +
-                    "<p><strong>Mensaje:</strong></p>" +
-                    "<div style='background-color: #f0f0f0; padding: 15px; border-left: 4px solid #ff0800; border-radius: 5px;'>" +
-                    "<p style='white-space: pre-line;'>" + userMessage + "</p>" +
-                    "</div>" +
-                    "<p style='font-size: 12px; color: #888;'>Este mensaje ha sido generado automáticamente desde el formulario de contacto.</p>" +
-                    "</div>" +
-                    "</body></html>";
+            		"<body style='margin:0; padding:0; background-color:#eef2f5; font-family:Helvetica, Arial, sans-serif;'>" +
+            		"<table width='100%' cellpadding='0' cellspacing='0' style='background-color:#eef2f5; padding:20px 0;'>" +
+            		"<tr>" +
+            		"<td align='center'>" +
+            		"<table width='600' cellpadding='0' cellspacing='0' style='background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.1);'>" +
+            		"<tr>" +
+            		"<td style='background-color:#002f3d; padding:20px; text-align:center;'>" +
+            		"<h2 style='color:#ffffff; margin:0; font-size:24px;'>Nueva consulta recibida</h2>" +
+            		"</td>" +
+            		"</tr>" +
+            		"<tr>" +
+            		"<td style='padding:20px;'>" +
+            		"<p style='font-size:16px; color:#333333; margin:0 0 10px;'><strong>Correo del usuario:</strong> " + userEmail + "</p>" +
+            		"<p style='font-size:16px; color:#333333; margin:0 0 10px;'><strong>Mensaje:</strong></p>" +
+            		"<div style='background-color:#fafafa; padding:15px; border-left:4px solid #cf4444; border-radius:4px;'>" +
+            		"<p style='font-size:15px; color:#333333; margin:0; white-space:pre-line;'>" + userMessage + "</p>" +
+            		"</div>" +
+            		"</td>" +
+            		"</tr>" +
+            		"<tr>" +
+            		"<td style='background-color:#f9f9f9; padding:15px; text-align:center; font-size:12px; color:#888888;'>" +
+            		"Este mensaje ha sido generado automáticamente desde el formulario de contacto." +
+            		"</td>" +
+            		"</tr>" +
+            		"</table>" +
+            		"</td>" +
+            		"</tr>" +
+            		"</table>" +
+            		"</body>" +
+            		"</html>";
 
             helper.setText(htmlContent, true);
             mailSender.send(mimeMessage);
