@@ -123,7 +123,9 @@
         </div>
       </div>
     </div>
+    
   </IonContent>
+
 </template>
 
 <script setup lang="ts">
@@ -142,9 +144,12 @@ import { changeNameAndEmail, changePassword } from '@/services/personServices';
 
 import Loader from '@/components/ui/Loader.vue';
 import { useLoadingEffect } from '@/composables/useLoadingEffect';
+
 const { isNowLoading } = useLoadingEffect();
 
 const { goTo, logout } = useUserMenu();
+
+
 
 
 /* ERRORES START */
