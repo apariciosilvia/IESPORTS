@@ -217,16 +217,17 @@ async function editSport() {
     await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
 
-  } catch (err: any) {
-    if (err.response?.status === 409) openPopup('info','El nombre del deporte ya existe');
-    else if (err.response?.status === 400) {
-      let msg = '';
-      Object.values(err.response.data).forEach(v => { msg += v + '\\n'; });
-      openPopup('error',msg);
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data   = error.response?.data;
+    let msg = '';
+
+    if (status >= 400 && status <= 409) {
+      msg = Object.values(data ?? {})[0] || error.message;
     } else {
-      console.error(err);
-      openPopup('error','Error al actualizar el deporte');
+      msg = 'Error inesperado';
     }
+    openPopup('error', msg); 
   }
 }
 </script>

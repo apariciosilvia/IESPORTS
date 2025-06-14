@@ -167,7 +167,7 @@ import type { Course } from '@/model/course'
 import { changeUserRoleAndCourse, getPersonById } from '@/services/personServices'
 import { getRoles } from '@/services/roleService'
 import { getCourses } from '@/services/courseService'
-import type { ChangeRoleAndCourseDTO } from '@/model/dto/ChangeRoleAndCourseDTO'
+import type { ChangeRoleAndCourseDTO } from '@/model/dto/changeRoleAndCourseDTO'
 
 const emit = defineEmits<{
   (e: 'close'): void
@@ -244,9 +244,17 @@ async function savePerson() {
     await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
 
-  } catch (e: any) {
-    openPopup('error','Error al actualizar la persona')
-    console.error(e)
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data   = error.response?.data;
+    let msg = '';
+
+    if (status >= 400 && status <= 409) {
+      msg = Object.values(data ?? {})[0] || error.message;
+    } else {
+      msg = 'Error inesperado';
+    }
+    openPopup('error', msg); 
   }
 }
 </script>

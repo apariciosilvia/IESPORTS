@@ -261,6 +261,7 @@ function requestDelete(teamId: number){
 
 async function confirmDelete() {
   if (pendingDeleteId.value !== null) {
+
     try {
       await deleteTeam(pendingDeleteId.value);
       teamsInfo.value = teamsInfo.value.filter(
@@ -268,7 +269,21 @@ async function confirmDelete() {
       );
       openPopup('success', 'Equipo eliminado correctamente');
     } catch (error: any) {
-      console.error('Error al eliminar equipo:', error);
+      const status = error.response?.status;
+      const data   = error.response?.data;
+      let msg = '';
+
+      if (status >= 400 && status <= 409) {
+        msg = Object.values(data ?? {})[0] || error.message;
+      } else {
+        msg = 'Error inesperado';
+      }
+
+      openPopup('error', msg);
+      
+    } finally {
+      showConfirm.value = false;
+      pendingDeleteId.value = null;
     }
   }
   showConfirm.value = false;

@@ -224,20 +224,31 @@ function requestDelete(id: number){
 }
 
 async function confirmDelete() {
-  if (pendingDeleteId.value !== null) {
-    try {
-      await deleteSport(pendingDeleteId.value);
-      sports.value = sports.value.filter(
-        (s) => s.id !== pendingDeleteId.value
-      );
-      openPopup('success', 'Deporte eliminado correctamente');
-    } catch (error: any) {
-      console.error('Error al eliminar deporte:', error);
+  if (pendingDeleteId.value === null) return;
+
+  try {
+    await deleteSport(pendingDeleteId.value);
+    sports.value = sports.value.filter(s => s.id !== pendingDeleteId.value);
+    openPopup('success', 'Deporte eliminado correctamente');
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data   = error.response?.data;
+    let msg = '';
+
+    if (status >= 400 && status <= 409) {
+      msg = Object.values(data ?? {})[0] || error.message;
+    } else {
+      msg = 'Error inesperado';
     }
+
+    openPopup('error', msg);
+  } finally {
+    showConfirm.value = false;
+    pendingDeleteId.value = null;
   }
-  showConfirm.value = false;
-  pendingDeleteId.value = null;
 }
+
+
 
 function cancelDelete() {
   showConfirm.value = false;

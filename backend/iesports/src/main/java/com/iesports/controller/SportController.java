@@ -181,19 +181,19 @@ public class SportController {
 
 	     Sport existingSport = ss.getSportById(sportDTO.getId());
 	     if (existingSport == null) {
-	         errors.put("sport", "El deporte con ID " + sportDTO.getId() + " no existe");
+	         errors.put("id", "El deporte con ID " + sportDTO.getId() + " no existe");
 	         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	     }
 
 	     // Comprobar si el deporte está relacionado con algún torneo
 	     List<Tournament> tournamentsWithSport = tournamentS.findTournamentsBySportId(sportDTO.getId().intValue());
 	     if (tournamentsWithSport != null && !tournamentsWithSport.isEmpty()) {
-	         errors.put("sport", "El deporte con nombre " + existingSport.getName() + " está asociado a uno o más torneos y no puede ser eliminado.");
+	         errors.put("id", "El deporte con nombre " + existingSport.getName() + " ya está en uso.");
 	         return ResponseEntity.status(HttpStatus.CONFLICT).body(errors);
 	     }
 
 	     ss.deleteSport(existingSport);
-	     return ResponseEntity.ok(Map.of("sport", "Deporte borrado con éxito"));
+	     return ResponseEntity.ok(Map.of("id", "Deporte borrado con éxito"));
 	 }
 
 	 
