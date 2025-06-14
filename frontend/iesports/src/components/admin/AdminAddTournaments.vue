@@ -424,24 +424,17 @@ async function createTournament() {
     await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
     
-  } catch (error) {
-    // Narrow error to any to access properties safely
-    const err = error as any;
-    if (err.response?.status === 409) {
-      openPopup('info', 'Ya existe un torneo con este nombre');
-    } else if (err.response?.status === 404) {
-      openPopup('error', err.response.data.error || 'Datos inválidos enviados al servidor');
-    } else if (err.response?.status === 400) {
-      const errors = err.response.data;
-      let msg = '';
-      for (const key in errors) {
-        msg += `${errors[key]}\n`;
-      }
-      openPopup('error', msg);
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data   = error.response?.data;
+    let msg = '';
+
+    if (status >= 400 && status <= 409) {
+      msg = Object.values(data ?? {})[0] || error.message;
     } else {
-      console.error(error);
-      openPopup('error', 'Error al crear el torneo');
+      msg = 'Error inesperado';
     }
+    openPopup('error', msg); 
   }
 }
 
