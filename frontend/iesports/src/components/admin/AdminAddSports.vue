@@ -189,8 +189,11 @@ async function createSport() {
   try {
     await addSport(sportAddDTO);
     emit('created', 'Deporte creado correctamente');
+    openPopup('success','Deporte creado')
     resetForm();
-    emit('close');
+
+    // espera 2 segundos antes de recargar
+    await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
 
   } catch (error: any) {

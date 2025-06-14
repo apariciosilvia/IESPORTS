@@ -240,10 +240,8 @@ async function savePerson() {
     emit('updated','Persona actualizada correctamente')
     openPopup('success','Persona actualizada')
 
-    // espera 2 s antes de recargar
-
     // espera 2 segundos antes de recargar
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
 
   } catch (e: any) {
