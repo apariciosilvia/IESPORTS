@@ -341,4 +341,36 @@ function closeModal() {
 :deep(ion-button:hover) {
   opacity: 0.8;
 }
+
+
+/* Responsive para móvil */
+@media (max-width: 600px) {
+  .calendar-container {
+    margin: 7rem 0;
+    padding: 0.5rem;
+    width: 100%;
+    box-shadow: none;
+  }
+  :deep(.fc-header-toolbar) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  :deep(.fc-button) {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  :deep(.fc-col-header-cell-cushion) {
+    font-size: 0.8rem;
+  }
+  :deep(.fc-daygrid-day-number) {
+    font-size: 0.8rem;
+  }
+  :deep(.fc-event) {
+    font-size: 0.7rem;
+    padding: 3px 4px;
+  }
+  :deep(ion-modal) {
+    --width: 90%;
+  }
+}
 </style>
