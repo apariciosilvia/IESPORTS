@@ -244,7 +244,7 @@ async function savePerson() {
     await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
 
-  }  catch (error: any) {
+  } catch (error: any) {
     const status = error.response?.status;
     const data   = error.response?.data;
     let msg = '';
