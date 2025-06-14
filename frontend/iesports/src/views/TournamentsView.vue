@@ -69,8 +69,6 @@ import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 import Footer from '@/components/ui/Footer.vue';
 import TournamentCard from '@/components/layout/TournamentCard.vue'
 
-import Loader from '@/components/ui/Loader.vue';
-
 import { ref, onMounted, computed } from 'vue';
 
 // Importamos nuestros métodos del servicio
