@@ -1,4 +1,7 @@
 <template>
+
+  <Loader v-if="isNowLoading" />
+  
   <IonHeader>
     <IonToolbar style="--background: #002F3D; --color: white;">
       <IonButton @click="goTo('/')" slot="start" fill="clear">
@@ -136,6 +139,10 @@ import type { ChangePasswordDTO } from '@/model/dto/changePasswordDTO';
 
 // SERVICIOS
 import { changeNameAndEmail, changePassword } from '@/services/personServices';
+
+import Loader from '@/components/ui/Loader.vue';
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
+const { isNowLoading } = useLoadingEffect();
 
 const { goTo, logout } = useUserMenu();
 

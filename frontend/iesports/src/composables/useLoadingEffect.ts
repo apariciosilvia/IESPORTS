@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 // 1. Definimos el composable
 export function useLoadingEffect() {
   // 2. Estado reactivo que controla el spinner
+
   const isNowLoading = ref(true)
 
   // 3. Función para activar el spinner y simular la carga

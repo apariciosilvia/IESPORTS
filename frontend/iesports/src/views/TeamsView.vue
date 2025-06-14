@@ -2,7 +2,7 @@
   <ion-page>
 
     <Loader v-if="isNowLoading" />
-    
+
     <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
       <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
 
@@ -89,6 +89,11 @@ import Loader from '@/components/ui/Loader.vue';
 import { useLoadingEffect } from '@/composables/useLoadingEffect';
 
 const { isNowLoading } = useLoadingEffect();
+
+import Loader from '@/components/ui/Loader.vue';
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
+const { isNowLoading } = useLoadingEffect();
+
 
 const { showNav, handleScroll } = useNavbarVisibility();
 
