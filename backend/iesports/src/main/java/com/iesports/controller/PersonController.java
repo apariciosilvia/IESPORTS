@@ -24,6 +24,7 @@ import com.iesports.dto.ChangeForgottenPasswordDTO;
 import com.iesports.dto.ChangeNameAndEmailDTO;
 import com.iesports.dto.ChangePasswordDTO;
 import com.iesports.dto.ChangeRoleDTO;
+import com.iesports.dto.ContactFormRequestDTO;
 import com.iesports.dto.ForgotPasswordRequestDTO;
 import com.iesports.dto.PersonLoginDTO;
 import com.iesports.dto.PersonRegisterDTO;
@@ -78,6 +79,50 @@ public class PersonController {
 	public List<Person> getPersons() {
 		return ps.getPersons();
 	}
+	
+	@Operation(summary = "Obtener una persona por su ID")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Persona encontrada correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class)
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "ID proporcionado no válido",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(example = "{\"person\": \"Las credenciales introducidas no son válidas\"}")
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "404",
+	        description = "Persona no encontrada con el ID proporcionado",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(example = "{\"person\": \"No se encontró una persona con el ID proporcionado\"}")
+	        )
+	    )
+	})
+	@GetMapping("/getPersonById")
+	public ResponseEntity<?> getPersonById(@RequestParam Long id) {
+	    if (id == null) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body(Map.of("person", "Las credenciales introducidas no son válidas"));
+	    }
+
+	    Person person = ps.getPersonById(id);
+	    if (person == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(Map.of("person", "No se encontró una persona con el ID proporcionado"));
+	    }
+
+	    return ResponseEntity.ok(person);
+	}
+
 	
 	@Operation(summary = "Obtener la lista de personas con el rol de alumno")
 	@ApiResponses({
@@ -506,6 +551,39 @@ public class PersonController {
 
 	    return ResponseEntity.ok(person);
 	}
+	
+	@Operation(summary = "Enviar una consulta a través del formulario de contacto")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Consulta enviada correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(example = "{\"mensaje\": \"Consulta enviada correctamente. Nos pondremos en contacto contigo en breve.\"}")
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "500",
+	        description = "Error al enviar la consulta",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(example = "{\"email\": \"No se pudo enviar tu consulta. Por favor, intenta de nuevo más tarde.\"}")
+	        )
+	    )
+	})
+	@PostMapping("/contactForm")
+	public ResponseEntity<?> contactForm(@Valid @RequestBody ContactFormRequestDTO contactDTO) {
+	    try {
+	        ms.sendUserQuestion(contactDTO.getEmail(), contactDTO.getMessage());
+
+	        return ResponseEntity.ok(Map.of("mensaje", "Consulta enviada correctamente. Nos pondremos en contacto contigo en breve."));
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(Map.of("email", "No se pudo enviar tu consulta. Por favor, intenta de nuevo más tarde."));
+	    }
+	}
+
 	
 	//SIRVE DE RELLENO PARA LA DOCUMENTACIÓN
 
