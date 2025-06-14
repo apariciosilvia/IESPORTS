@@ -94,7 +94,7 @@
   <!-- Main View -->
   <ion-header>
     <ion-toolbar class="header-red">
-      <ion-title>NUEVO DEPORTE</ion-title>
+      <ion-title>EDITAR PERSONA</ion-title>
       <ion-buttons slot="end">
         <ion-button @click=" $emit('close')">Cerrar</ion-button>
       </ion-buttons>
@@ -103,113 +103,150 @@
 
   <ion-content class="content">
     <div class="form-container">
-      <!-- Input Nombre -->
-      <ion-input
-        label="Nombre de deporte"
-        label-placement="floating"
-        fill="outline"
-        placeholder="Escribe un deporte"
-        class="input-name"
-        v-model="sportNameAdd"
-      />
+      <h1>Nombre: {{ person?.name }}</h1>
+      <h1>Correo: {{ person?.email }}</h1>
 
+
+      <ion-list class="sports">
+        <ion-item class="clean-select" lines="none">
+          <ion-select
+            interface="popover"
+            placeholder="Selecciona un rol"
+            class="list-sports"
+            v-model="selectedRoleId"
+          >
+            <ion-select-option
+              v-for="r in roles"
+              :key="r.id"
+              :value="r.id"
+            >
+              {{ r.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+
+      <ion-list class="sports">
+        <ion-item class="clean-select" lines="none">
+          <ion-select
+            interface="popover"
+            placeholder="Selecciona un curso"
+            class="list-sports"
+            v-model="selectedCourseId"
+          >
+            <ion-select-option
+              v-for="c in courses"
+              :key="c.id"
+              :value="c.id"
+            >
+              {{ c.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
     </div>
   </ion-content>
 
-  <ion-footer>
+ <ion-footer>
     <div class="footer-buttons">
-      <ion-button
-        expand="block"
-        class="btn-clean"
-        @click="resetForm"
-      >
+      <ion-button expand="block" class="btn-clean" @click="resetForm">
         <span class="material-symbols-outlined">mop</span>Limpiar
       </ion-button>
-      <ion-button
-        expand="block"
-        class="btn-save"
-        @click="createSport"
-      >
-        <span class="material-symbols-outlined">save</span>Crear Deporte
+      <ion-button expand="block" class="btn-save" @click="savePerson" >
+        <span class="material-symbols-outlined">save</span>Editar Persona
       </ion-button>
     </div>
   </ion-footer>
 </template>
-
 <script setup lang="ts">
-import { ref } from 'vue';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonFooter, IonInput } from '@ionic/vue';
-import { addSport } from '@/services/sportService';
-import type { SportAddDTO } from '@/model/dto/SportAddDTO';
+import { ref, onMounted, watch } from 'vue'
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonFooter, IonList, IonItem, IonSelect, IonSelectOption } from '@ionic/vue'
+import type { Person } from '@/model/person'
+import type { Role } from '@/model/role'
+import type { Course } from '@/model/course'
+import { changeUserRoleAndCourse, getPersonById } from '@/services/personServices'
+import { getRoles } from '@/services/roleService'
+import { getCourses } from '@/services/courseService'
+import type { ChangeRoleAndCourseDTO } from '@/model/dto/ChangeRoleAndCourseDTO'
 
 const emit = defineEmits<{
-  (e: 'close'): void;
-  (e: 'created', message: string): void;
+  (e: 'close'): void
+  (e: 'updated', msg: string): void
 }>();
 
-const sportNameAdd = ref<string>('');
+const props = defineProps<{ id: number }>()
 
-// Popup state
-const showPopup = ref<boolean>(false);
-const popupType = ref<'success' | 'alert' | 'error' | 'info'>('info');
-const popupMessage = ref<string>('');
+const roles = ref<Role[]>([])
+const courses = ref<Course[]>([])
+const person = ref<Person | null>(null)
+const selectedRoleId = ref<number | null>(null)
+const selectedCourseId = ref<number | null>(null)
 
-function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string) {
-  popupType.value = type;
-  popupMessage.value = message.replace(/\n/g, '<br>');
-  showPopup.value = true;
+// Popups
+const showPopup = ref(false)
+const popupType = ref<'success'|'alert'|'error'|'info'>('info')
+const popupMessage = ref('')
 
-  // Cerrar automáticamente los tipos distintos a 'success'
-  if (type !== 'success') {
-    setTimeout(() => {
-      showPopup.value = false;
-      popupMessage.value = '';
-    }, 3000);
-  }
+function openPopup(type: typeof popupType.value, msg: string) {
+  popupType.value = type
+  popupMessage.value = msg.replace(/\n/g, '<br>')
+  showPopup.value = true
+  if (type !== 'success') setTimeout(() => showPopup.value = false, 3000)
 }
 function closePopup() {
-  showPopup.value = false;
-  popupMessage.value = '';
+  showPopup.value = false
+  popupMessage.value = ''
+}
+
+async function loadData() {
+  try {
+    // 1) recuperar listas
+    roles.value = await getRoles()
+    courses.value = await getCourses()
+    // 2) recuperar persona y asignar selección
+    if (props.id != null) {
+      person.value = await getPersonById(props.id)
+      selectedRoleId.value = person.value.role.id
+      selectedCourseId.value = person.value.course.id
+    }
+  } catch (e: any) {
+    openPopup('error', 'No se pudieron cargar los datos')
+    console.error(e)
+  }
 }
 
 function resetForm() {
-  sportNameAdd.value = '';
+  loadData()
 }
 
-async function createSport() {
-  if (!sportNameAdd.value.trim()) {
-    openPopup('alert', 'El nombre del deporte es obligatorio');
-    return;
+onMounted(() => {
+  loadData()
+})
+
+watch(() => props.id, () => {
+  loadData()
+})
+
+async function savePerson() {
+  const changeRoleAndCourseDto: ChangeRoleAndCourseDTO = {
+    personId: props.id,
+    roleId: selectedRoleId.value!,
+    courseId: selectedCourseId.value!
   }
-
-  const sportAddDTO: SportAddDTO = {
-    name: sportNameAdd.value,
-  };
-
   try {
-    await addSport(sportAddDTO);
-    emit('created', 'Deporte creado correctamente');
-    openPopup('success','Deporte creado')
-    resetForm();
+    console.log('usuario para actualizar',changeRoleAndCourseDto)
+    await changeUserRoleAndCourse(changeRoleAndCourseDto);
+    
+    emit('updated','Persona actualizada correctamente')
+    openPopup('success','Persona actualizada')
 
     // espera 2 segundos antes de recargar
     await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
 
-  } catch (error: any) {
-    if (error.response?.status === 409) {
-      openPopup('info', 'El nombre del deporte ya existe');
-    } else if (error.response?.status === 400) {
-      const errors = error.response.data;
-      let msg = '';
-      for (const key in errors) {
-        msg += `${errors[key]}\n`;
-      }
-      openPopup('error', msg);
-    } else {
-      console.error(error);
-      openPopup('error', 'Error al crear el deporte');
-    }
+  } catch (e: any) {
+    openPopup('error','Error al actualizar la persona')
+    console.error(e)
   }
 }
 </script>

@@ -12,6 +12,8 @@
 
   <AdminSports/>
 
+  <AdminPerson/>
+
  
 </ion-content>
 </template>
@@ -29,6 +31,7 @@ import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 
 import Loader from '@/components/ui/Loader.vue';
 import { useLoadingEffect } from '@/composables/useLoadingEffect';
+import AdminPerson from '@/components/admin/AdminPerson.vue';
 const { isNowLoading } = useLoadingEffect();
 
 // 3. Extraemos el control de la navbar

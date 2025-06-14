@@ -191,16 +191,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonButton,
-  IonContent,
-  IonFooter,
-  IonInput,
-  IonSearchbar } from '@ionic/vue';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonFooter, IonInput, IonSearchbar } from '@ionic/vue';
 import { getPersonsRoleStudent } from '@/services/personServices';
 import { addTeam } from '@/services/teamService';
 import type { TeamAddDTO } from '@/model/dto/teamAddDTO';
@@ -298,9 +289,13 @@ async function createTeam() {
     console.log('teamAddDTO',teamAddDTO);
     await addTeam(teamAddDTO);
     emit('created', 'Equipo creado correctamente');
+    openPopup('success','Equipo creado')
     resetForm();
-    emit('close');
+
+    // espera 2 segundos antes de recargar
+    await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
+
 
   } catch (error: any) {
     if (error.response?.status === 409) {
