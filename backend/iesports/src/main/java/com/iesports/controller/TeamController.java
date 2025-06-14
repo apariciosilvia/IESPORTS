@@ -137,13 +137,12 @@ public class TeamController {
         if (isInTournamentMatch) {
             return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(Map.of("team", "El equipo con nombre " + teamToDelete.get().getName() + " participa en un torneo y no puede ser eliminado."));
+                .body(Map.of("team", "El equipo con nombre " + teamToDelete.get().getName() + " participa en un torneo"));
         }
 
         tr.deleteTeam(teamToDelete.get());
         return ResponseEntity.ok(Map.of("team", "Equipo borrado con éxito"));
     }
-
 
 
 
