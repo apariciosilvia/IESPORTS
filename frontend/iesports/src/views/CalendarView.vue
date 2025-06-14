@@ -1,5 +1,4 @@
 <template>
-  <!-- Navbar solo visible cuando se hace scroll suficiente -->
    <ion-page>
 
     <Loader v-if="isNowLoading" />
@@ -42,12 +41,6 @@ onMounted(async () => {
 });
 
 console.log('matches calendar' , matches.value);
-
-
-
-
-
-
 
 
 // Ahora extraemos sólo lo que necesitamos:
