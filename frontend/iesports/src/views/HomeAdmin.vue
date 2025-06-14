@@ -14,8 +14,9 @@
 
   <AdminPerson/>
 
- 
+ <Footer />
 </ion-content>
+
 </template>
 
 <script setup lang="ts">
@@ -27,6 +28,9 @@ import AdminTeams from '@/components/admin/AdminTeams.vue';
 import AdminSports from '@/components/admin/AdminSports.vue';
 
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
+
+// COMPONENTES
+import Footer from '@/components/ui/Footer.vue';
 
 
 import Loader from '@/components/ui/Loader.vue';

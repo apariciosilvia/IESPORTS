@@ -38,6 +38,7 @@
       </ion-content>
     </ion-modal>
   </div>
+  <Footer />
 </template>
 
 <script setup lang="ts">
@@ -46,6 +47,8 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import esLocale from '@fullcalendar/core/locales/es'
 import type { Match } from '@/model/match'
+import Footer from '@/components/ui/Footer.vue';
+
 
 // asigna colores según deporte
 const sportColors: Record<string,string> = {
