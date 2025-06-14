@@ -1,6 +1,7 @@
+import type { Course } from '@/model/course';
 import axios from 'axios';
 
-function getCourses() {
+function getCourses(): Promise<Course[]> {
 
     return new Promise((resolve, reject) => {
   

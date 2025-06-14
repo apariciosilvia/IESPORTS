@@ -23,11 +23,12 @@ import com.iesports.dao.service.impl.RoleServiceImpl;
 import com.iesports.dto.ChangeForgottenPasswordDTO;
 import com.iesports.dto.ChangeNameAndEmailDTO;
 import com.iesports.dto.ChangePasswordDTO;
-import com.iesports.dto.ChangeRoleDTO;
+import com.iesports.dto.ChangeRoleAndCourseDTO;
 import com.iesports.dto.ContactFormRequestDTO;
 import com.iesports.dto.ForgotPasswordRequestDTO;
 import com.iesports.dto.PersonLoginDTO;
 import com.iesports.dto.PersonRegisterDTO;
+import com.iesports.model.Course;
 import com.iesports.model.Person;
 import com.iesports.model.Role;
 
@@ -504,17 +505,14 @@ public class PersonController {
 		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
 	
-	@Operation(summary = "Cambiar el rol de un usuario")
+	@Operation(summary = "Cambiar el rol y el curso de un usuario")
 	@ApiResponses({
 	    @ApiResponse(
 	        responseCode = "200",
-	        description = "Rol cambiado correctamente",
+	        description = "Rol y curso cambiados correctamente",
 	        content = @Content(
 	            mediaType = "application/json",
-	            schema = @Schema(implementation = Person.class),
-	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
-	                value = "{\"id\":3,\"name\":\"Ana\",\"role\":{\"id\":2,\"name\":\"admin\"}}"
-	            )
+	            schema = @Schema(implementation = Person.class)
 	        )
 	    ),
 	    @ApiResponse(
@@ -523,13 +521,13 @@ public class PersonController {
 	        content = @Content(
 	            mediaType = "application/json",
 	            schema = @Schema(
-	                example = "{\"personId\":\"Usuario no encontrado\",\"roleId\":\"Rol no encontrado\"}"
+	                example = "{\"personId\":\"Usuario no encontrado\",\"roleId\":\"Rol no encontrado\",\"error\":\"No se ha realizado ningún cambio\"}"
 	            )
 	        )
 	    )
 	})
-	@PostMapping("/changeRole")
-	public ResponseEntity<?> changeUserRole(@Valid @RequestBody ChangeRoleDTO dto) {
+	@PostMapping("/changeRoleAndCourse")
+	public ResponseEntity<?> changeUserRoleAndCourse(@Valid @RequestBody ChangeRoleAndCourseDTO dto) {
 	    Map<String, String> errors = new HashMap<>();
 
 	    Person person = ps.getPersonById(dto.getPersonId());
@@ -541,12 +539,25 @@ public class PersonController {
 	    if (role == null) {
 	        errors.put("roleId", "Rol no encontrado");
 	    }
+	    
+	    Course course = cs.getCourse(dto.getCourseId());
+	    if (course == null) {
+	        errors.put("courseId", "Curso no encontrado");
+	    }
+	    
+	    System.err.println(dto);
+	    System.err.println(person);
+	    
+	    if (person.getCourse().getId() == dto.getCourseId() && person.getRole().getId() == dto.getRoleId()) {
+	    	errors.put("error", "No se ha realizado ningún cambio");
+	    }
 
 	    if (!errors.isEmpty()) {
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	    }
 
 	    person.setRole(role);
+	    person.setCourse(course);
 	    ps.updatePerson(person);
 
 	    return ResponseEntity.ok(person);

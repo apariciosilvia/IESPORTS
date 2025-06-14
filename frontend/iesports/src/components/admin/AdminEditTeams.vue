@@ -296,10 +296,14 @@ async function editTeam() {
   };
   try {
     await updateTeam(dto);
-    emit('created','Equipo actualizado correctamente');
+    emit('created', 'Equipo actualizado correctamente');
+    openPopup('success','Equipo actualizado')
     resetForm();
-    emit('close');
+
+    // espera 2 segundos antes de recargar
+    await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
+
   } catch (err: any) {
     if (err.response?.status === 409) openPopup('info','El nombre del equipo ya existe');
     else if (err.response?.status === 400) {

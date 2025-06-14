@@ -294,9 +294,9 @@
 
 <script setup lang="ts">
 
-const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+// const emit = defineEmits<{
+//   (e: 'close'): void;
+// }>();
 
 import { ref, onMounted, computed } from 'vue';
 import { IonSelect, IonSelectOption, IonContent, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
@@ -445,9 +445,14 @@ async function editTournament() {
 
   try {
     await modifyTournament(payload);
+    openPopup('success','Torneo actualizado')
     resetForm();
-    emit('close');
+
+    // espera 2 segundos antes de recargar
+    await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
+
+    
 
   } catch (err: any) {
     if (err.response?.status === 404) {

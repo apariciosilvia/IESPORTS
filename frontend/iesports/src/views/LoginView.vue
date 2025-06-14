@@ -344,6 +344,7 @@ import { getCourses } from "@/services/courseService";
 import { login, register, forgotPassword, changeTempPassword } from '@/services/personServices';
 import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequestDTO';
 import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
+import type { Course } from '@/model/course';
 
 
 /* FONDO ANIMADO START */
@@ -519,7 +520,7 @@ async function changeTemporalPassword(){
 
 
 /* OBTENER TODOS LOS CURSOS START */
-const courses:Ref<any[]> = ref([]);
+const courses:Ref<Course[]> = ref([]);
 const selectedCourse = ref('');
  
 async function handleGetCourses() {

@@ -242,9 +242,9 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+// const emit = defineEmits<{
+//   (e: 'close'): void;
+// }>();
 
 import { ref, onMounted, computed, watch  } from 'vue';
 
@@ -417,9 +417,12 @@ async function createTournament() {
   try {
     console.log('Datos del torneo a crear:', tournamentData);
     await addTournament(tournamentData);
+    openPopup('success','Torneo creado')
     resetForm();
-    emit('close');
-    setTimeout(() => window.location.reload(), 3000);
+
+    // espera 2 segundos antes de recargar
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    window.location.reload();
     
   } catch (error) {
     // Narrow error to any to access properties safely

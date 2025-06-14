@@ -210,9 +210,13 @@ async function editSport() {
   try {
     await updateSport(dto);
     emit('created','Deporte actualizado correctamente');
+    openPopup('success','Deporte actualizado')
     resetForm();
-    emit('close');
+
+    // espera 2 segundos antes de recargar
+    await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
+
   } catch (err: any) {
     if (err.response?.status === 409) openPopup('info','El nombre del deporte ya existe');
     else if (err.response?.status === 400) {
