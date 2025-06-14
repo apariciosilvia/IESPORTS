@@ -131,5 +131,38 @@ public class MailService {
         }
     }
 
+    
+    public void sendUserQuestion(String userEmail, String userMessage) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            // Este es el correo del TFG al que se enviará el mensaje
+            helper.setTo("equipo.iesports@gmail.com"); // ← Cambia esto por el correo real de vuestro TFG
+            // El usuario parecerá ser el remitente
+            helper.setFrom(userEmail);
+            helper.setReplyTo(userEmail); // Importante: si alguien responde al correo, le responde al usuario
+            helper.setSubject("Nueva consulta desde el formulario de contacto");
+
+            String htmlContent = "<html>" +
+                    "<body style='font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;'>" +
+                    "<div style='background-color: #fff; padding: 20px; border-radius: 10px; max-width: 600px; margin: auto;'>" +
+                    "<h2 style='color: #002f3d;'>Nueva consulta recibida</h2>" +
+                    "<p><strong>Correo del usuario:</strong> " + userEmail + "</p>" +
+                    "<p><strong>Mensaje:</strong></p>" +
+                    "<div style='background-color: #f0f0f0; padding: 15px; border-left: 4px solid #ff0800; border-radius: 5px;'>" +
+                    "<p style='white-space: pre-line;'>" + userMessage + "</p>" +
+                    "</div>" +
+                    "<p style='font-size: 12px; color: #888;'>Este mensaje ha sido generado automáticamente desde el formulario de contacto.</p>" +
+                    "</div>" +
+                    "</body></html>";
+
+            helper.setText(htmlContent, true);
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

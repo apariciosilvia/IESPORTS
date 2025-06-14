@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.iesports.dao.service.impl.SportServiceImpl;
+import com.iesports.dao.service.impl.TournamentServiceImpl;
 import com.iesports.dto.SportDeleteDTO;
 import com.iesports.dto.SportAddDTO;
 import com.iesports.dto.SportUpdateDTO;
 import com.iesports.model.Sport;
 import com.iesports.model.Team;
+import com.iesports.model.Tournament;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,6 +40,9 @@ public class SportController {
 	
 	@Autowired
 	private SportServiceImpl ss;
+	
+	@Autowired
+	private TournamentServiceImpl tournamentS;
 	
 	 @Operation(summary = "Obtener todos los deportes")
 	    @ApiResponse(
@@ -159,6 +164,16 @@ public class SportController {
 	                 @ExampleObject(value = "{\"sport\":\"El deporte con ID 1 no existe\"}")
 	             }
 	         )
+	     ),
+	     @ApiResponse(
+	         responseCode = "409",
+	         description = "El deporte está asociado a torneos y no puede ser eliminado",
+	         content = @Content(mediaType = "application/json",
+	             schema = @Schema(implementation = Map.class),
+	             examples = {
+	                 @ExampleObject(value = "{\"sport\":\"El deporte con nombre Fútbol está asociado a uno o más torneos y no puede ser eliminado.\"}")
+	             }
+	         )
 	     )
 	 })
 	 
@@ -171,9 +186,18 @@ public class SportController {
 	         errors.put("sport", "El deporte con ID " + sportDTO.getId() + " no existe");
 	         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	     }
+
+	     // Comprobar si el deporte está relacionado con algún torneo
+	     List<Tournament> tournamentsWithSport = tournamentS.findTournamentsBySportId(sportDTO.getId().intValue());
+	     if (tournamentsWithSport != null && !tournamentsWithSport.isEmpty()) {
+	         errors.put("sport", "El deporte con nombre " + existingSport.getName() + " está asociado a uno o más torneos y no puede ser eliminado.");
+	         return ResponseEntity.status(HttpStatus.CONFLICT).body(errors);
+	     }
+
 	     ss.deleteSport(existingSport);
-         return ResponseEntity.ok(Map.of("sport", "Deporte borrado con éxito"));
+	     return ResponseEntity.ok(Map.of("sport", "Deporte borrado con éxito"));
 	 }
+
 	 
 	 @Operation(summary = "Obtener un deporte por ID")
 	 @ApiResponses({
