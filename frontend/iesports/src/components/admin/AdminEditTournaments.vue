@@ -454,26 +454,17 @@ async function editTournament() {
 
     
 
-  } catch (err: any) {
-    if (err.response?.status === 404) {
-      openPopup('alert', 'El torneo no existe');
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data   = error.response?.data;
+    let msg = '';
 
-    } else if (err.response?.status === 400) {
-      const errors = err.response.data;
-      let msg = '';
-
-      for (const key in errors) {
-        msg += `${errors[key]}\n`;
-      }
-
-      openPopup('error', msg);
-
+    if (status >= 400 && status <= 409) {
+      msg = Object.values(data ?? {})[0] || error.message;
     } else {
-      openPopup('error', 'Error al actualizar el torneo');
-
+      msg = 'Error inesperado';
     }
-
-    console.error(err);
+    openPopup('error', msg); 
   }
 }
 
