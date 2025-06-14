@@ -294,9 +294,9 @@
 
 <script setup lang="ts">
 
-const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+// const emit = defineEmits<{
+//   (e: 'close'): void;
+// }>();
 
 import { ref, onMounted, computed } from 'vue';
 import { IonSelect, IonSelectOption, IonContent, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';

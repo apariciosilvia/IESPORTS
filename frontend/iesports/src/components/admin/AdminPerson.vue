@@ -166,15 +166,15 @@ const showPopup = ref(false);
 const popupType = ref<'success' | 'alert' | 'error' | 'info'>('info');
 const popupMessage = ref('');
 
-function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string) {
-  popupType.value = type;
-  popupMessage.value = message.replace(/\n/g, '<br>');
-  showPopup.value = true;
-  setTimeout(() => {
-    showPopup.value = false;
-    popupMessage.value = '';
-  }, 3000);
-}
+// function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string) {
+//   popupType.value = type;
+//   popupMessage.value = message.replace(/\n/g, '<br>');
+//   showPopup.value = true;
+//   setTimeout(() => {
+//     showPopup.value = false;
+//     popupMessage.value = '';
+//   }, 3000);
+// }
 
 function openAddModal() {
   modalMode.value = 'add';
@@ -206,8 +206,6 @@ onMounted(async () => {
     console.error('Error al cargar personas:', e);
   }
 });
-
-
 </script>
 
 <style scoped>
@@ -409,7 +407,7 @@ onMounted(async () => {
   border: solid 1px #D9D8D8;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 33rem);
+  height: calc(100vh - 9rem);
 }
 
 .header {
@@ -511,9 +509,9 @@ onMounted(async () => {
   align-items: center;
   background-color: #0a2540;
   border-radius: 5px;
-  padding: 10px 15px;
-  gap: 20%;
-  width: 110px;
+  padding: 10px 10px;
+
+  width: 55px;
 }
 .action-btn {
   background: none;
@@ -530,10 +528,7 @@ onMounted(async () => {
   outline: none;
 }
 
-.actions button:last-child {
-  border-left: 1px solid rgba(255, 255, 255, 0.466);
-  padding-left: 15%;
-}
+
 .edit-icon {
   color: white;
 }
