@@ -17,7 +17,6 @@ import { onMounted, ref } from 'vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import Calendar from "@/components/ui/Calendar.vue";
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
-import Loader from '@/components/ui/Loader.vue';
 
 import Loader from '@/components/ui/Loader.vue';
 

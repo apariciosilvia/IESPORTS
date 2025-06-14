@@ -83,12 +83,6 @@ import { getSports } from '@/services/sportService';
 
 import type { Sport } from '@/model/sport';
 import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
-import Loader from '@/components/ui/Loader.vue';
-
-
-import { useLoadingEffect } from '@/composables/useLoadingEffect';
-
-const { isNowLoading } = useLoadingEffect();
 
 import Loader from '@/components/ui/Loader.vue';
 import { useLoadingEffect } from '@/composables/useLoadingEffect';
