@@ -1,5 +1,4 @@
 <template>
-  <!-- Navbar solo visible cuando se hace scroll suficiente -->
    <ion-page>
 
     <Loader v-if="isNowLoading" />
@@ -18,6 +17,7 @@ import { onMounted, ref } from 'vue';
 import Navbar from '@/components/layout/Navbar.vue';
 import Calendar from "@/components/ui/Calendar.vue";
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
+import Loader from '@/components/ui/Loader.vue';
 
 import Loader from '@/components/ui/Loader.vue';
 
@@ -42,12 +42,6 @@ onMounted(async () => {
 });
 
 console.log('matches calendar' , matches.value);
-
-
-
-
-
-
 
 
 // Ahora extraemos sólo lo que necesitamos:

@@ -4,8 +4,9 @@
     <!-- Contenido principal de la página -->
     <!-- <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true"> -->
 
-      <!-- ② Spinner mientras isLoading es true; contenido cuando termine -->
+     <!-- ② Spinner mientras isLoading es true; contenido cuando termine -->
     <Loader v-if="isNowLoading " />
+
     <ion-content
       v-else
       fullscreen
