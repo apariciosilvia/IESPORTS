@@ -1,6 +1,9 @@
 <template>
   
    <ion-page>
+
+    <Loader v-if="isNowLoading" />
+    
     <!-- Contenido principal de la página -->
       <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
         <!-- Navbar visible siempre -->
@@ -78,6 +81,10 @@ import { getMatches } from '@/services/matchService';
 import type { Match } from '@/model/match';
 // import type { Tournament } from '@/model/tournament';
 import type { Sport } from '@/model/sport';
+
+import Loader from '@/components/ui/Loader.vue';
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
+const { isNowLoading } = useLoadingEffect();
 
 
 //Extraemos el control de la navbar
