@@ -68,7 +68,7 @@ function updateSport(SportUpdateDTO: SportUpdateDTO) {
 
 
 
-function deleteSport(idSport: number) {
+function deleteSport(idSport: number): Promise<any> {
 
   const url = `${import.meta.env.VITE_URL_API}/sport/deleteSport`;
   
