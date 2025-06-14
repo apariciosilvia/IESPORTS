@@ -347,7 +347,11 @@ public class TournamentController {
 								matchIsModified = true;
 							}
 						}
+				    } else {
+				    	System.err.println("No se puede asignar un ganador antes de la fecha del partido");
 				    }
+				} else {
+					System.err.println("No se puede asignar un ganador sin fecha de partido");
 				}
 				
 				//EN CASO DE HABER MODIFICACIONES, SE ACTUALIZARÁ EL PARTIDO
