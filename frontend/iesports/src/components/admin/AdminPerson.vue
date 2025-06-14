@@ -91,29 +91,6 @@
       </div>
     </div>
 
-
-    <!-- Confirmación de eliminación -->
-    <div v-if="showConfirm" class="confirm-overlay">
-      <div class="card">
-        <div class="card-content">
-          <p class="card-heading">¿Eliminar deporte?</p>
-          <p class="card-description">Esta acción no se puede deshacer.</p>
-          
-        </div>
-        <div class="card-button-wrapper">
-          <button class="card-button secondary" @click="cancelDelete">Cancelar</button>
-          <!-- <button class="card-button primary" @click="confirmDelete">Eliminar</button> -->
-        </div>
-        <button class="exit-button" @click="cancelDelete">
-          <svg height="20px" viewBox="0 0 384 512">
-            <path
-              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
-            ></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-
     <div class="header">
       <h2 class="tittle">Usuarios</h2>
       <ion-button class="new-btn" @click="openAddModal">
@@ -147,12 +124,7 @@
                 >
                   <span class="material-symbols-outlined edit-icon">edit_square</span>
                 </button>
-                <button 
-                  type="button" 
-                  class="action-btn delete-btn"
-                  @click="requestDelete(p.id)">
-                  <span class="material-symbols-outlined delete-icon">delete</span>
-                </button>
+               
               </div>
             </td>
           </tr>
@@ -162,15 +134,15 @@
     <!-- Modal principal --> 
     <ion-modal
       :is-open="isModalOpen"
-      :key="`${modalMode}-${sportToEdit ?? 'new'}-${isModalOpen}`"
+      :key="`${modalMode}-${personToEdit ?? 'new'}-${isModalOpen}`"
       backdrop-dismiss="false"
       swipe-to-close="false"
     >
-      <!-- <component
-        :is="modalMode === 'add' ? AdminAddpersons : AdminEditpersons"
+      <component
+        :is="modalMode === 'add' ? AdminAddPersons : AdminEditPersons"
         @close="closeModal"
-        :id="sportToEdit"
-      /> -->
+        :id="personToEdit"
+      />
     </ion-modal>
 
   </section>
@@ -181,14 +153,13 @@ import { onMounted, ref } from 'vue';
 import { IonButton } from '@ionic/vue';
 import { getPersons } from '@/services/personServices';
 import type { Person } from '@/model/person';
+import AdminAddPersons from '@/components/admin/AdminAddPersons.vue';
+import AdminEditPersons from '@/components/admin/AdminEditPersons.vue';
 
 const modalMode = ref<'add' | 'edit'>('add');
-const sportToEdit = ref<number | null>(null);
+const personToEdit = ref<number | null>(null);
 const isModalOpen = ref(false);
 const persons = ref<Person[]>([]);
-
-const showConfirm = ref(false);
-const pendingDeleteId = ref<number | null>(null);
 
 // Popup state
 const showPopup = ref(false);
@@ -207,45 +178,19 @@ function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string
 
 function openAddModal() {
   modalMode.value = 'add';
-  sportToEdit.value = null;
+  personToEdit.value = null;
   isModalOpen.value = true;
 }
 
 function openEditModal(id: number) {
   modalMode.value = 'edit';
-  sportToEdit.value = id;
+  personToEdit.value = id;
   isModalOpen.value = true;
 }
 
 function closeModal() {
   document.activeElement instanceof HTMLElement && document.activeElement.blur();
   isModalOpen.value = false;
-}
-
-function requestDelete(id: number){
-  pendingDeleteId.value = id;
-  showConfirm.value = true;
-}
-
-// async function confirmDelete() {
-//   if (pendingDeleteId.value !== null) {
-//     try {
-//       await deleteSport(pendingDeleteId.value);
-//       persons.value = persons.value.filter(
-//         (s) => s.id !== pendingDeleteId.value
-//       );
-//       openPopup('success', 'Deporte eliminado correctamente');
-//     } catch (error: any) {
-//       console.error('Error al eliminar deporte:', error);
-//     }
-//   }
-//   showConfirm.value = false;
-//   pendingDeleteId.value = null;
-// }
-
-function cancelDelete() {
-  showConfirm.value = false;
-  pendingDeleteId.value = null;
 }
 
 function closePopup() {
@@ -599,13 +544,13 @@ onMounted(async () => {
 ion-modal {
   --width: 95vw;
   --max-width: 1200px;
-  --height: 20vw;
+  --height: 90vw;
   --max-height: 300vh;
 }
 
 ion-modal::part(content) {
-  height: 25vh !important;
-  max-height: 75vh !important;
+  height: 55vh !important;
+  max-height: 100vh !important;
   width: 95vw;
   max-width: 1200px;
   overflow: hidden;

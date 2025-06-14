@@ -3,6 +3,8 @@ import type { ChangePasswordDTO } from '@/model/dto/changePasswordDTO';
 import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequestDTO';
 import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
 import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
+import type { ChangeRoleAndCourseDTO } from '@/model/dto/ChangeRoleAndCourseDTO';
+
 import type { Person } from '@/model/person';
 
 function getPersons() {
@@ -108,4 +110,30 @@ function changeTempPassword(ChangeForgottenPasswordDTO: ChangeForgottenPasswordD
 };
 
 
-export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};
+
+function changeUserRoleAndCourse(ChangeRoleAndCourseDTO: ChangeRoleAndCourseDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/changeRoleAndCourse`;
+
+  return axios.post(url, ChangeRoleAndCourseDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+
+function getPersonById(id: number): Promise<Person> {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/getPersonById`;
+
+  return axios
+    .get<Person>(url, { params: { id } })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error cargando información de la persona:', error);
+      return Promise.reject(error);
+    });
+}
+
+
+
+export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword, changeUserRoleAndCourse, getPersonById};
