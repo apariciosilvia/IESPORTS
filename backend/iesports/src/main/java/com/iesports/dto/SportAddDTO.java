@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class SportAddDTO {
 
-	@NotBlank(message = "El nombre es obligatorio")
+	@NotBlank(message = "El nombre del deporte es obligatorio")
 	private String name;
 
 	public String getName() {

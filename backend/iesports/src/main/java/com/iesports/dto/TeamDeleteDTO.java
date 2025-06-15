@@ -1,15 +1,10 @@
 package com.iesports.dto;
 
-import java.util.List;
-
-import com.iesports.model.Person;
-
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 public class TeamDeleteDTO {
 
-    @NotNull(message = "El nombre no debe estar vacío")
+    @NotNull(message = "El equipo es obligatorio")
     private Long id;
 
     public Long getId() {

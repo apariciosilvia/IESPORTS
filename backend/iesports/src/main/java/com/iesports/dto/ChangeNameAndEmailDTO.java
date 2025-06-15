@@ -6,13 +6,13 @@ import jakarta.validation.constraints.NotNull;
 
 public class ChangeNameAndEmailDTO {
 	
-	@NotNull(message = "La persona no puede ser nula")
+	@NotNull(message = "El usuarui es obligatorio")
 	private Long personId;
 	
 	@NotBlank(message = "El nombre es obligatorio")
 	private String name;
 	
-	@Email(message = "El email no es válido")
+	@Email(message = "El email no tiene el formato correcto")
 	@NotBlank(message = "El email es obligatorio")
 	private String email;
 

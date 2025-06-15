@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public class MatchDTO {
 
-	@NotBlank(message = "El id del equipo 1 es obligatorio")
+	@NotBlank(message = "El equipo 1 es obligatorio")
 	private Long team1Id;
-	@NotBlank(message = "El id del equipo 2 es obligatorio")
+	@NotBlank(message = "El equipo 2 es obligatorio")
 	private Long team2Id;
 	
 	private Date matchDate;
