@@ -1,6 +1,7 @@
 <!-- src/components/NewTeam.vue -->
 <template>
-  <!-- Popup Container -->
+
+  <!-- START ALERTS POPUPS -->
   <div class="popup-container" v-if="showPopup">
     <!-- SUCCESS -->
     <div class="popup success-popup" v-if="popupType === 'success'">
@@ -90,8 +91,9 @@
       </div>
     </div>
   </div>
+  <!-- END ALERTS POPUPS -->
 
-  <!-- Main View -->
+  <!-- START VISTA EDITAR EQUIPO -->
   <ion-header>
     <ion-toolbar class="header-red">
       <ion-title>EDITAR EQUIPO</ion-title>
@@ -187,6 +189,7 @@
       </ion-button>
     </div>
   </ion-footer>
+  <!-- END VISTA EDITAR EQUIPO -->
 </template>
 
 <script setup lang="ts">

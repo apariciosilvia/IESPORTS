@@ -1,5 +1,5 @@
 <template>
-  <!-- Popup Container -->
+  <!-- START ALERTS POPUPS -->
   <div class="popup-container" v-if="showPopup">
     <!-- SUCCESS -->
     <div class="popup success-popup" v-if="popupType === 'success'">
@@ -88,9 +88,10 @@
         </svg>
       </div>
     </div>
-  </div>
+  </div>Ç
+  <!-- END ALERTS POPUPS -->
 
-  <!-- Cabecera del modal -->
+  <!-- START VISTA EDITAR TORNEO -->
   <ion-header>
     <ion-toolbar class="white-header">
       <ion-title>EDITAR TORNEO</ion-title>
@@ -292,14 +293,10 @@
       </ion-button>
     </div>
   </ion-footer>
+  <!-- END VISTA EDITAR TORNEO -->
 </template>
 
 <script setup lang="ts">
-
-// const emit = defineEmits<{
-//   (e: 'close'): void;
-// }>();
-
 import { ref, onMounted, computed } from 'vue';
 import { IonSelect, IonSelectOption, IonContent, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
 
