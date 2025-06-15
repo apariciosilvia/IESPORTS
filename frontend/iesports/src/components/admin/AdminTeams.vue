@@ -1,6 +1,7 @@
 <template>
   <section class="teams">
-     <!-- Alerts -->
+
+    <!-- START ALERTS POPUPS -->
     <div class="popup-container" v-if="showPopup">
       <!-- SUCCESS -->
       <div class="popup success-popup" v-if="popupType === 'success'">
@@ -90,9 +91,10 @@
         </div>
       </div>
     </div>
+    <!-- END ALERTS POPUPS -->
 
 
-    <!-- Confirmación de eliminación -->
+    <!-- START POPUP DE CONFIRMACIÓN ANTES DE ELIMINAR -->
     <div v-if="showConfirm" class="confirm-overlay">
       <div class="card">
         <div class="card-content">
@@ -113,7 +115,10 @@
         </button>
       </div>
     </div>
+    <!-- END POPUP DE CONFIRMACIÓN ANTES DE ELIMINAR -->
 
+
+    <!-- START VISTA TODOS LOS EQUIPOS -->
     <div class="header">
       <h2 class="tittle">Equipos</h2>
       <ion-button class="new-btn" @click="openAddModal">
@@ -189,7 +194,9 @@
         </tbody>
       </table>
     </div>
-    <!-- Modal principal --> 
+    <!-- END VISTA TODOS LOS EQUIPOS -->
+
+    <!-- START MODAL EDITAR Y CREAR EQUIPO --> 
     <ion-modal
       :is-open="isModalOpen"
       :key="`${modalMode}-${teamToEdit ?? 'new'}-${isModalOpen}`"
@@ -202,7 +209,7 @@
         :idTeam="teamToEdit"
       />
     </ion-modal>
-
+    <!-- END MODAL EDITAR Y CREAR EQUIPO -->
   </section>
 </template>
 

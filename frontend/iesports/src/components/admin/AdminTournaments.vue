@@ -1,6 +1,7 @@
 <template>
   <section class="tournaments">
-    <!-- Alerts -->
+
+    <!-- START ALERTS POPUPS -->
     <div class="popup-container" v-if="showPopup">
       <!-- SUCCESS -->
       <div class="popup success-popup" v-if="popupType === 'success'">
@@ -90,9 +91,10 @@
         </div>
       </div>
     </div>
+    <!-- END ALERTS POPUPS -->
 
 
-    <!-- Confirmación de eliminación -->
+    <!-- START POPUP DE CONFIRMACIÓN ANTES DE ELIMINAR -->
     <div v-if="showConfirm" class="confirm-overlay">
       <div class="card">
         <div class="card-content">
@@ -113,7 +115,10 @@
         </button>
       </div>
     </div>
+    <!-- END POPUP DE CONFIRMACIÓN ANTES DE ELIMINAR -->
 
+
+    <!-- START VISTA TODOS LOS TORNEOS -->
     <div class="header">
       <h2 class="tittle">Torneos</h2>
       <ion-button class="new-btn" @click="openAddModal">
@@ -180,6 +185,10 @@
         </tbody>
       </table>
     </div>
+    <!-- END VISTA TODOS LOS TORNEOS -->
+
+
+    <!-- START MODAL EDITAR Y CREAR TORNEO --> 
     <ion-modal :is-open="isModalOpen" backdrop-dismiss="false" swipe-to-close="false">
       <component
         :is="modalMode === 'add' ? AdminAddTournaments : AdminEditTournaments"
@@ -187,6 +196,7 @@
         :tournamentId="tournamentToEdit"
       />
     </ion-modal>
+    <!-- END MODAL EDITAR Y CREAR TORNEO -->
   </section>
 </template>
 

@@ -1,6 +1,7 @@
 <template>
   <section class="sports">
-     <!-- Alerts -->
+
+    <!-- START ALERTS POPUPS -->
     <div class="popup-container" v-if="showPopup">
       <!-- SUCCESS -->
       <div class="popup success-popup" v-if="popupType === 'success'">
@@ -90,9 +91,10 @@
         </div>
       </div>
     </div>
+    <!-- END ALERTS POPUPS -->
 
 
-    <!-- Confirmación de eliminación -->
+    <!-- START POPUP DE CONFIRMACIÓN ANTES DE ELIMINAR -->
     <div v-if="showConfirm" class="confirm-overlay">
       <div class="card">
         <div class="card-content">
@@ -113,7 +115,10 @@
         </button>
       </div>
     </div>
+    <!-- END POPUP DE CONFIRMACIÓN ANTES DE ELIMINAR -->
 
+
+    <!-- START VISTA TODOS LOS DEPORTES -->
     <div class="header">
       <h2 class="tittle">Deportes</h2>
       <ion-button class="new-btn" @click="openAddModal">
@@ -153,7 +158,10 @@
         </tbody>
       </table>
     </div>
-    <!-- Modal principal --> 
+    <!-- END VISTA TODOS LOS DEPORTES -->
+
+
+    <!-- START MODAL EDITAR Y CREAR DEPORTE --> 
     <ion-modal
       :is-open="isModalOpen"
       :key="`${modalMode}-${sportToEdit ?? 'new'}-${isModalOpen}`"
@@ -166,6 +174,7 @@
         :id="sportToEdit"
       />
     </ion-modal>
+    <!-- END MODAL EDITAR Y CREAR DEPORTE --> 
 
   </section>
 </template>
@@ -173,8 +182,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { IonButton } from '@ionic/vue';
+
+// SERVICES
 import { deleteSport, getSports } from '@/services/sportService';
+
+// CLASSES
 import type { Sport } from '@/model/sport';
+
+// COMPONENTS
 import AdminAddSports from '@/components/admin/AdminAddSports.vue';
 import AdminEditSports from '@/components/admin/AdminEditSports.vue';
 
@@ -186,7 +201,7 @@ const sports = ref<Sport[]>([]);
 const showConfirm = ref(false);
 const pendingDeleteId = ref<number | null>(null);
 
-// Popup state
+/* ALERTS POPUPS START*/
 const showPopup = ref(false);
 const popupType = ref<'success' | 'alert' | 'error' | 'info'>('info');
 const popupMessage = ref('');
@@ -206,7 +221,10 @@ function openAddModal() {
   sportToEdit.value = null;
   isModalOpen.value = true;
 }
+/* ALERTS POPUPS END*/
 
+
+/* MODAL EDITAR Y CREAR DEPORTE START */
 function openEditModal(id: number) {
   modalMode.value = 'edit';
   sportToEdit.value = id;
@@ -218,6 +236,10 @@ function closeModal() {
   isModalOpen.value = false;
 }
 
+/* MODAL EDITAR Y CREAR DEPORTE END */
+
+
+/* POPUP CONFIRMAR ANTES DE ELIMINAR START */
 function requestDelete(id: number){
   pendingDeleteId.value = id;
   showConfirm.value = true;
@@ -248,8 +270,6 @@ async function confirmDelete() {
   }
 }
 
-
-
 function cancelDelete() {
   showConfirm.value = false;
   pendingDeleteId.value = null;
@@ -259,6 +279,8 @@ function closePopup() {
   showPopup.value = false;
   popupMessage.value = '';
 }
+/* POPUP CONFIRMAR ANTES DE ELIMINAR START */
+
 
 onMounted(async () => {
   try {
@@ -268,8 +290,6 @@ onMounted(async () => {
     console.error('Error al cargar deportes:', e);
   }
 });
-
-
 </script>
 
 <style scoped>
@@ -471,7 +491,7 @@ onMounted(async () => {
   border: solid 1px #D9D8D8;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 33rem);
+  height: calc(100vh - 23rem);
 }
 
 .header {
