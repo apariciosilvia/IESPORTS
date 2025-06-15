@@ -294,12 +294,11 @@ async function toggleUserEdit() {
       openPopup('success','Perfil actualizado');
     
     } catch (error: any) {
-      openPopup('error','Error al actualizar perfil')
 
       if (error.response && error.response.status === 400) {
         errores.value = error.response.data;
       } else {
-        errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
+        openPopup('error','Error inesperado. Intenta de nuevo.');
       }
     }
   }
@@ -335,12 +334,11 @@ async function togglePasswordEdit() {
       confirmPassword.value = '';
 
     } catch (error: any) {
-      openPopup('error','Error al cambiar contraseña');
       
       if (error.response && error.response.status === 400) {
         errores.value = error.response.data;
       } else {
-        errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
+        openPopup('error','Error inesperado. Intenta de nuevo.');
       }
       currentPassword.value = '';
       newPassword.value = '';
