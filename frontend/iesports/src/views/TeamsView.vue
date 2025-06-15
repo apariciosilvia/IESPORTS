@@ -1,5 +1,8 @@
 <template>
   <ion-page>
+
+    <Loader v-if="isNowLoading" />
+
     <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
       <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
 
@@ -7,7 +10,7 @@
       <div class="filters-container">
         <!-- Filtro por deporte -->
         <ion-item class="filter-item">
-          <ion-label>Deporte</ion-label>
+          <ion-label>Filtra por deporte</ion-label>
           <ion-select v-model="selectedSport" placeholder="Selecciona deporte">
             <ion-select-option :value="null">Todos</ion-select-option>
             <ion-select-option
@@ -45,6 +48,14 @@
         />
       </div>
 
+
+      <!-- Mensaje si no hay resultados -->
+      <div v-if="Object.keys(filteredTeams).length === 0" class="no-results">
+        <span class="material-symbols-outlined">search_off</span>
+          <p class="no-results-text">No se encontraron equipos con los filtros seleccionados.</p>
+          <p class="no-results-subtext">Prueba a cambiar los filtros o restablecer la búsqueda.</p>
+      </div>
+
       <Footer />
     </ion-content>
   </ion-page>
@@ -72,6 +83,11 @@ import { getSports } from '@/services/sportService';
 
 import type { Sport } from '@/model/sport';
 import type { TeamInfoDTO } from '@/model/dto/teamInfoDTO';
+
+import Loader from '@/components/ui/Loader.vue';
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
+const { isNowLoading } = useLoadingEffect();
+
 
 const { showNav, handleScroll } = useNavbarVisibility();
 
@@ -259,5 +275,110 @@ watch(selectedSport, async () => {
   --box-shadow: none;
   text-align: left;
   max-height: 40px;
+}
+
+
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  color: #666;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+  .no-results {
+    padding: 1rem;
+    min-height: 30vh;
+  }
+
+  .no-results .material-symbols-outlined {
+    font-size: 6rem;
+  }
+
+  .no-results-text {
+    font-size: 1rem;
+  }
+
+  .no-results-subtext {
+    font-size: 0.9rem;
+  }
+}
+
+/* Móviles grandes y tablets (481px a 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .no-results {
+    min-height: 50vh;
+  }
+  .no-results .material-symbols-outlined {
+    font-size: 7rem;
+  }
+
+  .no-results-text {
+    font-size: 1.1rem;
+  }
+
+  .no-results-subtext {
+    font-size: 1rem;
+  }
+}
+
+/* Portátiles (769px a 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .no-results {
+    min-height: 60vh;
+  }
+  .no-results .material-symbols-outlined {
+    font-size: 8rem;
+  }
+
+  .no-results-text {
+    font-size: 1.2rem;
+  }
+
+  .no-results-subtext {
+    font-size: 1.05rem;
+  }
+}
+
+/* Pantallas grandes (más de 1024px) */
+@media (min-width: 1025px) {
+
+  .no-results .material-symbols-outlined {
+    font-size: 9rem;
+  }
+
+  .no-results-text {
+    font-size: 1.3rem;
+  }
+
+  .no-results-subtext {
+    font-size: 1.1rem;
+  }
+}
+
+
+.no-results .material-symbols-outlined {
+  font-size: 9rem;
+  color: #aaa;
+  margin-bottom: 1rem;
+}
+
+.no-results-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.no-results-subtext {
+  font-size: 1rem;
+  font-style: italic;
+  color: #999;
 }
 </style>

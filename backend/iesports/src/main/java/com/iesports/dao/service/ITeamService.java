@@ -21,5 +21,5 @@ public interface ITeamService {
 	
 	public List<Team> getTeamsByTournamentId(Long tournamentId);
 	
-	public Team getTeamByIdAndName(Long id, String name);
+	public boolean existsNameTeam(String nameTeam, Long idTeam);
 }

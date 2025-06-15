@@ -1,6 +1,8 @@
 <template>
-  <!-- Navbar solo visible cuando se hace scroll suficiente -->
    <ion-page>
+
+    <Loader v-if="isNowLoading" />
+
     <!-- Contenido principal de la página -->
     <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true">
       <Navbar :class="['navbar', { 'navbar-visible': showNav }]" />
@@ -16,12 +18,17 @@ import Navbar from '@/components/layout/Navbar.vue';
 import Calendar from "@/components/ui/Calendar.vue";
 import { useNavbarVisibility } from '@/composables/useNavbarVisibility';
 
+import Loader from '@/components/ui/Loader.vue';
+
 import type { Match } from '@/model/match';
 
 
 import { getMatches } from '@/services/matchService';
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
 
 const matches = ref<Match[]>([]);
+
+const { isNowLoading } = useLoadingEffect();
 
 onMounted(async () => {
   try {
@@ -34,12 +41,6 @@ onMounted(async () => {
 });
 
 console.log('matches calendar' , matches.value);
-
-
-
-
-
-
 
 
 // Ahora extraemos sólo lo que necesitamos:

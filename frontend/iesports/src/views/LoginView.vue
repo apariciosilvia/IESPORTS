@@ -244,6 +244,15 @@
             <a href="#" @click.prevent="showRegister = false; cleanInputs()">¿Ya tienes cuenta? Inicia sesión</a>
           </div>
         </div>
+
+         <!-- Popup Modal -->
+        <div v-if="showPopup" class="modal-overlay">
+          <div class="modal">
+            <!-- sin reverseString ni computed aquí -->
+            <p>{{ popupMessage }}</p>
+            <button @click="closePopup">OK</button>
+          </div>
+        </div>
         <!-- REGISTRO END -->
       </div>
     </div>
@@ -344,6 +353,7 @@ import { getCourses } from "@/services/courseService";
 import { login, register, forgotPassword, changeTempPassword } from '@/services/personServices';
 import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequestDTO';
 import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
+import type { Course } from '@/model/course';
 
 
 /* FONDO ANIMADO START */
@@ -412,6 +422,13 @@ const errores = ref<Record<string, string>>({});
 /* FUNCION PARA REGISTRARSE START */
 const showRegister = ref(false);
 const registerData = ref({ name: '', email: '', password: '', confirmPassword: '' })
+const showPopup = ref(false)
+const popupMessage = ref('')
+
+function closePopup() {
+  showPopup.value = false;
+  router.push('/');
+}
 
 async function handleRegister() {
   try {
@@ -424,9 +441,9 @@ async function handleRegister() {
     );
 
     if (response) {
-      localStorage.setItem('usuario', JSON.stringify(response.data));
-      alert('Registro exitoso. Has iniciado sesión automáticamente.');
-      router.push('/');
+      localStorage.setItem('usuario', JSON.stringify(response.data))
+      popupMessage.value = 'Registro exitoso. Has iniciado sesión automáticamente.'
+      showPopup.value = true
     }
   } catch (error: any) {
     console.error('Error al registrar:', error.response.data);
@@ -519,7 +536,7 @@ async function changeTemporalPassword(){
 
 
 /* OBTENER TODOS LOS CURSOS START */
-const courses:Ref<any[]> = ref([]);
+const courses:Ref<Course[]> = ref([]);
 const selectedCourse = ref('');
  
 async function handleGetCourses() {
@@ -573,6 +590,35 @@ function cleanInputs() {
 </script>
  
 <style scoped>
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transform: rotateY(180deg);
+}
+
+.modal button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
  
 .vanta-bg {
   position: absolute;
@@ -1146,4 +1192,3 @@ ion-popover.wide-popover::part(content) {
   max-width: 90vw;
 }
 </style>
- 

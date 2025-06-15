@@ -1,5 +1,6 @@
 package com.iesports.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,14 +9,18 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "roles")
+@Schema(description = "Entidad que representa un rol")
 public class Role {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description = "ID único del registro", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
 	private Long id;
 
 //	@Column (nullable = false)
+	@Schema(description = "Nombre asociado al registro", example = "Administrador")
 	private String name;
+	@Schema(description = "Indica si el rol está activo (1 = sí, 0 = no)", example = "0")
 	private int active;
 
 	public Role() {

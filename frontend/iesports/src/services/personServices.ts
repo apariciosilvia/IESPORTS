@@ -3,12 +3,35 @@ import type { ChangePasswordDTO } from '@/model/dto/changePasswordDTO';
 import type { ForgotPasswordRequestDTO } from '@/model/dto/forgotPasswordRequestDTO';
 import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPasswordDTO';
 import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
+import type { ChangeRoleAndCourseDTO } from '@/model/dto/changeRoleAndCourseDTO';
+import type { ContactFormRequestDTO } from '@/model/dto/contactFormRequestDTO';
+import type { PersonRegisterByAdminDTO } from '@/model/dto/personRegisterByAdminDTO';
+
+import type { Person } from '@/model/person';
 
 function getPersons() {
 
   return new Promise<any[]>((resolve, reject) => {
 
     const url = `${import.meta.env.VITE_URL_API}/person/getPersons`;
+
+     axios.get(url)
+       .then(response => {
+        console.log('Respuesta completa:', response.data); 
+         resolve(response.data);
+       })
+       .catch(error => {
+        console.error('Error en la petición:', error);
+        reject(error);
+       });
+   });
+};
+
+function getPersonsRoleStudent() {
+
+  return new Promise<Person[]>((resolve, reject) => {
+
+    const url = `${import.meta.env.VITE_URL_API}/person/getPersonsRoleStudent`;
 
      axios.get(url)
        .then(response => {
@@ -51,23 +74,21 @@ function register(name: string, email: string, password1: string, password2: str
   });
 }
 
-function changeNameAndEmail(changeNameAndEmailDTO: ChangeNameAndEmailDTO) {
-
+async function changeNameAndEmail(changeNameAndEmailDTO: ChangeNameAndEmailDTO): Promise<Person> {
   const url = `${import.meta.env.VITE_URL_API}/person/changeNameAndEmail`;
-
-  return axios.post(url, changeNameAndEmailDTO, {
+  const { data: updatedUser } = await axios.post<Person>(url, changeNameAndEmailDTO, {
     headers: { 'Content-Type': 'application/json' }
   });
+  return updatedUser;
 };
 
-function changePassword(ChangePasswordDTO: ChangePasswordDTO) {
-
+async function changePassword(dto: ChangePasswordDTO): Promise<void> {
   const url = `${import.meta.env.VITE_URL_API}/person/changePassword`;
-
-  return axios.post(url, ChangePasswordDTO, {
+  await axios.post<void>(url, dto, {
     headers: { 'Content-Type': 'application/json' }
   });
-};
+}
+
 
 function forgotPassword(ForgotPasswordRequestDTO: ForgotPasswordRequestDTO) {
 
@@ -89,4 +110,47 @@ function changeTempPassword(ChangeForgottenPasswordDTO: ChangeForgottenPasswordD
 };
 
 
-export { getPersons, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword};
+
+function changeUserRoleAndCourse(ChangeRoleAndCourseDTO: ChangeRoleAndCourseDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/changeRoleAndCourse`;
+
+  return axios.post(url, ChangeRoleAndCourseDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+
+function getPersonById(id: number): Promise<Person> {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/getPersonById`;
+
+  return axios
+    .get<Person>(url, { params: { id } })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error cargando información de la persona:', error);
+      return Promise.reject(error);
+    });
+}
+
+function contactForm(ContactFormRequestDTO: ContactFormRequestDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/contactForm`;
+
+  return axios.post(url, ContactFormRequestDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+
+
+function registerAUser(PersonRegisterByAdminDTO: PersonRegisterByAdminDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/registerAUser`;
+
+  return axios.post(url, PersonRegisterByAdminDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword, changeUserRoleAndCourse, getPersonById, contactForm, registerAUser };

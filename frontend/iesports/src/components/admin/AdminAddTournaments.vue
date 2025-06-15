@@ -242,9 +242,9 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+// const emit = defineEmits<{
+//   (e: 'close'): void;
+// }>();
 
 import { ref, onMounted, computed, watch  } from 'vue';
 
@@ -267,7 +267,7 @@ const teams = ref<Team[]>([]);
 
 const tournamentName = ref('');
 const selectedSportId = ref<number | null>(null);
-const selectedNumberTeams = ref<number>(8); // valor por defecto
+const selectedNumberTeams = ref<number>(8); 
 const selectedTeams = ref<string[]>([]);
 const matchDates = ref<(Date | null)[]>([]);
 
@@ -417,28 +417,24 @@ async function createTournament() {
   try {
     console.log('Datos del torneo a crear:', tournamentData);
     await addTournament(tournamentData);
+    openPopup('success','Torneo creado')
     resetForm();
-    emit('close');
-    setTimeout(() => window.location.reload(), 3000);
+
+    // espera 2 segundos antes de recargar
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    window.location.reload();
     
-  } catch (error) {
-    // Narrow error to any to access properties safely
-    const err = error as any;
-    if (err.response?.status === 409) {
-      openPopup('info', 'Ya existe un torneo con este nombre');
-    } else if (err.response?.status === 404) {
-      openPopup('error', err.response.data.error || 'Datos inválidos enviados al servidor');
-    } else if (err.response?.status === 400) {
-      const errors = err.response.data;
-      let msg = '';
-      for (const key in errors) {
-        msg += `${errors[key]}\n`;
-      }
-      openPopup('error', msg);
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data   = error.response?.data;
+    let msg = '';
+
+    if (status >= 400 && status <= 409) {
+      msg = Object.values(data ?? {})[0] || error.message;
     } else {
-      console.error(error);
-      openPopup('error', 'Error al crear el torneo');
+      msg = 'Error inesperado';
     }
+    openPopup('error', msg); 
   }
 }
 
@@ -453,6 +449,7 @@ function resetForm() {
 
 onMounted(() => {
   loadData();
+  console.log("Añadir torneo")
 });
 
 

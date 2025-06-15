@@ -2,7 +2,7 @@ package com.iesports.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class SportRegisterDTO {
+public class SportAddDTO {
 
 	@NotBlank(message = "El nombre es obligatorio")
 	private String name;
@@ -19,6 +19,5 @@ public class SportRegisterDTO {
 	public String toString() {
 		return "SportRegisterDTO [name=" + name + "]";
 	}
-
 
 }

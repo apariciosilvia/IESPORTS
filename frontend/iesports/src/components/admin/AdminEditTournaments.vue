@@ -294,9 +294,9 @@
 
 <script setup lang="ts">
 
-const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+// const emit = defineEmits<{
+//   (e: 'close'): void;
+// }>();
 
 import { ref, onMounted, computed } from 'vue';
 import { IonSelect, IonSelectOption, IonContent, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
@@ -445,30 +445,26 @@ async function editTournament() {
 
   try {
     await modifyTournament(payload);
+    openPopup('success','Torneo actualizado')
     resetForm();
-    emit('close');
+
+    // espera 2 segundos antes de recargar
+    await new Promise(resolve => setTimeout(resolve, 1000))
     window.location.reload();
 
-  } catch (err: any) {
-    if (err.response?.status === 404) {
-      openPopup('alert', 'El torneo no existe');
+    
 
-    } else if (err.response?.status === 400) {
-      const errors = err.response.data;
-      let msg = '';
+  } catch (error: any) {
+    const status = error.response?.status;
+    const data   = error.response?.data;
+    let msg = '';
 
-      for (const key in errors) {
-        msg += `${errors[key]}\n`;
-      }
-
-      openPopup('error', msg);
-
+    if (status >= 400 && status <= 409) {
+      msg = Object.values(data ?? {})[0] || error.message;
     } else {
-      openPopup('error', 'Error al actualizar el torneo');
-
+      msg = 'Error inesperado';
     }
-
-    console.error(err);
+    openPopup('error', msg); 
   }
 }
 
@@ -498,6 +494,7 @@ const roundsInfo = computed(() => {
 
 onMounted(() => {
   loadData();
+  console.log("Editar torneo ", props.tournamentId)
 });
 </script>
 

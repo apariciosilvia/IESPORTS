@@ -31,7 +31,11 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 			""", nativeQuery = true)
 	public List<Team> getTeamsByTournamentId(Long tournamentId);
 	
-	
-	@Query(value = "SELECT * FROM TEAM WHERE id=?1 AND name=?2", nativeQuery = true)
-	public Team getTeamByIdAndName(Long id, String name);
+	@Query(value = """
+			SELECT COUNT(*)
+			FROM teams
+			WHERE name = ?1
+			AND NOT id = ?2;
+			""", nativeQuery = true)
+	public Integer existsNameTeam(String nameTeam, Long idTeam);
 }

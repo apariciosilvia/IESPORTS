@@ -1,4 +1,5 @@
 package com.iesports.model;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,12 +10,18 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @Entity
 @Table(name = "teams")
+@Schema(description = "Entidad que representa un equipo")
 public class Team {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description = "ID único del equipo", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
 	private Long id;
+	@Column(name = "name", unique = true)
+    @Schema(description = "Nombre único del equipo", example = "Advance Junior High")
 	private String name;
 	
 	@ManyToMany
@@ -23,6 +30,7 @@ public class Team {
         joinColumns = @JoinColumn(name = "team_id"),
         inverseJoinColumns = @JoinColumn(name = "player_id")
     )
+	@Schema(description = "Lista de jugadores que pertenecen al equipo")
 	List<Person> players;
 	
 	public Team(Long id, String name, List<Person> players) {

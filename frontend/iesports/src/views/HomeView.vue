@@ -4,8 +4,9 @@
     <!-- Contenido principal de la página -->
     <!-- <ion-content fullscreen @ionScroll="handleScroll" :scroll-events="true"> -->
 
-      <!-- ② Spinner mientras isLoading es true; contenido cuando termine -->
-    <LoadingSpinner v-if="isLoading" />
+     <!-- ② Spinner mientras isLoading es true; contenido cuando termine -->
+    <Loader v-if="isNowLoading " />
+
     <ion-content
       v-else
       fullscreen
@@ -49,16 +50,16 @@ import Navbar from '@/components/layout/Navbar.vue';
 import Gallery from '@/components/ui/Gallery.vue';
 import ContactComponent from '@/components/layout/ContactComponent.vue';
 import Footer from '@/components/ui/Footer.vue';
-import LoadingSpinner from '@/components/ui/LoadingSpinner.vue'
+import Loader from '@/components/ui/Loader.vue'
 
 /* Importa lógica separada (composables) */
-import { useLoadingEffect } from '@/composables//useLoadingEffect';
+import { useLoadingEffect } from '@/composables/useLoadingEffect';
 import { useNavbarScroll } from '@/composables/useNavbarScroll'     // gestiona scroll dinámico
 
 import { onMounted, ref } from 'vue';
 
 // Llamamos al composable de carga
-const { isLoading, loadData } = useLoadingEffect();
+const { isNowLoading } = useLoadingEffect();
 
 const nombre = ref('');
 
