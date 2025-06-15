@@ -255,6 +255,7 @@
                   type="number"
                   v-model.number="match.pointsTeam1"
                   :readonly="match.winnerTeam !== null"
+                  min="0"
                 />
               </div>
               <span class="vs-text">
@@ -272,6 +273,7 @@
                   type="number"
                   v-model.number="match.pointsTeam2"
                   :readonly="match.winnerTeam !== null"
+                  min="0"
                 />
               </div>
             </div>

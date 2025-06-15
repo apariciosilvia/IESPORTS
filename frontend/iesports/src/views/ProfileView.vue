@@ -14,7 +14,7 @@
   <IonContent class="ion-padding">
     <div class="profile-container">
 
-       <!-- Alerts -->
+    <!-- Alerts -->
     <div class="popup-container" v-if="showPopup">
       <!-- SUCCESS -->
       <div class="popup success-popup" v-if="popupType === 'success'">
