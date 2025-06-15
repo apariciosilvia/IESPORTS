@@ -550,13 +550,18 @@ ion-modal {
 }
 
 ion-modal::part(content) {
-  height: 55vh !important;
+  height: 45vh !important;
   max-height: 100vh !important;
   width: 95vw;
   max-width: 1200px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+@media (max-width: 600px) {
+  ion-modal::part(content) {
+    height: 75vh !important;
+  }
 }
 
 ion-modal::part(backdrop) {

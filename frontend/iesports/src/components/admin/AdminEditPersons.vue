@@ -1,6 +1,5 @@
-<!-- src/components/NewSport.vue -->
 <template>
-  <!-- Popup Container -->
+  <!-- START ALERTS POPUPS -->
   <div class="popup-container" v-if="showPopup">
     <!-- SUCCESS -->
     <div class="popup success-popup" v-if="popupType === 'success'">
@@ -90,8 +89,9 @@
       </div>
     </div>
   </div>
+  <!-- END ALERTS POPUPS -->
 
-  <!-- Main View -->
+  <!-- START VISTA EDITAR USUARIO -->
   <ion-header>
     <ion-toolbar class="header-red">
       <ion-title>EDITAR USUARIO</ion-title>
@@ -102,48 +102,51 @@
   </ion-header>
 
   <ion-content class="content">
-    <div class="form-container">
-      <h1>Nombre: {{ person?.name }}</h1>
-      <h1>Correo: {{ person?.email }}</h1>
+    <div class="form-columns">
+      <div class="left-column">
+        <h1>Nombre: {{ person?.name }}</h1>
+        <h1>Correo: {{ person?.email }}</h1>
+      </div>
 
-
-      <ion-list class="sports">
-        <ion-item class="clean-select" lines="none">
-          <ion-select
-            interface="popover"
-            placeholder="Selecciona un rol"
-            class="list-sports"
-            v-model="selectedRoleId"
-          >
-            <ion-select-option
-              v-for="r in roles"
-              :key="r.id"
-              :value="r.id"
+      <div class="right-column">
+        <ion-list class="sports">
+          <ion-item class="clean-select" lines="none">
+            <ion-select
+              interface="popover"
+              placeholder="Selecciona un rol"
+              class="list-sports"
+              v-model="selectedRoleId"
             >
-              {{ r.name }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-list>
+              <ion-select-option
+                v-for="r in roles"
+                :key="r.id"
+                :value="r.id"
+              >
+                {{ r.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
 
-      <ion-list class="sports">
-        <ion-item class="clean-select" lines="none">
-          <ion-select
-            interface="popover"
-            placeholder="Selecciona un curso"
-            class="list-sports"
-            v-model="selectedCourseId"
-          >
-            <ion-select-option
-              v-for="c in courses"
-              :key="c.id"
-              :value="c.id"
+        <ion-list class="sports">
+          <ion-item class="clean-select" lines="none">
+            <ion-select
+              interface="popover"
+              placeholder="Selecciona un curso"
+              class="list-sports"
+              v-model="selectedCourseId"
             >
-              {{ c.name }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-list>
+              <ion-select-option
+                v-for="c in courses"
+                :key="c.id"
+                :value="c.id"
+              >
+                {{ c.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+      </div>
     </div>
   </ion-content>
 
@@ -153,11 +156,13 @@
         <span class="material-symbols-outlined">mop</span>Limpiar
       </ion-button>
       <ion-button expand="block" class="btn-save" @click="savePerson" >
-        <span class="material-symbols-outlined">save</span>Editar Persona
+        <span class="material-symbols-outlined">save</span>Editar Usuario
       </ion-button>
     </div>
   </ion-footer>
+  <!-- END VISTA EDITAR USUARIO -->
 </template>
+
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonFooter, IonList, IonItem, IonSelect, IonSelectOption } from '@ionic/vue'
@@ -552,4 +557,50 @@ async function savePerson() {
 .btn-save .material-symbols-outlined {
   margin-right: 5px;
 }
+
+
+.list-sports {
+  --background: #e22f28;
+  --border-radius: 5px;
+  color: white;
+  --placeholder-color: #ffffff;
+  font-weight: bolder;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+}
+.list-sports::part(icon) {
+  color: #f2acaa;
+}
+ion-select::part(placeholder) {
+  color: white;
+  font-weight: bold;
+}
+
+
+.form-columns {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.left-column,
+.right-column {
+  flex: 1;
+  min-width: 250px;
+}
+
+.left-column h1 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #042935;
+  margin-bottom: 0.75rem;
+  border-left: 4px solid #e32f29;
+  padding-left: 0.75rem;
+  background-color: #d3d1d194;
+  border-radius: 4px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
 </style>

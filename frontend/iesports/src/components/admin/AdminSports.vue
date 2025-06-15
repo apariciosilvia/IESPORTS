@@ -626,12 +626,12 @@ onMounted(async () => {
 ion-modal {
   --width: 95vw;
   --max-width: 1200px;
-  --height: 20vw;
+  --height: 40vw;
   --max-height: 300vh;
 }
 
 ion-modal::part(content) {
-  height: 25vh !important;
+  height: 35vh !important;
   max-height: 75vh !important;
   width: 95vw;
   max-width: 1200px;

@@ -1,5 +1,5 @@
 <template>
-  <!-- Popup Container -->
+  <!-- START ALERTS POPUPS -->
   <div class="popup-container" v-if="showPopup">
     <!-- SUCCESS -->
     <div class="popup success-popup" v-if="popupType === 'success'">
@@ -89,8 +89,9 @@
       </div>
     </div>
   </div>
+  <!-- END ALERTS POPUPS -->
 
-  <!-- Main View -->
+  <!-- START VISTA CREAR USUARIO -->
   <ion-header>
     <ion-toolbar class="header-red">
       <ion-title>NUEVO USUARIO</ion-title>
@@ -101,18 +102,32 @@
   </ion-header>
 
   <ion-content class="content">
-    <div class="form-container">
-      <ion-list>
-        <ion-item>
-          <ion-label position="floating">Name</ion-label>
-          <ion-input v-model="personNameAdd" type="text" required></ion-input>
-        </ion-item>
+   <div class="form-container">
+    <div class="form-columns">
+      <div class="left-column">
+        <ion-input
+          label="Nombre"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Escribe un nombre"
+          class="input-name"
+          required
+          v-model="personNameAdd"
+        />
+        <ion-input
+          label="Correo"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Escribe un nombre correo"
+          class="input-name"
+          type="email"
+          required
+          v-model="personEmailAdd"
+        />
+      
+      </div>
 
-        <ion-item>
-          <ion-label position="floating">Email</ion-label>
-          <ion-input v-model="personEmailAdd" type="email" required></ion-input>
-        </ion-item>
-
+      <div class="right-column">
         <ion-list class="sports">
           <ion-item class="clean-select" lines="none">
             <ion-select
@@ -150,8 +165,10 @@
             </ion-select>
           </ion-item>
         </ion-list>
-      </ion-list>
+      </div>
     </div>
+  </div>
+
   </ion-content>
 
   <ion-footer>
@@ -160,19 +177,16 @@
         <span class="material-symbols-outlined">mop</span>Limpiar
       </ion-button>
       <ion-button expand="block" class="btn-save" @click="savePerson()">
-        <span class="material-symbols-outlined">save</span>Editar Persona
+        <span class="material-symbols-outlined">save</span>Crear Usuario
       </ion-button>
     </div>
   </ion-footer>
+  <!-- END VISTA CREAR USUARIO -->
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { 
-  IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-  IonContent, IonFooter, IonInput, IonList, IonItem, IonLabel,
-  IonSelect, IonSelectOption
-} from '@ionic/vue'
+import {  IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonFooter, IonInput, IonList, IonItem, IonSelect, IonSelectOption } from '@ionic/vue'
 import type { Role } from '@/model/role'
 import type { Course } from '@/model/course'
 import { registerAUser } from '@/services/personServices'
@@ -220,7 +234,10 @@ async function loadData() {
 }
 
 function resetForm() {
-  loadData()
+  personNameAdd.value = ''
+  personEmailAdd.value = ''
+  selectedRoleId.value = null
+  selectedCourseId.value = null
 }
 
 onMounted(loadData)
@@ -547,4 +564,212 @@ async function savePerson() {
 .btn-save .material-symbols-outlined {
   margin-right: 5px;
 }
+
+
+
+.sports {
+  padding: 0;
+  margin-top: 4%;
+}
+
+.list-sports {
+  --background: #e22f28;
+  --border-radius: 5px;
+  color: white;
+  --placeholder-color: #ffffff;
+  font-weight: bolder;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+}
+.list-sports::part(icon) {
+  color: #f2acaa;
+}
+ion-select::part(placeholder) {
+  color: white;
+  font-weight: bold;
+}
+.clean-select {
+  margin: 0;
+  padding: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+}
+
+.radio-item {
+  margin-top: 1rem;
+}
+.radio-item h5 {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  text-align: left;
+  color: #0a2540;
+}
+
+.glass-radio-group {
+  position: relative;         
+  display: flex;
+  background: #ececec;
+  border-radius: 22px;
+  overflow: hidden;
+  width: max-content;
+}
+
+.glass-radio-group input:checked + label {
+  color: #ffffff;
+}
+
+.glass-radio-group input {
+  display: none;
+}
+
+.glass-radio-group label {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.glass-glider {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 33.333%;
+  background: #979797;
+  border-radius: 22px;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+#glass-silver:checked ~ .glass-glider {
+  transform: translateX(0%);
+  background: linear-gradient(135deg, #ffd70055, #ffcc00);
+}
+#glass-gold:checked ~ .glass-glider {
+  transform: translateX(100%);
+  background: linear-gradient(135deg, #e2632865, #e22f28);
+}
+#glass-platinum:checked ~ .glass-glider {
+  transform: translateX(200%);
+  background: linear-gradient(135deg, #d0e7ff55, #0a2540);
+}
+
+.team-selector {
+  padding: 1rem;
+  border-radius: 12px;
+  
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.counter {
+  font-weight: bold;
+  color: #ff3c2f;
+}
+
+.custom-search {
+  --border-radius: 8px;
+  --box-shadow: none;
+  border: 1px solid #0a254098;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.sc-ion-searchbar-md-h {
+  -webkit-padding-start: 0;
+  padding-inline-start: 0;
+  -webkit-padding-end: 0;
+  padding-inline-end: 0 ;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.team-selector {
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.counter {
+  font-weight: bold;
+  color: #ff3c2f;
+}
+
+.team-list {
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 0.5rem;
+}
+
+.team-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem; /* aumenta este valor para más separación */
+  background: #f1f1f1;
+}
+
+.team-card {
+  background: white;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  flex: 1;
+}
+
+.input-name {
+  --border-color: #022029;
+  --border-style: solid;
+  --border-width: 1px;
+  --color: #022029;
+  --placeholder-color: #999999;
+  text-align: left ;
+}
+
+.btn-clean, .btn-save {
+  --background: #0a2540;
+  --border-radius: 8px;
+  --color: white;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  font-weight: bold;
+}
+
+.btn-clean .material-symbols-outlined,
+.btn-save .material-symbols-outlined {
+  margin-right: 5px;
+}
+
+
+.form-columns {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.left-column,
+.right-column {
+  flex: 1;
+  min-width: 250px;
+}
+
 </style>
