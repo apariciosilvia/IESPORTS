@@ -1,7 +1,7 @@
 <template>
   <ion-page>
    <ion-content>
-    <!-- Alerts -->
+    <!-- START ALERTS POPUPS -->
     <div class="popup-container" v-if="showPopup">
       <!-- SUCCESS -->
       <div class="popup success-popup" v-if="popupType === 'success'">
@@ -91,7 +91,9 @@
         </div>
       </div>
     </div>
+    <!-- END ALERTS POPUPS -->
 
+    <!-- START FONDO ANIMADO -->
     <vue-particles
       id="tsparticles"
       @particles-loaded="particlesLoaded"
@@ -179,11 +181,12 @@
         detectRetina: true
       }"
     />
+    <!-- END FONDO ANIMADO -->
 
     <div class="card-container" :class="{ 'show-back': showRegister }">
       <div class="card-inner">
         
-        <!-- Login -->
+        <!-- LOGIN START -->
         <div class="card-face card-front">
         <span v-if="errores.error" class="error-credenciales">{{ errores.error }}</span>
 
@@ -195,7 +198,7 @@
 
           <h2 class="tittle">Iniciar sesión</h2>
         </div>
-        <!-- LOGIN START -->
+        
         <form @submit.prevent="handleLogin">
             <span v-if="errores.email" class="error-msg">{{ errores.email }}</span>
             <ion-input v-model="loginData.email" type="text" placeholder="Correo electrónico" class="custom-input" fill="outline" :class="{ 'error-border': errores.email || errores.error }"/>
@@ -475,35 +478,40 @@ const loginData = ref({ email: '', password: '' });
 
 async function handleLogin() {
   try {
-    const response: any = await login(loginData.value.email.trim(), loginData.value.password.trim());
-    console.log('Login exitoso:', response);
- 
-    // const user = response.data ?? response;
-    const person :Person = response.data;
+    const response: any = await login(
+      loginData.value.email.trim(),
+      loginData.value.password.trim()
+    );
+    const person: Person = response.data;
+    if (!person) {
+      openPopup('error', 'Usuario no encontrado');
+      return;
+    }
+    localStorage.setItem('usuario', JSON.stringify(person));
 
-      if (person != null) {
-        localStorage.setItem('usuario', JSON.stringify(person));
+    // Si viene con contraseña temporal pendiente
+    if (person.tempPassword === 1) {
+      showResetPassword.value = true;
+      return;
+    }
 
-        if(person.tempPassword == 1){
-          showResetPassword.value = true; //Activar el popup de restablecer contraseña temporal
-        } else {
-          if (person?.role.name === 'Administrador') {
-            router.push({ name: 'HomeAdmin' });
-          } else {
-            router.push({ name: 'Home' });
-          }
-        }
-      } 
+    // Determinar ruta según rol (evita fallos si role o role.name vienen undefined)
+    const roleName = person.role?.name ?? '';
+    const routeName = roleName === 'Administrador' ? 'HomeAdmin' : 'Home';
+
+    // Espera al push y atrapa errores
+    await router.push({ name: routeName });
+    return;
   } catch (error: any) {
     console.error('Error al iniciar sesión:', error);
-
-    if (error.response && error.response.status === 400) {
+    if (error.response?.status === 400) {
       errores.value = error.response.data;
     } else {
       openPopup('error', 'Error inesperado. Intenta de nuevo.');
     }
   }
 }
+
 /* FUNCION PARA LOGEARSE END */
 
 

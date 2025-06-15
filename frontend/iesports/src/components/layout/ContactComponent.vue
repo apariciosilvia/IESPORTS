@@ -1,6 +1,6 @@
 <template>
 
-  <!-- Popup Container -->
+  <!-- START ALERTS POPUPS -->
   <div class="popup-container" v-if="showPopup">
     <!-- SUCCESS -->
     <div class="popup success-popup" v-if="popupType === 'success'">
@@ -90,6 +90,7 @@
       </div>
     </div>
   </div>
+  <!-- END ALERTS POPUPS -->
 
   <div class="page-wrapper">
     <div class="contact-wrapper">
