@@ -168,9 +168,13 @@ async function toggleUserEdit() {
         email: user.value.email,
     }
     try {
-      await changeNameAndEmail(changeNameAndEmailDTO);
       errores.value = {};
-      // localStorage.setItem('usuario', JSON.stringify(user.value)); // fallback
+      // llamamos y esperamos la respuesta (ahora devuelve directamente Person)
+      const updatedUser = await changeNameAndEmail(changeNameAndEmailDTO);
+      // actualiza tu ref/reactivo
+      user.value = updatedUser;
+      // guarda en localStorage
+      localStorage.setItem('usuario', JSON.stringify(updatedUser));
       alert('Perfil actualizado');
     } catch (error: any) {
       console.log('Error al actualizar perfil');
@@ -204,12 +208,13 @@ async function togglePasswordEdit() {
       password2ChangePassword: confirmPassword.value
     };
     try {
+      errores.value = {};
       await changePassword(changePasswordDTO);
       alert('Contraseña cambiada');
       currentPassword.value = '';
       newPassword.value = '';
       confirmPassword.value = '';
-      errores.value = {};
+
     } catch (error: any) {
       console.log('Error al cambiar contraseña');
       
@@ -218,11 +223,9 @@ async function togglePasswordEdit() {
       } else {
         errores.value = { general: 'Error inesperado. Intenta de nuevo.' };
       }
-
       currentPassword.value = '';
       newPassword.value = '';
       confirmPassword.value = '';
-      
     }
   }
   isEditingPassword.value = !isEditingPassword.value;

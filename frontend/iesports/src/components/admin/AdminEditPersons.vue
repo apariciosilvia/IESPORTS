@@ -94,7 +94,7 @@
   <!-- Main View -->
   <ion-header>
     <ion-toolbar class="header-red">
-      <ion-title>EDITAR PERSONA</ion-title>
+      <ion-title>EDITAR USUARIO</ion-title>
       <ion-buttons slot="end">
         <ion-button @click=" $emit('close')">Cerrar</ion-button>
       </ion-buttons>

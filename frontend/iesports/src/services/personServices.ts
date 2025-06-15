@@ -74,23 +74,21 @@ function register(name: string, email: string, password1: string, password2: str
   });
 }
 
-function changeNameAndEmail(changeNameAndEmailDTO: ChangeNameAndEmailDTO) {
-
+async function changeNameAndEmail(changeNameAndEmailDTO: ChangeNameAndEmailDTO): Promise<Person> {
   const url = `${import.meta.env.VITE_URL_API}/person/changeNameAndEmail`;
-
-  return axios.post(url, changeNameAndEmailDTO, {
+  const { data: updatedUser } = await axios.post<Person>(url, changeNameAndEmailDTO, {
     headers: { 'Content-Type': 'application/json' }
   });
+  return updatedUser;
 };
 
-function changePassword(ChangePasswordDTO: ChangePasswordDTO) {
-
+async function changePassword(dto: ChangePasswordDTO): Promise<void> {
   const url = `${import.meta.env.VITE_URL_API}/person/changePassword`;
-
-  return axios.post(url, ChangePasswordDTO, {
+  await axios.post<void>(url, dto, {
     headers: { 'Content-Type': 'application/json' }
   });
-};
+}
+
 
 function forgotPassword(ForgotPasswordRequestDTO: ForgotPasswordRequestDTO) {
 
@@ -150,9 +148,7 @@ function registerAUser(PersonRegisterByAdminDTO: PersonRegisterByAdminDTO) {
 
   const url = `${import.meta.env.VITE_URL_API}/person/registerAUser`;
 
-  // 3. Llamamos al endpoint Spring Boot
   return axios.post(url, PersonRegisterByAdminDTO, {
-    // 2. Configuramos encabezados para JSON
     headers: { 'Content-Type': 'application/json' }
   });
 }
