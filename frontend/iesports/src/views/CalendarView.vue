@@ -40,9 +40,6 @@ onMounted(async () => {
   }
 });
 
-console.log('matches calendar' , matches.value);
-
-
 // Ahora extraemos sólo lo que necesitamos:
 const { showNav, handleScroll } = useNavbarVisibility();
 </script>
