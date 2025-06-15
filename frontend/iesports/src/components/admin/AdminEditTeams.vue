@@ -562,6 +562,25 @@ async function editTeam() {
   height: 400px;
 }
 
+
+@media (max-width: 768px) {
+  .panels {
+    flex-direction: column;
+  }
+
+  .panel-left,
+  .panel-right {
+    flex: unset;
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+
+   .members-list {
+    max-height: 250px; /* mantén la altura en móvil */
+  }
+}
+
 .selected-list {
   flex: 1;
   display: flex;
