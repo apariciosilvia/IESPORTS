@@ -27,6 +27,7 @@ import com.iesports.dto.ChangeRoleAndCourseDTO;
 import com.iesports.dto.ContactFormRequestDTO;
 import com.iesports.dto.ForgotPasswordRequestDTO;
 import com.iesports.dto.PersonLoginDTO;
+import com.iesports.dto.PersonRegisterByAdminDTO;
 import com.iesports.dto.PersonRegisterDTO;
 import com.iesports.model.Course;
 import com.iesports.model.Person;
@@ -248,6 +249,83 @@ public class PersonController {
 		String passwordEncripted = passwordEncoder.encode(person.getPassword1());
 
 		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), rs.getRole(4L), person.getName(), person.getEmail(), passwordEncripted, 1, 0);
+		System.out.println("Persona a registrar: " + person.toString());
+
+		newPerson = ps.savePerson(newPerson);
+		
+		System.out.println("Persona registrada: " + newPerson.toString());
+		
+		try {
+		    ms.sendWelcomeEmail(person.getEmail(), person.getName());
+
+		} catch (Exception e) {
+			 e.printStackTrace();
+		}
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(newPerson);
+
+		}
+	@Operation(summary = "Registrar una nueva persona")
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "201",
+	        description = "Persona registrada correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Person.class),
+	            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+	                name = "Persona registrada",
+	                value = "{\"id\":10,\"name\":\"Laura\",\"email\":\"laura@mail.com\",\"role\":{\"id\":4,\"name\":\"estudiante\"},\"course\":{\"id\":2,\"name\":\"DAW 2\"}}"
+	            )
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "400",
+	        description = "Error en la validación de datos de entrada",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(
+	                example = "{\n" +
+	                          "  \"email\": \"El email laura@mail.com ya existe\",\n" +
+	                          "  \"password2\": \"Las contraseñas no coinciden\",\n" +
+	                          "  \"role\": \"El rol no existe\"\n" +
+	                          "}"
+	            )
+	        )
+	    )
+	})
+
+	@PostMapping("/registerAUser")
+	public ResponseEntity<?> registerAUser(@Valid @RequestBody PersonRegisterByAdminDTO person) {
+		
+		Map<String, String> errors = new HashMap<>();
+
+		System.out.println("Persona de entrada: " + person.toString());
+
+		if (ps.emailExists(person.getEmail())) {
+			System.err.println("El email " + person.getEmail() + " ya existe");
+			errors.put("email", "El email " + person.getEmail() + " ya existe");
+		}
+
+		if (!person.getPassword1().equals(person.getPassword2())) {
+			System.err.println("Las contraseñas no coinciden");
+			errors.put("password2", "Las contraseñas no coinciden");
+		}
+		
+		Role role = rs.getRole(person.getRole().getId()); // or roleRepository.findById(id)
+
+		if (role == null) {
+			System.err.println("El rol con nombre no existe");
+		    errors.put("role", "El rol no existe");
+		}
+		
+		if (errors.size() > 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		}
+
+		String passwordEncripted = passwordEncoder.encode(person.getPassword1());
+
+		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), person.getRole(), person.getName(), person.getEmail(), passwordEncripted, 1, 0);
 		System.out.println("Persona a registrar: " + person.toString());
 
 		newPerson = ps.savePerson(newPerson);
