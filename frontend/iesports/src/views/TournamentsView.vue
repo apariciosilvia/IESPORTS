@@ -29,7 +29,6 @@
             <ion-label>Filtra por año</ion-label>
             <ion-select v-model="selectedYear" placeholder="Selecciona la temporada">
               <ion-select-option :value="null">Todos</ion-select-option>
-
               <ion-select-option
                 v-for="year in years"
                 :key="year.toString()"
@@ -39,7 +38,19 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
+
+          <!-- Nueva barra de búsqueda -->
+          <div class="search-wrapper">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input
+              v-model="searchTournament"
+              type="text"
+              placeholder="Buscar torneo por nombre..."
+              class="search-bar"
+            />
+          </div>
         </div>
+
         <IonList class="tournament-list">
           <!-- Lista dinámica de torneos filtrados -->
             <TournamentCard
@@ -85,6 +96,9 @@ import type { Sport } from '@/model/sport';
 import Loader from '@/components/ui/Loader.vue';
 import { useLoadingEffect } from '@/composables/useLoadingEffect';
 const { isNowLoading } = useLoadingEffect();
+
+const searchTournament = ref('');
+
 
 //Extraemos el control de la navbar
 const { showNav, handleScroll } = useNavbarVisibility();
@@ -162,9 +176,11 @@ onMounted(() => {
 const filteredMatches = computed(() => {
   return matches.value.filter(m =>
     (!selectedSport.value || m.tournament.sport.id === selectedSport.value) &&
-    (!selectedYear.value  || m.tournament.date === selectedYear.value)
+    (!selectedYear.value || m.tournament.date === selectedYear.value) &&
+    (!searchTournament.value || m.tournament.name.toLowerCase().includes(searchTournament.value.toLowerCase()))
   );
 });
+
 </script>
 
 <style scoped>
@@ -349,6 +365,48 @@ const filteredMatches = computed(() => {
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
+  }
+}
+
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  flex: 1;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  color: #666;
+  pointer-events: none;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background-color: transparent;
+  color: #0a2540;
+}
+
+.search-bar::placeholder {
+  color: #888;
+}
+
+.search-bar:focus {
+  outline: none;
+}
+
+@media (max-width: 600px) {
+  .search-wrapper {
+    width: 100%;
   }
 }
 
