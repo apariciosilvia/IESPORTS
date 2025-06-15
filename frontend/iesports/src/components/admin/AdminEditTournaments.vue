@@ -88,7 +88,7 @@
         </svg>
       </div>
     </div>
-  </div>Ç
+  </div>
   <!-- END ALERTS POPUPS -->
 
   <!-- START VISTA EDITAR TORNEO -->

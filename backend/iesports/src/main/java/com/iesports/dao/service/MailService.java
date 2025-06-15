@@ -243,7 +243,7 @@ public class MailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             // Este es el correo del TFG al que se enviará el mensaje
-            helper.setTo("noreply.iesports@gmail.com"); // ← Cambia esto por el correo real de vuestro TFG
+            helper.setTo("equipo.iesports@gmail.com"); // ← Cambia esto por el correo real de vuestro TFG
             // El usuario parecerá ser el remitente
             helper.setFrom(userEmail);
             helper.setReplyTo(userEmail); // Importante: si alguien responde al correo, le responde al usuario
