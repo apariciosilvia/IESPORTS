@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotNull;
 
 public class SportUpdateDTO {
 	
-	@NotNull(message = "El id es obligatorio")
+	@NotNull(message = "El deporte es obligatorio")
     private Long id;
     
-	@NotBlank(message = "El nombre es obligatorio")
+	@NotBlank(message = "El nombre del deporte es obligatorio")
 	private String name;
 
 	public Long getId() {

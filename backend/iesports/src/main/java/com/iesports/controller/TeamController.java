@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iesports.dao.service.MailService;
 import com.iesports.dao.service.impl.MatchServiceImpl;
-import com.iesports.dao.service.impl.PersonServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
 import com.iesports.dto.TeamAddDTO;
 import com.iesports.dto.TeamDeleteDTO;
@@ -42,13 +43,13 @@ import jakarta.validation.Valid;
 public class TeamController {
 
     @Autowired
-    TeamServiceImpl tr;
-
-    @Autowired
-    private PersonServiceImpl ps;
+    private TeamServiceImpl tr;
     
     @Autowired
 	private MatchServiceImpl ms;
+    
+    @Autowired
+	private MailService mailS;
 
     @Operation(summary = "Obtener todos los equipos con información de deportes asociados")
     @ApiResponse(
@@ -189,25 +190,20 @@ public class TeamController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errores);
         }
 
-        List<Person> fullPlayers = new ArrayList<>();
-        for (Person player : teamDTO.getPlayers()) {
-            Person fullPlayer = ps.getPersonById(player.getId());
-            if (fullPlayer == null) {
-                errores.put("jugador_" + player.getId(), "El jugador con código " + player.getId() + " no existe en la base de datos");
-            } else {
-                fullPlayers.add(fullPlayer);
-            }
-        }
-
         if (!errores.isEmpty()) {
             return ResponseEntity.badRequest().body(errores);
         }
 
         Team newTeam = new Team();
         newTeam.setName(teamDTO.getName());
-        newTeam.setPlayers(fullPlayers);
+        newTeam.setPlayers(teamDTO.getPlayers());
 
         Team savedTeam = tr.saveTeam(newTeam);
+        
+        for (Person p : savedTeam.getPlayers()) {
+			mailS.sendAddedToTeamEmail(p, savedTeam);
+        }
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTeam);
     }
 
@@ -234,16 +230,33 @@ public class TeamController {
     public ResponseEntity<?> updateTeam(@Valid @RequestBody TeamUpdateDTO teamUpdateDTO) {
 
         if (tr.existsNameTeam(teamUpdateDTO.getNameTeam(), teamUpdateDTO.getIdTeam())) {
-            System.out.println("El nombre " + teamUpdateDTO.getNameTeam() + " ya esta asignado a un equipo.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("nameTeam", "El nombre " + teamUpdateDTO.getNameTeam() + " ya esta asignado a un equipo."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("nameTeam", "El nombre " + teamUpdateDTO.getNameTeam() + " ya esta asignado a un equipo."));
         }
-        
+
+        // Obtener los jugadores actuales del equipo y clonar los IDs antes de actualizar
+        Team currentTeam = tr.getTeam(teamUpdateDTO.getIdTeam());
+        List<Long> oldIds = currentTeam.getPlayers().stream()
+            .map(Person::getId)
+            .collect(Collectors.toList());
+
+        // Crear el nuevo objeto Team actualizado
         Team teamUpdate = new Team(teamUpdateDTO.getIdTeam(), teamUpdateDTO.getNameTeam(), teamUpdateDTO.getPlayers());
-        
+
+        // Actualizar el equipo en la base de datos
         tr.updateTeam(teamUpdate);
+
+        // Enviar correo solo a los nuevos integrantes
+        for (Person p : teamUpdate.getPlayers()) {
+            if (!oldIds.contains(p.getId())) {
+                mailS.sendAddedToTeamEmail(p, teamUpdate);
+            }
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(teamUpdate);
     }
+
+
     
     @Operation(summary = "Obtener un equipo por ID")
     @ApiResponses({

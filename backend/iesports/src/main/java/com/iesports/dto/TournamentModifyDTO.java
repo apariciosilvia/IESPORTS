@@ -13,7 +13,7 @@ public class TournamentModifyDTO {
 	@NotBlank(message = "El nombre del torneo es obligatorio")
 	private String tournamentNameModified;
 	
-	@NotNull(message = "El deporte es obligatorio")
+	@NotNull(message = "El deporte del torneo es obligatorio")
 	private Long sportModifiedId;
 	
 	@NotNull(message = "Debe haber algun partido")

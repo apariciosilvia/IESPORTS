@@ -2,11 +2,6 @@ package com.iesports.dto;
 
 import java.util.List;
 
-import com.iesports.model.Match;
-import com.iesports.model.Team;
-import com.iesports.model.Tournament;
-
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class TournamentAddDTO {
