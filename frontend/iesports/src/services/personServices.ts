@@ -5,6 +5,7 @@ import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPass
 import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
 import type { ChangeRoleAndCourseDTO } from '@/model/dto/changeRoleAndCourseDTO';
 import type { ContactFormRequestDTO } from '@/model/dto/contactFormRequestDTO';
+import type { PersonRegisterByAdminDTO } from '@/model/dto/personRegisterByAdminDTO';
 
 import type { Person } from '@/model/person';
 
@@ -73,23 +74,21 @@ function register(name: string, email: string, password1: string, password2: str
   });
 }
 
-function changeNameAndEmail(changeNameAndEmailDTO: ChangeNameAndEmailDTO) {
-
+async function changeNameAndEmail(changeNameAndEmailDTO: ChangeNameAndEmailDTO): Promise<Person> {
   const url = `${import.meta.env.VITE_URL_API}/person/changeNameAndEmail`;
-
-  return axios.post(url, changeNameAndEmailDTO, {
+  const { data: updatedUser } = await axios.post<Person>(url, changeNameAndEmailDTO, {
     headers: { 'Content-Type': 'application/json' }
   });
+  return updatedUser;
 };
 
-function changePassword(ChangePasswordDTO: ChangePasswordDTO) {
-
+async function changePassword(dto: ChangePasswordDTO): Promise<void> {
   const url = `${import.meta.env.VITE_URL_API}/person/changePassword`;
-
-  return axios.post(url, ChangePasswordDTO, {
+  await axios.post<void>(url, dto, {
     headers: { 'Content-Type': 'application/json' }
   });
-};
+}
+
 
 function forgotPassword(ForgotPasswordRequestDTO: ForgotPasswordRequestDTO) {
 
@@ -144,4 +143,14 @@ function contactForm(ContactFormRequestDTO: ContactFormRequestDTO) {
   });
 };
 
-export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword, changeUserRoleAndCourse, getPersonById, contactForm };
+
+function registerAUser(PersonRegisterByAdminDTO: PersonRegisterByAdminDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/registerAUser`;
+
+  return axios.post(url, PersonRegisterByAdminDTO, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword, changeUserRoleAndCourse, getPersonById, contactForm, registerAUser };
