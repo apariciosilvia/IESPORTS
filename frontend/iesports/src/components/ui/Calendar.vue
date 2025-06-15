@@ -17,7 +17,7 @@
         <p class="content"><strong>Ronda:</strong> {{ selectedMatch?.round }}</p>
         <p class="content"><strong>Resultado:</strong> {{ selectedMatch?.pointsTeam1 }} - {{ selectedMatch?.pointsTeam2 }}</p>
         <div class="team-block team1">
-          <p><strong>Equipo 1:</strong></p>
+          <p><strong>Equipo 1: {{ selectedMatch?.team1.name }}</strong></p>
           <div class="player-list">
             <div v-for="p in selectedMatch?.team1.players || []" :key="p.id" class="player-item">
               <span class="player-badge team1"></span>
@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="team-block team2">
-          <p><strong>Equipo 2:</strong></p>
+          <p><strong>Equipo 2: {{ selectedMatch?.team2.name }}</strong></p>
           <div class="player-list">
             <div v-for="p in selectedMatch?.team2.players || []" :key="p.id" class="player-item">
               <span class="player-badge team2"></span>

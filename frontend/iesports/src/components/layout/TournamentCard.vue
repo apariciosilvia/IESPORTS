@@ -203,6 +203,12 @@ const sportClass = computed(() => {
     case 'fútbol': return 'futbol-bg';
     case 'baloncesto': return 'baloncesto-bg';
     case 'pingpong': return 'pingpong-bg';
+    case 'tenis': return 'tenis-bg';
+    case 'volleyball': return 'volleyball-bg';
+    case 'béisbol': return 'beisbol-bg';
+    case 'balonmano': return 'balonmano-bg';
+    case 'natación': return 'natacion-bg';
+    case 'rugby': return 'rugby-bg';
     default: return 'default-bg';
   }
 })
@@ -252,6 +258,36 @@ const sportClass = computed(() => {
 .baloncesto-bg {
   background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
               url('@/assets/fondos/fondo-baloncesto.jpeg') center center;
+}
+
+.volleyball-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-volleyball.png') center center;
+}
+
+.tenis-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-tenis.png') center center;
+}
+
+.beisbol-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-beisbol.png') center center;
+}
+
+.balonmano-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-balonmano.png') center center;
+}
+
+.natacion-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-natacion.png') center center;
+}
+
+.rugby-bg {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.616), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.185), rgba(0, 0, 0, 0.479), rgba(0, 0, 0, 0.555)),
+              url('@/assets/fondos/fondo-rugby.png') center center;
 }
 
 .default-bg {
