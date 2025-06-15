@@ -1,7 +1,6 @@
 package com.iesports.controller;
 
 import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iesports.dao.service.MailService;
 import com.iesports.dao.service.impl.MatchServiceImpl;
 import com.iesports.dao.service.impl.SportServiceImpl;
 import com.iesports.dao.service.impl.TeamServiceImpl;
@@ -34,33 +34,40 @@ import com.iesports.dto.TournamentModifyDTO;
 import com.iesports.enums.RoundMatchEnum;
 import com.iesports.enums.StateTournamentEnum;
 import com.iesports.model.Match;
+import com.iesports.model.Person;
 import com.iesports.model.Sport;
 import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/tournament")
 @Tag(name = "Gestión de torneos", description = "Endpoints para la gestión de torneos")
 public class TournamentController {
 
-	RoundMatchEnum currentRoundState = null;
 	@Autowired
 	private TournamentServiceImpl tournamentS;
+	
 	@Autowired
 	private MatchServiceImpl matchS;
+	
 	@Autowired
-	TeamServiceImpl teamS;
+	private TeamServiceImpl teamS;
+	
 	@Autowired
-	SportServiceImpl sportS;
+	private SportServiceImpl sportS;
+	
+	@Autowired
+	private MailService mailS;
+	
+	RoundMatchEnum currentRoundState = null;
 	
 	@Operation(
 		    summary = "Obtener torneos filtrados",
@@ -550,7 +557,18 @@ public class TournamentController {
 					if(nextRoundMatch == newMatchNextRound.getRound())
 					{
 						newMatchNextRound.setTeam2(currentWinnerTeam);
-						matchS.saveMatch(newMatchNextRound);
+						newMatchNextRound = matchS.saveMatch(newMatchNextRound);
+						
+						// Enviamos un correo de que han pasado a la siguiente ronda a cada uno de los participantes de cada equipo
+						List<Person> membersTeam1 = newMatchNextRound.getTeam1().getPlayers();
+						List<Person> membersTeam2 = newMatchNextRound.getTeam2().getPlayers();
+
+						for (Person p: membersTeam1) {
+							mailS.sendMatchVictoryEmail(p, newMatchNextRound);
+						}
+						for (Person p: membersTeam2) {
+							mailS.sendMatchVictoryEmail(p, newMatchNextRound);
+						}
 						
 						newMatchNextRound = new Match(null,null,null,currentTournament,null,null,0,0,null);
 						contTeamPerMatch = 0;
