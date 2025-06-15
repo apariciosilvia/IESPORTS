@@ -1,6 +1,7 @@
 package com.iesports.controller;
 
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -38,8 +39,13 @@ import com.iesports.model.Team;
 import com.iesports.model.Tournament;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/tournament")
@@ -56,6 +62,23 @@ public class TournamentController {
 	@Autowired
 	SportServiceImpl sportS;
 	
+	@Operation(
+		    summary = "Obtener torneos filtrados",
+		    description = "Devuelve una lista de torneos filtrados por deporte (sport_id) y/o fecha (date). " +
+		                  "Si no se especifican filtros, devuelve todos los torneos ordenados de más nuevo a más viejo.",
+		    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+		        description = "Filtros para la búsqueda de torneos",
+		        required = true,
+		        content = @io.swagger.v3.oas.annotations.media.Content(
+		            mediaType = "application/json",
+		            schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = TournamentFilterDTO.class)
+		        )
+		    ),
+		    responses = {
+		        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lista de torneos"),
+		        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "No se encontraron torneos")
+		    }
+		)
 	@PostMapping("/getTournaments")
 	public ResponseEntity<?> getTournaments(@RequestBody TournamentFilterDTO filterDTO) {
 	    Integer sport_id = filterDTO.getSport_id();
@@ -97,7 +120,14 @@ public class TournamentController {
 	    return ResponseEntity.ok(tournaments);
 	}
 
-
+	@Operation(
+		    summary = "Obtener años con torneos",
+		    description = "Devuelve una lista de años para los que existen torneos registrados.",
+		    responses = {
+		        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lista de años"),
+		        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "No se encontraron fechas de torneos")
+		    }
+	)
 	@GetMapping("/getYears")
 	public ResponseEntity<?> getDates() {
 	    System.out.println("Solicitud recibida para obtener fechas de torneos");
@@ -114,7 +144,25 @@ public class TournamentController {
 	    System.out.println("Se encontraron " + fechas.size() + " fechas de torneos");
 	    return ResponseEntity.ok(fechas);
 	}
-	
+	@Operation(
+		    summary = "Obtener torneo por ID",
+		    description = "Devuelve el torneo correspondiente al ID proporcionado"
+		)
+		@ApiResponses({
+		    @ApiResponse(
+		        responseCode = "200",
+		        description = "Torneo encontrado correctamente",
+		        content = @Content(
+		            mediaType = "application/json",
+		            schema = @Schema(implementation = Tournament.class)
+		        )
+		    ),
+		    @ApiResponse(
+		        responseCode = "404",
+		        description = "Torneo no encontrado",
+		        content = @Content
+		    )
+		})
 	@GetMapping("/getTeamsByTournamentId")
 	public ResponseEntity<?> getTeamsByTournamentId(){
 		List<TournamentAdminDTO> result = new ArrayList<TournamentAdminDTO>();
@@ -138,7 +186,30 @@ public class TournamentController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
-	
+	@Operation(
+		    summary = "Añadir un nuevo torneo",
+		    description = "Crea un torneo nuevo con los datos proporcionados"
+		)
+		@ApiResponses({
+		    @ApiResponse(
+		        responseCode = "201",
+		        description = "Torneo creado correctamente",
+		        content = @Content(
+		            mediaType = "application/json",
+		            schema = @Schema(implementation = Tournament.class)
+		        )
+		    ),
+		    @ApiResponse(
+		        responseCode = "404",
+		        description = "Deporte no encontrado o número de equipos incorrecto",
+		        content = @Content
+		    ),
+		    @ApiResponse(
+		        responseCode = "400",
+		        description = "Datos inválidos en el cuerpo de la solicitud",
+		        content = @Content
+		    )
+		})
 	@PostMapping("/addTournament")
 	public ResponseEntity<?> addTournament(@Valid @RequestBody  TournamentAddDTO tournamentDTO){
 		
@@ -206,12 +277,28 @@ public class TournamentController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(currentTournament);
 	}
-	
+
 	@GetMapping("/getTournamentById")
 	@Operation(
 	    summary = "Obtener torneo por ID",
 	    description = "Devuelve el torneo correspondiente al ID proporcionado"
 	)
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Torneo encontrado correctamente",
+	        content = @Content(
+	            mediaType = "application/json",
+	            schema = @Schema(implementation = Tournament.class)
+	        )
+	    ),
+	    @ApiResponse(
+	        responseCode = "404",
+	        description = "Torneo no encontrado",
+	        content = @Content
+	    )
+	})
+	
 	public ResponseEntity<Tournament> getTournamentById(@RequestParam Long tournamentId) {
 	    Tournament tournament = tournamentS.getTournamentById(tournamentId);
 
@@ -223,6 +310,22 @@ public class TournamentController {
 	    return ResponseEntity.status(HttpStatus.OK).body(tournament);
 	}
 	
+	@Operation(
+	    summary = "Eliminar un torneo",
+	    description = "Elimina el torneo y todos los partidos asociados al ID proporcionado"
+	)
+	@ApiResponses({
+	    @ApiResponse(
+	        responseCode = "200",
+	        description = "Torneo y partidos asociados eliminados correctamente",
+	        content = @Content
+	    ),
+	    @ApiResponse(
+	        responseCode = "404",
+	        description = "Torneo no encontrado",
+	        content = @Content
+	    )
+	})
 	@PostMapping("/deleteTournament")
 	public ResponseEntity<?> deleteTournament(@RequestParam Long tournamentId){
 		
@@ -242,7 +345,30 @@ public class TournamentController {
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
-	
+	@Operation(
+		    summary = "Modificar torneo",
+		    description = "Modifica el torneo y los partidos asociados con la información proporcionada"
+		)
+		@ApiResponses({
+		    @ApiResponse(
+		        responseCode = "200",
+		        description = "Torneo modificado correctamente",
+		        content = @Content(
+		            mediaType = "application/json",
+		            schema = @Schema(implementation = Tournament.class)
+		        )
+		    ),
+		    @ApiResponse(
+		        responseCode = "404",
+		        description = "Torneo o deporte no encontrado",
+		        content = @Content
+		    ),
+		    @ApiResponse(
+		        responseCode = "400",
+		        description = "Datos inválidos en la solicitud",
+		        content = @Content
+		    )
+		})
 	@PostMapping("/modifyTournament")
 	public ResponseEntity<?> modifyTournament(@Valid @RequestBody TournamentModifyDTO tournamentDTO ){
 		System.err.println(tournamentDTO.toString());
@@ -347,7 +473,11 @@ public class TournamentController {
 								matchIsModified = true;
 							}
 						}
+				    } else {
+				    	System.err.println("No se puede asignar un ganador antes de la fecha del partido");
 				    }
+				} else {
+					System.err.println("No se puede asignar un ganador sin fecha de partido");
 				}
 				
 				//EN CASO DE HABER MODIFICACIONES, SE ACTUALIZARÁ EL PARTIDO
