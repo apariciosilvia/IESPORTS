@@ -511,7 +511,7 @@ onMounted(async () => {
   border: solid 1px #D9D8D8;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 23rem);
+  height: calc(100vh - 12rem);
 }
 
 .header {
