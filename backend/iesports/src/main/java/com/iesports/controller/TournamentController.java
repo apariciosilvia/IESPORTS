@@ -565,9 +565,11 @@ public class TournamentController {
 
 						for (Person p: membersTeam1) {
 							mailS.sendMatchVictoryEmail(p, newMatchNextRound);
+							System.err.println("Se ha enviado un email a:" + p.getEmail());
 						}
 						for (Person p: membersTeam2) {
 							mailS.sendMatchVictoryEmail(p, newMatchNextRound);
+							System.err.println("Se ha enviado un email a:" + p.getEmail());
 						}
 						
 						newMatchNextRound = new Match(null,null,null,currentTournament,null,null,0,0,null);
