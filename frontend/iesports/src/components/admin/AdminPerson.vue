@@ -1,6 +1,7 @@
 <template>
   <section class="persons">
-     <!-- Alerts -->
+
+    <!-- START ALERTS POPUPS -->
     <div class="popup-container" v-if="showPopup">
       <!-- SUCCESS -->
       <div class="popup success-popup" v-if="popupType === 'success'">
@@ -90,7 +91,10 @@
         </div>
       </div>
     </div>
+    <!-- END ALERTS POPUPS -->
 
+
+    <!-- START VISTA TODOS LOS USUARIOS -->
     <div class="header">
       <h2 class="tittle">Usuarios</h2>
       <ion-button class="new-btn" @click="openAddModal">
@@ -124,14 +128,16 @@
                 >
                   <span class="material-symbols-outlined edit-icon">edit_square</span>
                 </button>
-               
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <!-- Modal principal --> 
+    <!-- END VISTA TODOS LOS USUARIOS -->
+
+
+    <!-- START MODAL EDITAR Y CREAR USUARIO --> 
     <ion-modal
       :is-open="isModalOpen"
       :key="`${modalMode}-${personToEdit ?? 'new'}-${isModalOpen}`"
@@ -144,7 +150,7 @@
         :id="personToEdit"
       />
     </ion-modal>
-
+    <!-- END MODAL EDITAR Y CREAR USUARIO --> 
   </section>
 </template>
 
