@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <p v-if="!(roundsGroups['OCTAVOS'] && roundsGroups['OCTAVOS'].length)">
+      <p class="match-empty" v-if="!(roundsGroups['OCTAVOS'] && roundsGroups['OCTAVOS'].length)">
         Todavía no hay partidos realizados.
       </p>
     </div>
