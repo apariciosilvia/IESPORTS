@@ -148,7 +148,6 @@ async function sendContactMail() {
     
   } catch (err: any) {
     console.error(err)
-    alert('')
     openPopup('error', 'Error al enviar el correo. Vuelve a intentarlo más tarde.');
   }
 }

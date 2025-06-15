@@ -1,6 +1,6 @@
 <!-- src/components/NewSport.vue -->
 <template>
-  <!-- Popup Container -->
+  <!-- START ALERTS POPUPS -->
   <div class="popup-container" v-if="showPopup">
     <!-- SUCCESS -->
     <div class="popup success-popup" v-if="popupType === 'success'">
@@ -90,8 +90,9 @@
       </div>
     </div>
   </div>
+  <!-- END ALERTS POPUPS -->
 
-  <!-- Main View -->
+  <!-- START VISTA CREAR DEPORTE -->
   <ion-header>
     <ion-toolbar class="header-red">
       <ion-title>NUEVO DEPORTE</ion-title>
@@ -134,6 +135,7 @@
       </ion-button>
     </div>
   </ion-footer>
+  <!-- END VISTA CREAR DEPORTE -->
 </template>
 
 <script setup lang="ts">
