@@ -5,6 +5,7 @@ import type { ChangeForgottenPasswordDTO } from '@/model/dto/changeForgottenPass
 import type { ChangeNameAndEmailDTO } from '@/model/dto/changeNameAndEmailDTO';
 import type { ChangeRoleAndCourseDTO } from '@/model/dto/changeRoleAndCourseDTO';
 import type { ContactFormRequestDTO } from '@/model/dto/contactFormRequestDTO';
+import type { PersonRegisterByAdminDTO } from '@/model/dto/personRegisterByAdminDTO';
 
 import type { Person } from '@/model/person';
 
@@ -144,4 +145,16 @@ function contactForm(ContactFormRequestDTO: ContactFormRequestDTO) {
   });
 };
 
-export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword, changeUserRoleAndCourse, getPersonById, contactForm };
+
+function registerAUser(PersonRegisterByAdminDTO: PersonRegisterByAdminDTO) {
+
+  const url = `${import.meta.env.VITE_URL_API}/person/registerAUser`;
+
+  // 3. Llamamos al endpoint Spring Boot
+  return axios.post(url, PersonRegisterByAdminDTO, {
+    // 2. Configuramos encabezados para JSON
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+export { getPersons, getPersonsRoleStudent, login, register, changeNameAndEmail, changePassword, forgotPassword, changeTempPassword, changeUserRoleAndCourse, getPersonById, contactForm, registerAUser };

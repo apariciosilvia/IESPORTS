@@ -306,13 +306,8 @@ public class PersonController {
 			System.err.println("El email " + person.getEmail() + " ya existe");
 			errors.put("email", "El email " + person.getEmail() + " ya existe");
 		}
-
-		if (!person.getPassword1().equals(person.getPassword2())) {
-			System.err.println("Las contraseñas no coinciden");
-			errors.put("password2", "Las contraseñas no coinciden");
-		}
 		
-		Role role = rs.getRole(person.getRole().getId()); // or roleRepository.findById(id)
+		Role role = rs.getRole(person.getRoleId()); // or roleRepository.findById(id)
 
 		if (role == null) {
 			System.err.println("El rol con nombre no existe");
@@ -322,10 +317,12 @@ public class PersonController {
 		if (errors.size() > 0) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 		}
+		
+		String passwordTemp = gtps.generateTemporaryPassword();
 
-		String passwordEncripted = passwordEncoder.encode(person.getPassword1());
+		String passwordEncripted = passwordEncoder.encode(passwordTemp);
 
-		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), person.getRole(), person.getName(), person.getEmail(), passwordEncripted, 1, 0);
+		Person newPerson = new Person(null, cs.getCourse(person.getCourseId()), role, person.getName(), person.getEmail(), passwordEncripted, 1, 1);
 		System.out.println("Persona a registrar: " + person.toString());
 
 		newPerson = ps.savePerson(newPerson);
@@ -333,7 +330,7 @@ public class PersonController {
 		System.out.println("Persona registrada: " + newPerson.toString());
 		
 		try {
-		    ms.sendWelcomeEmail(person.getEmail(), person.getName());
+		    ms.sendAdminRegistrationEmail(newPerson, passwordTemp);
 
 		} catch (Exception e) {
 			 e.printStackTrace();
