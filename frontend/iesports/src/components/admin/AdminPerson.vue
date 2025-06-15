@@ -97,11 +97,23 @@
     <!-- START VISTA TODOS LOS USUARIOS -->
     <div class="header">
       <h2 class="tittle">Usuarios</h2>
-      <ion-button class="new-btn" @click="openAddModal">
-        <span class="material-symbols-outlined">add_circle</span>
-        Nuevo Usuario
-      </ion-button>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Buscar usuario por nombre..."
+            class="search-bar"
+          />
+        </div>
+        <ion-button class="new-btn" @click="openAddModal">
+          <span class="material-symbols-outlined">add_circle</span>
+          Nuevo Usuario
+        </ion-button>
+      </div>
     </div>
+
     <div class="table">
       <table class="persons-table">
         <thead>
@@ -114,7 +126,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="p in persons" :key="p.id">
+          <tr v-for="p in filteredPersons" :key="p.id">
             <td class="col-name">{{ p.name }}</td>
             <td class="col-name">{{ p.email }}</td>
             <td class="col-name">{{ p.role.name }}</td>
@@ -155,7 +167,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { IonButton } from '@ionic/vue';
 import { getPersons } from '@/services/personServices';
 import type { Person } from '@/model/person';
@@ -166,6 +178,15 @@ const modalMode = ref<'add' | 'edit'>('add');
 const personToEdit = ref<number | null>(null);
 const isModalOpen = ref(false);
 const persons = ref<Person[]>([]);
+
+
+const searchQuery = ref('');
+const filteredPersons = computed(() =>
+  persons.value.filter(p =>
+    p.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+);
+
 
 // Popup state
 const showPopup = ref(false);
@@ -606,4 +627,77 @@ ion-modal::part(backdrop) {
     overflow-x: auto;
   }
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: white;
+  pointer-events: none;
+}
+
+.search-bar {
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  height: 100%;
+  line-height: 1.5;
+  max-height: 100%;
+  color: white;
+  background-color: #002f3d;
+}
+
+.search-bar::placeholder {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.search-bar:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #ccc;
+}
+
+@media screen and (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .new-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 </style>

@@ -9,10 +9,10 @@ import jakarta.validation.constraints.Size;
 
 public class TeamUpdateDTO {
 
-	@NotNull(message = "El idTeam es obligatorio")
+	@NotNull(message = "El equipo es obligatorio")
 	private Long idTeam;
 
-	@NotNull(message = "El nombre es obligatorio")
+	@NotNull(message = "El nombre del equipo es obligatorio")
 	private String nameTeam;
 
 	@NotNull(message = "Debes asignar mínimo un usuario")

@@ -8,7 +8,7 @@ public class ContactFormRequestDTO {
 	@Email(message = "El email no tiene el formato correcto")
     private String email;
 
-    @NotBlank(message = "Un mensaje es obligatorio para poder enviar un formulario")
+    @NotBlank(message = "El mensaje no puede estar vacío")
     private String message;
 
     // Getters y setters

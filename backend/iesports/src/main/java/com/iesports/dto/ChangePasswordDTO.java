@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public class ChangePasswordDTO {
 
-	@NotNull(message = "La persona no puede ser nula")
+	@NotNull(message = "El usuario es obligatorio")
 	private Long personId;
 	
 	@NotNull(message = "La contraseña actual es obligatoria")

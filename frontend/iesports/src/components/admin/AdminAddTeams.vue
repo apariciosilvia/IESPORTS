@@ -565,7 +565,7 @@ async function createTeam() {
   }
 
    .members-list {
-    max-height: 250px; /* mantén la altura en móvil */
+    max-height: 250px;
   }
 }
 

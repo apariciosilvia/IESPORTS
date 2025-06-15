@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class SportDeleteDTO {
 
-	@NotNull(message = "El id es obligatorio")
+	@NotNull(message = "El deporte es obligatorio")
 	private Long id;
 
 	public Long getId() {

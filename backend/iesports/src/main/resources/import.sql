@@ -75,6 +75,10 @@ INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email
 INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 9, 4, 'patricia.cano@example.com', 'Patricia Cano', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
 INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 10, 4, 'hector.reyes@example.com', 'Héctor Reyes', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
 
+INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 10, 4, 'sanzromerom@gmail.com', 'Lolo Sanz', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 10, 4, 'sanzromeromanuel@gmail.com', 'Manuel Sanz', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+INSERT INTO `persons` (`active`, `temp_password`, `course_id`, `role_id`, `email`, `name`, `password`) VALUES (1, 0, 10, 4, 'silvia.aparicio.martin@gmail.com', 'Silvita', '$2a$10$GE7GA/T2MOA0DEbDskLih.daAuvRkC3t.7nZbpKTSRKYqvTBEX7Ey');
+
 INSERT INTO `sports` (`id`, `name`) VALUES (1, 'Fútbol');
 INSERT INTO `sports` (`id`, `name`) VALUES (2, 'Baloncesto');
 INSERT INTO `sports` (`id`, `name`) VALUES (3, 'PingPong');
@@ -95,6 +99,8 @@ INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (3, '2024
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2021/22', 'Ajedrez Winter', 'FINALIZADO');
 INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (4, '2022/23', 'Liga Ajedrez Indoor', 'PROCESO');
 
+INSERT INTO `tournaments` (`sport_id`, `date`, `name`, `state`) VALUES (1, '2025/26', 'L&S Tournament', 'PENDIENTE');
+
 
 INSERT INTO teams (name) VALUES ('Raimon Eleven');
 INSERT INTO teams (name) VALUES ('Zeus Junior High');
@@ -114,6 +120,10 @@ INSERT INTO teams (name) VALUES ('Marugame Middle School');
 INSERT INTO teams (name) VALUES ('Kagemori Middle School');
 INSERT INTO teams (name) VALUES ('Musashi Middle School');
 INSERT INTO teams (name) VALUES ('Hakuren Phoenix');
+
+INSERT INTO teams (name) VALUES ('LoloTeam');
+INSERT INTO teams (name) VALUES ('SilviaTeam');
+
 
 
 -- PARTIDOS PARA TORNEO PRUEBA EDITAR PROCESO
@@ -191,6 +201,9 @@ INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`,
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2024-12-06', 'OCTAVOS', 7, 13, 14, 0, 0);
 INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`) VALUES ('2024-12-07', 'OCTAVOS', 7, 15, 16, 0, 0);
 
+
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-28', 'SEMIFINAL', 9, 19, 3, 0, 0, null);
+INSERT INTO `matches` (`date`, `round`, `tournament_id`, `team1_id`, `team2_id`, `points_team1`, `points_team2`, `winner_team_id`) VALUES ('2025-05-28', 'SEMIFINAL', 9, 1, 20, 0, 0, null);
 
 
 -- Asignar personas a equipos
@@ -271,5 +284,9 @@ INSERT INTO players_team (player_id, team_id) VALUES (30, 11);
 INSERT INTO players_team (player_id, team_id) VALUES (31, 11);
 
 
+INSERT INTO players_team (player_id, team_id) VALUES (58, 19);
+INSERT INTO players_team (player_id, team_id) VALUES (59, 19);
 
+INSERT INTO players_team (player_id, team_id) VALUES (3, 20);
+INSERT INTO players_team (player_id, team_id) VALUES (60, 20);
 
