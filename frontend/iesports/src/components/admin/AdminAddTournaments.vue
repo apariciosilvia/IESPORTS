@@ -1,5 +1,5 @@
 <template>
-  <!-- Popup Container -->
+  <!-- START ALERTS POPUPS -->
   <div class="popup-container" v-if="showPopup">
     <!-- SUCCESS -->
     <div class="popup success-popup" v-if="popupType === 'success'">
@@ -89,163 +89,159 @@
       </div>
     </div>
   </div>
- <!-- Cabecera del modal -->
-        <ion-header>
-          <ion-toolbar class="white-header">
-            <ion-title>NUEVO TORNEO</ion-title>
-            <ion-buttons slot="end">
-              <ion-button @click="$emit('close')">
-                Cerrar
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-    <ion-content class="modal-body">
-      <div class="modal-grid">
-        <div class="row">
-          <!-- Columna Izquierda (40%) -->
-          <div class="column-left">
-            <ion-input
-              label="Nombre"
-              label-placement="floating"
-              fill="outline"
-              placeholder="Escribe un nombre"
-              class="input-name"
-              v-model="tournamentName"
-            />
-            <ion-list class="sports">
-              <ion-item class="clean-select" lines="none">
-                <ion-select
-                  interface="popover"
-                  placeholder="Selecciona un deporte"
-                  class="list-sports"
-                  v-model="selectedSportId"
-                >
-                  <ion-select-option  v-for="s in sports"
-                  :key="s.id"
-                  :value="s.id">
-                    {{ s.name }}
-                  </ion-select-option>
-                 
-                </ion-select>
-              </ion-item>
-            </ion-list>
+  <!-- END ALERTS POPUPS -->
 
-            <div class="radio-item">
-              <h5>Número de equipos</h5>
-              <div class="glass-radio-group">
-                <input type="radio"  name="teams" id="glass-silver" value="4" v-model="selectedNumberTeams" />
-                <label for="glass-silver">4</label>
-                <input type="radio" name="teams" id="glass-gold" value="8" checked v-model="selectedNumberTeams" />
-                <label for="glass-gold">8</label>
-                <input type="radio" name="teams" id="glass-platinum" value="16" v-model="selectedNumberTeams" />
-                <label for="glass-platinum">16</label>
-                <div class="glass-glider"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Columna Derecha (60%) -->
-          <div class="column-right">
-            <div class="team-selector">
-              <div class="header">
-                <h2>Equipos</h2>
-                <span class="counter">{{ selectedTeams.length }}/{{ selectedNumberTeams }}</span>
-                
-              </div>
-
-              <ion-searchbar
-                v-model="searchText"
-                placeholder="Buscar equipo ..."
-                class="custom-search"
-              />
-
-             <div class="team-list">
-                <div
-                  class="team-row"
-                  v-for="team in filteredTeams"
-                  :key="team.id"
-                >
-                  <div class="team-card">
-                    <span class="team-name">{{ team.name }}</span>
-                  </div>
-                  <button class="add-button" @click="addTeam(team.name)">
-                    <span class="material-symbols-outlined">add_circle</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tabla de emparejamientos -->
-        <div class="row">
-          <div class="colum-down">
-            <div class="match-header">
-              <span>Equipo 1</span>
-              <span>Equipo 2</span>
-              <span>Fecha partido (opcional)</span>
-              <span>Ronda</span>
-            </div>
-            <div class="match-rows">
-              <div
-                class="match-row"
-                v-for="n in matchesToRender"
-                :key="n"
+  <!-- START VISTA CREAR TORNEO -->
+  <ion-header>
+    <ion-toolbar class="white-header">
+      <ion-title>NUEVO TORNEO</ion-title>
+      <ion-buttons slot="end">
+        <ion-button @click="$emit('close')">
+          Cerrar
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="modal-body">
+    <div class="modal-grid">
+      <div class="row">
+        <!-- Columna Izquierda (40%) -->
+        <div class="column-left">
+          <ion-input
+            label="Nombre"
+            label-placement="floating"
+            fill="outline"
+            placeholder="Escribe un nombre"
+            class="input-name"
+            v-model="tournamentName"
+          />
+          <ion-list class="sports">
+            <ion-item class="clean-select" lines="none">
+              <ion-select
+                interface="popover"
+                placeholder="Selecciona un deporte"
+                class="list-sports"
+                v-model="selectedSportId"
               >
-                <!-- Equipo 1 -->
-                <div class="team-box">
-                  <span>{{ selectedTeams[(n - 1) * 2] || ' sin equipo '  }}</span>
-                  <button class="delete-btn" @click="removeTeam((n - 1) * 2)">
-                    <span class="material-symbols-outlined">delete</span>
-                  </button>
-                </div>
+                <ion-select-option  v-for="s in sports"
+                :key="s.id"
+                :value="s.id">
+                  {{ s.name }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
 
-                <span class="vs-text">VS</span>
+          <div class="radio-item">
+            <h5>Número de equipos</h5>
+            <div class="glass-radio-group">
+              <input type="radio"  name="teams" id="glass-silver" value="4" v-model="selectedNumberTeams" />
+              <label for="glass-silver">4</label>
+              <input type="radio" name="teams" id="glass-gold" value="8" checked v-model="selectedNumberTeams" />
+              <label for="glass-gold">8</label>
+              <input type="radio" name="teams" id="glass-platinum" value="16" v-model="selectedNumberTeams" />
+              <label for="glass-platinum">16</label>
+              <div class="glass-glider"></div>
+            </div>
+          </div>
+        </div>
 
-                <!-- Equipo 2 -->
-                <div class="team-box">
-                  <span>{{ selectedTeams[(n - 1) * 2 + 1] || ' sin equipo ' }}</span>
-                  <button class="delete-btn" @click="removeTeam((n - 1) * 2 + 1)">
-                    <span class="material-symbols-outlined">delete</span>
-                  </button>
-                </div>
-
-                <!-- Fecha -->
-                <div class="date-btn">
-                  <input type="date" v-model="matchDates[n - 1]" name="" id="" class="date-input" />
-                </div>
-
-                <!-- Ronda -->
-                <span class="round-label">{{ selectedNumberTeams == 4 ? 'SEMIFINAL' : selectedNumberTeams == 8 ? 'CUARTOS' : selectedNumberTeams == 16 ? 'OCTAVOS' : '' }}</span>
-              </div>
+        <!-- Columna Derecha (60%) -->
+        <div class="column-right">
+          <div class="team-selector">
+            <div class="header">
+              <h2>Equipos</h2>
+              <span class="counter">{{ selectedTeams.length }}/{{ selectedNumberTeams }}</span>
             </div>
 
+            <ion-searchbar
+              v-model="searchText"
+              placeholder="Buscar equipo ..."
+              class="custom-search"
+            />
+
+            <div class="team-list">
+              <div
+                class="team-row"
+                v-for="team in filteredTeams"
+                :key="team.id"
+              >
+                <div class="team-card">
+                  <span class="team-name">{{ team.name }}</span>
+                </div>
+                <button class="add-button" @click="addTeam(team.name)">
+                  <span class="material-symbols-outlined">add_circle</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Tabla de emparejamientos -->
+      <div class="row">
+        <div class="colum-down">
+          <div class="match-header">
+            <span>Equipo 1</span>
+            <span>Equipo 2</span>
+            <span>Fecha partido (opcional)</span>
+            <span>Ronda</span>
+          </div>
+          <div class="match-rows">
+            <div
+              class="match-row"
+              v-for="n in matchesToRender"
+              :key="n"
+            >
+              <!-- Equipo 1 -->
+              <div class="team-box">
+                <span>{{ selectedTeams[(n - 1) * 2] || ' sin equipo '  }}</span>
+                <button class="delete-btn" @click="removeTeam((n - 1) * 2)">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+
+              <span class="vs-text">VS</span>
+
+              <!-- Equipo 2 -->
+              <div class="team-box">
+                <span>{{ selectedTeams[(n - 1) * 2 + 1] || ' sin equipo ' }}</span>
+                <button class="delete-btn" @click="removeTeam((n - 1) * 2 + 1)">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+
+              <!-- Fecha -->
+              <div class="date-btn">
+                <input type="date" v-model="matchDates[n - 1]" name="" id="" class="date-input" />
+              </div>
+
+              <!-- Ronda -->
+              <span class="round-label">{{ selectedNumberTeams == 4 ? 'SEMIFINAL' : selectedNumberTeams == 8 ? 'CUARTOS' : selectedNumberTeams == 16 ? 'OCTAVOS' : '' }}</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </ion-content>
-    <ion-footer class="row">
-      <div class="colum-down2">
-        <ion-button
-          expand="block"
-          class="btn-clean"
-          @click="resetForm"
-        ><span class="material-symbols-outlined">mop</span>Limpiar</ion-button>
-        <ion-button
-          expand="block"
-          class="btn-save"
-          @click="createTournament"
-        ><span class="material-symbols-outlined">save</span>Crear Torneo</ion-button>
-      </div>
-    </ion-footer>
+    </div>
+  </ion-content>
+  <ion-footer class="row">
+    <div class="colum-down2">
+      <ion-button
+        expand="block"
+        class="btn-clean"
+        @click="resetForm"
+      ><span class="material-symbols-outlined">mop</span>Limpiar</ion-button>
+      <ion-button
+        expand="block"
+        class="btn-save"
+        @click="createTournament"
+      ><span class="material-symbols-outlined">save</span>Crear Torneo</ion-button>
+    </div>
+  </ion-footer>
+  <!-- END VISTA CREAR TORNEO -->
 </template>
 
 <script setup lang="ts">
-// const emit = defineEmits<{
-//   (e: 'close'): void;
-// }>();
-
 import { ref, onMounted, computed, watch  } from 'vue';
 
 import { IonSelect, IonSelectOption, IonContent, IonSearchbar, IonList, IonItem, IonInput, IonHeader, IonToolbar, IonButton, IonTitle, IonButtons, IonFooter } from '@ionic/vue';
@@ -289,20 +285,11 @@ function openPopup(type: 'success' | 'alert' | 'error' | 'info', message: string
     }, 1000);
   }
 }
+
 function closePopup() {
   showPopup.value = false;
   popupMessage.value = '';
 }
-
-
-// function addTeam(teamName: string) {
-//   if (
-//     selectedTeams.value.length < matchesToRender.value * 2 &&
-//     !selectedTeams.value.includes(teamName)
-//   ) {
-//     selectedTeams.value.push(teamName);
-//   }
-// }
 
 function addTeam(teamName: string) {
   console.log("Intentando agregar equipo:", teamName);

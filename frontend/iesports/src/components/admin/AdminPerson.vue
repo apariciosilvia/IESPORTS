@@ -558,6 +558,7 @@ ion-modal::part(content) {
   display: flex;
   flex-direction: column;
 }
+
 @media (max-width: 600px) {
   ion-modal::part(content) {
     height: 75vh !important;
