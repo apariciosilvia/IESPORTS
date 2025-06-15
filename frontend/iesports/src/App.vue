@@ -5,8 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonApp, isPlatform } from '@ionic/vue'
-import { computed } from 'vue'
+import { IonApp, isPlatform } from '@ionic/vue';
 
-const isMobile = isPlatform('mobile')
+const isMobile = isPlatform('mobile');
 </script>

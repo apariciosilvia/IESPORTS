@@ -1,4 +1,3 @@
-
 <template>
   <div class="calendar-container">
     <FullCalendar :options="calendarOptions" />
@@ -48,7 +47,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import esLocale from '@fullcalendar/core/locales/es'
 import type { Match } from '@/model/match'
 import Footer from '@/components/ui/Footer.vue';
-
 
 // asigna colores según deporte
 const sportColors: Record<string,string> = {
@@ -108,35 +106,43 @@ const calendarOptions = ref({
   events: events.value,
   eventContent: (arg: any) => {
     const { team1, team2 } = arg.event.extendedProps
-    const truncate = (s:string, max=6) =>
-      s.length>max ? s.slice(0,max)+'...' : s
+    const viewType = arg.view.type
+    const isDayView = viewType === 'dayGridDay'
+
+    const truncate = (s: string, max = 6) =>
+      s.length > max ? s.slice(0, max) + '...' : s
+
     const wrap = document.createElement('div')
     wrap.style.display = 'inline-flex'
     wrap.style.alignItems = 'center'
-    wrap.style.whiteSpace = 'nowrap'
-    const makeSpan = (txt:string) => {
+    wrap.style.whiteSpace = isDayView ? 'normal' : 'nowrap'
+
+    const makeSpan = (txt: string) => {
       const s = document.createElement('span')
       s.textContent = txt
-      s.style.display = 'inline-block'
-      s.style.maxWidth = '3.5em'
-      s.style.overflow = 'hidden'
-      s.style.textOverflow = 'ellipsis'
-      s.style.whiteSpace = 'nowrap'
+      if (!isDayView) {
+        s.style.display = 'inline-block'
+        s.style.maxWidth = '3.5em'
+        s.style.overflow = 'hidden'
+        s.style.textOverflow = 'ellipsis'
+        s.style.whiteSpace = 'nowrap'
+      }
       return s
     }
-    wrap.appendChild(makeSpan(truncate(team1.name)))
+
+    wrap.appendChild(makeSpan(isDayView ? team1.name : truncate(team1.name)))
     const vs = document.createElement('span')
     vs.textContent = ' vs '
     vs.style.margin = '0 .2em'
     wrap.appendChild(vs)
-    wrap.appendChild(makeSpan(truncate(team2.name)))
+    wrap.appendChild(makeSpan(isDayView ? team2.name : truncate(team2.name)))
     return { domNodes: [wrap] }
   },
-  eventClick: (info:any) => {
+  eventClick: (info: any) => {
     selectedMatch.value = info.event.extendedProps
     showModal.value = true
   },
-  dayCellDidMount: (arg:any) => {
+  dayCellDidMount: (arg: any) => {
     arg.el.style.backgroundColor = '#fff'
     if ([0,6].includes(arg.date.getDay())) arg.el.style.backgroundColor = '#f0f0f0'
   }
@@ -219,7 +225,6 @@ function closeModal() {
   padding: 4px 6px;
   font-size: 0.8rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.356);
-
   border-color: #f03726 !important;
   color: #fff !important;
   transition: transform 0.1s;
@@ -233,12 +238,6 @@ function closeModal() {
 .fc-scrollgrid .fc-scrollgrid-section {
   background-color: #fdfdfd;
 }
-
-
-
-
-
-
 
 /* Estilos para el modal */
 :deep(ion-modal) {
@@ -278,7 +277,7 @@ function closeModal() {
   line-height: 1.4;
 }
 
-.content{
+.content {
   text-align: left;
   padding-left: 1rem;
 }
@@ -344,7 +343,6 @@ function closeModal() {
 :deep(ion-button:hover) {
   opacity: 0.8;
 }
-
 
 /* Responsive para móvil */
 @media (max-width: 600px) {
