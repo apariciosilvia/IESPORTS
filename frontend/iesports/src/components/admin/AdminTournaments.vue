@@ -121,10 +121,21 @@
     <!-- START VISTA TODOS LOS TORNEOS -->
     <div class="header">
       <h2 class="tittle">Torneos</h2>
-      <ion-button class="new-btn" @click="openAddModal">
-        <span class="material-symbols-outlined">add_circle</span>
-        Nuevo Torneo
-      </ion-button>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Buscar torneo por nombre..."
+            class="search-bar"
+          />
+        </div>
+        <ion-button class="new-btn" @click="openAddModal">
+          <span class="material-symbols-outlined">add_circle</span>
+          Nuevo Torneo
+        </ion-button>
+      </div>
     </div>
     <div class="table">
       <table class="tournaments-table">
@@ -139,7 +150,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="t in tournamentsAdminDTO" :key="t.tournament.id">
+          <tr v-for="t in filteredTournaments" :key="t.tournament.id">
             <td class="col-nombre">{{ t.tournament.name }}</td>
             <td class="col-anio">{{ t.tournament.date }}</td>
             <td class="col-estado">{{ t.tournament.state }}</td>
@@ -201,7 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { IonSelect, IonSelectOption, IonModal, IonButton } from '@ionic/vue';
 
 //Components
@@ -221,6 +232,15 @@ const tournamentsAdminDTO = ref<TournamentAdminDTO[]>([]);
 
 const showConfirm = ref(false);
 const pendingDeleteId = ref<number | null>(null);
+
+
+const searchQuery = ref('');
+const filteredTournaments = computed(() =>
+  tournamentsAdminDTO.value.filter(t =>
+    t.tournament.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+);
+
 
 // Popup state
 const showPopup = ref(false);
@@ -681,4 +701,101 @@ ion-modal::part(backdrop) {
     overflow-x: auto;
   }
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: #555;
+  pointer-events: none;
+  color: white;
+}
+
+.search-bar {
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  height: 100%;
+  line-height: 1.5;
+  max-height: 100%;
+  color: white;
+  background-color: #002f3d;
+}
+
+.search-bar::placeholder {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.search-bar:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #ccc; 
+}
+
+@media screen and (max-width: 1024px) {
+  ion-modal {
+    --width: 95vw;
+    --height: 90vh;
+    --max-width: 95vw;
+    --max-height: 90vh;
+  }
+  
+  .tournaments {
+    margin: 1rem;
+    padding: 1rem;
+    margin-top: 5rem;
+    height: auto;
+  }
+
+  .tournaments-table th,
+  .tournaments-table td {
+    padding: 0.5rem 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .new-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .table {
+    overflow-x: auto;
+  }
+}
+
 </style>

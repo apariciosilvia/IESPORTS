@@ -577,7 +577,7 @@ async function editTeam() {
   }
 
    .members-list {
-    max-height: 250px; /* mantén la altura en móvil */
+    max-height: 250px;
   }
 }
 

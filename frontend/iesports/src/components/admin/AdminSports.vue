@@ -121,11 +121,23 @@
     <!-- START VISTA TODOS LOS DEPORTES -->
     <div class="header">
       <h2 class="tittle">Deportes</h2>
-      <ion-button class="new-btn" @click="openAddModal">
-        <span class="material-symbols-outlined">add_circle</span>
-        Nuevo Deporte
-      </ion-button>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Buscar deporte por nombre..."
+            class="search-bar"
+          />
+        </div>
+        <ion-button class="new-btn" @click="openAddModal">
+          <span class="material-symbols-outlined">add_circle</span>
+          Nuevo Deporte
+        </ion-button>
+      </div>
     </div>
+
     <div class="table">
       <table class="sports-table">
         <thead>
@@ -135,7 +147,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="s in sports" :key="s.id">
+          <tr v-for="s in filteredSports" :key="s.id">
             <td class="col-name">{{ s.name }}</td>
             <td class="col-actions">
               <div class="actions">
@@ -180,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { IonButton } from '@ionic/vue';
 
 // SERVICES
@@ -200,6 +212,14 @@ const sports = ref<Sport[]>([]);
 
 const showConfirm = ref(false);
 const pendingDeleteId = ref<number | null>(null);
+
+const searchQuery = ref('');
+const filteredSports = computed(() =>
+  sports.value.filter(s =>
+    s.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+);
+
 
 /* ALERTS POPUPS START*/
 const showPopup = ref(false);
@@ -681,4 +701,77 @@ ion-modal::part(backdrop) {
     overflow-x: auto;
   }
 }
+
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: white;
+  pointer-events: none;
+}
+
+.search-bar {
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  height: 100%;
+  line-height: 1.5;
+  max-height: 100%;
+  color: white;
+  background-color: #002f3d;
+}
+
+.search-bar::placeholder {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.search-bar:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #ccc;
+}
+
+@media screen and (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .new-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 </style>
