@@ -1,0 +1,28 @@
+# Etapa 1: Build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
+
+WORKDIR /app
+
+# Copia pom.xml y descarga dependencias primero (para cache)
+COPY ./backend/iesports/pom.xml .
+RUN mvn dependency:go-offline
+
+# Copia el resto del código fuente
+COPY ./backend/iesports/src ./src
+
+# Compila y empaqueta el .jar
+RUN mvn clean package -DskipTests
+
+# Etapa 2: Runtime
+FROM eclipse-temurin:21-jre-alpine
+
+WORKDIR /app
+
+# Copia el .jar desde el builder
+COPY --from=builder /app/target/*.jar app.jar
+
+# Expone el puerto (ajústalo si tu app usa otro)
+EXPOSE 8080
+
+# Ejecuta el jar
+CMD ["java", "-jar", "app.jar"]
